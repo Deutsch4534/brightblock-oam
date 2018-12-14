@@ -1,6 +1,6 @@
 <template>
-<li class="media mb-3">
-  <sell-via-registering :showRegisterModal="showRegisterModal" :artwork="artwork" @closeme="toggleRegisterModal"  @md-closed="toggleRegisterModal"/>
+<div class="md-layout-item md-size-20 md-xsmall-size-100">
+  <sell-via-registering :showRegisterModal="showRegisterModal" :artwork="artwork"/>
   <sell-via-buy-now :showBuyNowModal="showBuyNowModal" :artwork="artwork"/>
   <sell-via-auction :showAuctionModal="showAuctionModal" :artwork="artwork"/>
 
@@ -11,21 +11,18 @@
       <p class="artwork-caption">Artist: {{artistProfile.name}}</p>
       <p class="artwork-caption">{{artwork.description}}</p>
 
-      <a class="artwork-action" v-if="canRegister" v-on:click="toggleRegisterModal">Register {{status}}</a>
-      <a class="artwork-action" v-if="canSell" @click="showBuyNowModal !== showBuyNowModal">Buy</a>
-      <a class="artwork-action" v-if="canSell" @click="showAuctionModal !== showAuctionModal">Bid</a>
+      <a class="artwork-action" v-if="canRegister" v-on:click="showRegisterModal = !showRegisterModal">Register {{status}}</a>
+      <a class="artwork-action" v-if="canSell" @click="showBuyNowModal = !showBuyNowModal">Buy</a>
+      <a class="artwork-action" v-if="canSell" @click="showAuctionModal = !showAuctionModal">Bid</a>
       <router-link :to="editUrl" class="artwork-action" v-if="editable">Edit</router-link>
-
       <a class="artwork-action" @click="deleteArtwork(artwork.id)" v-if="debugMode">Delete</a>
-
     </div>
     <selling-options :artwork="artwork"/>
   </div>
-</li>
+</div>
 </template>
 
 <script>
-import moneyUtils from "@/services/moneyUtils";
 import SellingOptions from "./SellingOptions";
 import SellViaRegistering from "./SellViaRegistering";
 import SellViaAuction from "./SellViaAuction";
@@ -64,9 +61,6 @@ export default {
   methods: {
     deleteArtwork(id) {
       this.$store.dispatch("myArtworksStore/deleteMyArtwork", id);
-    },
-    toggleRegisterModal() {
-      this.showRegisterModal = !this.showRegisterModal;
     }
   },
   computed: {
@@ -86,35 +80,6 @@ export default {
     sellingBuyNow() {
       return this.artwork.saleData.soid === 1;
     },
-    sellingAuction() {
-      return (
-        this.artwork.saleData.soid === 2 && this.artwork.saleData.auctionId > 0
-      );
-    },
-    valueInEther() {
-      return moneyUtils.valueInEtherFromWei(this.artwork.bcitem.price);
-    },
-    valueReserveInEther() {
-      return moneyUtils.valueInEther(
-        this.artwork.saleData.fiatCurrency,
-        this.artwork.saleData.reserve
-      );
-    },
-    valueReserveInBitcoin() {
-      return moneyUtils.valueInBitcoin(
-        this.artwork.saleData.fiatCurrency,
-        this.artwork.saleData.reserve
-      );
-    },
-    valueInBitcoin() {
-      return moneyUtils.valueInBitcoinFromWei(this.artwork.bcitem.price);
-    },
-    sellingCurrency() {
-      return this.artwork.saleData.fiatCurrency;
-    },
-    sellingCurrencySymbol() {
-      return moneyUtils.currencySymbol(this.artwork.saleData.fiatCurrency);
-    },
     status() {
       return this.$store.getters["myArtworksStore/bcstatus"](this.artwork.id);
     },
@@ -131,19 +96,8 @@ export default {
     artworkWidth() {
       return `col-sm-${this.width}`;
     },
-    manageAuctionUrl() {
-      return `/my-auctions/manage/${this.artwork.saleData.auctionId}`;
-    },
-    publicAuctionUrl() {
-      return `/online-auction/${this.artwork.owner}/${
-        this.artwork.saleData.auctionId
-      }`;
-    },
     editUrl() {
       return `/my-artwork/update/${this.artwork.id}`;
-    },
-    url() {
-      return `/artworks/${this.artwork.owner}/${this.artwork.id}`;
     }
   }
 };

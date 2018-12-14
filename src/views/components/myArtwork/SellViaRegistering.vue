@@ -1,6 +1,6 @@
 <template>
 <div>
-  <md-dialog :md-active.sync="showModal" @md-closed="myCloseMethod()">
+  <md-dialog :md-active.sync="showModal">
     <md-dialog-title>Register Artwork</md-dialog-title>
     <md-dialog-content>
       {{message}}
@@ -36,16 +36,20 @@ export default {
       }
     }
   },
+  watch: {
+    // can pass old/ new values in here.
+    showRegisterModal() {
+      this.showModal = !this.showModal;
+    }
+  },
   data() {
     return {
-      message: null
+      message: null,
+      showModal: false
     };
   },
   mounted() {},
   computed: {
-    showModal() {
-      return this.showRegisterModal;
-    },
     fiatRates() {
       return this.$store.getters["conversionStore/getFiatRates"];
     },
@@ -59,9 +63,6 @@ export default {
     }
   },
   methods: {
-    myCloseMethod: function() {
-      this.$emit("closeme");
-    },
     registerArtworkBitcoin: function() {
       let regData = {
         title: this.artwork.title,

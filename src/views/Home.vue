@@ -1,20 +1,19 @@
 <template>
-  <div class="wrapper">
-    <leafs/>
-    <div class="main main-raised">
-      <div class="section section-basic">
-        <div class="container">
-          <div id="images">
-            <div class="title">
-              <h2>Images</h2>
-            </div>
-            <last-artworks :artworks="artworks" class=""/>
+<div class="wrapper">
+  <leafs/>
+  <div class="main main-raised">
+    <div class="section section-basic">
+      <div class="container">
+        <div id="images">
+          <div class="title">
+            <h2>Images</h2>
           </div>
+          <last-artworks :artworks="artworks" class=""/>
         </div>
       </div>
     </div>
   </div>
-
+</div>
 </template>
 
 <script>

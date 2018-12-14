@@ -1,7 +1,7 @@
 <template>
-<ul class="list-unstyled">
+<div class="md-layout">
   <my-single-artwork v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" :width="artworkWidth" :sold="sold"/>
-</ul>
+</div>
 </template>
 
 <script>

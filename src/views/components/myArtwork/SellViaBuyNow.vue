@@ -50,20 +50,26 @@ import moneyUtils from "@/services/moneyUtils";
 export default {
   name: "SellViaAuction",
   props: {
-    showModal: false
+    showRegisterModal: false,
+    artwork: {
+      type: Object,
+      default() {
+        return {};
+      }
+    }
+  },
+  watch: {
+    // can pass old/ new values in here.
+    showRegisterModal() {
+      this.showModal = !this.showModal;
+    }
   },
   data() {
     return {
       errors: [],
       amount: 0,
       currency: "EUR",
-      message: null,
-      artwork: {
-        type: Object,
-        default() {
-          return {};
-        }
-      }
+      message: null
     };
   },
   mounted() {},

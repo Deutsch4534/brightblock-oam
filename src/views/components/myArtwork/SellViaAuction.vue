@@ -62,28 +62,27 @@ import moneyUtils from "@/services/moneyUtils";
 export default {
   name: "SellViaAuction",
   props: {
-    showModal: false
+    showRegisterModal: false,
+    artwork: {
+      type: Object,
+      default() {
+        return {};
+      }
+    }
+  },
+  watch: {
+    // can pass old/ new values in here.
+    showRegisterModal() {
+      this.showModal = !this.showModal;
+    }
   },
   data() {
     return {
       errors: [],
       auctionId: -1,
       currency: "EUR",
-      message: null,
-      artwork: {
-        saleData: {}
-      }
+      message: null
     };
-  },
-  mounted() {
-    /*
-    JQuery('#sellViaAuctionModal').on('show.bs.modal', function (event) {
-      var trigger = JQuery(event.relatedTarget)
-      $self.artworkId = trigger.data('artwork')
-      $self.artwork = $self.$store.getters['myArtworksStore/myArtwork']($self.artworkId)
-      $self.auctionId = $self.artwork.saleData.auctionId
-    })
-    */
   },
   computed: {
     fiatRates() {
