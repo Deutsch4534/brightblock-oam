@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+import Home from "./views/Home.vue";
 import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
 import Login from "./views/Login.vue";
@@ -7,12 +8,25 @@ import Profile from "./views/Profile.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 
+import MyArtworks from "./views/MyArtworks";
+import MyArtworkUpload from "./views/MyArtworkUpload";
+import MyArtworkUpdate from "./views/MyArtworkUpdate";
+
 Vue.use(Router);
 
 export default new Router({
   routes: [
     {
       path: "/",
+      name: "home",
+      components: { default: Home, header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/index",
       name: "index",
       components: { default: Index, header: MainNavbar, footer: MainFooter },
       props: {
@@ -36,6 +50,36 @@ export default new Router({
       props: {
         header: { colorOnScroll: 400 }
       }
+    },
+    {
+      path: "/my-artwork/update/:artworkId",
+      name: "myArtworkUpdate",
+      components: {
+        default: MyArtworkUpdate,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/my-artwork/upload",
+      name: "myArtworkUpload",
+      components: {
+        default: MyArtworkUpload,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/my-artworks",
+      name: "my-artworks",
+      components: {
+        default: MyArtworks,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      meta: { requiresAuth: true }
     },
     {
       path: "/profile",

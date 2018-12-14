@@ -7,8 +7,9 @@
 function debounce(func, wait, immediate) {
   let timeout;
   return function() {
-    const context = this,
-      args = arguments;
+    const context = this;
+
+    const args = arguments;
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       timeout = null;

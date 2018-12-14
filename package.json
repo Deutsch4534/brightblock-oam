@@ -1,7 +1,7 @@
 {
-  "name": "vue-material-kit",
-  "author": "Dragos Ct <dragos@creative-tim.com>",
-  "description": "Vue Material Kit",
+  "name": "open-artem",
+  "author": "Mike Cohen",
+  "description": "Decentralised art market and auction.",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,20 @@
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm run dev"
   },
   "dependencies": {
+    "@opentok/client": "^2.14.7",
+    "@stomp/stompjs": "^4.0.6",
+    "bitcoinjs-message": "^2.0.0",
+    "moment": "^2.22.2",
+    "web3": "github:ethereum/web3.js",
+    "@babel/core": "^7.1.6",
+    "aes-js": "^3.1.2",
+    "ajv": "^6.6.1",
+    "aws-sdk": "^2.371.0",
+    "axios": "^0.18.0",
+    "babel-runtime": "^6.26.0",
+    "blockstack": "^18.1.0",
+    "crypto-js": "^3.1.9-1",
+    "javascript-opentimestamps": "^0.4.3",
     "nouislider": "11.1.0",
     "v-tooltip": "2.0.0-rc.33",
     "vue": "2.5.17",
@@ -19,13 +33,16 @@
     "vue-clickaway": "2.2.2",
     "vue-lazyload": "1.2.6",
     "vue-material": "1.0.0-beta-10.2",
-    "vue-router": "3.0.1"
+    "vue-router": "^2.8.1",
+    "vuex": "^3.0.1",
+    "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "3.0.1",
     "@vue/cli-plugin-eslint": "3.0.1",
     "@vue/cli-service": "3.0.1",
-    "@vue/eslint-config-prettier": "3.0.1",
+    "@vue/eslint-config-prettier": "^3.0.5",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "node-sass": "4.9.3",
     "sass-loader": "7.1.0",
     "vue-template-compiler": "2.5.17"

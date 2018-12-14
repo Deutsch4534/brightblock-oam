@@ -1,13 +1,26 @@
 <template>
-  <md-toolbar id="toolbar" md-elevation="0" class="md-transparent md-absolute" :class="extraNavClasses" :color-on-scroll="colorOnScroll">
+  <md-toolbar
+    id="toolbar"
+    md-elevation="0"
+    class="md-white md-absolute"
+    :class="extraNavClasses"
+    :color-on-scroll="colorOnScroll"
+  >
     <div class="md-toolbar-row md-collapse-lateral">
       <div class="md-toolbar-section-start">
-        <h3 class="md-title">Vue Material Kit</h3>
+        <h3 class="md-title">
+          <router-link to="/" style="color: white;"
+            ><span class="md-display-2">OAM</span></router-link
+          >
+        </h3>
       </div>
       <div class="md-toolbar-section-end">
-        <md-button class="md-just-icon md-simple md-toolbar-toggle" :class="{toggled: toggledClass}" @click="toggleNavbarMobile()">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
+        <md-button
+          class="md-just-icon md-simple md-toolbar-toggle"
+          :class="{ toggled: toggledClass }"
+          @click="toggleNavbarMobile()"
+        >
+          <span class="icon-bar"></span> <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </md-button>
 
@@ -17,90 +30,83 @@
               <!-- Here you can add your items from the section-start of your toolbar -->
             </mobile-menu>
             <md-list>
-              <li class="md-list-item" v-if="!showDownload">
-                <a href="javascript:void(0)" class="md-list-item-router md-list-item-container md-button-clean dropdown">
+              <li class="md-list-item" v-if="loggedIn">
+                <a
+                  href="javascript:void(0)"
+                  class="md-list-item-router md-list-item-container md-button-clean dropdown"
+                >
                   <div class="md-list-item-content">
                     <drop-down direction="down">
-                      <md-button slot="title" class="md-button md-button-link md-white md-simple dropdown-toggle" data-toggle="dropdown">
-                        <i class="material-icons">apps</i>
-                        <p>Components</p>
+                      <md-button
+                        slot="title"
+                        class="md-button md-button-link md-white md-simple dropdown-toggle"
+                        data-toggle="dropdown"
+                      >
+                        <p><span v-html="avatar"></span></p>
                       </md-button>
                       <ul class="dropdown-menu dropdown-with-icons">
                         <li>
-                          <a href="#/">
-                            <i class="material-icons">layers</i>
-                            <p>All Components</p>
-                          </a>
+                          <a class="dropdown-item">{{ username }}</a>
                         </li>
                         <li>
-                          <a href="https://demos.creative-tim.com/vue-material-kit/documentation/" >
-                            <i class="material-icons">content_paste</i>
-                            <p>Documentation</p>
-                          </a>
+                          <router-link
+                            class="dropdown-item"
+                            to="/admin/registrations"
+                            v-if="showAdmin"
+                            >Admin</router-link
+                          >
+                        </li>
+                        <li>
+                          <router-link
+                            class="dropdown-item"
+                            to="/my-artworks"
+                            >My Art Work</router-link
+                          >
+                        </li>
+                        <li>
+                          <router-link
+                            class="dropdown-item"
+                            to="/my-artwork/upload"
+                            >Upload Artwork</router-link
+                          >
+                        </li>
+                        <li>
+                          <router-link
+                            class="dropdown-item"
+                            to="/my-auctions"
+                            >My Auctions</router-link
+                          >
+                        </li>
+                        <li>
+                          <router-link
+                            class="dropdown-item"
+                            to="/my-auctions/upload"
+                            >New Auction</router-link
+                          >
+                        </li>
+                        <li>
+                          <router-link
+                            class="dropdown-item"
+                            to="/account/userData"
+                            >My Account</router-link
+                          >
+                        </li>
+                        <li>
+                          <a
+                            href="#"
+                            class="dropdown-item"
+                            @click.prevent="logout"
+                            ><i class="material-icons">fingerprint</i> Logout</a
+                          >
                         </li>
                       </ul>
                     </drop-down>
                   </div>
                 </a>
               </li>
-
-              <md-list-item href="https://demos.creative-tim.com/vue-material-kit/documentation/"  target="_blank" v-if="showDownload">
-                <i class="material-icons">content_paste</i>
-                <p>Documentation</p>
-              </md-list-item>
-
-              <md-list-item href="javascript:void(0)" @click="scrollToElement()" v-if="showDownload">
-                <i class="material-icons">cloud_download</i>
-                <p>Download</p>
-              </md-list-item>
-
-              <li class="md-list-item" v-else>
-                <a href="javascript:void(0)" class="md-list-item-router md-list-item-container md-button-clean dropdown">
-                  <div class="md-list-item-content">
-                    <drop-down direction="down">
-                      <md-button slot="title" class="md-button md-button-link md-white md-simple dropdown-toggle" data-toggle="dropdown">
-                        <i class="material-icons">view_carousel</i>
-                        <p>Examples</p>
-                      </md-button>
-                      <ul class="dropdown-menu dropdown-with-icons">
-                        <li>
-                          <a href="#/landing">
-                            <i class="material-icons">view_day</i>
-                            <p>Landing Page</p>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#/login">
-                            <i class="material-icons">fingerprint</i>
-                            <p>Login Page</p>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#/profile">
-                            <i class="material-icons">account_circle</i>
-                            <p>Profile Page</p>
-                          </a>
-                        </li>
-                      </ul>
-                    </drop-down>
-                  </div>
-                </a>
-              </li>
-
-              <md-list-item href="https://twitter.com/CreativeTim" target="_blank">
-                <i class="fab fa-twitter"></i>
-                <p class="hidden-lg">Twitter</p>
-                <md-tooltip md-direction="bottom">Follow us on Twitter</md-tooltip>
-              </md-list-item>
-              <md-list-item href="https://www.facebook.com/CreativeTim" target="_blank">
-                <i class="fab fa-facebook-square"></i>
-                <p class="hidden-lg">Facebook</p>
-                <md-tooltip md-direction="bottom">Like us on Facebook</md-tooltip>
-              </md-list-item>
-              <md-list-item href="https://www.instagram.com/CreativeTimOfficial" target="_blank">
-                <i class="fab fa-instagram"></i>
-                <p class="hidden-lg">Instagram</p>
-                <md-tooltip md-direction="bottom">Follow us on Instagram</md-tooltip>
+              <md-list-item href="#/login" v-else>
+                <i class="material-icons">fingerprint</i>
+                <p>Login</p>
               </md-list-item>
             </md-list>
           </div>
@@ -125,6 +131,8 @@ function resizeThrottler(actualResizeHandler) {
 }
 
 import MobileMenu from "@/layout/MobileMenu";
+import myAccountService from "@/services/myAccountService";
+
 export default {
   components: {
     MobileMenu
@@ -160,6 +168,28 @@ export default {
     showDownload() {
       const excludedRoutes = ["login", "landing", "profile"];
       return excludedRoutes.every(r => r !== this.$route.name);
+    },
+    showAdmin() {
+      return this.$store.state.myAccountStore.myProfile.showAdmin;
+    },
+    username() {
+      return this.$store.state.myAccountStore.myProfile.name;
+    },
+    avatar() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      if (myProfile.loggedIn) {
+        return (
+          '<img style="width: 40px; height: 40px; border-radius: 20px;" src="' +
+          myProfile.avatarUrl +
+          '"/>'
+        );
+      } else {
+        return '<span class="icon-user"></span>';
+      }
+    },
+    loggedIn() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      return myProfile.loggedIn;
     }
   },
   methods: {
@@ -206,6 +236,11 @@ export default {
       if (element_id) {
         element_id.scrollIntoView({ block: "end", behavior: "smooth" });
       }
+    },
+    logout() {
+      localStorage.clear();
+      sessionStorage.clear();
+      myAccountService.logout();
     }
   },
   mounted() {
