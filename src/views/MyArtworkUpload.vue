@@ -1,24 +1,27 @@
 <template>
-<section class="white-bg black pt-120 pb-120">
-  <div class="container wide">
-    <div class="row">
-      <div class="col-md-12">
-        <h1 class="innerpage">Upload Artwork</h1>
-        <my-artwork-upload-form/>
+<div class="wrapper">
+  <leafs/>
+  <div class="main main-raised">
+    <div class="section section-basic">
+      <div class="container">
+        <my-artwork-upload-form :formTitle="'Upload Artwork'"/>
       </div>
     </div>
   </div>
-</section>
+</div>
 </template>
 
 <script>
 import MyArtworkUploadForm from "./components/myArtwork/MyArtworkUploadForm";
+import Leafs from "./components/Leafs";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyArtworkUpload",
+  bodyClass: "index-page",
   components: {
-    MyArtworkUploadForm
+    MyArtworkUploadForm,
+    Leafs
   },
   data() {
     return {};

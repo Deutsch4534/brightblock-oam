@@ -12,9 +12,11 @@ import MyArtworks from "./views/MyArtworks";
 import MyArtworkUpload from "./views/MyArtworkUpload";
 import MyArtworkUpdate from "./views/MyArtworkUpdate";
 
+import myAccountService from "@/services/myAccountService";
+
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: "/",
@@ -84,6 +86,7 @@ export default new Router({
     {
       path: "/profile",
       name: "profile",
+      meta: { requiresAuth: true },
       components: { default: Profile, header: MainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
@@ -99,3 +102,21 @@ export default new Router({
     }
   }
 });
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!myAccountService.myProfile().loggedIn) {
+      next({
+        path: "/",
+        query: { redirect: to.fullPath }
+      });
+    } else {
+      next();
+    }
+  } else {
+    next(); // make sure to always call next()!
+  }
+});
+
+export default router;

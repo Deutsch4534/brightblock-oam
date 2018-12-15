@@ -1,156 +1,156 @@
 <template>
-<div class="innerpage mt-50 col-md-12">
-
-  <wait-for-it-modal/>
-
-  <form class="form-horizontal">
-    <p v-if="errors.length" :key="errors.length">
-      <b>Please correct the following error(s):</b>
-      <ul>
-        <li v-for="(error, index) in errors" :key="index" v-bind:error="error">{{ error }}</li>
-      </ul>
-    </p>
-    <div class="form-group">
-      <label>Title</label>
-      <input class="form-control" type="text" placeholder="Title of your item" v-model="artwork.title">
-    </div>
-
-    <div class="form-group">
-      <label>Description</label>
-      <textarea class="form-control" placeholder="What inspired you to create this?" v-model="artwork.description"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label>Keywords</label>
-      <textarea class="form-control" placeholder="keywords" v-model="artwork.keywords"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label>Editions</label>
-      <input class="form-control" type="number" placeholder="How many editions would you like" v-model="artwork.editions">
-    </div>
-
-    <div class="form-group">
-      <label>Owner (Blockstack Id)</label>
-      <input class="form-control" type="text" placeholder="Id of the owner." v-model="artwork.owner">
-    </div>
-
-    <div class="form-group">
-      <label>Artist (Blockstack Id)</label>
-      <input class="form-control" type="text" placeholder="Id of the artist." v-model="artwork.artist">
-    </div>
-
-    <h4>Artwork Images</h4>
-    <hr/>
-    <div class="radio-inline">
-      <label>
-        <input type="radio" name="artwork.itemType" value="physart" v-model="artwork.itemType">
-        Physical Artwork
-      </label>
-    </div>
-    <div class="radio-inline">
-      <label>
-        <input type="radio" name="artwork.itemType" value="digiart" v-model="artwork.itemType" checked>
-        Digital Artwork
-      </label>
-    </div>
-    <div class="radio-inline">
-      <label>
-        <input type="radio" name="artwork.itemType" value="photoart" v-model="artwork.itemType">
-        Photographic work
-      </label>
-    </div>
-    <div class="form-group" v-if="artwork.itemType == 'digiart' || artwork.itemType == 'photoart'">
-      <div id="load-artwork">
-        <div class="drop_area" @drop.prevent="loadArtwork" @dragover.prevent>
-          Drop your artwork file here!
+<div class="md-layout">
+  <md-dialog-alert
+    :md-active.sync="showAlert"
+    :md-content="alertMessage"
+    md-confirm-text="OK!" />
+  <form novalidate class="md-layout" @submit.prevent="validateArtwork">
+    <md-card class="md-layout-item md-size-50 md-small-size-100">
+      <md-card-header>
+        <div class="md-title">{{formTitle}}</div>
+      </md-card-header>
+      <md-card-content>
+        <div class="md-layout">
+          <div class="md-layout-item md-size-100">
+            <md-field :class="getValidationClass('title')">
+              <label for="title">Title</label>
+              <md-input name="title" id="title" v-model="artwork.title" :disabled="sending" />
+              <span class="md-error" v-if="!$v.artwork.title.required">The title name is required</span>
+              <span class="md-error" v-else-if="!$v.artwork.title.minlength">Invalid first name</span>
+            </md-field>
+          </div>
+          <div class="md-layout-item md-size-100">
+            <md-field :class="getValidationClass('description')">
+              <label for="description">Description</label>
+              <md-textarea name="description" id="description" v-model="artwork.description" required></md-textarea>
+              <span class="md-error">The description is required</span>
+            </md-field>
+          </div>
+          <div class="md-layout-item md-size-100">
+            <md-field :class="getValidationClass('keywords')">
+              <label for="keywords">Keywords</label>
+              <md-textarea name="keywords" id="keywords" v-model="artwork.keywords" required></md-textarea>
+              <span class="md-error">Enter some keywords</span>
+            </md-field>
+          </div>
+          <div class="md-layout-item md-size-100">
+            <md-field :class="getValidationClass('editions')">
+              <label for="editions">editions</label>
+              <md-input name="editions" id="title" autocomplete="editions" v-model="artwork.editions" :disabled="sending" />
+              <span class="md-error" v-if="!$v.artwork.editions">Number of editions is required</span>
+              <span class="md-error" v-else-if="!$v.artwork.editions.minlength">At least 1 edition.</span>
+              <span class="md-error" v-else-if="!$v.artwork.editions.maxlength">At most 10 editions.</span>
+            </md-field>
+          </div>
+          <div class="md-layout-item md-size-100">
+            <md-field :class="getValidationClass('owner')">
+              <label for="owner">owner</label>
+              <md-input name="owner" type="text" id="title" autocomplete="owner" v-model="artwork.owner" :disabled="sending" />
+              <span class="md-error" v-if="!$v.artwork.owner.required">The owner is required</span>
+            </md-field>
+          </div>
+          <div class="md-layout-item md-size-100">
+            <md-field :class="getValidationClass('artist')">
+              <label for="artist">artist</label>
+              <md-input name="owner" type="text" id="title" autocomplete="artist" v-model="artwork.artist" :disabled="sending" />
+              <span class="md-error" v-if="!$v.artwork.artist.required">The artist is required</span>
+            </md-field>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <hr/>
-      </div>
-      <div class="row">
-        <div class="col-sm-4"><h5>Image / File</h5></div>
-        <div class="col-sm-8"><h5>File Information</h5></div>
-      </div>
-      <div class="row">
-        <hr/>
-      </div>
-      <my-artwork-manage-image v-for="(file, index) in artwork.artwork" :key="index" :file="file"/>
-      <div class="form-group pull-right" v-if="artwork.artwork.length > 0">
-        <button type="submit" class="btn btn-default" @click.prevent="deleteArtwork()">Restart Artwork</button>
-      </div>
-    </div>
+      </md-card-content>
+      <md-card-actions>
+        <md-button type="submit" class="md-primary">Upload</md-button>
+      </md-card-actions>
+    </md-card>
 
-    <h4>Other Images</h4>
-    <hr/>
-    <div class="form-group">
-      <div id="load-artwork">
-        <div class="drop_area" @drop.prevent="loadImageFiles" @dragover.prevent>
-          Drop your images of your art here!
+    <md-card class="md-layout-item md-size-50 md-small-size-100">
+      <md-card-content>
+        <div class="md-layout">
+          <div class="md-layout-item md-size-100">
+            <md-radio v-model="artwork.itemType" value="digiart">Digital</md-radio>
+            <md-radio v-model="artwork.itemType" value="physart">Physical</md-radio>
+            <md-radio v-model="artwork.itemType" value="photoart">Photographic</md-radio>
+          </div>
+          <div class="md-layout-item md-size-100" v-if="artwork.itemType === 'digiart' || artwork.itemType === 'photoart'">
+            <div class="md-title">Artwork Images</div>
+            <span class="md-error" v-if="!$v.artwork.artwork.required">The artwork is required</span>
+            <div id="load-artwork">
+              <div class="drop_area" @drop.prevent="loadArtwork" @dragover.prevent>
+                Drop artwork file here!
+              </div>
+            </div>
+            <my-artwork-manage-image v-for="(file, index) in artwork.artwork" :key="index" :file="file"/>
+            <div class="form-group pull-right" v-if="artwork.artwork.length > 0">
+              <button type="submit" class="btn btn-default" @click.prevent="deleteArtwork()">Restart Artwork</button>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <hr/>
-      </div>
-      <div class="row">
-        <div class="col-sm-4"><h5>Image / File</h5></div>
-        <div class="col-sm-8"><h5>File Information</h5></div>
-      </div>
-      <div class="row">
-        <hr/>
-      </div>
-      <my-artwork-manage-image v-for="(file, index) in artwork.images" :key="index" :file="file"/>
-      <div class="form-group pull-right" v-if="artwork.images.length > 0">
-        <button type="submit" class="btn btn-default" @click.prevent="deleteImages()">Restart Images</button>
-      </div>
-    </div>
+        <!-- end layout -->
+      </md-card-content>
 
-    <h4>Supporting Documents</h4>
-    <hr/>
-    <div class="form-group">
-      <div id="load-artwork">
-        <div class="drop_area" @drop.prevent="loadSupportingFiles" @dragover.prevent>
-          Drop supporting documents here!
+      <md-card-content>
+        <div class="md-layout">
+          <div class="md-layout-item md-small-size-100">
+            <div class="md-title">Other Images</div>
+            <div id="load-artwork">
+              <div class="drop_area" @drop.prevent="loadImageFiles" @dragover.prevent>
+                Drop your images of your art here!
+              </div>
+            </div>
+            <my-artwork-manage-image v-for="(file, index) in artwork.images" :key="index" :file="file"/>
+            <div class="form-group pull-right" v-if="artwork.images.length > 0">
+              <button type="submit" class="btn btn-default" @click.prevent="deleteImages()">Restart Images</button>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <hr/>
-      </div>
-      <div class="row">
-        <div class="col-sm-4"><h5>Image / File</h5></div>
-        <div class="col-sm-8"><h5>File Information</h5></div>
-      </div>
-      <div class="row">
-        <hr/>
-      </div>
-      <my-artwork-manage-image v-for="(file, index) in artwork.supportingDocuments" :key="index" :file="file"/>
-      <div class="form-group pull-right" v-if="artwork.supportingDocuments.length > 0">
-        <button type="submit" class="btn btn-default" @click.prevent="deleteDocuments()">Restart Documents</button>
-      </div>
-    </div>
+        <!-- end layout -->
+      </md-card-content>
 
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary" v-on:click.prevent="upload">Submit</button>
-    </div>
+      <md-card-content>
+        <div class="md-layout">
+          <div class="md-layout-item md-small-size-100">
+            <div class="md-title">Supporting Documents</div>
+            <div id="load-artwork">
+              <div class="drop_area" @drop.prevent="loadSupportingFiles" @dragover.prevent>
+                Drop supporting documents here!
+              </div>
+            </div>
+            <my-artwork-manage-image v-for="(file, index) in artwork.supportingDocuments" :key="index" :file="file"/>
+            <div class="form-group pull-right" v-if="artwork.supportingDocuments.length > 0">
+              <button type="submit" class="btn btn-default" @click.prevent="deleteDocuments()">Restart Documents</button>
+            </div>
+          </div>
+        </div>
+        <!-- end layout -->
+      </md-card-content>
+      <md-progress-bar md-mode="indeterminate" v-if="sending" />
+    </md-card>
   </form>
 </div>
 </template>
 
 <script>
 import MyArtworkManageImage from "./MyArtworkManageImage";
+import { validationMixin } from "vuelidate";
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
+import myAccountService from "@/services/myAccountService";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyArtworkUploadForm",
+  mixins: [validationMixin],
   components: { MyArtworkManageImage },
-  props: ["artworkId", "mode"],
+  props: ["artworkId", "mode", "formTitle"],
   data() {
     return {
       errors: [],
+      sending: false,
+      showAlert: false,
+      alertMessage: null,
       artwork: {
         itemType: "digiart",
         keywords: "Photography,Illustration.3D,2D,Film & Video,Mix-media",
+        artist: "unknown",
         owner: "unknown",
         editions: 1,
         images: [],
@@ -176,34 +176,88 @@ export default {
         this.artwork = artwork;
       }
     } else {
-      let uploader = this.$store.getters["myAccountStore/getMyProfile"]
-        .username;
-      this.artwork.uploader = uploader;
-      this.artwork.owner = uploader;
-      this.artwork.artist = uploader;
+      let user = myAccountService.myProfile();
+      if (user) {
+        this.artwork.uploader = user.username;
+        this.artwork.owner = user.username;
+        this.artwork.artist = user.username;
+      }
+    }
+  },
+  validations: {
+    artwork: {
+      title: {
+        required,
+        minLength: minLength(1)
+      },
+      description: {
+        required,
+        minLength: minLength(1)
+      },
+      keywords: {
+        required
+      },
+      owner: {
+        required
+      },
+      artist: {
+        required
+      },
+      artwork: {
+        required
+      },
+      editions: {
+        required,
+        minLength: minLength(1),
+        maxLength: maxLength(10)
+      }
     }
   },
   methods: {
     upload: function() {
-      if (this.validate()) {
-        this.openModal();
-        if (this.mode === "update") {
-          this.$store
-            .dispatch("myArtworksStore/updateArtwork", this.artwork)
-            .then(artwork => {
-              this.artwork = artwork;
-              this.closeModal();
-              this.$router.push("/my-artworks");
-            });
-        } else {
-          this.$store
-            .dispatch("myArtworksStore/uploadArtwork", this.artwork)
-            .then(artwork => {
-              this.artwork = artwork;
-              this.closeModal();
-              this.$router.push("/my-artworks");
-            });
-        }
+      this.alertMessage =
+        "Please wait while we upload your artwork to your storage..";
+      this.showAlert = true;
+      if (this.mode === "update") {
+        this.$store
+          .dispatch("myArtworksStore/updateArtwork", this.artwork)
+          .then(artwork => {
+            this.artwork = artwork;
+            this.showAlert = false;
+            this.$router.push("/my-artworks");
+          });
+      } else {
+        this.$store
+          .dispatch("myArtworksStore/uploadArtwork", this.artwork)
+          .then(artwork => {
+            this.artwork = artwork;
+            this.showAlert = false;
+            this.$router.push("/my-artworks");
+          });
+      }
+    },
+    getValidationClass(fieldName) {
+      const field = this.$v.artwork[fieldName];
+      if (field) {
+        return {
+          "md-invalid": field.$invalid && field.$dirty
+        };
+      }
+    },
+    clearForm() {
+      this.$v.$reset();
+      this.artwork.title = null;
+      this.artwork.description = null;
+      this.artwork.keywords = null;
+      this.artwork.itemType = null;
+      this.artwork.editions = 1;
+      this.artwork.owner = null;
+      this.artwork.artist = null;
+    },
+    validateArtwork() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.upload();
       }
     },
     validate: function() {
@@ -284,11 +338,12 @@ export default {
 #load-artwork {
   height: 90px;
   width: 100%;
-  background: antiquewhite;
+  background: #ccc;
   text-align: center;
-  padding-top: 20px;
-  font-size: 30px;
+  padding: 20px;
+  font-size: 1.2em;
   margin: 5px;
-  border: 2pt solid green;
+  border: 2pt solid #333;
+  border-radius: 10px;
 }
 </style>

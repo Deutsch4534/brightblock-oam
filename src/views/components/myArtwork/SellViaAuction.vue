@@ -79,6 +79,7 @@ export default {
   data() {
     return {
       errors: [],
+      showModal: false,
       auctionId: -1,
       currency: "EUR",
       message: null

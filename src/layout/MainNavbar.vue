@@ -2,7 +2,7 @@
   <md-toolbar
     id="toolbar"
     md-elevation="0"
-    class="md-transparent md-absolute"
+    class="md-white md-absolute"
     :class="extraNavClasses"
     :color-on-scroll="colorOnScroll"
   >

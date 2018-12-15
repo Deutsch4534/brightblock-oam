@@ -1,13 +1,13 @@
 <template>
-<div class="row">
-  <div class="col-sm-4"><img :src=file.dataUrl alt="none"/></div>
-  <div class="col-sm-8">
-    <p>
-      {{ file.name }} ({{ file.size }}) type: {{ file.type }}
-    </p>
-    <p>
-      Last Changed: {{ file.lastModifiedDate }}
-    </p>
+<div class="md-layout">
+  <div class="md-layout-item">
+    <img :src=file.dataUrl alt="none"/>
+  </div>
+  <div class="md-layout-item">
+    {{ file.name }} ({{ file.size }}) type: {{ file.type }}
+  </div>
+  <div class="md-layout-item">
+    Last Changed: {{ file.lastModifiedDate }}
   </div>
 </div>
 </template>

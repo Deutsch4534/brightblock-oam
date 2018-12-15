@@ -4,7 +4,7 @@ const myAccountStore = {
   namespaced: true,
   state: {
     myProfile: {
-      username: "anon",
+      username: null,
       loggedIn: false,
       showAdmin: false
     }
