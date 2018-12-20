@@ -13,33 +13,32 @@
 </template>
 
 <script>
-import utils from '@/services/utils'
-import MySingleAuction from './MySingleAuction'
+import utils from "@/services/utils";
+import MySingleAuction from "./MySingleAuction";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'AuctionList',
+  name: "AuctionList",
   components: { MySingleAuction },
-  props: {
-  },
+  props: {},
   methods: {
-    startsIn (date) {
-      return utils.dt_Offset(date)
-    },
+    startsIn(date) {
+      return utils.dt_Offset(date);
+    }
   },
   computed: {
-    myAuctionsFuture () {
-      return this.$store.getters['myAuctionsStore/myAuctionsFuture']
+    myAuctionsFuture() {
+      return this.$store.getters["myAuctionsStore/myAuctionsFuture"];
     },
-    myAuctionsPast () {
-      return this.$store.getters['myAuctionsStore/myAuctionsPast']
+    myAuctionsPast() {
+      return this.$store.getters["myAuctionsStore/myAuctionsPast"];
     },
-    myAuctionsFutureCount () {
-      return this.$store.getters['myAuctionsStore/myAuctionsFutureCount']
+    myAuctionsFutureCount() {
+      return this.$store.getters["myAuctionsStore/myAuctionsFutureCount"];
     },
-    myAuctionsPastCount () {
-      return this.$store.getters['myAuctionsStore/myAuctionsPastCount']
-    },
+    myAuctionsPastCount() {
+      return this.$store.getters["myAuctionsStore/myAuctionsPastCount"];
+    }
   }
-}
+};
 </script>

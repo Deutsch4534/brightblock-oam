@@ -9,26 +9,26 @@
 </template>
 
 <script>
-
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'SingleAuctionItem',
-  components: { },
+  name: "SingleAuctionItem",
+  components: {},
   props: {
     auctionId: null,
     item: {
       type: Object,
-      default () {
-        return {}
+      default() {
+        return {};
       }
-    },
+    }
   },
-  methods: {
-  },
+  methods: {},
   computed: {
-    artwork () {
-      return this.$store.getters['artworkSearchStore/getArtwork'](this.item.itemId)
-    },
+    artwork() {
+      return this.$store.getters["artworkSearchStore/getArtwork"](
+        this.item.itemId
+      );
+    }
   }
-}
+};
 </script>

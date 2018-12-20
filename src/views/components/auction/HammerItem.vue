@@ -27,113 +27,121 @@
 </template>
 
 <script>
-import SetFinalBidPrice from './SetFinalBidPrice'
-import peerToPeerService from '@/services/peerToPeerService'
-import moneyUtils from '@/services/moneyUtils'
-import biddingUtils from '@/services/biddingUtils'
+import SetFinalBidPrice from "./SetFinalBidPrice";
+import peerToPeerService from "@/services/peerToPeerService";
+import moneyUtils from "@/services/moneyUtils";
+import biddingUtils from "@/services/biddingUtils";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'HammerItem',
+  name: "HammerItem",
   components: { SetFinalBidPrice },
   props: {
     auctionId: null,
     admin: false,
     item: {
       type: Object,
-      default () {
-        return {}
+      default() {
+        return {};
       }
-    },
+    }
   },
-  data () {
+  data() {
     return {
       setFinalBidPriceActive: false,
       paused: false
-    }
+    };
   },
   methods: {
-    openSetFinalBidPriceDialog (value) {
-      this.setFinalBidPriceActive = true
+    openSetFinalBidPriceDialog() {
+      this.setFinalBidPriceActive = true;
     },
-    pauseBidding () {
-      let myProfile = this.$store.getters['myAccountStore/getMyProfile']
-      let message = 'Pausing the auction to wait for bidders to catch up...'
+    pauseBidding() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      let message = "Pausing the auction to wait for bidders to catch up...";
       if (this.item.paused) {
-        message = 'Ready to go again now...'
+        message = "Ready to go again now...";
       }
       let messageData = {
         content: message,
         username: myProfile.username,
         auctionId: this.auctionId
-      }
-      this.$store.commit('myAuctionsStore/messageEvent', messageData)
+      };
+      this.$store.commit("myAuctionsStore/messageEvent", messageData);
 
       let data = {
         username: myProfile.username,
         auctionId: this.auctionId,
         itemId: this.item.itemId
-      }
-      this.$store.commit('myAuctionsStore/pauseItemEvent', data)
+      };
+      this.$store.commit("myAuctionsStore/pauseItemEvent", data);
     },
-    closeDialog (value) {
-      this.setFinalBidPriceActive = false
+    closeDialog() {
+      this.setFinalBidPriceActive = false;
     },
-    bid (amount) {
-      let $self = this
-      setTimeout(function () {
-        $self.paused = false
+    bid(amount) {
+      let $self = this;
+      setTimeout(function() {
+        $self.paused = false;
         // $self.$forceUpdate()
-      }, 2000)
-      this.paused = true
-      let bidSignal = biddingUtils.bidSignal(amount, this.item.itemId, this.auctionId)
+      }, 2000);
+      this.paused = true;
+      let bidSignal = biddingUtils.bidSignal(
+        amount,
+        this.item.itemId,
+        this.auctionId
+      );
       if (this.admin) {
-        this.$store.commit('myAuctionsStore/sendBidEvent', bidSignal)
+        this.$store.commit("myAuctionsStore/sendBidEvent", bidSignal);
       } else {
         peerToPeerService.sendPeerSignal({
-          type: 'wa-bid-send-adm',
+          type: "wa-bid-send-adm",
           data: bidSignal
-        })
+        });
       }
-    },
+    }
   },
   computed: {
-    artwork () {
+    artwork() {
       if (!this.item.itemId) {
         return {
-          title: 'no artwork under the hammer right now',
-          image: '/static/images/artwork1.jpg'
-        }
+          title: "no artwork under the hammer right now",
+          image: "/static/images/artwork1.jpg"
+        };
       }
-      return this.$store.getters['artworkSearchStore/getArtwork'](this.item.itemId)
+      return this.$store.getters["artworkSearchStore/getArtwork"](
+        this.item.itemId
+      );
     },
-    bidStatusClass () {
-      return biddingUtils.bidStatusClass(this.item)
+    bidStatusClass() {
+      return biddingUtils.bidStatusClass(this.item);
     },
-    showSetFinalPriceButton () {
-      return this.admin && this.item.paused && this.item.sellingStatus !== 'selling'
+    showSetFinalPriceButton() {
+      return (
+        this.admin && this.item.paused && this.item.sellingStatus !== "selling"
+      );
     },
-    selling () {
-      return (this.item.sellingStatus === 'selling')
+    selling() {
+      return this.item.sellingStatus === "selling";
     },
-    sellingMessage () {
-      return biddingUtils.sellingMessage(this.item)
+    sellingMessage() {
+      return biddingUtils.sellingMessage(this.item);
     },
-    inplay () {
-      return (this.item.itemId)
+    inplay() {
+      return this.item.itemId;
     },
-    currencySymbol () {
-      return moneyUtils.currencySymbol(this.item.fiatCurrency)
+    currencySymbol() {
+      return moneyUtils.currencySymbol(this.item.fiatCurrency);
     },
-    nextBid () {
-      return biddingUtils.nextBid(this.item)
+    nextBid() {
+      return biddingUtils.nextBid(this.item);
     },
-    currentBid () {
-      return biddingUtils.currentBid(this.item)
+    currentBid() {
+      return biddingUtils.currentBid(this.item);
     },
-    currentBidder () {
-      return biddingUtils.currentBidder(this.item)
-    },
+    currentBidder() {
+      return biddingUtils.currentBidder(this.item);
+    }
   }
-}
+};
 </script>

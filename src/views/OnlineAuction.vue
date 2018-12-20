@@ -1,5 +1,4 @@
 <template>
-<section>
   <div class="container">
     <div class="row">
       <div class="col-md-12 pt-5">
@@ -35,107 +34,132 @@
       </div>
     </div>
   </div>
-</section>
 </template>
 
 <script>
-import SingleAuctionItem from './components/auction/SingleAuctionItem'
-import HammerItem from './components/auction/HammerItem'
-import MessageStream from './components/rtc/MessageStream'
-import VideoStream from './components/rtc/VideoStream'
-import WatchersStream from './components/rtc/WatchersStream'
-import utils from '@/services/utils'
-import peerToPeerService from '@/services/peerToPeerService'
+import SingleAuctionItem from "./components/auction/SingleAuctionItem";
+import HammerItem from "./components/auction/HammerItem";
+import MessageStream from "./components/rtc/MessageStream";
+import VideoStream from "./components/rtc/VideoStream";
+import WatchersStream from "./components/rtc/WatchersStream";
+import utils from "@/services/utils";
+import peerToPeerService from "@/services/peerToPeerService";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'OnlineAuction',
-  components: { WatchersStream, SingleAuctionItem, HammerItem, VideoStream, MessageStream },
-  data () {
+  name: "OnlineAuction",
+  components: {
+    WatchersStream,
+    SingleAuctionItem,
+    HammerItem,
+    VideoStream,
+    MessageStream
+  },
+  data() {
     return {
       auctionId: null,
       username: null
-    }
+    };
   },
-  beforeDestroy () {
-    peerToPeerService.disconnect()
+  beforeDestroy() {
+    peerToPeerService.disconnect();
   },
-  created () {
-    window.addEventListener('beforeunload', this.stopPublishing)
-    this.auctionId = Number(this.$route.params.auctionId)
-    this.$store.dispatch('myAccountStore/fetchMyAccount').then((myProfile) => {
-      this.username = myProfile.username
-      this.$store.dispatch('onlineAuctionsStore/fetchOnlineAuction', this.auctionId).then((auction) => {
-        try {
-          peerToPeerService.startSession(myProfile.username, auction.auctionId)
-        } catch (e) {
-          console.log(e)
-        }
-      })
-    })
+  created() {
+    window.addEventListener("beforeunload", this.stopPublishing);
+    this.auctionId = Number(this.$route.params.auctionId);
+    this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
+      this.username = myProfile.username;
+      this.$store
+        .dispatch("onlineAuctionsStore/fetchOnlineAuction", this.auctionId)
+        .then(auction => {
+          try {
+            peerToPeerService.startSession(
+              myProfile.username,
+              auction.auctionId
+            );
+          } catch (e) {
+            console.log(e);
+          }
+        });
+    });
   },
   methods: {
-    myUsername () {
-      let myProfile = this.$store.getters['myAccountStore/getMyProfile']
+    myUsername() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
       if (myProfile) {
-        return myProfile.username
+        return myProfile.username;
       } else {
-        return ''
+        return "";
       }
-    },
+    }
   },
   computed: {
-    auction () {
-      let auction = this.$store.getters['onlineAuctionsStore/onlineAuction'](this.auctionId)
+    auction() {
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
+        this.auctionId
+      );
       if (auction) {
-        return auction
+        return auction;
       } else {
-        return {}
+        return {};
       }
     },
-    administrator () {
-      let auction = this.$store.getters['onlineAuctionsStore/onlineAuction'](this.auctionId)
+    administrator() {
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
+        this.auctionId
+      );
       if (auction) {
-        return auction.administrator
+        return auction.administrator;
       } else {
-        return {}
+        return {};
       }
     },
-    winning () {
-      let winning = this.$store.getters['onlineAuctionsStore/getWinning']({auctionId: this.auctionId, username: this.username})
-      return winning
+    winning() {
+      let winning = this.$store.getters["onlineAuctionsStore/getWinning"]({
+        auctionId: this.auctionId,
+        username: this.username
+      });
+      return winning;
     },
-    sellingItems () {
-      let auction = this.$store.getters['onlineAuctionsStore/onlineAuction'](this.auctionId)
+    sellingItems() {
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
+        this.auctionId
+      );
       if (auction && auction.items) {
-        let following = auction.items.filter(item => !item.inplay)
-        return following
+        let following = auction.items.filter(item => !item.inplay);
+        return following;
       } else {
-        return []
+        return [];
       }
     },
-    hammerItem () {
-      let auction = this.$store.getters['onlineAuctionsStore/onlineAuction'](this.auctionId)
+    hammerItem() {
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
+        this.auctionId
+      );
       if (auction && auction.items) {
-        let hammerItems = auction.items.filter(item => item.inplay)
+        let hammerItems = auction.items.filter(item => item.inplay);
         if (hammerItems && hammerItems.length === 1) {
-          return hammerItems[0]
+          return hammerItems[0];
         }
       }
-      return {}
+      return {};
     },
-    peers () {
-      return this.$store.getters['onlineAuctionsStore/getPeers']
+    peers() {
+      return this.$store.getters["onlineAuctionsStore/getPeers"];
     },
-    artworksSize () {
-      let auction = this.$store.getters['onlineAuctionsStore/onlineAuction'](this.auctionId)
-      return (auction && auction.items) ? auction.items.length : 0
+    artworksSize() {
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
+        this.auctionId
+      );
+      return auction && auction.items ? auction.items.length : 0;
     },
-    countdown () {
-      let auction = this.$store.getters['onlineAuctionsStore/onlineAuction'](this.auctionId)
-      let serverTime = this.$store.getters['serverTime']
-      return (auction) ? utils.dt_Offset(serverTime, auction.startDate) : '?'
-    },
-  },
-}
+    countdown() {
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
+        this.auctionId
+      );
+      let serverTime = this.$store.getters["serverTime"];
+      return auction ? utils.dt_Offset(serverTime, auction.startDate) : "?";
+    }
+  }
+};
 </script>

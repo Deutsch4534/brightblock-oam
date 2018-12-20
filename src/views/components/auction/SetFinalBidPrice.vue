@@ -45,99 +45,117 @@
 </template>
 
 <script>
-import notify from '@/services/notify'
-import ethereumService from '@/services/ethereumService'
-import moneyUtils from '@/services/moneyUtils'
+import notify from "@/services/notify";
+import ethereumService from "@/services/ethereumService";
+import moneyUtils from "@/services/moneyUtils";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'SetFinalBidPrice',
+  name: "SetFinalBidPrice",
   props: {
     isModalActive: false,
     amount: null,
     auctionId: null,
     item: {
       type: Object,
-      default () {
-        return {}
+      default() {
+        return {};
       }
-    },
-  },
-  data () {
-    return {
-      errors: [],
-      currency: 'EUR',
-      message: null,
     }
   },
-  mounted () {
+  data() {
+    return {
+      errors: [],
+      currency: "EUR",
+      message: null
+    };
   },
+  mounted() {},
   computed: {
-    fiatRates () {
-      return this.$store.getters['conversionStore/getFiatRates']
+    fiatRates() {
+      return this.$store.getters["conversionStore/getFiatRates"];
     },
 
-    artwork () {
-      let artwork = this.$store.getters['artworkSearchStore/getArtwork'](this.item.itemId)
+    artwork() {
+      let artwork = this.$store.getters["artworkSearchStore/getArtwork"](
+        this.item.itemId
+      );
       if (artwork) {
-        return artwork
+        return artwork;
       } else {
         return {
-          image: '/static/images/artwork1.jpg'
-        }
+          image: "/static/images/artwork1.jpg"
+        };
       }
     },
 
-    auctions () {
-      return this.$store.getters['myAuctionsStore/myAuctionsFuture']
+    auctions() {
+      return this.$store.getters["myAuctionsStore/myAuctionsFuture"];
     },
 
-    conversionMessage () {
-      return moneyUtils.conversionMessage(this.currency)
+    conversionMessage() {
+      return moneyUtils.conversionMessage(this.currency);
     },
 
-    currencySymbol () {
-      return moneyUtils.currencySymbol(this.currency)
-    },
+    currencySymbol() {
+      return moneyUtils.currencySymbol(this.currency);
+    }
   },
   methods: {
-    closeModal () {
-      $('#setFinalBidPriceModal').modal('hide')
+    closeModal() {},
+
+    valueInBitcoin(amount) {
+      return moneyUtils.valueInBitcoin(this.currency, amount);
     },
 
-    valueInBitcoin (amount) {
-      return moneyUtils.valueInBitcoin(this.currency, amount)
+    valueInEther(amount) {
+      return moneyUtils.valueInEther(this.currency, amount);
     },
 
-    valueInEther (amount) {
-      return moneyUtils.valueInEther(this.currency, amount)
-    },
-
-    setPrice: function () {
-      this.$store.commit('myAuctionsStore/sellItemEvent', {auctionId: this.auctionId, itemId: this.item.itemId})
-      let artwork = this.$store.getters['artworkSearchStore/getArtwork'](this.item.itemId)
-      this.message = 'Setting Price: Please confirm the transaction in your wallet...'
+    setPrice: function() {
+      this.$store.commit("myAuctionsStore/sellItemEvent", {
+        auctionId: this.auctionId,
+        itemId: this.item.itemId
+      });
+      let artwork = this.$store.getters["artworkSearchStore/getArtwork"](
+        this.item.itemId
+      );
+      this.message =
+        "Setting Price: Please confirm the transaction in your wallet...";
       let priceData = {
         itemIndex: artwork.bcitem.itemIndex,
         amountInWei: moneyUtils.valueInWei(this.currency, this.amount)
-      }
-      let $self = this
-      ethereumService.setPriceOnChain(priceData, function (result) {
-        artwork.bcitem.setPriceTxId = result.txId
-        artwork.bcitem.status = 'price-set'
-        $self.$store.dispatch('myArtworksStore/syncBlockchainState', artwork).then((artwork) => {
-          if (artwork) {
-            $self.artwork = artwork
-          }
-        })
-        // $self.$store.commit('myAuctionsStore/sellItemEvent', {auctionId: $self.auctionId, itemId: $self.item.itemId})
-        notify.info({title: 'Set Price.', text: 'The final bid amount has been saved on chain - ready for payment.'})
-        $self.closeModal()
-      }, function (error) {
-        console.log(error)
-        notify.error({title: 'Set Price.', text: 'Error setting price for your item.'})
-      })
+      };
+      let $self = this;
+      ethereumService.setPriceOnChain(
+        priceData,
+        function(result) {
+          artwork.bcitem.setPriceTxId = result.txId;
+          artwork.bcitem.status = "price-set";
+          $self.$store
+            .dispatch("myArtworksStore/syncBlockchainState", artwork)
+            .then(artwork => {
+              if (artwork) {
+                $self.artwork = artwork;
+              }
+            });
+          // $self.$store.commit('myAuctionsStore/sellItemEvent', {auctionId: $self.auctionId, itemId: $self.item.itemId})
+          notify.info({
+            title: "Set Price.",
+            text:
+              "The final bid amount has been saved on chain - ready for payment."
+          });
+          $self.closeModal();
+        },
+        function(error) {
+          console.log(error);
+          notify.error({
+            title: "Set Price.",
+            text: "Error setting price for your item."
+          });
+        }
+      );
     }
   }
-}
+};
 </script>

@@ -15,52 +15,56 @@
 </template>
 
 <script>
-import peerToPeerService from '@/services/peerToPeerService'
+import peerToPeerService from "@/services/peerToPeerService";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'MessageStream',
+  name: "MessageStream",
   props: {
     auctionId: null,
     admin: false
   },
-  data () {
+  data() {
     return {
-      message: ''
-    }
+      message: ""
+    };
   },
   computed: {
-    messages () {
-      let auction = {}
+    messages() {
+      let auction = {};
       if (this.admin) {
-        auction = this.$store.getters['myAuctionsStore/myAuction'](this.auctionId)
+        auction = this.$store.getters["myAuctionsStore/myAuction"](
+          this.auctionId
+        );
       } else {
-        auction = this.$store.getters['onlineAuctionsStore/onlineAuction'](this.auctionId)
+        auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
+          this.auctionId
+        );
       }
       if (!auction) {
-        auction = {}
+        auction = {};
       }
-      return auction.messages
-    },
+      return auction.messages;
+    }
   },
   methods: {
-    sendMessage () {
-      let myProfile = this.$store.getters['myAccountStore/getMyProfile']
+    sendMessage() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
       let data = {
         content: this.message,
         username: myProfile.username,
         auctionId: this.auctionId
-      }
+      };
 
       if (this.admin) {
-        this.$store.commit('myAuctionsStore/messageEvent', data)
+        this.$store.commit("myAuctionsStore/messageEvent", data);
       } else {
         peerToPeerService.sendPeerSignal({
-          type: 'wa-message-send-adm',
+          type: "wa-message-send-adm",
           data: data
-        })
+        });
       }
-    },
+    }
   }
-}
+};
 </script>

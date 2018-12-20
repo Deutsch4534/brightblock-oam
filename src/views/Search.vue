@@ -1,28 +1,18 @@
 <template>
-<div class="wrapper">
-  <leafs/>
-  <div class="main main-raised">
-    <div class="section section-basic">
-      <div class="container">
-        <h1 class="innerpage mb-0">Search results for: {{ queryString }} ({{numberArtworks}})</h1>
-        <results-list :artworks="artworks" :show-load-button="false" :chunks="6"/>
-      </div>
-    </div>
-  </div>
+<div class="container">
+  <h1 class="innerpage mb-0">Search results for: {{ queryString }} ({{numberArtworks}})</h1>
+  <results-list :artworks="artworks" :show-load-button="false" :chunks="6"/>
 </div>
 </template>
 
 <script>
 import ResultsList from "./components/search/ResultsList";
-import Leafs from "./components/Leafs";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "Search",
-  bodyClass: "index-page",
   components: {
-    ResultsList,
-    Leafs
+    ResultsList
   },
   data() {
     return {

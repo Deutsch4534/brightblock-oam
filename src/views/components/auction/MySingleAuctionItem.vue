@@ -22,66 +22,77 @@
 </template>
 
 <script>
-import SellViaAuction from '../myArtwork/RegisterForAuction'
+import SellViaAuction from "../myArtwork/RegisterForAuction";
 // import peerToPeerService from '@/services/peerToPeerService'
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'MySingleAuctionItem',
+  name: "MySingleAuctionItem",
   components: { SellViaAuction },
   props: {
     auctionId: null,
     sellingItem: false,
     item: {
       type: Object,
-      default () {
-        return {}
+      default() {
+        return {};
       }
-    },
-  },
-  data () {
-    return {
-      sellAuctionActive: false
     }
   },
-  mounted () {
+  data() {
+    return {
+      sellAuctionActive: false
+    };
   },
+  mounted() {},
   methods: {
-    removeFromAuction () {
-      this.$store.dispatch('myArtworksStore/removeFromAuction', {auctionId: this.auctionId, itemId: this.item.itemId}).then((artwork) => {
-
-      }).catch(e => {
-        console.log(e.message)
-      })
+    removeFromAuction() {
+      this.$store
+        .dispatch("myArtworksStore/removeFromAuction", {
+          auctionId: this.auctionId,
+          itemId: this.item.itemId
+        })
+        .then(() => {})
+        .catch(e => {
+          console.log(e.message);
+        });
     },
-    activateBidding (value) {
-      this.$store.commit('myAuctionsStore/activateItemEvent', {auctionId: this.auctionId, itemId: this.item.itemId})
+    activateBidding() {
+      this.$store.commit("myAuctionsStore/activateItemEvent", {
+        auctionId: this.auctionId,
+        itemId: this.item.itemId
+      });
     },
-    deactivateBidding (value) {
-      this.$store.commit('myAuctionsStore/activateItemEvent', {auctionId: this.auctionId, itemId: null})
+    deactivateBidding() {
+      this.$store.commit("myAuctionsStore/activateItemEvent", {
+        auctionId: this.auctionId,
+        itemId: null
+      });
     },
-    closeDialog (value) {
-      this.sellAuctionActive = false
+    closeDialog() {
+      this.sellAuctionActive = false;
     },
-    openAuctionDialog (value) {
-      this.sellAuctionActive = true
-    },
+    openAuctionDialog() {
+      this.sellAuctionActive = true;
+    }
   },
   computed: {
-    canSell () {
-      let artwork = this.$store.getters['myArtworksStore/myArtwork'](this.item.itemId)
-      let bcitem = artwork.bcitem
-      return (bcitem && bcitem.itemIndex > -1)
+    canSell() {
+      let artwork = this.$store.getters["myArtworksStore/myArtwork"](
+        this.item.itemId
+      );
+      let bcitem = artwork.bcitem;
+      return bcitem && bcitem.itemIndex > -1;
     },
-    artwork () {
-      return this.$store.getters['myArtworksStore/myArtwork'](this.item.itemId)
+    artwork() {
+      return this.$store.getters["myArtworksStore/myArtwork"](this.item.itemId);
     },
-    registerUrl () {
-      return `/my-artworks/register/${this.item.itemId}`
+    registerUrl() {
+      return `/my-artworks/register/${this.item.itemId}`;
     },
-    debugMode () {
-      return this.$store.getters['isDebugMode']
-    },
+    debugMode() {
+      return this.$store.getters["isDebugMode"];
+    }
   }
-}
+};
 </script>

@@ -1,5 +1,4 @@
 <template>
-<section>
   <div class="container">
     <div class="row">
       <div class="col-md-12 pt-5">
@@ -52,140 +51,181 @@
     </div>
 
   </div>
-</section>
 </template>
 
 <script>
-import WatchersStream from './components/rtc/WatchersStream'
-import MessageStream from './components/rtc/MessageStream'
-import VideoStream from './components/rtc/VideoStream'
-import MySingleAuction from './components/auction/MySingleAuction'
-import MySingleAuctionItem from './components/auction/MySingleAuctionItem'
-import HammerItem from './components/auction/HammerItem'
+import WatchersStream from "./components/rtc/WatchersStream";
+import MessageStream from "./components/rtc/MessageStream";
+import VideoStream from "./components/rtc/VideoStream";
+import MySingleAuction from "./components/auction/MySingleAuction";
+import MySingleAuctionItem from "./components/auction/MySingleAuctionItem";
+import HammerItem from "./components/auction/HammerItem";
 
-import utils from '@/services/utils'
-import notify from '@/services/notify'
-import peerToPeerService from '@/services/peerToPeerService'
-import eventBus from '@/services/eventBus'
+import utils from "@/services/utils";
+import notify from "@/services/notify";
+import peerToPeerService from "@/services/peerToPeerService";
+import eventBus from "@/services/eventBus";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'MyAuctionManage',
-  components: { WatchersStream, HammerItem, MySingleAuction, MySingleAuctionItem, VideoStream, MessageStream },
-  data () {
+  name: "MyAuctionManage",
+  components: {
+    WatchersStream,
+    HammerItem,
+    MySingleAuction,
+    MySingleAuctionItem,
+    VideoStream,
+    MessageStream
+  },
+  data() {
     return {
       auctionId: null
-    }
+    };
   },
-  beforeDestroy () {
-    peerToPeerService.disconnect()
-    eventBus.$off('signal-in-message')
+  beforeDestroy() {
+    peerToPeerService.disconnect();
+    eventBus.$off("signal-in-message");
   },
-  created () {
-    this.auctionId = Number(this.$route.params.auctionId)
-    this.$store.dispatch('myAccountStore/fetchMyAccount').then((myProfile) => {
-      this.$store.dispatch('myAuctionsStore/fetchMyAuction', this.auctionId).then((auction) => {
-        // this.auction = auction
-        try {
-          this.$store.commit('onlineAuctionsStore/onlineAuction', auction)
-          peerToPeerService.startSession(myProfile.username, auction.auctionId)
-        } catch (e) {
-          console.log(e)
-        }
-      })
-    })
+  created() {
+    this.auctionId = Number(this.$route.params.auctionId);
+    this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
+      this.$store
+        .dispatch("myAuctionsStore/fetchMyAuction", this.auctionId)
+        .then(auction => {
+          // this.auction = auction
+          try {
+            this.$store.commit("onlineAuctionsStore/onlineAuction", auction);
+            peerToPeerService.startSession(
+              myProfile.username,
+              auction.auctionId
+            );
+          } catch (e) {
+            console.log(e);
+          }
+        });
+    });
   },
   methods: {
-    startsIn (date) {
-      return utils.dt_Offset(date)
+    startsIn(date) {
+      return utils.dt_Offset(date);
     },
-    deleteAuction () {
-      this.$store.dispatch('myAuctionsStore/deleteMyAuction', this.auctionId)
+    deleteAuction() {
+      this.$store.dispatch("myAuctionsStore/deleteMyAuction", this.auctionId);
     },
-    makePublic () {
-      let auction = this.$store.getters['myAuctionsStore/myAuction'](this.auctionId)
-      auction.privacy = 'public'
-      this.$store.dispatch('myAuctionsStore/makePublic', auction)
-      notify.info({title: 'Manage Auction', text: auction.title + ' is now public and can be found by others via search results.'})
+    makePublic() {
+      let auction = this.$store.getters["myAuctionsStore/myAuction"](
+        this.auctionId
+      );
+      auction.privacy = "public";
+      this.$store.dispatch("myAuctionsStore/makePublic", auction);
+      notify.info({
+        title: "Manage Auction",
+        text:
+          auction.title +
+          " is now public and can be found by others via search results."
+      });
     },
-    makePrivate () {
-      let auction = this.$store.getters['myAuctionsStore/myAuction'](this.auctionId)
-      auction.privacy = 'private'
-      this.$store.dispatch('myAuctionsStore/makePrivate', auction)
-      notify.info({title: 'Manage Auction', text: auction.title + ' is now private and can not be found by other users.'})
-    },
+    makePrivate() {
+      let auction = this.$store.getters["myAuctionsStore/myAuction"](
+        this.auctionId
+      );
+      auction.privacy = "private";
+      this.$store.dispatch("myAuctionsStore/makePrivate", auction);
+      notify.info({
+        title: "Manage Auction",
+        text:
+          auction.title + " is now private and can not be found by other users."
+      });
+    }
   },
   computed: {
-    sellingItemsSize () {
-      let sellingItems = this.$store.getters['myArtworksStore/auctioning'](this.auctionId)
-      return sellingItems.length
+    sellingItemsSize() {
+      let sellingItems = this.$store.getters["myArtworksStore/auctioning"](
+        this.auctionId
+      );
+      return sellingItems.length;
     },
-    winning () {
-      let winning = this.$store.getters['onlineAuctionsStore/getWinning']({auctionId: this.auctionId, username: this.username})
-      return winning
+    winning() {
+      let winning = this.$store.getters["onlineAuctionsStore/getWinning"]({
+        auctionId: this.auctionId,
+        username: this.username
+      });
+      return winning;
     },
-    countdown () {
-      let auction = this.$store.getters['onlineAuctionsStore/onlineAuction'](this.auctionId)
-      let serverTime = this.$store.getters['serverTime']
-      return (auction) ? utils.dt_Offset(serverTime, auction.startDate) : '?'
+    countdown() {
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
+        this.auctionId
+      );
+      let serverTime = this.$store.getters["serverTime"];
+      return auction ? utils.dt_Offset(serverTime, auction.startDate) : "?";
     },
-    auction () {
-      let auction = this.$store.getters['myAuctionsStore/myAuction'](this.auctionId)
+    auction() {
+      let auction = this.$store.getters["myAuctionsStore/myAuction"](
+        this.auctionId
+      );
       if (!auction || !auction.auctionId) {
         auction = {
           items: []
-        }
+        };
       }
-      return auction
+      return auction;
     },
-    debugMode () {
-      return this.$store.getters['isDebugMode']
+    debugMode() {
+      return this.$store.getters["isDebugMode"];
     },
-    updateUrl () {
-      return `/my-auctions/update/${this.auctionId}`
+    updateUrl() {
+      return `/my-auctions/update/${this.auctionId}`;
     },
-    hammerItem () {
-      let hammerItem = {}
-      let auction = this.$store.getters['myAuctionsStore/myAuction'](this.auctionId)
+    hammerItem() {
+      let hammerItem = {};
+      let auction = this.$store.getters["myAuctionsStore/myAuction"](
+        this.auctionId
+      );
       if (auction && auction.items) {
-        let hammerItems = auction.items.filter(item => item.inplay)
+        let hammerItems = auction.items.filter(item => item.inplay);
         if (hammerItems && hammerItems.length === 1) {
-          hammerItem = hammerItems[0]
+          hammerItem = hammerItems[0];
         }
       }
-      return hammerItem
+      return hammerItem;
     },
-    availableItems () {
-      let available = this.$store.getters['myArtworksStore/available'](this.auctionId)
+    availableItems() {
+      let available = this.$store.getters["myArtworksStore/available"](
+        this.auctionId
+      );
       if (available && available.length > 0) {
-        let items = []
+        let items = [];
         for (let key in available) {
           items.push({
             itemId: available[key].id
-          })
+          });
         }
-        return items
+        return items;
       } else {
-        return []
+        return [];
       }
     },
-    sellingItems () {
-      let auction = this.$store.getters['myAuctionsStore/myAuction'](this.auctionId)
+    sellingItems() {
+      let auction = this.$store.getters["myAuctionsStore/myAuction"](
+        this.auctionId
+      );
       if (auction && auction.items) {
-        let following = auction.items.filter(item => !item.inplay)
-        return following
+        let following = auction.items.filter(item => !item.inplay);
+        return following;
       } else {
-        return []
+        return [];
       }
     },
-    onlineAuctionUrl () {
-      let auction = this.$store.getters['myAuctionsStore/myAuction'](this.auctionId)
+    onlineAuctionUrl() {
+      let auction = this.$store.getters["myAuctionsStore/myAuction"](
+        this.auctionId
+      );
       if (auction) {
-        return `/online-auction/${auction.administrator}/${this.auctionId}`
+        return `/online-auction/${auction.administrator}/${this.auctionId}`;
       } else {
-        return '/'
+        return "/";
       }
-    },
-  },
-}
+    }
+  }
+};
 </script>

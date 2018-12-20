@@ -11,34 +11,34 @@
 </template>
 
 <script>
-
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'MessageStream',
+  name: "MessageStream",
   props: {
-    auctionId: null,
+    auctionId: null
   },
-  data () {
-    return {
-    }
+  data() {
+    return {};
   },
   computed: {
-    administrator () {
-      return this.$store.getters['onlineAuctionsStore/getAdministrator'](this.auctionId)
+    administrator() {
+      return this.$store.getters["onlineAuctionsStore/getAdministrator"](
+        this.auctionId
+      );
     },
-    peers () {
-      return this.$store.getters['onlineAuctionsStore/getPeers']
-    },
+    peers() {
+      return this.$store.getters["onlineAuctionsStore/getPeers"];
+    }
   },
   methods: {
-    myUsername () {
-      let myProfile = this.$store.getters['myAccountStore/getMyProfile']
+    myUsername() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
       if (myProfile) {
-        return myProfile.username
+        return myProfile.username;
       } else {
-        return ''
+        return "";
       }
-    },
+    }
   }
-}
+};
 </script>

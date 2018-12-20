@@ -1,29 +1,19 @@
 <template>
-<div class="wrapper">
-  <leafs/>
-  <div class="main main-raised">
-    <div class="section section-basic">
-      <div class="container">
-        <div id="images">
-          <last-artworks :artworks="artworks" class=""/>
-        </div>
-      </div>
-    </div>
+<div class="container">
+  <div id="images">
+    <last-artworks :artworks="artworks" class=""/>
   </div>
 </div>
 </template>
 
 <script>
 import LastArtworks from "./components/home/LastArtworks";
-import Leafs from "./components/Leafs";
 
 export default {
   components: {
-    LastArtworks,
-    Leafs
+    LastArtworks
   },
   name: "home",
-  bodyClass: "index-page",
   props: {
     image: {
       type: String,

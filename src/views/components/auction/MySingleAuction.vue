@@ -13,41 +13,42 @@
 </template>
 
 <script>
-import utils from '@/services/utils'
-import moment from 'moment'
+import utils from "@/services/utils";
+import moment from "moment";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'MySingleAuction',
-  components: { },
+  name: "MySingleAuction",
+  components: {},
   props: {
     auction: {
       type: Object,
-      default () {
-        return {}
+      default() {
+        return {};
       }
-    },
+    }
   },
   methods: {
-    convertDate (date) {
-      return moment(date).format()
-    },
+    convertDate(date) {
+      return moment(date).format();
+    }
   },
   computed: {
-
-    debugMode () {
-      return this.$store.getters['isDebugMode']
+    debugMode() {
+      return this.$store.getters["isDebugMode"];
     },
-    countdown () {
-      let serverTime = this.$store.getters['serverTime']
-      return utils.dt_Offset(serverTime, this.auction.startDate)
+    countdown() {
+      let serverTime = this.$store.getters["serverTime"];
+      return utils.dt_Offset(serverTime, this.auction.startDate);
     },
-    manageUrl () {
-      return `/my-auctions/manage/${this.auction.auctionId}`
+    manageUrl() {
+      return `/my-auctions/manage/${this.auction.auctionId}`;
     },
-    onlineAuctionUrl () {
-      return `/online-auction/${this.auction.administrator}/${this.auction.auctionId}`
-    },
+    onlineAuctionUrl() {
+      return `/online-auction/${this.auction.administrator}/${
+        this.auction.auctionId
+      }`;
+    }
   }
-}
+};
 </script>

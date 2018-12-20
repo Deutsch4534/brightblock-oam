@@ -7,35 +7,37 @@
 </template>
 
 <script>
-import utils from '@/services/utils'
-import moment from 'moment'
+import utils from "@/services/utils";
+import moment from "moment";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'SingleAuction',
-  components: { },
+  name: "SingleAuction",
+  components: {},
   props: {
     auction: {
       type: Object,
-      default () {
-        return {}
+      default() {
+        return {};
       }
     },
-    future: false,
+    future: false
   },
   methods: {
-    convertDate (date) {
-      return moment(date).format()
-    },
+    convertDate(date) {
+      return moment(date).format();
+    }
   },
   computed: {
-    auctionUrl () {
-      return `/online-auction/${this.auction.administrator}/${this.auction.auctionId}`
+    auctionUrl() {
+      return `/online-auction/${this.auction.administrator}/${
+        this.auction.auctionId
+      }`;
     },
-    countdown () {
-      let serverTime = this.$store.getters['serverTime']
-      return utils.dt_Offset(serverTime, this.auction.startDate)
-    },
+    countdown() {
+      let serverTime = this.$store.getters["serverTime"];
+      return utils.dt_Offset(serverTime, this.auction.startDate);
+    }
   }
-}
+};
 </script>

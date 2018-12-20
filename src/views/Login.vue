@@ -1,6 +1,10 @@
 <template>
+<!--
   <div class="wrapper">
     <div class="section page-header header-filter" :style="headerStyle">
+    </div>
+  </div>
+-->
       <div class="container">
         <div class="md-layout">
           <div
@@ -60,8 +64,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -72,7 +74,7 @@ export default {
   components: {
     LoginCard
   },
-  bodyClass: "login-page",
+  // bodyClass: "login-page",
   data() {
     return {
       firstname: null,

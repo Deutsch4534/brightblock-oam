@@ -1,25 +1,18 @@
 <template>
-<div class="wrapper">
-  <leafs/>
-  <div class="main main-raised">
-    <div class="section section-basic">
-      <div class="container">
-        <h1>{{artist.name}}, {{artwork.title}}</h1>
-        <p class="mb-0">
-          1/1 Edition, {{artwork.description}}<br/>
-        </p>
-        <p>
-          Artist: {{artwork.artist}}<br />
-          Owner: {{artwork.owner}}
-        </p>
-        <p class="keywords">Keywords ︱ {{aboutArtwork.keywords}}</p>
-        <div id="images">
-          <img :src="artwork.image" :alt="artwork.title" class="img-responsive">
-        </div>
-        <buy-artwork-form :purchaseState="purchaseState" :artwork="artwork" @buy="buyArtwork()"/>
-      </div>
-    </div>
+<div class="container">
+  <h1>{{artist.name}}, {{artwork.title}}</h1>
+  <p class="mb-0">
+    1/1 Edition, {{artwork.description}}<br/>
+  </p>
+  <p>
+    Artist: {{artwork.artist}}<br />
+    Owner: {{artwork.owner}}
+  </p>
+  <p class="keywords">Keywords ︱ {{aboutArtwork.keywords}}</p>
+  <div id="images">
+    <img :src="artwork.image" :alt="artwork.title" class="img-responsive">
   </div>
+  <buy-artwork-form :purchaseState="purchaseState" :artwork="artwork" @buy="buyArtwork()"/>
 </div>
 </template>
 
@@ -29,16 +22,13 @@ import BuyArtworkForm from "./components/artwork/BuyArtworkForm";
 import ethereumService from "@/services/ethereumService";
 import notify from "@/services/notify";
 import moneyUtils from "@/services/moneyUtils";
-import Leafs from "./components/Leafs";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "Artwork",
-  bodyClass: "index-page",
   components: {
     BuyArtworkForm,
-    AboutArtwork,
-    Leafs
+    AboutArtwork
   },
   data() {
     return {

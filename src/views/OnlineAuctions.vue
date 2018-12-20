@@ -1,5 +1,4 @@
 <template>
-<section>
   <div class="container">
     <div class="row">
       <div class="col-sm-12 pt-5">
@@ -10,34 +9,31 @@
       </div>
     </div>
   </div>
-</section>
 </template>
 
 <script>
-import SingleAuction from './components/auction/SingleAuction'
+import SingleAuction from "./components/auction/SingleAuction";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'OnlineAuctions',
+  name: "OnlineAuctions",
   components: { SingleAuction },
-  data () {
-    return {
-    }
+  data() {
+    return {};
   },
-  created () {
-    this.$store.dispatch('onlineAuctionsStore/fetchOnlineAuctions').then((auctions) => {
+  created() {
+    this.$store.dispatch("onlineAuctionsStore/fetchOnlineAuctions").then(() => {
       // loading online auctions
-    })
+    });
   },
-  methods: {
-  },
+  methods: {},
   computed: {
-    auctionsSize () {
-      return this.$store.getters['onlineAuctionsStore/onlineAuctions'].length
+    auctionsSize() {
+      return this.$store.getters["onlineAuctionsStore/onlineAuctions"].length;
     },
-    auctions () {
-      return this.$store.getters['onlineAuctionsStore/onlineAuctions']
-    },
-  },
-}
+    auctions() {
+      return this.$store.getters["onlineAuctionsStore/onlineAuctions"];
+    }
+  }
+};
 </script>

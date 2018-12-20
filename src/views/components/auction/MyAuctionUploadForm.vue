@@ -66,112 +66,116 @@
 </template>
 
 <script>
-import moment from 'moment'
-import { Datetime } from 'vue-datetime'
+import moment from "moment";
+import { Datetime } from "vue-datetime";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'MyAuctionUploadForm',
-  components: {datetime: Datetime},
-  props: ['auctionId', 'mode'],
-  data () {
+  name: "MyAuctionUploadForm",
+  components: { datetime: Datetime },
+  props: ["auctionId", "mode"],
+  data() {
     return {
       errors: [],
       startDate: null,
       endDate: null,
       auction: {
-        title: 'Egyptian Artworks Auction',
-        description: 'Egyptian artifacts auctioned from a private collection',
-        keywords: 'Egypt,Ancient,Sculpture',
-        auctioneer: '',
-        privacy: 'private',
+        title: "Egyptian Artworks Auction",
+        description: "Egyptian artifacts auctioned from a private collection",
+        keywords: "Egypt,Ancient,Sculpture",
+        auctioneer: "",
+        privacy: "private",
         sellingList: []
-      },
-    }
+      }
+    };
   },
-  mounted () {
-    let auction = this.$store.getters['myAuctionsStore/myAuction'](this.auctionId)
+  mounted() {
+    let auction = this.$store.getters["myAuctionsStore/myAuction"](
+      this.auctionId
+    );
     if (auction) {
-      this.auction = auction
-      this.startDate = moment(auction.startDate).format()
-      this.endDate = moment(auction.endDate).format()
+      this.auction = auction;
+      this.startDate = moment(auction.startDate).format();
+      this.endDate = moment(auction.endDate).format();
     } else {
       // let daysTillStart = Math.floor(Math.random() * 14) + 7
-      let dd = moment({}).add(2, 'days')
-      dd.hour(10)
-      dd.minute(0)
-      this.startDate = dd.format()
-      this.endDate = dd.add(2, 'days').format()
+      let dd = moment({}).add(2, "days");
+      dd.hour(10);
+      dd.minute(0);
+      this.startDate = dd.format();
+      this.endDate = dd.add(2, "days").format();
     }
   },
   computed: {
-    username () {
-      let profile = this.$store.getters['myAccountStore/getMyProfile']
-      return profile.username
-    },
+    username() {
+      let profile = this.$store.getters["myAccountStore/getMyProfile"];
+      return profile.username;
+    }
   },
   methods: {
-    upload: function () {
+    upload: function() {
       if (this.validate()) {
-        this.openModal()
-        let profile = this.$store.getters['myAccountStore/getMyProfile']
-        this.auction.auctioneer = profile.username
-        this.auction.administrator = profile.username
-        this.auction.auctionType = 'webcast'
-        this.auction.startDate = moment(this.startDate).valueOf()
-        this.auction.endDate = moment(this.endDate).valueOf()
+        this.openModal();
+        let profile = this.$store.getters["myAccountStore/getMyProfile"];
+        this.auction.auctioneer = profile.username;
+        this.auction.administrator = profile.username;
+        this.auction.auctionType = "webcast";
+        this.auction.startDate = moment(this.startDate).valueOf();
+        this.auction.endDate = moment(this.endDate).valueOf();
         if (!this.auction.messages) {
-          this.auction.messages = []
+          this.auction.messages = [];
         }
-        if (this.mode === 'update') {
-          this.auction.auctionId = this.auctionId
-          this.$store.dispatch('myAuctionsStore/updateAuction', this.auction).then((auction) => {
-            this.auction = auction
-            this.closeModal()
-            this.$router.push('/my-auctions')
-          })
+        if (this.mode === "update") {
+          this.auction.auctionId = this.auctionId;
+          this.$store
+            .dispatch("myAuctionsStore/updateAuction", this.auction)
+            .then(auction => {
+              this.auction = auction;
+              this.closeModal();
+              this.$router.push("/my-auctions");
+            });
         } else {
-          this.auction.auctionId = moment({}).valueOf()
-          this.$store.dispatch('myAuctionsStore/uploadAuction', this.auction).then((auction) => {
-            this.auction = auction
-            this.closeModal()
-            this.$router.push('/my-auctions')
-          })
+          this.auction.auctionId = moment({}).valueOf();
+          this.$store
+            .dispatch("myAuctionsStore/uploadAuction", this.auction)
+            .then(auction => {
+              this.auction = auction;
+              this.closeModal();
+              this.$router.push("/my-auctions");
+            });
         }
       }
     },
-    openModal () {
-    },
-    closeModal () {
-    },
-    validate: function () {
-      this.errors = []
+    openModal() {},
+    closeModal() {},
+    validate: function() {
+      this.errors = [];
       if (!this.auction.title) {
-        this.errors.push('title required.')
+        this.errors.push("title required.");
       }
       if (moment(this.startDate).isBefore(moment({}))) {
-        this.errors.push('Start date before now.')
+        this.errors.push("Start date before now.");
       }
       if (moment(this.endDate).isBefore(moment({}))) {
-        this.errors.push('End date before now.')
+        this.errors.push("End date before now.");
       }
       if (moment(this.endDate).isBefore(this.startDate)) {
-        this.errors.push('Ends before it starts.')
+        this.errors.push("Ends before it starts.");
       }
       if (!this.auction.description) {
-        this.errors.push('description required.')
+        this.errors.push("description required.");
       }
       if (!this.auction.keywords) {
-        this.errors.push('keywords required.')
+        this.errors.push("keywords required.");
       }
       if (this.errors.length > 0) {
-        return false
+        return false;
       } else {
-        return true
+        return true;
       }
-    },
+    }
   }
-}
+};
 </script>
 <style>
 </style>

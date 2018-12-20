@@ -10,30 +10,29 @@
 </template>
 
 <script>
-import peerToPeerService from '@/services/peerToPeerService'
+import peerToPeerService from "@/services/peerToPeerService";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: 'VideoStream',
+  name: "VideoStream",
   props: {
     canPublish: false
   },
-  data () {
+  data() {
     return {
       publishing: false
-    }
+    };
   },
-  computed: {
-  },
+  computed: {},
   methods: {
-    publish () {
-      peerToPeerService.startPublishing()
-      this.publishing = true
+    publish() {
+      peerToPeerService.startPublishing();
+      this.publishing = true;
     },
-    unpublish () {
-      peerToPeerService.stopPublishing()
-      this.publishing = false
-    },
+    unpublish() {
+      peerToPeerService.stopPublishing();
+      this.publishing = false;
+    }
   }
-}
+};
 </script>
