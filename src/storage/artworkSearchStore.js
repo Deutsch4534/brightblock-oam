@@ -115,7 +115,6 @@ const artworkSearchStore = {
         function(artwork) {
           if (artwork) {
             commit("addSearchResult", artwork);
-            // store.dispatch('artworkSearchStore/userArtwork', {username: artwork.owner, artworkId: artwork.id})
           }
         },
         function(error) {
@@ -124,7 +123,7 @@ const artworkSearchStore = {
       );
     },
 
-    userArtwork({ commit }, data) {
+    fetchUserArtwork({ commit }, data) {
       return new Promise(resolve => {
         artworkSearchService.userArtwork(
           data.artworkId,
@@ -166,22 +165,25 @@ const artworkSearchStore = {
         let blockchainItem = blockchainItems[index];
         if (users.indexOf(blockchainItem.blockstackId) === -1) {
           users += blockchainItem.blockstackId + ",";
-          artworkSearchService.userArtworks(
-            blockchainItem.blockstackId,
-            function(artwork) {
-              if (artwork) {
-                moneyUtils.convertPrices(artwork, blockchainItem);
-                if (artwork.owner !== artwork.bcitem.blockstackId) {
-                  artwork.owner = artwork.bcitem.blockstackId;
-                }
-                commit("addArtwork", artwork);
-              }
-            },
-            function(error) {
-              console.log("Error fetching recent artworks: ", error);
-            }
-          );
         }
+        artworkSearchService.userArtworks(
+          {
+            username: blockchainItem.blockstackId,
+            title: blockchainItem.title
+          },
+          function(artwork) {
+            if (artwork) {
+              moneyUtils.convertPrices(artwork, blockchainItem);
+              if (artwork.owner !== artwork.bcitem.blockstackId) {
+                artwork.owner = artwork.bcitem.blockstackId;
+              }
+              commit("addArtwork", artwork);
+            }
+          },
+          function(error) {
+            console.log("Error fetching recent artworks: ", error);
+          }
+        );
       }
     }
   }

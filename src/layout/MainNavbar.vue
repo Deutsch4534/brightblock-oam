@@ -30,6 +30,16 @@
               <!-- Here you can add your items from the section-start of your toolbar -->
             </mobile-menu>
             <md-list>
+              <md-list-item v-if="showSearch">
+                <md-field>
+                  <md-input v-model="query" type="text" v-on:keyup.13="doSearch"></md-input>
+                </md-field>
+              </md-list-item>
+              <md-list-item>
+                  <a href="#" @click="showSearch = !showSearch">
+                    <md-icon text="search" pos="left">search</md-icon>
+                    </a>
+              </md-list-item>
               <li class="md-list-item" v-if="loggedIn">
                 <a
                   href="javascript:void(0)"
@@ -161,7 +171,9 @@ export default {
   data() {
     return {
       extraNavClasses: "",
-      toggledClass: false
+      toggledClass: false,
+      showSearch: false,
+      query: null
     };
   },
   computed: {
@@ -207,6 +219,12 @@ export default {
       } else {
         bodyClick.remove();
       }
+    },
+    doSearch() {
+      if (!this.query) {
+        this.query = "*";
+      }
+      this.$router.push("/search?query=" + this.query);
     },
     toggleNavbarMobile() {
       this.NavbarStore.showNavbar = !this.NavbarStore.showNavbar;

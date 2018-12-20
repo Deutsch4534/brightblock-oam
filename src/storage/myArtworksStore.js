@@ -4,6 +4,7 @@ import _ from "lodash";
 import notify from "@/services/notify";
 import store from "@/storage/store";
 import moneyUtils from "@/services/moneyUtils";
+import myAccountService from "@/services/myAccountService";
 
 const myArtworksStore = {
   namespaced: true,
@@ -22,6 +23,22 @@ const myArtworksStore = {
       }
       return artwork.bcitem.status;
     },
+    canSell: (state, getters) => id => {
+      let artwork = getters.myArtwork(id);
+      let username = store.getters["myAccountStore/getMyProfile"].username;
+      return (
+        artwork.bcitem &&
+        artwork.bcitem.itemIndex >= 0 &&
+        artwork.owner === username
+      );
+    },
+    canRegister: (state, getters) => id => {
+      let artwork = getters.myArtwork(id);
+      if (artwork.bcitem && artwork.bcitem.itemIndex >= 0) {
+        return false;
+      }
+      return true;
+    },
     numberArtworksSold: (state, getters) => {
       return getters.sold.length;
     },
@@ -33,13 +50,40 @@ const myArtworksStore = {
       let userProfile = store.getters["myAccountStore/getMyProfile"];
       return userProfile.username === artwork.owner;
     },
-    myArtwork: state => id => {
-      let artworks = state.myArtworks.filter(myArtwork => myArtwork.id === id);
-      if (artworks && artworks.length > 0) {
-        return artworks[0];
-      } else {
-        return {};
+    myArtworkOrDefault: (state, getters) => id => {
+      let artwork = getters.myArtwork(id);
+      if (!artwork) {
+        artwork = {
+          itemType: "digiart",
+          keywords: "Photography,Illustration.3D,2D,Film & Video,Mix-media",
+          artist: "unknown",
+          owner: "unknown",
+          saleData: {},
+          editions: 1,
+          images: [],
+          supportingDocuments: [],
+          artwork: []
+        };
+        let user = myAccountService.myProfile();
+        if (user) {
+          artwork.uploader = user.username;
+          artwork.owner = user.username;
+          artwork.artist = user.username;
+        }
       }
+      return artwork;
+    },
+    myArtwork: state => id => {
+      let artwork;
+      if (id) {
+        let artworks = state.myArtworks.filter(
+          myArtwork => myArtwork.id === id
+        );
+        if (artworks && artworks.length > 0) {
+          artwork = artworks[0];
+        }
+      }
+      return artwork;
     },
     unsold: state => {
       let username = store.getters["myAccountStore/getMyProfile"].username;

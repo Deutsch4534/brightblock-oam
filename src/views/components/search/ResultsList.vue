@@ -1,19 +1,18 @@
 <template>
-<div>
-  <my-single-artwork v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" :width="artworkWidth" :sold="sold"/>
+<div class="md-layout">
+  <single-result v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" :width="artworkWidth"/>
 </div>
 </template>
 
 <script>
 import chunk from "lodash/chunk";
-import MySingleArtwork from "./MySingleArtwork";
+import SingleResult from "./SingleResult";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: "MyArtworksList",
-  components: { MySingleArtwork },
+  name: "ResultsList",
+  components: { SingleResult },
   props: {
-    sold: false,
     artworks: {
       type: Array,
       default() {

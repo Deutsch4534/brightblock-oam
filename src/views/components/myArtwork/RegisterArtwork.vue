@@ -1,6 +1,6 @@
 <template>
 <div>
-  <md-dialog :md-active.sync="showModal">
+  <md-dialog :md-active.sync="showModal" @md-closed="closeModal">
     <md-dialog-title>Register Artwork</md-dialog-title>
     <md-dialog-content>
       {{message}}
@@ -10,9 +10,11 @@
       <h4>{{artwork.title}}</h4>
       <p>{{myArtist.name}}</p>
     </md-dialog-content>
-    <md-dialog-actions>
-      <md-button class="md-primary" :disabled="status !== 'new'" @click="registerArtworkBitcoin()" v-if="!message">Register Bitcoin</md-button>
-      <md-button class="md-primary" :disabled="status !== 'new'" @click="registerArtworkEthereum()" v-if="!message">Register Ethereum</md-button>
+    <md-dialog-actions v-if="canRegister">
+      <!--
+      <md-button class="md-primary" :disabled="registered" @click="registerArtworkBitcoin()" v-if="!message">Register Bitcoin</md-button>
+      -->
+      <md-button class="md-primary" :disabled="registered" @click="registerArtworkEthereum()" v-if="!message">Register Ethereum</md-button>
     </md-dialog-actions>
   </md-dialog>
 </div>
@@ -26,29 +28,29 @@ import OpenTimestamps from "javascript-opentimestamps";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: "SellViaRegistering",
-  props: {
-    showRegisterModal: false,
-    artwork: {
-      type: Object,
-      default() {
-        return {};
-      }
-    }
-  },
-  watch: {
-    // can pass old/ new values in here.
-    showRegisterModal() {
-      this.showModal = !this.showModal;
-    }
-  },
+  name: "RegisterArtwork",
   data() {
     return {
       message: null,
-      showModal: false
+      showModal: true,
+      artworkId: null,
+      artwork: {
+        type: Object,
+        default() {
+          return {};
+        }
+      }
     };
   },
-  mounted() {},
+  mounted() {
+    this.artworkId = Number(this.$route.params.artworkId);
+    this.artwork = this.$store.getters["myArtworksStore/myArtwork"](
+      this.artworkId
+    );
+    if (this.artwork.artwork && this.artwork.artwork.length === 0) {
+      this.message = "please attach an artwork.";
+    }
+  },
   computed: {
     fiatRates() {
       return this.$store.getters["conversionStore/getFiatRates"];
@@ -58,11 +60,25 @@ export default {
         this.artwork.artist
       );
     },
-    status() {
-      return this.$store.getters["myArtworksStore/bcstatus"](this.artworkId);
+    registered() {
+      let bcstatus = this.$store.getters["myArtworksStore/bcstatus"](
+        this.artworkId
+      );
+      return bcstatus.itemId > -1;
+    },
+    canRegister() {
+      try {
+        return this.artwork.artwork.length > 0;
+      } catch (e) {
+        return false;
+      }
     }
   },
   methods: {
+    closeModal: function() {
+      this.showModal = false;
+      this.$router.push("/my-artworks");
+    },
     registerArtworkBitcoin: function() {
       let regData = {
         title: this.artwork.title,
@@ -111,7 +127,6 @@ export default {
                 title: "Register Artwork.",
                 text: "User storage has been updated..."
               });
-              $self.closeModal();
               $self.$store
                 .dispatch("myArtworksStore/syncBlockchainState", artwork)
                 .then(artwork => {
@@ -119,6 +134,7 @@ export default {
                     $self.artwork = artwork;
                   }
                 });
+              $self.closeModal();
             });
         },
         function(error) {

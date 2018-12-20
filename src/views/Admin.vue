@@ -4,8 +4,20 @@
   <div class="main main-raised">
     <div class="section section-basic">
       <div class="container">
-        <div id="images">
-          <last-artworks :artworks="artworks" class=""/>
+        <div class="md-layout">
+          <div class="md-layout-item md-size-25 md-xsmall-size-25">
+            <aside class="">
+              <h5><small>Admin Actions</small></h5>
+              <ul class="list-unstyled">
+                <li><a href="#/admin/settings">Settings</a></li>
+                <li><a href="#/admin/registrations">Ethereum Blockchain</a></li>
+                <li><a href="#/search-index-manager">Search Settings</a></li>
+              </ul>
+            </aside>
+          </div>
+          <div class="md-layout-item md-size-75 md-xsmall-size-75">
+            <router-view></router-view>
+          </div>
         </div>
       </div>
     </div>
@@ -14,12 +26,10 @@
 </template>
 
 <script>
-import LastArtworks from "./components/home/LastArtworks";
 import Leafs from "./components/Leafs";
 
 export default {
   components: {
-    LastArtworks,
     Leafs
   },
   name: "home",

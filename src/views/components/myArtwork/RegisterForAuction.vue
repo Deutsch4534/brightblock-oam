@@ -1,6 +1,6 @@
 <template>
 <div>
-  <md-dialog :md-active.sync="showModal">
+  <md-dialog :md-active.sync="showModal" @md-closed="closeModal">
     <md-dialog-title>Sell via Auction</md-dialog-title>
     <md-dialog-content v-if="message">
       {{message}}
@@ -16,36 +16,50 @@
             <li v-for="error in errors" :key="error.id">{{ error.message }}</li>
           </ul>
         </p>
-        <div class="form-group">
-          <label for="currencyHelpBlock">Select Currency</label>
-          <select class="form-control" v-model="currency">
-            <option v-for="(value,key) in fiatRates" :key="key">{{ key }}</option>
-          </select>
-          <p id="currencyHelpBlock" class="form-text text-muted">
+        <div class="md-layout-item md-size-100">
+          <md-field>
+            <label>Select Currency</label>
+            <md-select v-model="currency" id="currency" name="currency">
+              <md-option v-for="(value,key) in fiatRates" :key="key" :value="key">{{ key }}</md-option>
+            </md-select>
+          </md-field>
+          <p class="">
             {{conversionMessage}}
           </p>
         </div>
-        <div class="form-group">
-          <label>Reserve {{currencySymbol}}</label>
-          <input class="form-control" type="number" step="50" placeholder="Reserve price" v-model="artwork.saleData.reserve"  aria-describedby="reserveHelpBlock">
-          <p id="reserveHelpBlock" class="form-text text-muted">
-            This item will not sell if the bidding does not meet or exceed this amount.<br/>
-            {{valueInBitcoin(artwork.saleData.reserve)}} Btc / {{valueInEther(artwork.saleData.reserve)}} Eth
+
+        <div class="md-layout-item md-size-100">
+          <md-field>
+            <label>Reserve {{currencySymbol}}</label>
+            <md-input v-model="reserve" type="number" step="50" placeholder="Reserve price"></md-input>
+          </md-field>
+          <p id="amountHelpBlock" class="">
+            {{valueInBitcoin(reserve)}} Btc / {{valueInEther(reserve)}} Eth
           </p>
         </div>
-        <div class="form-group">
-          <label>Increment {{currencySymbol}}</label>
-          <input class="form-control" type="number" step="50" placeholder="Increment value" v-model="artwork.saleData.increment"  aria-describedby="incrementHelpBlock">
-          <p id="incrementHelpBlock" class="form-text text-muted">
-            {{valueInBitcoin(artwork.saleData.increment)}} Btc / {{valueInEther(artwork.saleData.increment)}} Eth
+
+        <div class="md-layout-item md-size-100">
+          <md-field>
+            <label>Increment {{currencySymbol}}</label>
+            <md-input v-model="increment" type="number" step="50" placeholder="Increment value"></md-input>
+          </md-field>
+          <p id="amountHelpBlock" class="">
+            {{valueInBitcoin(increment)}} Btc / {{valueInEther(increment)}} Eth
           </p>
         </div>
-        <div class="form-group">
-          Display in auction
-          <select class="form-control" v-model="auctionId">
-            <option v-for="(auction,key) in auctions" :key="key" :value="auction.auctionId">{{auction.title}}</option>
-          </select>
+
+        <div class="md-layout-item md-size-100">
+          <md-field>
+            <label>Select Auction</label>
+            <md-select v-model="auctionId" id="auctionId" name="auctionId">
+              <md-option v-for="(auction,key) in auctions" :key="key" :value="auction.auctionId">{{auction.title}}</md-option>
+            </md-select>
+          </md-field>
+          <p class="">
+            {{conversionMessage}}
+          </p>
         </div>
+
       </form>
     </md-dialog-content>
     <md-dialog-actions>
@@ -60,44 +74,48 @@ import moneyUtils from "@/services/moneyUtils";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: "SellViaAuction",
-  props: {
-    showRegisterModal: false,
-    artwork: {
-      type: Object,
-      default() {
-        return {};
-      }
-    }
-  },
-  watch: {
-    // can pass old/ new values in here.
-    showRegisterModal() {
-      this.showModal = !this.showModal;
-    }
-  },
+  name: "RegisterForAuction",
   data() {
     return {
       errors: [],
-      showModal: false,
+      showModal: true,
       auctionId: -1,
+      reserve: 0,
+      increment: 0,
       currency: "EUR",
+      artworkId: null,
       message: null
     };
+  },
+  mounted() {
+    this.artworkId = Number(this.$route.params.artworkId);
+    this.reserve = Number(this.$route.params.reserve);
+    this.increment = Number(this.$route.params.increment);
+    this.auctionId = Number(this.$route.params.auctionId);
+    this.currency = this.$route.params.currency;
   },
   computed: {
     fiatRates() {
       return this.$store.getters["conversionStore/getFiatRates"] || {};
     },
 
+    artwork() {
+      return this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+        this.artworkId
+      );
+    },
+
     auctionTitle() {
+      if (!this.artwork.saleData) {
+        return "-";
+      }
       let auction = this.$store.getters["myAuctionsStore/myAuction"](
         this.artwork.saleData.auctionId
       );
       if (auction) {
         return auction.title;
       } else {
-        return "unknown";
+        return "-";
       }
     },
 
@@ -120,6 +138,11 @@ export default {
   methods: {
     valueInBitcoin(amount) {
       return moneyUtils.valueInBitcoin(this.currency, amount);
+    },
+
+    closeModal: function() {
+      this.showModal = false;
+      this.$router.push("/my-artworks");
     },
 
     valueInEther(amount) {
@@ -166,17 +189,20 @@ export default {
         });
     },
     addToAuction() {
-      this.artwork.saleData = moneyUtils.buildSaleDataFromUserInput(
+      let saleData = moneyUtils.buildSaleDataFromUserInput(
         this.auctionId,
         this.currency,
-        this.artwork.saleData
+        0,
+        this.reserve,
+        this.increment
       );
-      this.validate(this.artwork.saleData);
+      this.validate(saleData);
       if (this.errors.length > 0) {
         return;
       }
       let $self = this;
       $self.message = "Please wait while we update the data.";
+      this.artwork.saleData = saleData;
       this.$store
         .dispatch("myArtworksStore/addToAuction", this.artwork)
         .then(() => {

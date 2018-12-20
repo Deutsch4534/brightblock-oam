@@ -1,6 +1,5 @@
 <template>
 <div class="md-layout-item md-size-20 md-xsmall-size-100" :class="{'text-center': responsive}">
-  <h4>Rounded Image</h4>
   <router-link :to="artworkUrl">
     <img :src="artwork.image" alt="artwork.title" class="rounded" :class="{'responsive-image': responsive}">
     <h5 class="pt-2"><small>{{artwork.title}}</small></h5>

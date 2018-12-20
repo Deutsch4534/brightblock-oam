@@ -1,5 +1,13 @@
 import Vue from "vue";
 import Router from "vue-router";
+
+import Admin from "./views/Admin.vue";
+import AdminSettings from "./views/components/admin/AdminSettings";
+import AdminRegistrations from "./views/components/admin/AdminRegistrations";
+import SearchIndexManager from "./views/components/admin/SearchIndexManager";
+import SearchBuilderTab from "./views/components/admin/SearchBuilderTab";
+import SearchDappsTab from "./views/components/admin/SearchDappsTab";
+
 import Home from "./views/Home.vue";
 import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
@@ -8,7 +16,14 @@ import Profile from "./views/Profile.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 
+import Artwork from "./views/Artwork";
+
+import Search from "./views/Search";
+
 import MyArtworks from "./views/MyArtworks";
+import RegisterArtwork from "./views/components/myArtwork/RegisterArtwork";
+import RegisterForSale from "./views/components/myArtwork/RegisterForSale";
+import RegisterForAuction from "./views/components/myArtwork/RegisterForAuction";
 import MyArtworkUpload from "./views/MyArtworkUpload";
 import MyArtworkUpdate from "./views/MyArtworkUpdate";
 
@@ -40,6 +55,24 @@ const router = new Router({
       path: "/landing",
       name: "landing",
       components: { default: Landing, header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/search",
+      name: "search",
+      components: { default: Search, header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/artworks/:owner/:artworkId",
+      name: "artwork",
+      components: { default: Artwork, header: MainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
@@ -81,7 +114,28 @@ const router = new Router({
         header: MainNavbar,
         footer: MainFooter
       },
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: "/my-artwork/register/:artworkId",
+          name: "registerArtwork",
+          component: RegisterArtwork
+        },
+        {
+          path: "/my-artwork/register-for-sale/:artworkId/:amount/:currency",
+          name: "registerForSale",
+          component: RegisterForSale,
+          props: true
+        },
+        {
+          path:
+            "/my-artwork/register-for-auction/" +
+            ":artworkId/:auctionId/:reserve/:increment/:currency",
+          name: "registerForAuction",
+          component: RegisterForAuction,
+          props: true
+        }
+      ]
     },
     {
       path: "/profile",
@@ -92,6 +146,41 @@ const router = new Router({
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
       }
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      meta: { requiresAuth: true },
+      components: { default: Admin, header: MainNavbar, footer: MainFooter },
+      children: [
+        {
+          path: "/search-index-manager",
+          name: "searchIndexManager",
+          component: SearchIndexManager,
+          children: [
+            {
+              path: "/search-index-manager/search-names",
+              name: "searchBuilderTab",
+              component: SearchBuilderTab
+            },
+            {
+              path: "/search-index-manager/search-dapps",
+              name: "searchDappsTab",
+              component: SearchDappsTab
+            }
+          ]
+        },
+        {
+          path: "/admin/settings",
+          name: "adminSettings",
+          component: AdminSettings
+        },
+        {
+          path: "/admin/registrations",
+          name: "adminRegistrations",
+          component: AdminRegistrations
+        }
+      ]
     }
   ],
   scrollBehavior: to => {

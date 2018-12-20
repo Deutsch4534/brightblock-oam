@@ -75,6 +75,18 @@ const utils = {
         error: "Uploader and id must be present."
       });
     }
+    if (!record.provData) {
+      record.provData = {};
+    }
+    if (!record.provData.artwork) {
+      record.provData.artwork = [];
+    }
+    if (!record.provData.images) {
+      record.provData.images = [];
+    }
+    if (!record.provData.supportingDocuments) {
+      record.provData.supportingDocuments = [];
+    }
     let artworkData = this.getArtworkData(record.provData);
     return _.merge(artworkData, {
       id: record.indexData.id,
@@ -147,7 +159,6 @@ const utils = {
       bcitem: provData.bcitem
     };
     if (
-      provData &&
       provData.artwork &&
       provData.artwork[0] &&
       provData.artwork[0].dataUrl.length > 0
@@ -157,7 +168,8 @@ const utils = {
         provData.artwork[0].dataUrl
       );
     } else {
-      artworkData.image = "/static/images/artwork1.jpg";
+      provData.artwork = [];
+      artworkData.image = "/images/missing-image.jpg";
     }
     return artworkData;
   },

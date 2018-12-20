@@ -292,7 +292,12 @@ const myArtworksService = {
             console.error("Corrupt json file - skipping! file: " + file, err);
           }
         } else {
-          failure({ ERR_CODE: 1, message: "no provenance file found" });
+          success(
+            utils.convertFromBlockstack({
+              indexData: indexData,
+              provData: {}
+            })
+          );
         }
       })
       .catch(function(e) {

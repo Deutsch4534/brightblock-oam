@@ -5,7 +5,8 @@ import _ from "lodash";
 const userProfilesStore = {
   namespaced: true,
   state: {
-    userProfiles: []
+    userProfiles: [],
+    namesRequestList: []
   },
   getters: {
     getProfile: state => username => {
@@ -50,6 +51,14 @@ const userProfilesStore = {
       if (index === -1) {
         state.userProfiles.push(userProfile);
       }
+    },
+    addNameToList(state, username) {
+      let index = _.findIndex(state.namesRequestList, function(u) {
+        return u === username;
+      });
+      if (index === -1) {
+        state.namesRequestList.push(username);
+      }
     }
   },
   actions: {
@@ -62,11 +71,11 @@ const userProfilesStore = {
         ) {
           resolve();
         }
-        let userProfiles = state.userProfiles;
-        let index = _.findIndex(userProfiles, function(o) {
-          return o.username === user.username;
+        let index = _.findIndex(state.namesRequestList, function(username) {
+          return username === user.username;
         });
         if (index === -1) {
+          commit("addNameToList", user.username);
           userProfilesService.fetchUserProfile(
             user.username,
             function(userProfile) {
@@ -81,8 +90,6 @@ const userProfilesStore = {
               resolve();
             }
           );
-        } else {
-          resolve(userProfiles[index]);
         }
       });
     }

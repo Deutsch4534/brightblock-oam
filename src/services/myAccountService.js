@@ -19,8 +19,13 @@ const myAccountService = {
     let account = loadUserData();
     if (account) {
       let person = new Person(account.profile);
+      let showAdmin =
+        account.username === "mike.personal.id" ||
+        account.username.indexOf("brightblock") > -1 ||
+        account.username.indexOf("antonio") > -1;
       myProfile = {
         loggedIn: true,
+        showAdmin: showAdmin,
         name: person.name(),
         description: person.description(),
         avatarUrl: person.avatarUrl(),

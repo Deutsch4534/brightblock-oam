@@ -1,22 +1,22 @@
 <template>
-<div class="md-layout-item md-size-20 md-xsmall-size-100">
-  <sell-via-registering :showRegisterModal="showRegisterModal" :artwork="artwork"/>
-  <sell-via-buy-now :showBuyNowModal="showBuyNowModal" :artwork="artwork"/>
-  <sell-via-auction :showAuctionModal="showAuctionModal" :artwork="artwork"/>
-
-  <img :src="artwork.image" :alt="artwork.title" class="mr-3 img-fluid" style="max-width: 250px;">
-  <div class="media-body row">
-    <div class="col-sm-7">
-      <h5 class="mt-0 mb-1">{{artwork.title}}</h5>
-      <p class="artwork-caption">Artist: {{artistProfile.name}}</p>
-      <p class="artwork-caption">{{artwork.description}}</p>
-
-      <a class="artwork-action" v-if="canRegister" v-on:click="showRegisterModal = !showRegisterModal">Register {{status}}</a>
-      <a class="artwork-action" v-if="canSell" @click="showBuyNowModal = !showBuyNowModal">Buy</a>
-      <a class="artwork-action" v-if="canSell" @click="showAuctionModal = !showAuctionModal">Bid</a>
-      <router-link :to="editUrl" class="artwork-action" v-if="editable">Edit</router-link>
-      <a class="artwork-action" @click="deleteArtwork(artwork.id)" v-if="debugMode">Delete</a>
+<div class="md-layout md-gutter">
+  <div class="md-layout-item md-size-25 md-xsmall-size-100">
+    <img :src="artwork.image" :alt="artwork.title" class="mr-3 img-fluid" style="max-width: 250px;">
+  </div>
+  <div class="md-layout-item md-size-50 md-xsmall-size-100">
+    <h5 class="mt-0 mb-1">{{artwork.title}}</h5>
+    <p class="artwork-caption">Artist: {{artistProfile.name}}</p>
+    <p class="artwork-caption">{{artwork.description}}</p>
+    <p class="artwork-caption" v-if="debugMode">{{artwork.bcitem}}</p>
+    <div class="md-layout">
+      <div class="md-layout-item md-size-20" v-if="canRegister"><router-link :to="registerUrl">Register</router-link></div>
+      <div class="md-layout-item md-size-20" v-if="canSell">    <router-link :to="registerForSaleUrl">Buy</router-link></div>
+      <div class="md-layout-item md-size-20" v-if="canAuction">    <router-link :to="registerForAuctionUrl">Auction</router-link></div>
+      <div class="md-layout-item md-size-20" v-if="debugMode">  <a @click="deleteArtwork(artwork.id)">Delete</a></div>
+      <div class="md-layout-item md-size-20" v-if="editable">   <router-link :to="editUrl" class="artwork-action">Edit</router-link></div>
     </div>
+  </div>
+  <div class="md-layout-item md-size-25 md-xsmall-size-100">
     <selling-options :artwork="artwork"/>
   </div>
 </div>
@@ -24,18 +24,12 @@
 
 <script>
 import SellingOptions from "./SellingOptions";
-import SellViaRegistering from "./SellViaRegistering";
-import SellViaAuction from "./SellViaAuction";
-import SellViaBuyNow from "./SellViaBuyNow";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MySingleArtwork",
   components: {
-    SellingOptions,
-    SellViaRegistering,
-    SellViaBuyNow,
-    SellViaAuction
+    SellingOptions
   },
   props: {
     sold: true,
@@ -51,11 +45,7 @@ export default {
     }
   },
   data() {
-    return {
-      showRegisterModal: false,
-      showBuyNowModal: false,
-      showAuctionModal: false
-    };
+    return {};
   },
   mounted() {},
   methods: {
@@ -70,23 +60,24 @@ export default {
     debugMode() {
       return this.$store.getters["isDebugMode"];
     },
-    canRegister() {
-      return !this.sold;
-    },
     canSell() {
-      let bcitem = this.artwork.bcitem;
-      return bcitem && bcitem.itemIndex > -1 && !this.sold;
+      return this.$store.getters["myArtworksStore/canSell"](this.artwork.id);
     },
-    sellingBuyNow() {
-      return this.artwork.saleData.soid === 1;
+    canAuction() {
+      let auctions = this.$store.getters["myAuctionsStore/myAuctionsFuture"];
+      let cs = this.$store.getters["myArtworksStore/canSell"](this.artwork.id);
+      return cs && auctions && auctions.length > 0;
     },
-    status() {
-      return this.$store.getters["myArtworksStore/bcstatus"](this.artwork.id);
+    canRegister() {
+      return this.$store.getters["myArtworksStore/canRegister"](
+        this.artwork.id
+      );
     },
     artistProfile() {
-      return this.$store.getters["userProfilesStore/getProfile"](
+      let profile = this.$store.getters["userProfilesStore/getProfile"](
         this.artwork.artist
       );
+      return profile ? profile : {};
     },
     ownerProfile() {
       return this.$store.getters["userProfilesStore/getProfile"](
@@ -98,7 +89,31 @@ export default {
     },
     editUrl() {
       return `/my-artwork/update/${this.artwork.id}`;
+    },
+    registerUrl() {
+      return `/my-artwork/register/${this.artwork.id}`;
+    },
+    registerForSaleUrl() {
+      let a = this.$store.getters["myArtworksStore/myArtwork"](this.artwork.id);
+      let id = this.artwork.id;
+      let amount = a.saleData ? a.saleData.amount : 0;
+      let currency = a.saleData ? a.saleData.fiatCurrency : "EUR";
+      return `/my-artwork/register-for-sale/${id}/${amount}/${currency}`;
+    },
+    registerForAuctionUrl() {
+      let a = this.$store.getters["myArtworksStore/myArtwork"](this.artwork.id);
+      let id = this.artwork.id;
+      let r = a.saleData ? a.saleData.reserve : 0;
+      let i = a.saleData ? a.saleData.increment : 0;
+      let c = a.saleData ? a.saleData.fiatCurrency : "EUR";
+      let aid = a.saleData ? a.saleData.auctionId : -1;
+      return `/my-artwork/register-for-auction/${id}/${aid}/${r}/${i}/${c}`;
     }
   }
 };
 </script>
+<style lang="scss" scoped>
+.md-layout-item {
+  margin-bottom: 20px;
+}
+</style>

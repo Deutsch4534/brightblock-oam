@@ -15,20 +15,32 @@ const artworkSearchService = {
         if (!results || results.length === 0) {
           success();
         } else {
-          let users = [];
+          // let users = [];
           _.forEach(results, function(searchIndexData) {
             try {
+              let id = Number(searchIndexData.id);
+              artworkSearchService.userArtwork(
+                id,
+                searchIndexData.owner,
+                success,
+                failure
+              );
+              /**
               let index = _.findIndex(users, function(username) {
                 return username === searchIndexData.owner;
               });
               if (index === -1) {
                 artworkSearchService.userArtworks(
-                  searchIndexData.owner,
+                  {
+                    username: searchIndexData.owner,
+                    title: searchIndexData.title
+                  },
                   success,
                   failure
                 );
                 users.push(searchIndexData.owner);
               }
+              **/
             } catch (error) {
               failure({ error: 2, message: "wrong id format." });
             }
@@ -40,9 +52,9 @@ const artworkSearchService = {
       });
   },
 
-  userArtworks: function(username, success, failure) {
+  userArtworks: function(data, success, failure) {
     const artworkRootFileName = store.state.constants.artworkRootFileName;
-    getFile(artworkRootFileName, { decrypt: false, username: username })
+    getFile(artworkRootFileName, { decrypt: false, username: data.username })
       .then(function(file) {
         if (!file) {
           success();
@@ -59,12 +71,23 @@ const artworkSearchService = {
               { username: indexData.owner },
               { root: true }
             );
-            artworkSearchService.fetchProvenanceFile(
-              indexData,
-              username,
-              success,
-              failure
-            );
+            if (data.title) {
+              if (data.title === indexData.title) {
+                artworkSearchService.fetchProvenanceFile(
+                  indexData,
+                  data.username,
+                  success,
+                  failure
+                );
+              }
+            } else {
+              artworkSearchService.fetchProvenanceFile(
+                indexData,
+                data.username,
+                success,
+                failure
+              );
+            }
           });
         }
       })

@@ -6,17 +6,18 @@
       <div class="container">
         <div id="images">
           <div class="title">
-            <h2>Artworks <span>(Artworks: {{numberArtworksUnsold}})</span></h2>
+            <h2>Artworks <span>({{numberArtworksUnsold}})</span></h2>
           </div>
           <my-artworks-list :artworks="unsold" :sold="false" :show-load-button="false" :chunks="6"/>
           <div class="title">
-            <h2>Sold Artworks <span>Artworks sold: {{numberArtworksSold}}</span></h2>
+            <h2>Sold Artworks <span>({{numberArtworksSold}})</span></h2>
           </div>
           <my-artworks-list :artworks="sold" :sold="true" :show-load-button="false" :chunks="6"/>
         </div>
       </div>
     </div>
   </div>
+  <router-view></router-view>
 </div>
 </template>
 

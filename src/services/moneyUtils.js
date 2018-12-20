@@ -58,7 +58,6 @@ const moneyUtils = {
         symbol;
       return conversionMessage;
     } catch (err) {
-      console.log("Warning - data not yet initialised..");
       return "";
     }
   },
@@ -88,7 +87,6 @@ const moneyUtils = {
       }
       return Math.round(conversion * precision) / precision;
     } catch (err) {
-      console.log("Warning - data not yet initialised..");
       return 0;
     }
   },
@@ -99,7 +97,6 @@ const moneyUtils = {
       let eth = wei / 1000000000000000000;
       return Math.round(eth * precision) / precision;
     } catch (err) {
-      console.log("Warning - data not yet initialised..");
       return 0;
     }
   },
@@ -111,7 +108,6 @@ const moneyUtils = {
       let ethToBtc = store.getters["conversionStore/getCryptoRate"]("eth_btc");
       return Math.round(valueInEther * ethToBtc * precision) / precision;
     } catch (err) {
-      console.log("Warning - data not yet initialised..");
       return 0;
     }
   },
@@ -135,7 +131,6 @@ const moneyUtils = {
       }
       return Math.round(fiatToBtc * precision) / precision;
     } catch (err) {
-      console.log("Warning - data not yet initialised..");
       return 0;
     }
   },
@@ -154,15 +149,15 @@ const moneyUtils = {
     };
   },
 
-  buildSaleDataFromUserInput(auctionId, currency, userSaleData) {
+  buildSaleDataFromUserInput(auctionId, currency, amount, reserve, increment) {
     try {
       let fiatRate = store.getters["conversionStore/getFiatRate"](currency);
       let ethToBtc = store.getters["conversionStore/getCryptoRate"]("eth_btc");
       let saleData = {};
       saleData.soid = auctionId ? 2 : 1;
-      saleData.amount = Number(userSaleData.amount);
-      saleData.reserve = Number(userSaleData.reserve);
-      saleData.increment = Number(userSaleData.increment);
+      saleData.amount = Number(amount);
+      saleData.reserve = Number(reserve);
+      saleData.increment = Number(increment);
       saleData.fiatCurrency = currency;
       saleData.initialRateBtc = fiatRate["15m"];
       saleData.initialRateEth = ethToBtc;
@@ -174,7 +169,7 @@ const moneyUtils = {
       saleData.auctionId = auctionId;
       return saleData;
     } catch (err) {
-      console.log("Warning - data not yet initialised..");
+      // console.log("Warning - data not yet initialised..");
       return {
         soid: -1
       };

@@ -73,7 +73,11 @@
           </div>
           <div class="md-layout-item md-size-100" v-if="artwork.itemType === 'digiart' || artwork.itemType === 'photoart'">
             <div class="md-title">Artwork Images</div>
-            <span class="md-error" v-if="!$v.artwork.artwork.required">The artwork is required</span>
+            <md-field :class="getValidationClass('artwork')">
+              <div class="md-error" v-if="!$v.artwork.artwork.required">The artwork is required</div>
+            </md-field>
+          </div>
+          <div class="md-layout-item md-size-100" style="margin-top: 20px;" v-if="artwork.itemType === 'digiart' || artwork.itemType === 'photoart'">
             <div id="load-artwork">
               <div class="drop_area" @drop.prevent="loadArtwork" @dragover.prevent>
                 Drop artwork file here!
@@ -133,7 +137,6 @@
 import MyArtworkManageImage from "./MyArtworkManageImage";
 import { validationMixin } from "vuelidate";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import myAccountService from "@/services/myAccountService";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -160,30 +163,11 @@ export default {
     };
   },
   mounted() {
-    if (this.mode === "update") {
-      // try to fetch it from the store - but if the user has just hard reload this page the store
-      // may not have fetched it.
-      let artwork = this.$store.getters["myArtworksStore/myArtwork"](
-        this.artworkId
-      );
-      if (!artwork || !artwork.id) {
-        this.$store
-          .dispatch("myArtworksStore/fetchMyArtwork", this.artworkId)
-          .then(artwork => {
-            this.artwork = artwork;
-          });
-      } else {
-        this.artwork = artwork;
-      }
-    } else {
-      let user = myAccountService.myProfile();
-      if (user) {
-        this.artwork.uploader = user.username;
-        this.artwork.owner = user.username;
-        this.artwork.artist = user.username;
-      }
-    }
+    this.artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+      this.artworkId
+    );
   },
+  computed: {},
   validations: {
     artwork: {
       title: {
@@ -258,6 +242,10 @@ export default {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.upload();
+      } else {
+        this.showAlert = true;
+        console.log("errros", this.$v);
+        this.alertMessage = "Please fix the form errors indicated in red.. ";
       }
     },
     validate: function() {
@@ -337,7 +325,6 @@ export default {
 <style>
 #load-artwork {
   height: 90px;
-  width: 100%;
   background: #ccc;
   text-align: center;
   padding: 20px;

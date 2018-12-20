@@ -1,6 +1,6 @@
 <template>
 <div>
-  <md-dialog :md-active.sync="showModal">
+  <md-dialog :md-active.sync="showModal" @md-closed="closeModal">
     <md-dialog-title>Sell via Buy Now</md-dialog-title>
     <md-dialog-content v-if="message">
       {{message}}
@@ -16,19 +16,24 @@
             <li v-for="error in errors" :key="error.id">{{ error.message }}</li>
           </ul>
         </p>
-        <div class="form-group">
-          <label for="currencyHelpBlock">Select Currency</label>
-          <select class="form-control" v-model="currency">
-            <option v-for="(value,key) in fiatRates" :key="key">{{ key }}</option>
-          </select>
-          <p id="currencyHelpBlock" class="form-text text-muted">
+        <div class="md-layout-item md-size-100">
+          <md-field>
+            <label>Select Currency</label>
+            <md-select v-model="currency" id="currency" name="currency">
+              <md-option v-for="(value,key) in fiatRates" :key="key" :value="key">{{ key }}</md-option>
+            </md-select>
+          </md-field>
+          <p class="">
             {{conversionMessage}}
           </p>
         </div>
-        <div class="form-group">
-          <label>Amount {{currencySymbol}}</label>
-          <input class="form-control" type="number" step="50" placeholder="Sale value of artwork" v-model="amount"  aria-describedby="amountHelpBlock">
-          <p id="amountHelpBlock" class="form-text text-muted">
+
+        <div class="md-layout-item md-size-100">
+          <md-field>
+            <label>Amount {{currencySymbol}}</label>
+            <md-input v-model="amount" type="number" step="50" placeholder="Sale value of artwork"></md-input>
+          </md-field>
+          <p id="amountHelpBlock" class="">
             {{valueInBitcoin}} Btc / {{valueInEther}} Eth
           </p>
         </div>
@@ -48,35 +53,31 @@ import moneyUtils from "@/services/moneyUtils";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: "SellViaAuction",
-  props: {
-    showRegisterModal: false,
-    artwork: {
-      type: Object,
-      default() {
-        return {};
-      }
-    }
-  },
-  watch: {
-    // can pass old/ new values in here.
-    showRegisterModal() {
-      this.showModal = !this.showModal;
-    }
-  },
+  name: "RegisterForSale",
   data() {
     return {
       errors: [],
-      showModal: false,
+      showModal: true,
+      artworkId: null,
+      message: null,
       amount: 0,
-      currency: "EUR",
-      message: null
+      currency: "EUR"
     };
   },
-  mounted() {},
+  mounted() {
+    this.artworkId = Number(this.$route.params.artworkId);
+    this.amount = Number(this.$route.params.amount);
+    this.currency = this.$route.params.currency;
+  },
   computed: {
     fiatRates() {
       return this.$store.getters["conversionStore/getFiatRates"];
+    },
+
+    artwork() {
+      return this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+        this.artworkId
+      );
     },
 
     auctions() {
@@ -102,6 +103,11 @@ export default {
   methods: {
     validate: function() {
       this.errors = [];
+    },
+
+    closeModal: function() {
+      this.showModal = false;
+      this.$router.push("/my-artworks");
     },
 
     setPrice: function() {

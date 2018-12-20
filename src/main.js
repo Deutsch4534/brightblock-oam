@@ -4,6 +4,7 @@ import Vuex from "vuex";
 import router from "./router";
 import store from "@/storage/store";
 import MaterialKit from "./plugins/material-kit";
+import Notifications from "vue-notification";
 
 import { CONSTANTS } from "@/storage/constants";
 import notify from "@/services/notify";
@@ -13,6 +14,7 @@ Vue.config.productionTip = false;
 
 Vue.use(MaterialKit);
 Vue.use(Vuex);
+Vue.use(Notifications);
 
 const NavbarStore = {
   showNavbar: false
@@ -27,12 +29,12 @@ Vue.mixin({
 });
 store.commit("constants", CONSTANTS);
 store.dispatch("fetchServerTime");
+store.dispatch("myArtworksStore/fetchMyArtworks");
 store.dispatch("conversionStore/fetchConversionData").then(() => {
   store.dispatch("myAccountStore/fetchMyAccount");
   store.dispatch("ethStore/fetchClientState").then(clientState => {
     ethereumService.connectToBlockChain(clientState);
     store.dispatch("ethStore/fetchBlockchainItems").then(blockchainItems => {
-      store.dispatch("myArtworksStore/fetchMyArtworks");
       store.dispatch(
         "artworkSearchStore/fetchRegisteredArtworks",
         blockchainItems
