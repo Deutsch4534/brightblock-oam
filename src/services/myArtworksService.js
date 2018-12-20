@@ -189,7 +189,8 @@ const myArtworksService = {
               "myArtworksStore/blockstackRootFile",
               blockstackRootFile
             );
-            searchIndexService.indexUsers(record.indexData.owner);
+            searchIndexService.addRecord("artwork", record.indexData);
+            // searchIndexService.indexUsers(record.indexData.owner);
             success(utils.convertFromBlockstack(record));
           })
           .catch(function() {
@@ -249,7 +250,8 @@ const myArtworksService = {
                         blockstackRootFile
                       );
                       success(utils.convertFromBlockstack(record));
-                      searchIndexService.indexUsers(record.indexData.owner);
+                      // searchIndexService.indexUsers(record.indexData.owner);
+                      searchIndexService.addRecord("artwork", record.indexData);
                     })
                     .catch(function() {
                       failure({
@@ -342,7 +344,7 @@ const myArtworksService = {
               message:
                 "This artwork is listed in auction: " +
                 artwork.saleData.auctionId +
-                " please remove it before continuing.."
+                " please remember to remove it.."
             });
             return;
           }

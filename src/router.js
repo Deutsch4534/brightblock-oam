@@ -27,6 +27,14 @@ import RegisterForAuction from "./views/components/myArtwork/RegisterForAuction"
 import MyArtworkUpload from "./views/MyArtworkUpload";
 import MyArtworkUpdate from "./views/MyArtworkUpdate";
 
+import MyAuctions from './views/MyAuctions'
+import MyAuctionList from './views/components/auction/MyAuctionList'
+import MyAuctionManage from './views/MyAuctionManage'
+import MyAuctionUpload from './views/MyAuctionUpload'
+import MyAuctionUpdate from './views/MyAuctionUpdate'
+import OnlineAuction from './views/OnlineAuction'
+import OnlineAuctions from './views/OnlineAuctions'
+
 import myAccountService from "@/services/myAccountService";
 
 Vue.use(Router);
@@ -134,6 +142,43 @@ const router = new Router({
           name: "registerForAuction",
           component: RegisterForAuction,
           props: true
+        }
+      ]
+    },
+    {
+      path: '/online-auction/:username/:auctionId',
+      name: 'onlineAuction',
+      components: { default: OnlineAuction, header: MainNavbar, footer: MainFooter },
+    },
+    {
+      path: '/online-auctions',
+      meta: { requiresAuth: true },
+      name: 'onlineAuctions',
+      components: { default: OnlineAuctions, header: MainNavbar, footer: MainFooter },
+    },
+    {
+      path: '/my-auctions/manage/:auctionId',
+      meta: { requiresAuth: true },
+      components: { default: MyAuctionManage, header: MainNavbar, footer: MainFooter },
+    },
+    {
+      path: '/my-auctions/update/:auctionId',
+      meta: { requiresAuth: true },
+      components: { default: MyAuctionUpdate, header: MainNavbar, footer: MainFooter },
+    },
+    {
+      path: '/my-auctions/upload',
+      meta: { requiresAuth: true },
+      components: { default: MyAuctionUpload, header: MainNavbar, footer: MainFooter },
+    },
+    {
+      path: '/my-auctions',
+      components: { default: MyAuctions, header: MainNavbar, footer: MainFooter },
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: '',
+          component: MyAuctionList,
         }
       ]
     },
