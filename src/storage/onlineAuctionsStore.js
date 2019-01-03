@@ -73,7 +73,20 @@ const onlineAuctionsStore = {
       }
     },
     onlineAuctions: state => {
-      return state.onlineAuctions;
+      // let serverTime = store.getters["serverTime"];
+      let now = new Date().getTime();
+      let auctions = state.onlineAuctions.filter(
+        auction => auction.startDate > now
+      );
+      return auctions;
+    },
+    pastAuctions: state => {
+      // let serverTime = store.getters["serverTime"];
+      let now = new Date().getTime();
+      let auctions = state.onlineAuctions.filter(
+        auction => auction.startDate < now
+      );
+      return auctions;
     },
     messages: state => auctionId => {
       let auction = state.onlineAuctions.filter(

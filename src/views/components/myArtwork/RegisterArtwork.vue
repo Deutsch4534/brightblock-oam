@@ -34,30 +34,30 @@ export default {
       message: null,
       showModal: true,
       artworkId: null,
-      artwork: {
-        type: Object,
-        default() {
-          return {};
-        }
-      }
+      from: "/my-artworks"
     };
   },
   mounted() {
     this.artworkId = Number(this.$route.params.artworkId);
-    this.artwork = this.$store.getters["myArtworksStore/myArtwork"](
-      this.artworkId
-    );
-    if (this.artwork.artwork && this.artwork.artwork.length === 0) {
-      this.message = "please attach an artwork.";
+    if (this.$route.query.from && this.$route.query.from === "auctions") {
+      this.from = "/my-auctions/manage/" + this.$route.query.auctionId;
     }
   },
   computed: {
     fiatRates() {
       return this.$store.getters["conversionStore/getFiatRates"];
     },
+    artwork() {
+      return this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+        this.artworkId
+      );
+    },
     myArtist() {
+      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+        this.artworkId
+      );
       return this.$store.getters["userProfilesStore/getProfile"](
-        this.artwork.artist
+        artwork.artist
       );
     },
     registered() {
@@ -68,7 +68,10 @@ export default {
     },
     canRegister() {
       try {
-        return this.artwork.artwork.length > 0;
+        let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+          this.artworkId
+        );
+        return artwork.artwork.length > 0;
       } catch (e) {
         return false;
       }
@@ -77,13 +80,16 @@ export default {
   methods: {
     closeModal: function() {
       this.showModal = false;
-      this.$router.push("/my-artworks");
+      this.$router.push(this.from);
     },
     registerArtworkBitcoin: function() {
+      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+        this.artworkId
+      );
       let regData = {
-        title: this.artwork.title,
-        timestamp: utils.buildArtworkHash(this.artwork.artwork[0].dataUrl),
-        uploader: this.artwork.owner
+        title: artwork.title,
+        timestamp: utils.buildArtworkHash(artwork.artwork[0].dataUrl),
+        uploader: artwork.owner
       };
       const file = Buffer.from(JSON.stringify(regData), "hex");
       const detached = OpenTimestamps.DetachedTimestampFile.fromBytes(
@@ -99,7 +105,12 @@ export default {
     registerArtworkEthereum: function() {
       this.message =
         "Registering your artwork - please allow a few minutes for the transaction to complete...";
-      let artwork = this.artwork;
+      let artwork = this.$store.getters["myArtworksStore/myArtwork"](
+        this.artworkId
+      );
+      if (!artwork || !artwork.id) {
+        return;
+      }
       let uploader = this.$store.getters["myAccountStore/getMyProfile"]
         .username;
       let regData = {
@@ -129,11 +140,7 @@ export default {
               });
               $self.$store
                 .dispatch("myArtworksStore/syncBlockchainState", artwork)
-                .then(artwork => {
-                  if (artwork) {
-                    $self.artwork = artwork;
-                  }
-                });
+                .then(() => {});
               $self.closeModal();
             });
         },

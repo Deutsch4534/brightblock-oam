@@ -11,6 +11,7 @@ import ResultsList from "./components/search/ResultsList";
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "Search",
+  bodyClass: "index-page",
   components: {
     ResultsList
   },

@@ -9,12 +9,16 @@ import Notifications from "vue-notification";
 import { CONSTANTS } from "@/storage/constants";
 import notify from "@/services/notify";
 import ethereumService from "@/services/ethereumService";
+import Datetime from "vue-datetime";
+// You need a specific loader for CSS files
+import "vue-datetime/dist/vue-datetime.css";
 
 Vue.config.productionTip = false;
 
 Vue.use(MaterialKit);
 Vue.use(Vuex);
 Vue.use(Notifications);
+Vue.use(Datetime);
 
 const NavbarStore = {
   showNavbar: false

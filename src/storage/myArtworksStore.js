@@ -128,7 +128,7 @@ const myArtworksStore = {
     }
   },
   actions: {
-    addToAuction(artwork) {
+    addToAuction({ commit }, artwork) {
       return new Promise((resolve, reject) => {
         store
           .dispatch("myAuctionsStore/addItem", artwork)
@@ -144,6 +144,7 @@ const myArtworksStore = {
                   title: "Sell Via Auction",
                   text: "Auction info added to artwork."
                 });
+                commit("addMyArtwork", artwork);
                 resolve(artwork);
               })
               .catch(e => {
@@ -313,6 +314,10 @@ const myArtworksStore = {
     syncBlockchainState({ commit }, artwork) {
       return new Promise(resolve => {
         let count = 0;
+        if (!artwork || !artwork.timestamp) {
+          resolve({});
+          return;
+        }
         let intval = setInterval(function() {
           store
             .dispatch("ethStore/fetchBlockchainItem", {

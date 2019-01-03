@@ -1,34 +1,32 @@
 <template>
-<li class="media my-3">
-  <img :src="artwork.image" :alt="artwork.title" class="mr-3 img-fluid" style="width: 150px;">
-  <div class="media-body" v-if="sellingItem">
-    <h4 class="media-heading">{{artwork.title}}</h4>
+<div class="md-layout md-gutter">
+  <div class="md-layout-item md-size-25 md-xsmall-size-100">
+    <img :src="artwork.image" :alt="artwork.title" class="mr-3 img-fluid" style="max-width: 250px;">
+  </div>
+  <div v-if="sellingItem">
+    <h4>{{artwork.title}}</h4>
     {{artwork.description}}
-    <p>
-      <a v-if="!item.inplay" v-on:click="activateBidding">Activate Bidding</a>
-      <a v-else v-on:click="deactivateBidding">Deactivate Bidding</a>
-      <a v-on:click="removeFromAuction">Remove from Auction</a>
-    </p>
+    <ul>
+      <li v-if="!item.inplay"><a href v-on:click="activateBidding">Activate Bidding</a></li>
+      <li v-else><a href v-on:click="deactivateBidding">Deactivate Bidding</a></li>
+      <li><a href v-on:click="removeFromAuction">Remove from Auction</a></li>
+    </ul>
   </div>
-  <div class="media-body" v-else>
-    <h4 class="media-heading">{{artwork.title}}</h4>
-    <p>
-      <router-link :to="registerUrl" class="artwork-action"  v-if="artwork.bcitem && artwork.bcitem.itemIndex === -1">Register</router-link>
-      <a v-if="canSell" v-on:click="openAuctionDialog">Add to Auction</a>
-      <sell-via-auction v-if="sellAuctionActive" :artwork="artwork" :isModalActive="true" @closeDialog="closeDialog"/>
-    </p>
+  <div v-else>
+    <h4>{{artwork.title}}</h4>
+    <ul>
+      <li v-if="artwork.bcitem && artwork.bcitem.itemIndex === -1"><router-link :to="registerUrl" class="artwork-action">Register</router-link></li>
+      <li v-if="canSell"><router-link :to="registerForAuctionUrl">Add to Auction</router-link></li>
+    </ul>
   </div>
-</li>
+</div>
 </template>
 
 <script>
-import SellViaAuction from "../myArtwork/RegisterForAuction";
-// import peerToPeerService from '@/services/peerToPeerService'
-
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MySingleAuctionItem",
-  components: { SellViaAuction },
+  components: {},
   props: {
     auctionId: null,
     sellingItem: false,
@@ -68,12 +66,6 @@ export default {
         auctionId: this.auctionId,
         itemId: null
       });
-    },
-    closeDialog() {
-      this.sellAuctionActive = false;
-    },
-    openAuctionDialog() {
-      this.sellAuctionActive = true;
     }
   },
   computed: {
@@ -88,7 +80,36 @@ export default {
       return this.$store.getters["myArtworksStore/myArtwork"](this.item.itemId);
     },
     registerUrl() {
-      return `/my-artworks/register/${this.item.itemId}`;
+      let url = `/my-artwork/register/${this.item.itemId}`;
+      url += "?from=auctions&auctionId=" + this.auctionId;
+      return url;
+    },
+    registerForSaleUrl() {
+      let a = this.$store.getters["myArtworksStore/myArtwork"](
+        this.item.itemId
+      );
+      let id = this.artwork.id;
+      let amount = a.saleData ? a.saleData.amount : 0;
+      let currency = a.saleData ? a.saleData.fiatCurrency : "EUR";
+      let url = `/my-artwork/register-for-sale/${id}/${amount}/${currency}`;
+      url += "?from=auctions&auctionId=" + this.auctionId;
+      return url;
+    },
+    registerForAuctionUrl() {
+      let a = this.$store.getters["myArtworksStore/myArtwork"](
+        this.item.itemId
+      );
+      let id = this.artwork.id;
+      let r = a.saleData ? a.saleData.reserve : 0;
+      let i = a.saleData ? a.saleData.increment : 0;
+      let c = a.saleData ? a.saleData.fiatCurrency : "EUR";
+      let aid = this.auctionId;
+      // if (a.saleData && a.saleData.auctionId) {
+      //  aid = a.saleData.auctionId;
+      // }
+      let url = `/my-artwork/register-for-auction/${id}/${aid}/${r}/${i}/${c}`;
+      url += "?from=auctions";
+      return url;
     },
     debugMode() {
       return this.$store.getters["isDebugMode"];
@@ -96,3 +117,8 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.md-layout-item {
+  margin-bottom: 20px;
+}
+</style>

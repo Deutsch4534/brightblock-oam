@@ -21,6 +21,7 @@
 <script>
 export default {
   name: "home",
+  bodyClass: "index-page",
   props: {
     image: {
       type: String,

@@ -26,6 +26,7 @@ import moneyUtils from "@/services/moneyUtils";
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "Artwork",
+  bodyClass: "index-page",
   components: {
     BuyArtworkForm,
     AboutArtwork

@@ -1,15 +1,14 @@
 <template>
 <div class="container">
-  <div id="images">
-    <div class="title">
-      <h2>Artworks <span>({{numberArtworksUnsold}})</span></h2>
-    </div>
-    <my-artworks-list :artworks="unsold" :sold="false" :show-load-button="false" :chunks="6"/>
-    <div class="title">
-      <h2>Sold Artworks <span>({{numberArtworksSold}})</span></h2>
-    </div>
-    <my-artworks-list :artworks="sold" :sold="true" :show-load-button="false" :chunks="6"/>
+  <router-view/>
+  <div class="title">
+    <h2>Artworks <span>({{numberArtworksUnsold}})</span></h2>
   </div>
+  <my-artworks-list :artworks="unsold" :sold="false" :show-load-button="false" :chunks="6"/>
+  <div class="title">
+    <h2>Sold Artworks <span>({{numberArtworksSold}})</span></h2>
+  </div>
+  <my-artworks-list :artworks="sold" :sold="true" :show-load-button="false" :chunks="6"/>
 </div>
 </template>
 

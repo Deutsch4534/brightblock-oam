@@ -10,6 +10,7 @@ import MyArtworkUploadForm from "./components/myArtwork/MyArtworkUploadForm";
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyArtworkUpload",
+  bodyClass: "index-page",
   components: {
     MyArtworkUploadForm
   },

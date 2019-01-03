@@ -14,6 +14,7 @@ export default {
     LastArtworks
   },
   name: "home",
+  bodyClass: "index-page",
   props: {
     image: {
       type: String,

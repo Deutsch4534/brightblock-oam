@@ -1,4 +1,3 @@
-import xhrService from "@/services/xhrService";
 import store from "@/storage/store";
 import { getFile } from "blockstack";
 
@@ -22,6 +21,7 @@ const auctionSearchService = {
 
   getUsersOnlineAuction: function(username) {
     return new Promise((resolve, reject) => {
+      /**
       store
         .dispatch("userProfilesStore/fetchUserProfile", { username: username })
         .then(function() {
@@ -38,6 +38,22 @@ const auctionSearchService = {
             .catch(function() {
               reject(new Error({ error: 1, message: "no auctions found" }));
             });
+        });
+    });
+    **/
+      const auctionsRootFileName = store.state.constants.auctionsRootFileName;
+      getFile(auctionsRootFileName, { decrypt: false, username: username })
+        .then(function(file) {
+          if (file) {
+            let rootFile = JSON.parse(file);
+            resolve(rootFile.records);
+          }
+        })
+        .catch(function() {
+          reject({
+            ERR_CODE: "AUCTIONS_1",
+            message: "Error fetching users auctions!"
+          });
         });
     });
   }

@@ -1,14 +1,17 @@
 <template>
-<div class="row">
-  <div class="col-md-12 col-xs-12">
-    <h4>Messaging</h4>
-    <div class="form-group">
-      <textarea class="form-control" rows="3" v-model="message" v-on:keyup.13.prevent="sendMessage"></textarea>
+<div>
+  <div class="md-layout">
+    <div class="md-layout-item md-size-100">
+      <h3>Messaging</h3>
+      <md-field>
+        <label>Messages</label>
+        <md-textarea class="form-control" v-model="message" v-on:keyup.13.prevent="sendMessage"></md-textarea>
+      </md-field>
     </div>
-  </div>
-  <div class="col-md-12 col-xs-12" style="max-height: 150px; overflow: scroll;">
-    <div v-for="(message, index) of messages" :key="index">
-      {{message.username}}: {{message.content}} <br/>
+    <div class="md-layout-item md-size-100">
+      <div v-for="(message, index) of messages" :key="index">
+        {{message.username}}: {{message.content}} <br/>
+      </div>
     </div>
   </div>
 </div>
@@ -55,7 +58,7 @@ export default {
         username: myProfile.username,
         auctionId: this.auctionId
       };
-
+      this.message = "";
       if (this.admin) {
         this.$store.commit("myAuctionsStore/messageEvent", data);
       } else {

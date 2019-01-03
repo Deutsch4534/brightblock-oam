@@ -83,6 +83,13 @@
                         <li>
                           <router-link
                             class="dropdown-item"
+                            to="/online-auctions"
+                            >Online Auctions</router-link
+                          >
+                        </li>
+                        <li>
+                          <router-link
+                            class="dropdown-item"
                             to="/my-auctions"
                             >My Auctions</router-link
                           >

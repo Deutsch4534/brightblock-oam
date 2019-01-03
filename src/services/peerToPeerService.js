@@ -4,7 +4,7 @@ import utils from "@/services/utils";
 import store from "@/storage/store";
 import notify from "@/services/notify";
 
-const apiKey = process.env.TOK_BOX_API_KEY;
+const apiKey = process.env.VUE_APP_TOK_BOX_API_KEY;
 
 /**
  *  The service is a client to the brightblock sever.

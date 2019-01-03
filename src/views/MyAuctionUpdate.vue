@@ -13,6 +13,7 @@ import MyAuctionUploadForm from "./components/auction/MyAuctionUploadForm";
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyAuctionUpload",
+  bodyClass: "index-page",
   components: {
     MyAuctionUploadForm
   },

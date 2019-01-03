@@ -1,66 +1,68 @@
 <template>
-<div class="innerpage mt-50">
+<div class="md-layout">
+  <md-dialog-alert
+    :md-active.sync="showAlert"
+    :md-content="alertMessage"
+    md-confirm-text="OK!" />
+  <form novalidate class="md-layout" @submit.prevent="validateAuction">
 
-  <form>
-    <p v-if="errors.length" :key="errors.length">
-      <b>Please correct the following error(s):</b>
-      <ul>
-        <li v-for="(error, index) in errors" :key="index" v-bind:error="error">{{ error }}</li>
-      </ul>
-    </p>
+    <md-card class="md-layout-item md-size-100 md-small-size-100">
+      <md-card-header>
+        <div class="md-title">{{formTitle}}</div>
+      </md-card-header>
+      <md-card-content>
+        <div class="md-layout">
+          <div class="md-layout-item md-size-100">
+            <md-field :class="getValidationClass('title')">
+              <label for="title">Title</label>
+              <md-input name="title" id="title" v-model="auction.title" :disabled="sending" />
+              <span class="md-error" v-if="!$v.auction.title.required">The title is required</span>
+              <span class="md-error" v-else-if="!$v.auction.title.minlength">Invalid first name</span>
+            </md-field>
+          </div>
 
-    <div class="form-group">
-      <p>Only auction administrators ({{username}}) are able to change information about the auction.</p>
-    </div>
+          <div class="md-layout-item md-size-100">
+          <datetime type="datetime" v-model="startDate" input-id="startDate">
+            <label for="startDate" slot="before"><md-icon>calendar_today</md-icon> Auction Starts</label>
+            <input id="startDate" class="">
+          </datetime>
+          </div>
 
-    <div class="form-group">
-      <label>Title</label>
-      <input class="form-control" placeholder="Title of your auction" v-model="auction.title">
-    </div>
+          <div class="md-layout-item md-size-100">
+            <datetime type="datetime" v-model="endDate" input-id="endDate">
+              <label for="endDate" slot="before"><md-icon>calendar_today</md-icon> Auction Ends</label>
+              <input id="endDate">
+            </datetime>
+          </div>
 
-    <div class="form-group">
-      <datetime type="datetime" v-model="startDate" input-id="startDate">
-        <label for="startDate" slot="before">Auction Starts&nbsp;&nbsp;&nbsp;</label>
-        <input id="startDate" class="form-control">
-      </datetime>
-    </div>
-
-    <div class="form-group">
-      <datetime type="datetime" v-model="endDate" input-id="endDate">
-        <label for="endDate" slot="before">Auction Ends&nbsp;&nbsp;&nbsp;&nbsp;</label>
-        <input id="endDate" class="form-control">
-      </datetime>
-    </div>
-
-    <div class="form-group">
-      <label>Description</label>
-      <textarea class="form-control" placeholder="Auction description - for marketing and discovery" v-model="auction.description"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label>Keywords</label>
-      <textarea class="form-control" placeholder="Auction keywords - for marketing and discovery" v-model="auction.keywords"></textarea>
-    </div>
-
-    <div class="radio-inline">
-      <label>
-        <input type="radio" name="auction.privacy" value="private" v-model="auction.privacy">
-        Private
-      </label>
-    </div>
-    <div class="radio-inline">
-      <label>
-        <input type="radio" name="auction.privacy" value="public" v-model="auction.privacy" checked>
-        Public
-      </label>
-    </div>
-
-    <hr/>
-
-    <div class="form-group">
-      <button type="submit" class="btn btn-default" v-on:click.prevent="upload">Submit</button>
-    </div>
-
+          <div class="md-layout-item md-size-100">
+            <md-field :class="getValidationClass('description')">
+              <label for="description">Description</label>
+              <md-textarea name="description" id="description" v-model="auction.description" required></md-textarea>
+              <span class="md-error">The description is required</span>
+            </md-field>
+          </div>
+          <div class="md-layout-item md-size-100">
+            <md-field :class="getValidationClass('keywords')">
+              <label for="keywords">Keywords</label>
+              <md-textarea name="keywords" id="keywords" v-model="auction.keywords" required></md-textarea>
+              <span class="md-error">Enter some keywords</span>
+            </md-field>
+          </div>
+        </div>
+      </md-card-content>
+      <md-card-content>
+        <div class="md-layout">
+          <div class="md-layout-item md-size-100">
+            <md-radio v-model="auction.privacy" value="public">Public</md-radio>
+            <md-radio v-model="auction.privacy" value="private">Private</md-radio>
+          </div>
+        </div>
+      </md-card-content>
+      <md-card-actions>
+        <md-button type="submit" class="md-primary">Upload</md-button>
+      </md-card-actions>
+    </md-card>
   </form>
 </div>
 </template>
@@ -68,15 +70,22 @@
 <script>
 import moment from "moment";
 import { Datetime } from "vue-datetime";
+import { validationMixin } from "vuelidate";
+import { required, minLength } from "vuelidate/lib/validators";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyAuctionUploadForm",
+  mixins: [validationMixin],
   components: { datetime: Datetime },
   props: ["auctionId", "mode"],
   data() {
     return {
       errors: [],
+      sending: false,
+      showAlert: false,
+      alertMessage: null,
+      formTitle: "Upload Auction",
       startDate: null,
       endDate: null,
       auction: {
@@ -110,6 +119,21 @@ export default {
     username() {
       let profile = this.$store.getters["myAccountStore/getMyProfile"];
       return profile.username;
+    }
+  },
+  validations: {
+    auction: {
+      title: {
+        required,
+        minLength: minLength(1)
+      },
+      description: {
+        required,
+        minLength: minLength(1)
+      },
+      keywords: {
+        required
+      }
     }
   },
   methods: {
@@ -148,6 +172,24 @@ export default {
     },
     openModal() {},
     closeModal() {},
+    getValidationClass(fieldName) {
+      const field = this.$v.auction[fieldName];
+      if (field) {
+        return {
+          "md-invalid": field.$invalid && field.$dirty
+        };
+      }
+    },
+    validateAuction() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.upload();
+      } else {
+        this.showAlert = true;
+        console.log("errros", this.$v);
+        this.alertMessage = "Please fix the form errors indicated in red.. ";
+      }
+    },
     validate: function() {
       this.errors = [];
       if (!this.auction.title) {

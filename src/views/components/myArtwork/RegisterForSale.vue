@@ -61,13 +61,17 @@ export default {
       artworkId: null,
       message: null,
       amount: 0,
-      currency: "EUR"
+      currency: "EUR",
+      from: "/my-artworks"
     };
   },
   mounted() {
     this.artworkId = Number(this.$route.params.artworkId);
     this.amount = Number(this.$route.params.amount);
     this.currency = this.$route.params.currency;
+    if (this.$route.query.from && this.$route.query.from === "auctions") {
+      this.from = "/my-auctions/manage/" + this.$route.query.auctionId;
+    }
   },
   computed: {
     fiatRates() {
@@ -107,7 +111,7 @@ export default {
 
     closeModal: function() {
       this.showModal = false;
-      this.$router.push("/my-artworks");
+      this.$router.push(this.from);
     },
 
     setPrice: function() {

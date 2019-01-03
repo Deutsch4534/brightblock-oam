@@ -1,8 +1,10 @@
 <template>
-<div class="col-sm-12">
-  <h5><router-link :to="auctionUrl"><small>{{auction.title}}</small></router-link></h5>
-  <p><small>{{auction.description}}</small></p>
-  <p><small><small>{{countdown}}</small></small></p>
+<div class="md-layout md-gutter">
+  <div class="md-layout-item md-size-100 md-xsmall-size-100">
+    <h3><router-link :to="auctionUrl">{{auction.title}}</router-link></h3>
+    <p>{{auction.description}}</p>
+    <p>{{countdown}}</p>
+  </div>
 </div>
 </template>
 

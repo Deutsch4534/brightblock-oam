@@ -1,33 +1,32 @@
 <template>
-<div class="row">
-  <set-final-bid-price :item="item" :amount="currentBid" :auctionId="auctionId" data-toggle="modal" data-target="#setFinalBidPriceModal"/>
-  <div class="col-sm-12">
+<div class="md-layout md-gutter">
+  <div class="md-layout-item md-size-100">
     <h4>{{artwork.title}}</h4>
     <p>Current Bid: {{currentBidder}} {{currencySymbol}} {{currentBid}} {{item.fiatCurrency}}</p>
-    <img :src="artwork.image" :alt="artwork.title" class="img-fluid" style="max-width: 350px"/>
+    <img :src="artwork.image" :alt="artwork.title"/>
+    <div class="md-layout-item md-size-20" v-if="canSell"><router-link :to="registerForSaleUrl">Buy</router-link></div>
   </div>
-  <div class="col-sm-12" v-if="inplay">
-    <button
-          class="btn btn-block black action-button text-uppercase" :class="bidStatusClass"
+  <div class="md-layout-item md-size-100"  v-if="inplay">
+    <md-button
+          class="md-primary" :class="bidStatusClass"
           :disabled="paused || item.paused || item.sellingStatus === 'selling'"
           style="max-width: 350px"
-          @click.prevent="bid(nextBid)">Bid {{currencySymbol}} {{nextBid}} {{item.fiatCurrency}}</button>
-    <button
+          @click.prevent="bid(nextBid)">Bid {{currencySymbol}} {{nextBid}} {{item.fiatCurrency}}</md-button>
+    <md-button
           v-if="showSetFinalPriceButton"
-          class="btn btn-block yellow-bg black action-button text-uppercase mt-3"
+          class="md-primary"
           style="max-width: 350px" v-bind:data-artwork="artwork.id"
           data-toggle="modal"
-          data-target="#setFinalBidPriceModal">Sell ({{currentBid}})</button>
+          data-target="#setFinalBidPriceModal">Sell ({{currentBid}})</md-button>
     <p v-if="selling && !admin" class="center-block text-center mt-3" v-html="sellingMessage"></p>
     <p v-if="item.sellingStatus === 'selling' && artwork.bcitem">confirming...{{artwork.bcitem.itemIndex}}, {{artwork.bcitem.status}}, {{artwork.bcitem.price}}</p>
-    <button v-if="item.sellingStatus === 'selling'" class="btn btn-block yellow-bg black action-button text-uppercase" style="max-width: 350px" v-on:click="openSetFinalBidPriceDialog">Confirm Price</button>
-    <button class="btn btn-block yellow-bg black action-button text-uppercase" style="max-width: 350px" v-on:click="pauseBidding"><span v-if="item.paused">Unpause</span><span v-else>Pause</span> Bidding</button>
+    <md-button class="md-primary" v-if="item.sellingStatus === 'selling'" style="max-width: 350px" v-on:click="openSetFinalBidPriceDialog">Confirm Price</md-button>
+    <md-button class="md-primary" style="max-width: 350px" v-on:click="pauseBidding"><span v-if="item.paused">Unpause</span><span v-else>Pause</span> Bidding</md-button>
   </div>
 </div>
 </template>
 
 <script>
-import SetFinalBidPrice from "./SetFinalBidPrice";
 import peerToPeerService from "@/services/peerToPeerService";
 import moneyUtils from "@/services/moneyUtils";
 import biddingUtils from "@/services/biddingUtils";
@@ -35,7 +34,7 @@ import biddingUtils from "@/services/biddingUtils";
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "HammerItem",
-  components: { SetFinalBidPrice },
+  components: {},
   props: {
     auctionId: null,
     admin: false,
@@ -48,14 +47,10 @@ export default {
   },
   data() {
     return {
-      setFinalBidPriceActive: false,
       paused: false
     };
   },
   methods: {
-    openSetFinalBidPriceDialog() {
-      this.setFinalBidPriceActive = true;
-    },
     pauseBidding() {
       let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
       let message = "Pausing the auction to wait for bidders to catch up...";
@@ -75,9 +70,6 @@ export default {
         itemId: this.item.itemId
       };
       this.$store.commit("myAuctionsStore/pauseItemEvent", data);
-    },
-    closeDialog() {
-      this.setFinalBidPriceActive = false;
     },
     bid(amount) {
       let $self = this;
@@ -106,7 +98,7 @@ export default {
       if (!this.item.itemId) {
         return {
           title: "no artwork under the hammer right now",
-          image: "/static/images/artwork1.jpg"
+          image: "/images/missing-image.jpg"
         };
       }
       return this.$store.getters["artworkSearchStore/getArtwork"](
@@ -120,6 +112,9 @@ export default {
       return (
         this.admin && this.item.paused && this.item.sellingStatus !== "selling"
       );
+    },
+    canSell() {
+      return true; // this.$store.getters["myArtworksStore/canSell"](this.artwork.id);
     },
     selling() {
       return this.item.sellingStatus === "selling";
@@ -141,6 +136,19 @@ export default {
     },
     currentBidder() {
       return biddingUtils.currentBidder(this.item);
+    },
+    registerForSaleUrl() {
+      if (this.item.itemId) {
+        let a = this.$store.getters["myArtworksStore/myArtwork"](
+          this.item.itemId
+        );
+        let id = this.artwork.id;
+        let amount = a.saleData ? a.saleData.amount : 0;
+        let currency = a.saleData ? a.saleData.fiatCurrency : "EUR";
+        return `/my-artwork/register-for-sale/${id}/${amount}/${currency}`;
+      } else {
+        return "/";
+      }
     }
   }
 };

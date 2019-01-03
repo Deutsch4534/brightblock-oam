@@ -1,32 +1,32 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col-md-12 pt-5">
-        <h1 class="innerpage">{{auction.title}} <span>({{artworksSize}} items)</span></h1>
+    <div class="md-layout">
+      <div class="md-layout-item md-size-100">
+        <h1>{{auction.title}} <span>({{artworksSize}} items)</span></h1>
         <p>{{auction.description}}</p>
         <p>{{countdown}}</p>
-        <div class="row">
-          <div class="col-md-6">
-            <hammer-item :item="hammerItem" :auctionId="auctionId"/>
-          </div>
-          <div class="col-md-6">
-            <div class="row" v-if="winning.length > 0">
-              <div class="col-md-12">
-                <h4>Won items</h4>
-                <p v-for="(item, index) of winning" :key="index">
-                  {{item.itemId}}
-                </p>
-              </div>
-            </div>
-            <watchers-stream :auctionId="auctionId"/>
-            <video-stream :canPublish="false"/>
-            <message-stream :auctionId="auctionId" :administrator="false"/>
-          </div>
-        </div>
       </div>
     </div>
-    <div class="row" v-if="artworksSize > 0">
-      <div class="col-sm-12">
+    <div class="md-layout">
+      <div class="md-layout-item md-size-50">
+        <hammer-item :item="hammerItem" :auctionId="auctionId"/>
+      </div>
+      <div class="md-layout-item md-size-50">
+        <div class="md-layout" v-if="winning.length > 0">
+          <div class="md-layout-item md-size-50">
+            <h4>Won items</h4>
+            <p v-for="(item, index) of winning" :key="index">
+              {{item.itemId}}
+            </p>
+          </div>
+        </div>
+        <watchers-stream :auctionId="auctionId"/>
+        <video-stream :canPublish="false"/>
+        <message-stream :auctionId="auctionId" :admin="false"/>
+      </div>
+    </div>
+    <div class="md-layout" v-if="artworksSize > 0">
+      <div class="md-layout-item md-size-100">
         <h4>Next Items</h4>
         <ul class="list-unstyled">
           <single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :item="item" :auctionId="auctionId"/>
@@ -48,6 +48,7 @@ import peerToPeerService from "@/services/peerToPeerService";
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "OnlineAuction",
+  bodyClass: "index-page",
   components: {
     WatchersStream,
     SingleAuctionItem,
@@ -58,29 +59,39 @@ export default {
   data() {
     return {
       auctionId: null,
+      auction: {
+        title: "tbd"
+      },
       username: null
     };
   },
   beforeDestroy() {
     peerToPeerService.disconnect();
   },
-  created() {
+  mounted() {
     window.addEventListener("beforeunload", this.stopPublishing);
     this.auctionId = Number(this.$route.params.auctionId);
+    this.username = this.$route.params.username;
+    let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
+      this.auctionId
+    );
+    let $self = this;
     this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
       this.username = myProfile.username;
-      this.$store
-        .dispatch("onlineAuctionsStore/fetchOnlineAuction", this.auctionId)
-        .then(auction => {
-          try {
-            peerToPeerService.startSession(
-              myProfile.username,
-              auction.auctionId
+      if (!auction) {
+        this.$store
+          .dispatch("onlineAuctionsStore/fetchUserAuctions", this.auctionId)
+          .then(() => {
+            auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
+              $self.auctionId
             );
-          } catch (e) {
-            console.log(e);
-          }
-        });
+            $self.auction = auction;
+            this.startPeerConnection(auction);
+          });
+      } else {
+        this.auction = auction;
+        this.startPeerConnection(auction);
+      }
     });
   },
   methods: {
@@ -91,10 +102,17 @@ export default {
       } else {
         return "";
       }
+    },
+    startPeerConnection(auction) {
+      try {
+        peerToPeerService.startSession(this.username, auction.auctionId);
+      } catch (e) {
+        console.log(e);
+      }
     }
   },
   computed: {
-    auction() {
+    auction1() {
       let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
         this.auctionId
       );

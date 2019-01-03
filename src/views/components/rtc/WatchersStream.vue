@@ -1,7 +1,7 @@
 <template>
 <div class="row">
   <div class="col-md-12">
-    <h4>Watchers</h4>
+    <h3>Watchers</h3>
     <h5>Administrator: {{administrator.username}}</h5>
     <p v-for="(peer, index) of peers" :key="index" v-if="administrator.username !== peer.username">
       {{peer.username}}

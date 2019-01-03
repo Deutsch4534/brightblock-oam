@@ -1,8 +1,6 @@
 <template>
   <div class="container">
-    <div class="row">
-      <router-view/>
-    </div>
+    <router-view/>
   </div>
 </template>
 
@@ -10,6 +8,7 @@
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyAuctions",
+  bodyClass: "index-page",
   components: {},
   data() {
     return {};

@@ -74,7 +74,7 @@ export default {
   components: {
     LoginCard
   },
-  // bodyClass: "login-page",
+  bodyClass: "login-page",
   data() {
     return {
       firstname: null,

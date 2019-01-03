@@ -106,7 +106,10 @@ export default {
       let r = a.saleData ? a.saleData.reserve : 0;
       let i = a.saleData ? a.saleData.increment : 0;
       let c = a.saleData ? a.saleData.fiatCurrency : "EUR";
-      let aid = a.saleData ? a.saleData.auctionId : -1;
+      let aid = -1;
+      if (a.saleData && a.saleData.auctionId) {
+        aid = a.saleData.auctionId;
+      }
       return `/my-artwork/register-for-auction/${id}/${aid}/${r}/${i}/${c}`;
     }
   }
