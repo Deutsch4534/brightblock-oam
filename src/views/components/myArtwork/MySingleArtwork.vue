@@ -1,7 +1,7 @@
 <template>
 <div class="md-layout md-gutter">
   <div class="md-layout-item md-size-25 md-xsmall-size-100">
-    <img :src="artwork.image" :alt="artwork.title" class="mr-3 img-fluid" style="max-width: 250px;">
+    <img :src="artwork.image" :alt="artwork.title">
   </div>
   <div class="md-layout-item md-size-50 md-xsmall-size-100">
     <h5 class="mt-0 mb-1">{{artwork.title}}</h5>

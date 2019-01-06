@@ -9,9 +9,11 @@
       </md-field>
     </div>
     <div class="md-layout-item md-size-100">
-      <div v-for="(message, index) of messages" :key="index">
-        {{message.username}}: {{message.content}} <br/>
-      </div>
+      <md-content class="md-scrollbar">
+        <div v-for="(message, index) of messages" :key="index">
+          {{message.username}}: {{message.content}} <br/>
+        </div>
+      </md-content>
     </div>
   </div>
 </div>
@@ -71,3 +73,10 @@ export default {
   }
 };
 </script>
+<style>
+.md-content {
+  max-width: 400px;
+  max-height: 200px;
+  overflow: auto;
+}
+</style>

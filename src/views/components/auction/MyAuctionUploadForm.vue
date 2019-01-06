@@ -7,11 +7,37 @@
   <form novalidate class="md-layout" @submit.prevent="validateAuction">
 
     <md-card class="md-layout-item md-size-100 md-small-size-100">
-      <md-card-header>
-        <div class="md-title">{{formTitle}}</div>
-      </md-card-header>
       <md-card-content>
         <div class="md-layout">
+          <div class="md-layout-item md-size-100">
+            <md-radio v-model="auction.auctionType" value="webcast">Webcast Auction</md-radio>
+            <md-radio v-model="auction.auctionType" value="sealed">Sealed Bid Auction</md-radio>
+            <md-radio v-model="auction.auctionType" value="timed" :disabled="true">Timed Auction</md-radio>
+            <md-radio v-model="auction.auctionType" value="penny" :disabled="true">Penny Auction</md-radio>
+          </div>
+        </div>
+      </md-card-content>
+    </md-card>
+
+    <md-card class="md-layout-item md-size-100 md-small-size-100">
+      <md-card-content>
+        <p v-if="errors.length" :key="errors.length">
+          <b>Please correct the following error(s):</b>
+          <ul>
+            <li v-for="(error, index) in errors" :key="index" v-bind:error="error">{{ error }}</li>
+          </ul>
+        </p>
+      </md-card-content>
+
+      <md-card-content>
+        <div class="md-layout">
+          <div class="md-layout-item md-size-100" v-if="auction.auctionType === 'sealed'">
+            <md-field :class="getValidationClass('sealedAddress')">
+              <label for="title">Destination Bitcoin Address</label>
+              <md-input name="title" id="sealedAddress" v-model="auction.sealedAddress" :disabled="sending" />
+              <span class="md-error" v-if="!$v.auction.sealedAddress.required">The address is required for a sealed bid auction.</span>
+            </md-field>
+          </div>
           <div class="md-layout-item md-size-100">
             <md-field :class="getValidationClass('title')">
               <label for="title">Title</label>
@@ -20,21 +46,6 @@
               <span class="md-error" v-else-if="!$v.auction.title.minlength">Invalid first name</span>
             </md-field>
           </div>
-
-          <div class="md-layout-item md-size-100">
-          <datetime type="datetime" v-model="startDate" input-id="startDate">
-            <label for="startDate" slot="before"><md-icon>calendar_today</md-icon> Auction Starts</label>
-            <input id="startDate" class="">
-          </datetime>
-          </div>
-
-          <div class="md-layout-item md-size-100">
-            <datetime type="datetime" v-model="endDate" input-id="endDate">
-              <label for="endDate" slot="before"><md-icon>calendar_today</md-icon> Auction Ends</label>
-              <input id="endDate">
-            </datetime>
-          </div>
-
           <div class="md-layout-item md-size-100">
             <md-field :class="getValidationClass('description')">
               <label for="description">Description</label>
@@ -49,8 +60,22 @@
               <span class="md-error">Enter some keywords</span>
             </md-field>
           </div>
+
+          <div class="md-layout-item md-size-100" style="margin-top: 30px;" v-if="auction.auctionType === 'webcast' || auction.auctionType === 'sealed'">
+              <datetime type="datetime" v-model="startDate" input-id="startDate">
+                <label for="startDate" slot="before"><md-icon>calendar_today</md-icon> Auction Starts</label>
+                <input id="startDate">
+              </datetime>
+          </div>
+          <div class="md-layout-item md-size-100" v-else>
+            <datetime type="datetime" v-model="endDate" input-id="endDate">
+              <label for="endDate" slot="before"><md-icon>calendar_today</md-icon> Auction Ends</label>
+              <input id="endDate">
+            </datetime>
+          </div>
         </div>
       </md-card-content>
+
       <md-card-content>
         <div class="md-layout">
           <div class="md-layout-item md-size-100">
@@ -59,6 +84,7 @@
           </div>
         </div>
       </md-card-content>
+
       <md-card-actions>
         <md-button type="submit" class="md-primary">Upload</md-button>
       </md-card-actions>
@@ -89,12 +115,14 @@ export default {
       startDate: null,
       endDate: null,
       auction: {
-        title: "Egyptian Artworks Auction",
-        description: "Egyptian artifacts auctioned from a private collection",
-        keywords: "Egypt,Ancient,Sculpture",
+        title: "",
+        description: "",
+        keywords: "",
         auctioneer: "",
-        privacy: "private",
-        sellingList: []
+        auctionType: "webcast",
+        privacy: "public",
+        sellingList: [],
+        sealedAddress: null
       }
     };
   },
@@ -131,6 +159,7 @@ export default {
         required,
         minLength: minLength(1)
       },
+      sealedAddress: {},
       keywords: {
         required
       }
@@ -143,9 +172,11 @@ export default {
         let profile = this.$store.getters["myAccountStore/getMyProfile"];
         this.auction.auctioneer = profile.username;
         this.auction.administrator = profile.username;
-        this.auction.auctionType = "webcast";
         this.auction.startDate = moment(this.startDate).valueOf();
         this.auction.endDate = moment(this.endDate).valueOf();
+        if (!this.auction.auctionType) {
+          this.auction.auctionType = "webcast";
+        }
         if (!this.auction.messages) {
           this.auction.messages = [];
         }
@@ -172,9 +203,28 @@ export default {
     },
     openModal() {},
     closeModal() {},
+    validations() {
+      if (this.auction.auctionType === "sealed") {
+        return {
+          sealedAddress: {
+            required
+          }
+        };
+      }
+    },
     getValidationClass(fieldName) {
       const field = this.$v.auction[fieldName];
       if (field) {
+        /**
+        if (fieldName === "sealedAddress") {
+          if (this.auction.auctionType === "sealed") {
+            if (!this.auction.sealedAddress) {
+              field.$invalid = true;
+              field.$dirty = true;
+            }
+          }
+        }
+        **/
         return {
           "md-invalid": field.$invalid && field.$dirty
         };
@@ -182,7 +232,8 @@ export default {
     },
     validateAuction() {
       this.$v.$touch();
-      if (!this.$v.$invalid) {
+      this.validate();
+      if (!this.$v.$invalid && this.errors.length === 0) {
         this.upload();
       } else {
         this.showAlert = true;
@@ -194,6 +245,11 @@ export default {
       this.errors = [];
       if (!this.auction.title) {
         this.errors.push("title required.");
+      }
+      if (this.auction.auctionType === "sealed") {
+        if (!this.auction.sealedAddress) {
+          this.errors.push("bitcoin address required for sealed bid auction.");
+        }
       }
       if (moment(this.startDate).isBefore(moment({}))) {
         this.errors.push("Start date before now.");

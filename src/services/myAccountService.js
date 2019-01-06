@@ -6,6 +6,7 @@ import {
   handlePendingSignIn,
   isSignInPending,
   isUserSignedIn,
+  hexStringToECPair,
   redirectToSignIn,
   signUserOut
 } from "blockstack";
@@ -23,8 +24,11 @@ const myAccountService = {
         account.username === "mike.personal.id" ||
         account.username.indexOf("brightblock") > -1 ||
         account.username.indexOf("antonio") > -1;
+      let privateKey = account.appPrivateKey + "01";
+      privateKey = hexStringToECPair(privateKey).toWIF();
       myProfile = {
         loggedIn: true,
+        appPrivateKey: privateKey,
         showAdmin: showAdmin,
         name: person.name(),
         description: person.description(),

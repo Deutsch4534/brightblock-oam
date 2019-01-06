@@ -1,23 +1,22 @@
 <template>
 <div class="md-layout md-gutter">
   <div class="md-layout-item md-size-25 md-xsmall-size-100">
-    <img :src="artwork.image" :alt="artwork.title" class="mr-3 img-fluid" style="max-width: 250px;">
+    <img :src="artwork.image" :alt="artwork.title" >
   </div>
   <div v-if="sellingItem">
     <h4>{{artwork.title}}</h4>
     {{artwork.description}}
-    <ul>
-      <li v-if="!item.inplay"><a href v-on:click="activateBidding">Activate Bidding</a></li>
-      <li v-else><a href v-on:click="deactivateBidding">Deactivate Bidding</a></li>
-      <li><a href v-on:click="removeFromAuction">Remove from Auction</a></li>
-    </ul>
+    <br/>
+    <a v-if="!item.inplay" href @click.prevent="activateBidding">Activate Bidding</a>
+    <a v-else href @click.prevent="deactivateBidding">Deactivate Bidding</a>
+    <br/>
+    <a href @click.prevent="removeFromAuction">Remove from Auction</a>
   </div>
   <div v-else>
     <h4>{{artwork.title}}</h4>
-    <ul>
-      <li v-if="artwork.bcitem && artwork.bcitem.itemIndex === -1"><router-link :to="registerUrl" class="artwork-action">Register</router-link></li>
-      <li v-if="canSell"><router-link :to="registerForAuctionUrl">Add to Auction</router-link></li>
-    </ul>
+    <router-link v-if="artwork.bcitem && artwork.bcitem.itemIndex === -1" :to="registerUrl" class="artwork-action">Register</router-link>
+    <br/>
+    <router-link v-if="canSell" :to="registerForAuctionUrl">Add to Auction</router-link>
   </div>
 </div>
 </template>
@@ -77,7 +76,14 @@ export default {
       return bcitem && bcitem.itemIndex > -1;
     },
     artwork() {
-      return this.$store.getters["myArtworksStore/myArtwork"](this.item.itemId);
+      let itemId = this.item.itemId;
+      let a = this.$store.getters["myArtworksStore/myArtwork"](itemId);
+      if (!a) {
+        a = {
+          title: "unknown artwork"
+        };
+      }
+      return a;
     },
     registerUrl() {
       let url = `/my-artwork/register/${this.item.itemId}`;

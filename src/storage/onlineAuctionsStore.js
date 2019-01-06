@@ -80,6 +80,20 @@ const onlineAuctionsStore = {
       );
       return auctions;
     },
+    webcastAuctions: state => {
+      // let serverTime = store.getters["serverTime"];
+      let now = new Date().getTime();
+      let auctions = state.onlineAuctions.filter(
+        auction => auction.startDate > now && auction.auctionType === "webcast"
+      );
+      return auctions;
+    },
+    sealedAuctions: state => {
+      let auctions = state.onlineAuctions.filter(
+        auction => auction.auctionType === "sealed"
+      );
+      return auctions;
+    },
     pastAuctions: state => {
       // let serverTime = store.getters["serverTime"];
       let now = new Date().getTime();

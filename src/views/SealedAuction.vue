@@ -67,33 +67,41 @@ export default {
   },
   mounted() {
     window.addEventListener("beforeunload", this.stopPublishing);
-    this.auctionId = Number(this.$route.params.auctionId);
-    this.username = this.$route.params.username;
     /**
-    let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
-      this.auctionId
-    );
     let $self = this;
-    **/
-    this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
-      this.startPeerConnection(myProfile.username, this.auctionId);
-      /**
-      if (!auction) {
+    this.$store
+      .dispatch("onlineAuctionsStore/fetchOnlineAuctions")
+      .then(onlineAuctions => {
+        let auction = {};
+        onlineAuctions.forEach(function(a) {
+          if (a.auctionType === "sealed") {
+            auction = a;
+          }
+        });
         this.$store
-          .dispatch("onlineAuctionsStore/fetchUserAuctions", this.auctionId)
-          .then(() => {
-            auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
-              $self.auctionId
-            );
-            $self.auction = auction;
-            this.startPeerConnection(myProfile.username, auction.auctionId);
+          .dispatch("myAccountStore/fetchMyAccount")
+          .then(myProfile => {
+            this.username = myProfile.username;
+            if (!auction) {
+              this.$store
+                .dispatch(
+                  "onlineAuctionsStore/fetchUserAuctions",
+                  this.auctionId
+                )
+                .then(() => {
+                  auction = this.$store.getters[
+                    "onlineAuctionsStore/onlineAuction"
+                  ]($self.auctionId);
+                  $self.auction = auction;
+                  this.startPeerConnection(auction);
+                });
+            } else {
+              this.auction = auction;
+              this.startPeerConnection(auction);
+            }
           });
-      } else {
-        this.auction = auction;
-        this.startPeerConnection(myProfile.username, auction.auctionId);
-      }
+      });
       **/
-    });
   },
   methods: {
     myUsername() {
@@ -104,9 +112,9 @@ export default {
         return "";
       }
     },
-    startPeerConnection(username, auctionId) {
+    startPeerConnection(auction) {
       try {
-        peerToPeerService.startSession(username, auctionId);
+        peerToPeerService.startSession(this.username, auction.auctionId);
       } catch (e) {
         console.log(e);
       }
@@ -114,11 +122,9 @@ export default {
   },
   computed: {
     auction() {
-      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
-        this.auctionId
-      );
-      if (auction) {
-        return auction;
+      let auctions = this.$store.getters["onlineAuctionsStore/sealedAuctions"];
+      if (auctions && auctions.length > 0) {
+        return auctions[0];
       } else {
         return {
           title: "no title"

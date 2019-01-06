@@ -1,5 +1,5 @@
 <template>
-<div class="md-layout">
+<div>
   <single-result v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" :width="artworkWidth"/>
 </div>
 </template>

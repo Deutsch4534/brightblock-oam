@@ -9,11 +9,13 @@
       <p>{{countdown}}</p>
     </div>
     <div class="md-layout-item md-size-50">
-      <p><router-link :to="updateUrl">edit</router-link></p>
-      <p><router-link :to="onlineAuctionUrl">public auction</router-link></p>
-      <!-- <p><a href="#" @click="deleteAuction()">delete</a></p> -->
-      <p v-if="auction.privacy === 'private'"><span><a href="#" @click="makePublic()">make public</a></span></p>
-      <p v-else><span><a href="#" @click="makePrivate()">make private</a></span></p>
+      <p>
+        <router-link :to="updateUrl"><md-button class="md-primary">edit</md-button></router-link>
+        <router-link :to="onlineAuctionUrl"><md-button class="md-primary">view</md-button></router-link>
+        <md-button class="md-primary" @click.prevent="deleteAuction()">delete</md-button>
+        <md-button v-if="auction.privacy === 'private'" class="md-primary" @click.prevent="makePublic()">make public</md-button>
+        <md-button v-else class="md-primary" @click.prevent="makePrivate()">make private</md-button>
+      </p>
     </div>
   </div>
   <div class="md-layout">
@@ -37,15 +39,11 @@
   <div class="md-layout">
     <div class="md-layout-item md-size-100">
       <h4>Selling Items ({{sellingItemsSize}})</h4>
-      <ul class="list-unstyled">
-        <my-single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="true"/>
-      </ul>
+      <my-single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="true"/>
     </div>
     <div class="md-layout-item md-size-100">
       <h4>Available Items</h4>
-      <ul class="list-unstyled">
-        <my-single-auction-item class="auction-item-container" v-for="(item, index) of availableItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="false"/>
-      </ul>
+      <my-single-auction-item class="auction-item-container" v-for="(item, index) of availableItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="false"/>
     </div>
   </div>
 </div>
@@ -94,10 +92,7 @@ export default {
           // this.auction = auction
           try {
             this.$store.commit("onlineAuctionsStore/onlineAuction", auction);
-            peerToPeerService.startSession(
-              myProfile.username,
-              auction.auctionId
-            );
+            peerToPeerService.startSession(myProfile.username, this.auctionId);
           } catch (e) {
             console.log(e);
           }
@@ -110,6 +105,7 @@ export default {
     },
     deleteAuction() {
       this.$store.dispatch("myAuctionsStore/deleteMyAuction", this.auctionId);
+      this.$router.push("/my-artworks");
     },
     makePublic() {
       let auction = this.$store.getters["myAuctionsStore/myAuction"](

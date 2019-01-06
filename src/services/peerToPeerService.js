@@ -80,6 +80,9 @@ const peerToPeerService = {
       console.log("opentok: Sending signal: " + signal.type);
       peerToPeerService.session.signal(signal, function(error) {
         if (error) {
+          if (error.name && error.name === "OT_NOT_CONNECTED") {
+            location.reload();
+          }
           notify.error({
             title: "Reload Page",
             text: "Signal error: " + error

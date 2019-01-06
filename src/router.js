@@ -27,6 +27,7 @@ import RegisterForAuction from "./views/components/myArtwork/RegisterForAuction"
 import MyArtworkUpload from "./views/MyArtworkUpload";
 import MyArtworkUpdate from "./views/MyArtworkUpdate";
 
+// import SealedAuction from "./views/SealedAuction";
 import MyAuctions from "./views/MyAuctions";
 import MyAuctionList from "./views/components/auction/MyAuctionList";
 import MyAuctionManage from "./views/MyAuctionManage";
@@ -43,6 +44,19 @@ const router = new Router({
   routes: [
     {
       path: "/",
+      name: "onlineAuctions",
+      components: {
+        default: OnlineAuctions,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/home",
       name: "home",
       components: { default: Home, header: MainNavbar, footer: MainFooter },
       props: {

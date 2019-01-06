@@ -1,15 +1,17 @@
 <template>
-<li class="media my-3">
-  <router-link :to="url"><img :src="artwork.image" :alt="artwork.title" class="mr-3 img-fluid" style="width: 250px;"></router-link>
-  <div class="media-body row">
-    <div class="col-sm-7">
-      <h5 class="mt-0 mb-1">{{artwork.title}}</h5>
-      <p class="artwork-caption">{{artwork.description}}</p>
-      <p class="artwork-caption">Artist: {{artwork.artist}}</p>
-    </div>
+<div class="md-layout md-gutter">
+  <div class="md-layout-item md-size-25 md-xsmall-size-100">
+    <router-link :to="url"><img :src="artwork.image" :alt="artwork.title"></router-link>
+  </div>
+  <div class="md-layout-item md-size-50 md-xsmall-size-100">
+    <h5 class="mt-0 mb-1">{{artwork.title}}</h5>
+    <p class="artwork-caption">{{artwork.description}}</p>
+    <p class="artwork-caption">Artist: {{artwork.artist}}</p>
+  </div>
+  <div class="md-layout-item md-size-25 md-xsmall-size-100">
     <selling-options :artwork="artwork"/>
   </div>
-</li>
+</div>
 </template>
 
 <script>
@@ -41,3 +43,8 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.md-layout-item {
+  margin-bottom: 20px;
+}
+</style>

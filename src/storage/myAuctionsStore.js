@@ -96,6 +96,9 @@ const myAuctionsStore = {
       let auction = state.myAuctions.filter(
         auction => auction.auctionId === data.auctionId
       )[0];
+      if (!auction) {
+        return;
+      }
       biddingUtils.addBid(auction, data.itemId, data.bid);
       store.dispatch("myAuctionsStore/updateAuction", auction).then(() => {
         let myProfile = store.getters["myAccountStore/getMyProfile"];

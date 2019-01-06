@@ -12,7 +12,7 @@ const biddingUtils = {
       ts: serverTime
     };
     bid.signedBid = utils.signBitcoin(
-      myProfile.privateKey,
+      myProfile.appPrivateKey,
       JSON.stringify(bid)
     );
 

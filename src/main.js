@@ -34,6 +34,8 @@ Vue.mixin({
 store.commit("constants", CONSTANTS);
 store.dispatch("fetchServerTime");
 store.dispatch("myArtworksStore/fetchMyArtworks");
+store.dispatch("myAuctionsStore/fetchMyAuctions");
+store.dispatch("onlineAuctionsStore/fetchOnlineAuctions");
 store.dispatch("conversionStore/fetchConversionData").then(() => {
   store.dispatch("myAccountStore/fetchMyAccount");
   store.dispatch("ethStore/fetchClientState").then(clientState => {
@@ -50,7 +52,6 @@ store.dispatch("conversionStore/fetchConversionData").then(() => {
       });
     });
   });
-  store.dispatch("myAuctionsStore/fetchMyAuctions");
 });
 
 new Vue({

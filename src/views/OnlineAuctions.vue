@@ -1,13 +1,33 @@
 <template>
 <div class="container">
-  <div class="title">
-    <h2>Upcoming Auctions ({{auctionsSize}})</h2>
+  <div class="md-layout">
+    <div class="md-layout-item md-size-50">
+      <md-card>
+        <md-card-header>webcast auctions</md-card-header>
+        <md-card-content>
+          <single-auction v-for="(auction, index) of webcastAuctions" :key="index" :auction="auction"/>
+        </md-card-content>
+      </md-card>
+    </div>
+    <div class="md-layout-item md-size-50">
+      <md-card>
+        <md-card-header>sealed auctions</md-card-header>
+        <md-card-content>
+          <single-auction v-for="(auction, index) of sealedAuctions" :key="index" :auction="auction"/>
+        </md-card-content>
+      </md-card>
+    </div>
   </div>
-  <single-auction v-for="(auction, index) of auctions" :key="index" :auction="auction"/>
-  <div class="title">
-    <h2>Past Auctions</h2>
+  <div class="md-layout">
+    <div class="md-layout-item md-size-50">
+      <md-card>
+        <md-card-header>past auctions</md-card-header>
+        <md-card-content>
+          <single-auction v-for="auction of pastAuctions" :key="auction.auctionId" :auction="auction"/>
+        </md-card-content>
+      </md-card>
+    </div>
   </div>
-  <single-auction v-for="auction of pastAuctions" :key="auction.auctionId" :auction="auction"/>
 </div>
 </template>
 
@@ -32,8 +52,11 @@ export default {
     auctionsSize() {
       return this.$store.getters["onlineAuctionsStore/onlineAuctions"].length;
     },
-    auctions() {
-      return this.$store.getters["onlineAuctionsStore/onlineAuctions"];
+    webcastAuctions() {
+      return this.$store.getters["onlineAuctionsStore/webcastAuctions"];
+    },
+    sealedAuctions() {
+      return this.$store.getters["onlineAuctionsStore/sealedAuctions"];
     },
     pastAuctions() {
       return this.$store.getters["onlineAuctionsStore/pastAuctions"];

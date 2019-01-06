@@ -4,24 +4,26 @@
     <h4>{{artwork.title}}</h4>
     <p>Current Bid: {{currentBidder}} {{currencySymbol}} {{currentBid}} {{item.fiatCurrency}}</p>
     <img :src="artwork.image" :alt="artwork.title"/>
-    <div class="md-layout-item md-size-20" v-if="canSell"><router-link :to="registerForSaleUrl">Buy</router-link></div>
   </div>
   <div class="md-layout-item md-size-100"  v-if="inplay">
     <md-button
           class="md-primary" :class="bidStatusClass"
           :disabled="paused || item.paused || item.sellingStatus === 'selling'"
-          style="max-width: 350px"
           @click.prevent="bid(nextBid)">Bid {{currencySymbol}} {{nextBid}} {{item.fiatCurrency}}</md-button>
     <md-button
           v-if="showSetFinalPriceButton"
           class="md-primary"
-          style="max-width: 350px" v-bind:data-artwork="artwork.id"
+          v-bind:data-artwork="artwork.id"
           data-toggle="modal"
           data-target="#setFinalBidPriceModal">Sell ({{currentBid}})</md-button>
     <p v-if="selling && !admin" class="center-block text-center mt-3" v-html="sellingMessage"></p>
     <p v-if="item.sellingStatus === 'selling' && artwork.bcitem">confirming...{{artwork.bcitem.itemIndex}}, {{artwork.bcitem.status}}, {{artwork.bcitem.price}}</p>
-    <md-button class="md-primary" v-if="item.sellingStatus === 'selling'" style="max-width: 350px" v-on:click="openSetFinalBidPriceDialog">Confirm Price</md-button>
-    <md-button class="md-primary" style="max-width: 350px" v-on:click="pauseBidding"><span v-if="item.paused">Unpause</span><span v-else>Pause</span> Bidding</md-button>
+    <md-button class="md-primary" v-if="item.sellingStatus === 'selling'" v-on:click="openSetFinalBidPriceDialog">Confirm Price</md-button>
+
+    <span v-if="admin">
+      <md-button v-if="item.paused" class="md-primary" @click.prevent="pauseBidding">Unpause Bidding</md-button>
+      <md-button v-else class="md-primary" @click.prevent="pauseBidding">Pause Bidding</md-button>
+    </span>
   </div>
 </div>
 </template>
