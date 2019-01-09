@@ -1,6 +1,6 @@
 // ethStore.js
 import ethereumService from "@/services/ethereumService";
-import notify from "@/services/notify";
+// import notify from "@/services/notify";
 import _ from "lodash";
 import SockJS from "sockjs-client";
 import Stomp from "@stomp/stompjs";
@@ -67,12 +67,14 @@ const ethStore = {
             resolve(clientState);
           },
           function(error) {
+            /**
             notify.error({
               title: "Blockchain Client.",
               text: "Error fetching blockchain state.<br>" + error
             });
+            **/
             resolve({
-              client: "Error - client not connected",
+              client: "Error - client not connected: " + error,
               metaMaskNetwork: { networkName: "not connected", networkId: -1 }
             });
           }
@@ -87,10 +89,11 @@ const ethStore = {
             resolve(blockchainItems);
           },
           function(error) {
-            notify.error({
-              title: "Blockchain Client.",
-              text: "Error fetching blockchain items.<br>" + error
-            });
+            // notify.error({
+            //  title: "Blockchain Client.",
+            //  text: "Error fetching blockchain items.<br>" + error
+            // });
+            console.log(error);
             resolve([]);
           }
         );

@@ -5,9 +5,11 @@ import router from "./router";
 import store from "@/storage/store";
 import MaterialKit from "./plugins/material-kit";
 import Notifications from "vue-notification";
+import PrismicVue from "prismic-vue";
+import linkResolver from "./prismic/linkResolver";
 
 import { CONSTANTS } from "@/storage/constants";
-import notify from "@/services/notify";
+// import notify from "@/services/notify";
 import ethereumService from "@/services/ethereumService";
 import Datetime from "vue-datetime";
 // You need a specific loader for CSS files
@@ -19,6 +21,10 @@ Vue.use(MaterialKit);
 Vue.use(Vuex);
 Vue.use(Notifications);
 Vue.use(Datetime);
+Vue.use(PrismicVue, {
+  endpoint: "https://brightblock.prismic.io/api/v2",
+  linkResolver
+});
 
 const NavbarStore = {
   showNavbar: false
@@ -33,6 +39,7 @@ Vue.mixin({
 });
 store.commit("constants", CONSTANTS);
 store.dispatch("fetchServerTime");
+store.dispatch("bitcoinStore/fetchClientState");
 store.dispatch("myArtworksStore/fetchMyArtworks");
 store.dispatch("myAuctionsStore/fetchMyAuctions");
 store.dispatch("onlineAuctionsStore/fetchOnlineAuctions");
@@ -45,9 +52,9 @@ store.dispatch("conversionStore/fetchConversionData").then(() => {
         "artworkSearchStore/fetchRegisteredArtworks",
         blockchainItems
       );
-      store.dispatch("ethStore/receiveBlockchainEvents").then(message => {
+      store.dispatch("ethStore/receiveBlockchainEvents").then(() => {
         if (store.getters["isDebugMode"]) {
-          notify.info({ title: "Blockchain Events.", text: message });
+          // notify.info({ title: "Blockchain Events.", text: message });
         }
       });
     });

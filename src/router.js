@@ -9,10 +9,12 @@ import SearchBuilderTab from "./views/components/admin/SearchBuilderTab";
 import SearchDappsTab from "./views/components/admin/SearchDappsTab";
 
 import Home from "./views/Home.vue";
+import BrightBlock from "./views/BrightBlock.vue";
 import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
 import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
+import BBMainNavbar from "./layout/BBMainNavbar.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 
@@ -44,10 +46,10 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      name: "onlineAuctions",
+      name: "brightBlock",
       components: {
-        default: OnlineAuctions,
-        header: MainNavbar,
+        default: BrightBlock,
+        header: BBMainNavbar,
         footer: MainFooter
       },
       props: {

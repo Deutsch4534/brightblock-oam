@@ -5,11 +5,10 @@
       <router-view name="header"/>
       <div>
         <div class="wrapper">
-          <leafs/>
+          <leafs v-if="showLeafs"/>
+          <leafless v-else/>
           <div class="main main-raised">
-            <div class="section section-basic">
-              <router-view/>
-            </div>
+            <router-view/>
           </div>
         </div>
       </div>
@@ -19,12 +18,25 @@
 </template>
 <script>
 import Leafs from "./views/components/Leafs";
+import Leafless from "./views/components/Leafless";
 
 export default {
   components: {
-    Leafs
+    Leafs,
+    Leafless
   },
-  bodyClass: "index-page"
+  bodyClass: "index-page",
+  data() {
+    return {
+      showLeafs: true
+    };
+  },
+  mounted() {
+    let routeName = this.$route.name;
+    if (routeName === "brightBlock") {
+      this.showLeafs = false;
+    }
+  }
 };
 </script>
 <style lang="scss">

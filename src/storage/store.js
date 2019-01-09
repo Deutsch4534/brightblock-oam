@@ -8,6 +8,7 @@ import userProfilesStore from "./userProfilesStore";
 import artworkSearchStore from "./artworkSearchStore";
 import conversionStore from "./conversionStore";
 import ethStore from "./ethStore";
+import bitcoinStore from "./bitcoinStore";
 import onlineAuctionsStore from "./onlineAuctionsStore";
 import myAuctionsStore from "./myAuctionsStore";
 import xhrService from "@/services/xhrService";
@@ -22,6 +23,7 @@ const store = new Vuex.Store({
     artworkSearchStore: artworkSearchStore,
     conversionStore: conversionStore,
     ethStore: ethStore,
+    bitcoinStore: bitcoinStore,
     myAuctionsStore: myAuctionsStore,
     onlineAuctionsStore: onlineAuctionsStore
   },
