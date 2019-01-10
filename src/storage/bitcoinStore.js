@@ -5,16 +5,27 @@ import bitcoinService from "@/services/bitcoinService";
 const bitcoinStore = {
   namespaced: true,
   state: {
-    clientState: {}
+    clientState: {},
+    balance: 0,
+    target: 100.0
   },
   getters: {
     getClientState: state => {
       return state.clientState;
+    },
+    getBalance: state => {
+      return state.balance;
+    },
+    getTarget: state => {
+      return state.target;
     }
   },
   mutations: {
     bitcoinClientState(state, clientState) {
       state.clientState = clientState;
+    },
+    setBalance(state, balance) {
+      state.balance = balance;
     }
   },
   actions: {
@@ -35,6 +46,19 @@ const bitcoinStore = {
             resolve({
               client: "Error - client not connected: " + error
             });
+          }
+        );
+      });
+    },
+    fetchBalance({ commit }) {
+      return new Promise(resolve => {
+        bitcoinService.fetchBalance(
+          function(balance) {
+            commit("balance", balance);
+            resolve(balance);
+          },
+          function() {
+            resolve(0);
           }
         );
       });

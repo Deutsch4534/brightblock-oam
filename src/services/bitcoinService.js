@@ -8,7 +8,18 @@ const bitcoinService = {
     xhrService
       .makeDirectCall(callee)
       .then(function(response) {
-        success(response);
+        success(response.details.result);
+      })
+      .catch(function(e) {
+        failure(e);
+      });
+  },
+  fetchBalance: function(success, failure) {
+    let callee = store.state.constants.btcGatewayUrl + "/bitcoin/getbalance";
+    xhrService
+      .makeDirectCall(callee)
+      .then(function(response) {
+        success(response.details.result);
       })
       .catch(function(e) {
         failure(e);

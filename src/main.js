@@ -39,7 +39,6 @@ Vue.mixin({
 });
 store.commit("constants", CONSTANTS);
 store.dispatch("fetchServerTime");
-store.dispatch("bitcoinStore/fetchClientState");
 store.dispatch("myArtworksStore/fetchMyArtworks");
 store.dispatch("myAuctionsStore/fetchMyAuctions");
 store.dispatch("onlineAuctionsStore/fetchOnlineAuctions");
@@ -56,6 +55,7 @@ store.dispatch("conversionStore/fetchConversionData").then(() => {
         if (store.getters["isDebugMode"]) {
           // notify.info({ title: "Blockchain Events.", text: message });
         }
+        store.dispatch("bitcoinStore/fetchClientState");
       });
     });
   });
