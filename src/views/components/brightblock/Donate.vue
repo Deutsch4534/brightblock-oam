@@ -40,6 +40,9 @@ export default {
   mounted() {
     this.getContent();
     this.$store.dispatch["bitcoinStore/fetchBalance"];
+    this.$store.dispatch("bitcoinStore/fetchBalance").then(balance => {
+      console.log(balance);
+    });
   },
   computed: {
     balance() {

@@ -54,7 +54,7 @@ const bitcoinStore = {
       return new Promise(resolve => {
         bitcoinService.fetchBalance(
           function(balance) {
-            commit("balance", balance);
+            commit("setBalance", balance);
             resolve(balance);
           },
           function() {
