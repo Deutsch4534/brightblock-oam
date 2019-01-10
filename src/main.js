@@ -55,7 +55,6 @@ store.dispatch("conversionStore/fetchConversionData").then(() => {
         if (store.getters["isDebugMode"]) {
           // notify.info({ title: "Blockchain Events.", text: message });
         }
-        store.dispatch("bitcoinStore/fetchClientState");
       });
     });
   });

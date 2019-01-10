@@ -14,7 +14,7 @@
                 <span>{{btcAddress}}</span>
               </div>
               <div class="md-layout-item md-size-100 md-xsmall-size-100">
-                <span>Target: {{target}}, Currently: {{balance}}</span>
+                <span>Target on chain: {{chain}}: {{target}}, Currently: {{balance}}</span>
               </div>
             </div>
         </form>
@@ -39,12 +39,16 @@ export default {
   },
   mounted() {
     this.getContent();
-    this.$store.dispatch["bitcoinStore/fetchBalance"];
-    this.$store.dispatch("bitcoinStore/fetchBalance").then(balance => {
-      console.log(balance);
-    });
+    this.$store.dispatch("bitcoinStore/fetchBalance");
+    this.$store.dispatch("bitcoinStore/fetchClientState");
   },
   computed: {
+    chain() {
+      let s = this.$store.getters["bitcoinStore/getClientState"];
+      if (s) {
+        return s.chain;
+      }
+    },
     balance() {
       return this.$store.getters["bitcoinStore/getBalance"];
     },
