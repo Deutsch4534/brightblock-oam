@@ -27,6 +27,10 @@
               <!-- Here you can add your items from the section-start of your toolbar -->
             </mobile-menu>
             <md-list class="md-primary">
+              <md-list-item>
+                <i class="material-icons">pdf</i>
+                <p><a href="https://prismic-io.s3.amazonaws.com/brightblock%2Ffce47ccb-a801-462b-ba00-5fb08102be10_brightblock_draft_proposal_1.pdf" class="md-subheading"><b>bright paper</b></a></p>
+              </md-list-item>
               <md-list-item @click="scrollToElement(link1 + 'Section')">
                 <i class="material-icons">dot</i>
                 <p class="md-subheading"><b>{{link1}}</b></p>
@@ -66,7 +70,6 @@ function resizeThrottler(actualResizeHandler) {
 }
 
 import MobileMenu from "@/layout/MobileMenu";
-import myAccountService from "@/services/myAccountService";
 
 export default {
   components: {
@@ -109,47 +112,18 @@ export default {
   created() {
     this.getContent();
   },
-  computed: {
-    showDownload() {
-      const excludedRoutes = ["login", "landing", "profile"];
-      return excludedRoutes.every(r => r !== this.$route.name);
-    },
-    bannerImage() {
-      return {
-        backgroundImage: `url(${this.image})`
-      };
-    },
-    showAdmin() {
-      return this.$store.state.myAccountStore.myProfile.showAdmin;
-    },
-    username() {
-      return this.$store.state.myAccountStore.myProfile.name;
-    },
-    avatar() {
-      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      if (myProfile.loggedIn) {
-        return (
-          '<img style="width: 40px; height: 40px; border-radius: 20px;" src="' +
-          myProfile.avatarUrl +
-          '"/>'
-        );
-      } else {
-        return '<span class="icon-user"></span>';
-      }
-    },
-    loggedIn() {
-      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      return myProfile.loggedIn;
-    }
-  },
+  computed: {},
   methods: {
     getContent() {
-      this.$prismic.client.getSingle("home").then(document => {
+      this.$prismic.client.getSingle("navbar").then(document => {
         this.link1 = document.data.link1[0].text;
         this.link2 = document.data.link2[0].text;
         this.link3 = document.data.link3[0].text;
         this.link4 = document.data.link4[0].text;
       });
+    },
+    getLink(numb) {
+      return "#link" + numb + "Section";
     },
     bodyClick() {
       let bodyClick = document.getElementById("bodyClick");
@@ -165,12 +139,6 @@ export default {
       } else {
         bodyClick.remove();
       }
-    },
-    doSearch() {
-      if (!this.query) {
-        this.query = "*";
-      }
-      this.$router.push("/search?query=" + this.query);
     },
     toggleNavbarMobile() {
       this.NavbarStore.showNavbar = !this.NavbarStore.showNavbar;
@@ -200,11 +168,6 @@ export default {
       if (element_id) {
         element_id.scrollIntoView({ block: "start", behavior: "smooth" });
       }
-    },
-    logout() {
-      localStorage.clear();
-      sessionStorage.clear();
-      myAccountService.logout();
     }
   },
   mounted() {

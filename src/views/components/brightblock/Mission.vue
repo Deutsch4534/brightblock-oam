@@ -1,10 +1,10 @@
 <template>
-<div class="section" id="missionSection">
+<div class="section" id="MissionSection">
   <div class="container">
     <div class="md-layout">
       <div class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto text-center">
         <h2 class="title text-center">{{title}}</h2>
-        <h5 class="description">{{description}}</h5>
+        <h5 class="description" v-html="statement"></h5>
       </div>
     </div>
     <div class="features text-center">
@@ -32,7 +32,7 @@ export default {
     return {
       features: [],
       title: null,
-      description: null
+      statement: null
     };
   },
   created() {
@@ -53,7 +53,7 @@ export default {
         });
       this.$prismic.client.getSingle("mission").then(document => {
         this.title = document.data.title[0].text;
-        this.description = document.data.description[0].text;
+        this.statement = document.data.statement[0].text;
       });
     }
   }

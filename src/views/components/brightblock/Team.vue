@@ -1,6 +1,7 @@
 <template>
-<div class="section text-center" id="teamSection">
+<div class="section text-center" id="TeamSection">
   <div class="container">
+    <profile-modal :showModal="showProfile" :bio="bio"/>
     <h2 class="title">{{title}}</h2>
     <div class="team">
         <div class="md-layout md-alignment-center-center">
@@ -8,11 +9,12 @@
             <div class="team-player text-center" v-if="profile.data && profile.data.avatar && profile.data.jobtitle">
               <md-card class="md-card-plain">
                 <div class="md-layout-item md-size-50 mx-auto">
-                  <img :src="profile.data.avatar.url" alt="Thumbnail Image" class="img-raised rounded-circle img-fluid">
+                  <img :src="profile.data.avatar.url" alt="Thumbnail Image" class="img-raised rounded-circle img-fluid" @click="showTeamProfile(profile)">
                 </div>
                 <h4 class="card-title">{{profile.data.jobtitle[0].text}}
                   <br>
-                  <small class="card-description text-muted">{{profile.data.name[0].text}}</small>
+                  <router-link to="/profile" ><small class="card-description text-muted">{{profile.data.name[0].text}}</small>
+                  </router-link>
                 </h4>
 
                 <md-card-content>
@@ -35,21 +37,31 @@
 
 <script>
 import _ from "lodash";
+import ProfileModal from "./ProfileModal";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "Team",
-  components: {},
+  components: { ProfileModal },
   data() {
     return {
       profiles: [],
-      title: null
+      bio: null,
+      title: null,
+      showProfile: false,
+      name: null
     };
   },
   created() {
     this.getContent();
   },
   methods: {
+    showTeamProfile(profile) {
+      if (profile) {
+        this.bio = profile;
+        this.showProfile = true;
+      }
+    },
     getContent() {
       let $self = this;
       this.$prismic.client

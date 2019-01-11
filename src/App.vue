@@ -33,7 +33,7 @@ export default {
   },
   mounted() {
     let routeName = this.$route.name;
-    if (routeName === "brightBlock") {
+    if (routeName === "brightBlock" || routeName === "profile") {
       this.showLeafs = false;
     }
   }

@@ -1,5 +1,5 @@
 <template>
-<div class="section section-contacts" id="donateSection">
+<div class="section section-contacts" id="DonateSection">
   <div class="container">
     <div class="md-layout">
       <div class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto">
@@ -14,7 +14,7 @@
                 <span>{{btcAddress}}</span>
               </div>
               <div class="md-layout-item md-size-100 md-xsmall-size-100">
-                <span>Target on chain: {{chain}}: {{target}}, Currently: {{balance}}</span>
+                <span>Target on {{chain}} chain: {{target}}, Currently: {{balance}}</span>
               </div>
             </div>
         </form>

@@ -223,10 +223,13 @@ const router = new Router({
       ]
     },
     {
-      path: "/profile",
+      path: "/profile/:prismicId",
       name: "profile",
-      meta: { requiresAuth: true },
-      components: { default: Profile, header: MainNavbar, footer: MainFooter },
+      components: {
+        default: Profile,
+        header: BBMainNavbar,
+        footer: MainFooter
+      },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
