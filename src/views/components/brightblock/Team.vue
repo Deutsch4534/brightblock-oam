@@ -20,12 +20,6 @@
                 <md-card-content>
                   <p class="card-description">{{profile.data.jobdescription[0].text}}</p>
                 </md-card-content>
-
-                <md-card-actions class="text-center">
-                  <md-button :href="social.url" class="md-just-icon md-simple" v-for="(social, index1) in profile.socials" :key="index1">
-                    <i :class="social.classes"></i>
-                  </md-button>
-                </md-card-actions>
               </md-card>
             </div>
           </div>

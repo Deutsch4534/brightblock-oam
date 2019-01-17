@@ -18,14 +18,21 @@ const artworkSearchService = {
           // let users = [];
           _.forEach(results, function(searchIndexData) {
             try {
-              let id = Number(searchIndexData.id);
+              searchIndexData.id = Number(searchIndexData.id);
+              artworkSearchService.fetchProvenanceFile(
+                searchIndexData,
+                searchIndexData.owner,
+                success,
+                failure
+              );
+
+              /**
               artworkSearchService.userArtwork(
                 id,
                 searchIndexData.owner,
                 success,
                 failure
               );
-              /**
               let index = _.findIndex(users, function(username) {
                 return username === searchIndexData.owner;
               });

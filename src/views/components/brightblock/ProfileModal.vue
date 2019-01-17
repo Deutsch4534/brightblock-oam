@@ -10,11 +10,11 @@
                   <img :src="bio.data.avatar.url" alt="Circle Image" class="img-raised rounded-circle img-fluid">
                 </div>
                 <div class="name">
-                  <h3 class="title">Carla Hortensia</h3>
+                  <h3 class="title">{{bio.data.name[0].text}}</h3>
                   <h6>{{bio.data.jobtitle[0].text}}</h6>
-                  <md-button href="javascript:void(0)" class="md-just-icon md-simple md-dribbble"><i class="fab fa-dribbble"></i></md-button>
-                  <md-button href="javascript:void(0)" class="md-just-icon md-simple md-twitter"><i class="fab fa-twitter"></i></md-button>
-                  <md-button href="javascript:void(0)" class="md-just-icon md-simple md-pinterest"><i class="fab fa-pinterest"></i></md-button>
+                  <md-button :href="social.url" class="md-just-icon md-simple" v-for="(social, index1) in bio.socials" :key="index1">
+                    <i :class="social.classes"></i>
+                  </md-button>
                 </div>
               </div>
             </div>
@@ -187,6 +187,10 @@ export default {
 <style lang="scss" scoped>
 body.modal-open {
   overflow: hidden;
+}
+.md-dialog {
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
 }
 .section {
   padding: 0;
