@@ -1,6 +1,6 @@
 <template>
   <md-toolbar
-    class="md-transparent md-absolute"
+    class="md-dark md-absolute"
     id="toolbar"
     :class="extraNavClasses"
     :color-on-scroll="colorOnScroll">
