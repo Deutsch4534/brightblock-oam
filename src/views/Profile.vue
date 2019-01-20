@@ -74,11 +74,9 @@
 </template>
 
 <script>
-import { Tabs } from "@/components";
+// import { Tabs } from "@/components";
 export default {
-  components: {
-    Tabs
-  },
+  components: {},
   bodyClass: "profile-page",
   data() {
     return {
@@ -131,7 +129,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .section {
   padding: 0;
 }

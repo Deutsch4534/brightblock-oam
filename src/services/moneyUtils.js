@@ -145,7 +145,7 @@ const moneyUtils = {
       initialRateBtc: 0,
       initialRateEth: 0,
       amountInEther: 0,
-      auctionId: undefined
+      auctionId: null
     };
   },
 

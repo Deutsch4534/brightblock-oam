@@ -24,7 +24,7 @@
 import utils from "@/services/utils";
 import notify from "@/services/notify";
 import ethereumService from "@/services/ethereumService";
-import OpenTimestamps from "javascript-opentimestamps";
+// import OpenTimestamps from "javascript-opentimestamps";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -91,6 +91,7 @@ export default {
         timestamp: utils.buildArtworkHash(artwork.artwork[0].dataUrl),
         uploader: artwork.owner
       };
+      /**
       const file = Buffer.from(JSON.stringify(regData), "hex");
       const detached = OpenTimestamps.DetachedTimestampFile.fromBytes(
         new OpenTimestamps.Ops.OpSHA256(),
@@ -101,6 +102,7 @@ export default {
         const infoResult = OpenTimestamps.info(detached);
         console.log(infoResult);
       });
+      **/
     },
     registerArtworkEthereum: function() {
       this.message =

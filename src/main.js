@@ -1,30 +1,32 @@
+import 'bootstrap-css-only/css/bootstrap.min.css';
+import 'mdbvue/build/css/mdb.css';
 import Vue from "vue";
 import App from "./App.vue";
 import Vuex from "vuex";
 import router from "./router";
 import store from "@/storage/store";
-import MaterialKit from "./plugins/material-kit";
-import Notifications from "vue-notification";
+// import Notifications from "vue-notification";
 import PrismicVue from "prismic-vue";
 import linkResolver from "./prismic/linkResolver";
 
 import { CONSTANTS } from "@/storage/constants";
 // import notify from "@/services/notify";
 import ethereumService from "@/services/ethereumService";
-import Datetime from "vue-datetime";
+// import Datetime from "vue-datetime";
 // You need a specific loader for CSS files
-import "vue-datetime/dist/vue-datetime.css";
+// import "vue-datetime/dist/vue-datetime.css";
 
 Vue.config.productionTip = false;
 
-Vue.use(MaterialKit);
 Vue.use(Vuex);
-Vue.use(Notifications);
-Vue.use(Datetime);
+// Vue.use(Notifications);
+// Vue.use(Datetime);
 Vue.use(PrismicVue, {
   endpoint: "https://brightblock.prismic.io/api/v2",
   linkResolver
 });
+
+Vue.config.productionTip = false;
 
 const NavbarStore = {
   showNavbar: false
@@ -52,7 +54,7 @@ store.dispatch("conversionStore/fetchConversionData").then(() => {
         blockchainItems
       );
       store.dispatch("ethStore/receiveBlockchainEvents").then(() => {
-        if (store.getters["isDebugMode"]) {
+        if (store.getters.isDebugMode) {
           // notify.info({ title: "Blockchain Events.", text: message });
         }
       });

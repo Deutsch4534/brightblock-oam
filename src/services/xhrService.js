@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const SERVER_URL = process.env.VUE_APP_ETH_GATEWAY_URL;
+const SERVER_URL = process.env.ETH_GATEWAY_URL;
 
 const xhrService = {
   makeDirectCall: function(url) {

@@ -8,14 +8,15 @@ import SearchIndexManager from "./views/components/admin/SearchIndexManager";
 import SearchBuilderTab from "./views/components/admin/SearchBuilderTab";
 import SearchDappsTab from "./views/components/admin/SearchDappsTab";
 
-import Home from "./views/Home.vue";
+// import Home from "./views/Home.vue";
 import BrightBlock from "./views/BrightBlock.vue";
 import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
 import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
 import TeamProfile from "./views/TeamProfile.vue";
-import BBMainNavbar from "./layout/BBMainNavbar.vue";
+import Navbar1 from "./layout/Navbar1.vue";
+// import BBMainNavbar from "./layout/BBMainNavbar.vue";
 import SecondNavbar from "./layout/SecondNavbar.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
@@ -48,18 +49,10 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      redirect: () => {
-        if (location.href.indexOf("localhos") > -1) {
-          return "brightBlock";
-        } else {
-          console.log("Router: /: " + location.href);
-          return "search";
-        }
-      },
       name: "home",
       components: {
-        default: Home,
-        header: MainNavbar,
+        default: BrightBlock,
+        header: Navbar1,
         footer: MainFooter
       },
       props: {
@@ -72,7 +65,7 @@ const router = new Router({
       name: "brightBlock",
       components: {
         default: BrightBlock,
-        header: BBMainNavbar,
+        header: Navbar1,
         footer: MainFooter
       },
       props: {
@@ -127,7 +120,7 @@ const router = new Router({
     {
       path: "/search",
       name: "search",
-      components: { default: Search, header: MainNavbar, footer: MainFooter },
+      components: { default: Search, header: Navbar1, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
@@ -301,25 +294,24 @@ const router = new Router({
   scrollBehavior: to => {
     if (to.hash) {
       return { selector: to.hash };
-    } else {
-      return { x: 0, y: 0 };
     }
+    return { x: 0, y: 0 };
   }
 });
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
-    if (!myAccountService.myProfile().loggedIn) {
-      next({
+    if (myAccountService.myProfile().loggedIn) {
+      return next();
+    } else {
+      return next({
         path: "/",
         query: { redirect: to.fullPath }
       });
-    } else {
-      next();
     }
   } else {
-    next(); // make sure to always call next()!
+    return next(); // make sure to always call next()!
   }
 });
 

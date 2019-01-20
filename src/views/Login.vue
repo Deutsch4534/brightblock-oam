@@ -67,13 +67,11 @@
 </template>
 
 <script>
-import { LoginCard } from "@/components";
+// import { LoginCard } from "@/components";
 import myAccountService from "@/services/myAccountService";
 
 export default {
-  components: {
-    LoginCard
-  },
+  components: {},
   bodyClass: "login-page",
   data() {
     return {
@@ -110,4 +108,4 @@ export default {
 };
 </script>
 
-<style lang="css"></style>
+<style></style>

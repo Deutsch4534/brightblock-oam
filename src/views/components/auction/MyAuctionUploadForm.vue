@@ -60,7 +60,7 @@
               <span class="md-error">Enter some keywords</span>
             </md-field>
           </div>
-
+          <!--
           <div class="md-layout-item md-size-100" style="margin-top: 30px;" v-if="auction.auctionType === 'webcast' || auction.auctionType === 'sealed'">
               <datetime type="datetime" v-model="startDate" input-id="startDate">
                 <label for="startDate" slot="before"><md-icon>calendar_today</md-icon> Auction Starts</label>
@@ -73,6 +73,7 @@
               <input id="endDate">
             </datetime>
           </div>
+          -->
         </div>
       </md-card-content>
 
@@ -95,7 +96,7 @@
 
 <script>
 import moment from "moment";
-import { Datetime } from "vue-datetime";
+// import { Datetime } from "vue-datetime";
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
 
@@ -103,7 +104,7 @@ import { required, minLength } from "vuelidate/lib/validators";
 export default {
   name: "MyAuctionUploadForm",
   mixins: [validationMixin],
-  components: { datetime: Datetime },
+//  components: { datetime: Datetime },
   props: ["auctionId", "mode"],
   data() {
     return {

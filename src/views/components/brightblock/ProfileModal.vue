@@ -184,7 +184,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 body.modal-open {
   overflow: hidden;
 }

@@ -1,19 +1,12 @@
 <template>
-  <div id="material-kit">
-    <notifications position="bottom right" group="artwork-actions" />
-    <div :class="{'nav-open': NavbarStore.showNavbar}">
-      <router-view name="header"/>
-      <div>
-        <div class="wrapper">
-          <leafs v-if="showLeafs"/>
-          <leafless v-else/>
-          <div class="main main-raised">
-            <router-view/>
-          </div>
-        </div>
+  <div id="app">
+    <router-view name="header"/>
+    <div class="wrapper">
+      <div class="main main-raised">
+        <router-view/>
       </div>
-      <router-view name="footer"/>
     </div>
+    <router-view name="footer"/>
   </div>
 </template>
 <script>
@@ -39,7 +32,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style>
 .section-download {
   .md-button + .md-button {
     margin-left: 5px;

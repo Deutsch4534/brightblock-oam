@@ -41,7 +41,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .md-tabs {
   margin-bottom: 3.5rem;
 }

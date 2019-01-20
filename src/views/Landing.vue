@@ -225,7 +225,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .md-card-actions.text-center {
   display: flex;
   justify-content: center !important;

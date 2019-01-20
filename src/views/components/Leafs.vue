@@ -1,5 +1,5 @@
 <template>
-<parallax class="page-header header-filter" :style="headerStyle">
+<div class="page-header header-filter" :style="headerStyle">
   <div class="md-layout">
     <div class="md-layout-item">
       <div class="image-wrapper">
@@ -13,7 +13,7 @@
       </div>
     </div>
   </div>
-</parallax>
+</div>
 </template>
 
 <script>

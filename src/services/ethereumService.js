@@ -89,7 +89,7 @@ const ethereumService = {
   registerOnChain: function(regData, success, failure) {
     let web3 = ethereumService.getWeb3();
     web3.eth.getAccounts(function(error, result) {
-      if (error || !result | (result.length === 0)) {
+      if (error || !result || (result.length === 0)) {
         failure({
           failed: true,
           message:
@@ -115,7 +115,7 @@ const ethereumService = {
   setPriceOnChain: function(priceData, success, failure) {
     let web3 = ethereumService.getWeb3();
     web3.eth.getAccounts(function(error, result) {
-      if (error || !result | (result.length === 0)) {
+      if (error || !result || (result.length === 0)) {
         failure({
           failed: true,
           message:
@@ -205,7 +205,7 @@ const ethereumService = {
   fetchBlockchainItems: function(success, failure) {
     xhrService
       .makeDirectCall(
-        store.state.constants.ethGatewayUrl + "/api/ethereum" + "/fetch"
+        store.state.constants.ethGatewayUrl + "/api/ethereum/fetch"
       )
       .then(function(response) {
         success(response.details);
@@ -229,7 +229,7 @@ const ethereumService = {
   deployContract: function(regData, success, failure) {
     xhrService
       .makeDirectCall(
-        store.state.constants.ethGatewayUrl + "/api/ethereum" + "/deploy"
+        store.state.constants.ethGatewayUrl + "/api/ethereum/deploy"
       )
       .then(function(response) {
         success(response.details);

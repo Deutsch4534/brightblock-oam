@@ -31,7 +31,7 @@ const myAuctionsService = {
           let rootFile = JSON.parse(file);
           if (rootFile.auctions) {
             rootFile.records = rootFile.auctions;
-            rootFile.auctions = undefined;
+            rootFile.auctions = null;
             putFile(auctionsRootFileName, JSON.stringify(rootFile), {
               encrypt: false
             });

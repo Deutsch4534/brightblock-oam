@@ -46,7 +46,7 @@ export default {
   mounted() {}
 };
 </script>
-<style lang="scss">
+<style>
 .section-download {
   .md-button + .md-button {
     margin-left: 5px;

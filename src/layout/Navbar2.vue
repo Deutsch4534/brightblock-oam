@@ -1,18 +1,18 @@
 <template>
 <!--Navbar-->
-<mdb-navbar class="indigo" dark>
-  <!-- Navbar brand -->
-  <mdb-navbar-brand href="/">
-    BrightBlock Auctions
+<mdb-navbar dark position="top" color="primary" scrolling>
+  <!-- mdbNavbar brand -->
+  <mdb-navbar-brand href="https://www.brightblock.org/">
+    BrightBlock
   </mdb-navbar-brand>
   <mdb-navbar-toggler>
     <mdb-navbar-nav>
-      <mdb-nav-item href="#" active>Home</mdb-nav-item>
-      <mdb-nav-item href="#">Features</mdb-nav-item>
-      <mdb-nav-item href="#">Pricing</mdb-nav-item>
-      <!-- Dropdown -->
+      <mdb-nav-item href="#" waves-fixed>Home</mdb-nav-item>
+      <mdb-nav-item href="#" waves-fixed>Features</mdb-nav-item>
+      <mdb-nav-item href="#" waves-fixed>Pricing</mdb-nav-item>
+      <!-- mdbDropdown  -->
       <mdb-dropdown tag="li" class="nav-item">
-        <mdb-dropdown-toggle tag="a" navLink color="indigo" slot="toggle" waves-fixed>Dropdown</mdb-dropdown-toggle>
+        <a class="nav-link dropdown-toggle waves-effect waves-light" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fingerprint"></i><span v-html="avatar"></span></a>
         <mdb-dropdown-menu>
           <mdb-dropdown-item>Action</mdb-dropdown-item>
           <mdb-dropdown-item>Another action</mdb-dropdown-item>
@@ -20,84 +20,13 @@
         </mdb-dropdown-menu>
       </mdb-dropdown>
     </mdb-navbar-nav>
-    <mdb-navbar-nav class="ml-auto nav-flex-icons">
-      <mdb-nav-item href="#" v-if="!loggedIn">
-        <i class="material-icons">fingerprint</i>
-        <p><a href="#/login" class="dropdown-item">Login</a></p>
-      </mdb-nav-item>
-      <mdb-dropdown tag="li" class="nav-item" v-else>
-        <mdb-dropdown-toggle tag="a" navLink color="indigo" slot="toggle" waves-fixed><p><span v-html="avatar"></span></p></mdb-dropdown-toggle>
-        <mdb-dropdown-menu>
-          <mdb-dropdown-item>
-            <a class="dropdown-item">{{ username }}</a>
-          </mdb-dropdown-item>
-          <mdb-dropdown-item>
-            <router-link
-              class="dropdown-item"
-              to="/admin/registrations"
-              v-if="showAdmin"
-              >Admin</router-link
-            >
-          </mdb-dropdown-item>
-          <mdb-dropdown-item>
-            <router-link
-              class="dropdown-item"
-              to="/my-artworks"
-              >My Art Work</router-link
-            >
-          </mdb-dropdown-item>
-          <mdb-dropdown-item>
-            <router-link
-              class="dropdown-item"
-              to="/my-artwork/upload"
-              >Upload Artwork</router-link
-            >
-          </mdb-dropdown-item>
-          <mdb-dropdown-item>
-            <router-link
-              class="dropdown-item"
-              to="/online-auctions"
-              >Online Auctions</router-link
-            >
-          </mdb-dropdown-item>
-          <mdb-dropdown-item>
-            <router-link
-              class="dropdown-item"
-              to="/my-auctions"
-              >My Auctions</router-link
-            >
-          </mdb-dropdown-item>
-          <mdb-dropdown-item>
-            <router-link
-              class="dropdown-item"
-              to="/my-auctions/upload"
-              >New Auction</router-link
-            >
-          </mdb-dropdown-item>
-          <mdb-dropdown-item>
-            <router-link
-              class="dropdown-item"
-              to="/account/userData"
-              >My Account</router-link
-            >
-          </mdb-dropdown-item>
-          <mdb-dropdown-item>
-            <a
-              href="#"
-              class="dropdown-item"
-              @click.prevent="logout"
-              ><i class="material-icons">fingerprint</i> Logout</a
-            >
-          </mdb-dropdown-item>
-        </mdb-dropdown-menu>
-      </mdb-dropdown>
-    </mdb-navbar-nav>
     <!-- Search form -->
-    <form class="form-inline" v-if="showSearch">
-      <input v-model="query" type="text" v-on:keyup.13="doSearch"/>
+    <form>
+      <mdb-input type="text" class="text-white" placeholder="Search" aria-label="Search" label navInput waves waves-fixed/>
     </form>
   </mdb-navbar-toggler>
 </mdb-navbar>
+<!--/.Navbar-->
 </template>
 
 <script>
@@ -114,41 +43,24 @@ function resizeThrottler(actualResizeHandler) {
   }
 }
 
-import MobileMenu from "@/layout/MobileMenu";
-import myAccountService from "@/services/myAccountService";
+import { mdbNavbar, mdbNavItem, mdbNavbarNav, mdbNavbarToggler, mdbContainer, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle, mdbInput, mdbNavbarBrand, mdbIcon, mdbRow } from 'mdbvue';
 
 export default {
+  name: 'NavbarPage',
   components: {
-    MobileMenu
-  },
-  props: {
-    type: {
-      type: String,
-      default: "white",
-      validator(value) {
-        return [
-          "white",
-          "default",
-          "primary",
-          "danger",
-          "success",
-          "warning",
-          "info"
-        ].includes(value);
-      }
-    },
-    colorOnScroll: {
-      type: Number,
-      default: 0
-    }
-  },
-  data() {
-    return {
-      extraNavClasses: "",
-      toggledClass: false,
-      showSearch: false,
-      query: null
-    };
+    mdbNavbar,
+    mdbNavItem,
+    mdbNavbarNav,
+    mdbNavbarToggler,
+    mdbContainer,
+    mdbDropdown,
+    mdbDropdownItem,
+    mdbDropdownMenu,
+    mdbDropdownToggle,
+    mdbInput,
+    mdbNavbarBrand,
+    mdbIcon,
+    mdbRow
   },
   computed: {
     showDownload() {
@@ -170,7 +82,7 @@ export default {
           '"/>'
         );
       } else {
-        return '<span class="icon-user"></span>';
+        return '<span class="fa fa-user"></span>';
       }
     },
     loggedIn() {
@@ -243,3 +155,7 @@ export default {
   }
 };
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+</style>

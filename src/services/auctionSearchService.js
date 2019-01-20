@@ -50,10 +50,7 @@ const auctionSearchService = {
           }
         })
         .catch(function() {
-          reject({
-            ERR_CODE: "AUCTIONS_1",
-            message: "Error fetching users auctions!"
-          });
+          reject(new Error({ error: "AUCTIONS_1", message: "Error fetching users auctions" }));
         });
     });
   }

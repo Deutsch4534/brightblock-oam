@@ -2,7 +2,7 @@
 import SockJS from "sockjs-client";
 import Stomp from "@stomp/stompjs";
 
-const SERVER_URL = process.env.VUE_APP_ETH_GATEWAY_URL;
+const SERVER_URL = process.env.ETH_GATEWAY_URL;
 
 const conversionService = {
   connectExchangeRates: function() {

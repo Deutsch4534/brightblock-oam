@@ -43,7 +43,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .md-layout-item {
   margin-bottom: 20px;
 }
