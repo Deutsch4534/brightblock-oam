@@ -14,7 +14,9 @@ import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
 import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
+import TeamProfile from "./views/TeamProfile.vue";
 import BBMainNavbar from "./layout/BBMainNavbar.vue";
+import SecondNavbar from "./layout/SecondNavbar.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 
@@ -46,6 +48,27 @@ const router = new Router({
   routes: [
     {
       path: "/",
+      redirect: () => {
+        if (location.href.indexOf("localhos") > -1) {
+          return "brightBlock";
+        } else {
+          console.log("Router: /: " + location.href);
+          return "search";
+        }
+      },
+      name: "home",
+      components: {
+        default: Home,
+        header: MainNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/brightBlock",
       name: "brightBlock",
       components: {
         default: BrightBlock,
@@ -58,9 +81,26 @@ const router = new Router({
       }
     },
     {
-      path: "/home",
-      name: "home",
-      components: { default: Home, header: MainNavbar, footer: MainFooter },
+      path: "/profile/team/:profileId",
+      name: "teamProfile",
+      components: {
+        default: TeamProfile,
+        header: SecondNavbar,
+        footer: MainFooter
+      },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/profile/user/blockstackId",
+      name: "profile",
+      components: {
+        default: Profile,
+        header: MainNavbar,
+        footer: MainFooter
+      },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
@@ -221,19 +261,6 @@ const router = new Router({
           component: MyAuctionList
         }
       ]
-    },
-    {
-      path: "/profile/:prismicId",
-      name: "profile",
-      components: {
-        default: Profile,
-        header: BBMainNavbar,
-        footer: MainFooter
-      },
-      props: {
-        header: { colorOnScroll: 400 },
-        footer: { backgroundColor: "black" }
-      }
     },
     {
       path: "/admin",

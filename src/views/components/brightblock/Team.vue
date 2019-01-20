@@ -1,7 +1,6 @@
 <template>
 <div class="section text-center" id="TeamSection">
   <div class="container">
-    <profile-modal :showModal="showProfile" :bio="bio"/>
     <h2 class="title">{{title}}</h2>
     <div class="team">
         <div class="md-layout md-alignment-center-center">
@@ -9,11 +8,11 @@
             <div class="team-player text-center" v-if="profile.data && profile.data.avatar && profile.data.jobtitle">
               <md-card class="md-card-plain">
                 <div class="md-layout-item md-size-50 mx-auto">
-                  <img :src="profile.data.avatar.url" alt="Thumbnail Image" class="img-raised rounded-circle img-fluid" @click="showTeamProfile(profile)">
+                  <router-link :to="profileUrl(profile)"><img :src="profile.data.avatar.url" alt="Thumbnail Image" class="img-raised rounded-circle img-fluid"></router-link>
                 </div>
                 <h4 class="card-title">{{profile.data.jobtitle[0].text}}
                   <br>
-                  <router-link to="/profile" ><small class="card-description text-muted">{{profile.data.name[0].text}}</small>
+                  <router-link :to="profileUrl(profile)"><small class="card-description text-muted">{{profile.data.name[0].text}}</small>
                   </router-link>
                 </h4>
 
@@ -31,12 +30,11 @@
 
 <script>
 import _ from "lodash";
-import ProfileModal from "./ProfileModal";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "Team",
-  components: { ProfileModal },
+  components: {},
   data() {
     return {
       profiles: [],
@@ -65,6 +63,7 @@ export default {
         .then(function(response) {
           $self.profiles = response.results;
           _.forEach($self.profiles, function(prof) {
+            $self.$store.commit("userProfilesStore/addTeamProfile", prof);
             try {
               let socAll = prof.data.sociallinks[0].text;
               let socPairs = socAll.split(",");
@@ -96,6 +95,9 @@ export default {
       this.$prismic.client.getSingle("profile").then(document => {
         this.title = document.data.title[0].text;
       });
+    },
+    profileUrl(profile) {
+      return `/profile/team/${profile.id}`;
     }
   },
   computed: {}

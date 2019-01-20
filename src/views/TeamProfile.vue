@@ -5,11 +5,11 @@
             <div class="md-layout-item md-size-50 mx-auto">
               <div class="profile">
                 <div class="avatar">
-                  <img :src="img" alt="Circle Image" class="img-raised rounded-circle img-fluid">
+                  <img :src="profile.data.avatar.url" alt="Circle Image" class="img-raised rounded-circle img-fluid">
                 </div>
                 <div class="name">
-                  <h3 class="title">Carla Hortensia</h3>
-                  <h6>Designer</h6>
+                  <h3 class="title">{{profile.data.name[0].text}}</h3>
+                  <h6>{{profile.data.jobtitle[0].text}}</h6>
                   <md-button href="javascript:void(0)" class="md-just-icon md-simple md-dribbble"><i class="fab fa-dribbble"></i></md-button>
                   <md-button href="javascript:void(0)" class="md-just-icon md-simple md-twitter"><i class="fab fa-twitter"></i></md-button>
                   <md-button href="javascript:void(0)" class="md-just-icon md-simple md-pinterest"><i class="fab fa-pinterest"></i></md-button>
@@ -18,7 +18,7 @@
             </div>
           </div>
           <div class="description text-center">
-            <p>An artist of considerable range, Chet Faker — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. </p>
+            <p>{{profile.data.jobdescription[0].text}}</p>
           </div>
           <div class="profile-tabs">
             <tabs
@@ -82,7 +82,6 @@ export default {
   bodyClass: "profile-page",
   data() {
     return {
-      profile: null,
       tabPane1: [
         { image: require("@/assets/img/examples/studio-1.jpg") },
         { image: require("@/assets/img/examples/studio-2.jpg") },
@@ -116,16 +115,22 @@ export default {
     }
   },
   mounted() {
-    let profileId = Number(this.$route.params.profileId);
-    this.profile = this.$store.getters["userProfilesStore/getTeamProfile"](
-      profileId
+    this.profileId = this.$route.params.profileId;
+    let profile = this.$store.getters["userProfilesStore/getTeamProfile"](
+      this.profileId
     );
+    if (!profile.id) {
+      let $self = this;
+      this.$prismic.client.getByID(this.profileId).then(function(profile) {
+        $self.$store.commit("userProfilesStore/addTeamProfile", profile);
+      });
+    }
   },
   computed: {
-    headerStyle() {
-      return {
-        backgroundImage: `url(${this.header})`
-      };
+    profile() {
+      return this.$store.getters["userProfilesStore/getTeamProfile"](
+        this.profileId
+      );
     }
   }
 };
