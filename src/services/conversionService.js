@@ -2,11 +2,9 @@
 import SockJS from "sockjs-client";
 import Stomp from "@stomp/stompjs";
 
-const SERVER_URL = process.env.ETH_GATEWAY_URL;
-
 const conversionService = {
   connectExchangeRates: function() {
-    let socket = new SockJS(SERVER_URL + "/exchanges");
+    let socket = new SockJS(process.env.VUE_APP_ETH_GATEWAY_URL + "/exchanges");
     let stompClient = Stomp.over(socket);
     let connectSuccess = function() {
       stompClient.subscribe("/topic/exchanges", function(response) {

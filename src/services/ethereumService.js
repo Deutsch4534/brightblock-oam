@@ -163,7 +163,7 @@ const ethereumService = {
   fetchClientState: function(success, failure) {
     xhrService
       .makeDirectCall(
-        store.state.constants.ethGatewayUrl + "/api/ethereum/client"
+        process.env.VUE_APP_ETH_GATEWAY_URL + "/api/ethereum/client"
       )
       .then(function(response) {
         let clientState = response.details;
@@ -177,7 +177,7 @@ const ethereumService = {
   loadContract: function(contractAddress) {
     xhrService
       .makeDirectCall(
-        store.state.constants.ethGatewayUrl +
+        process.env.VUE_APP_ETH_GATEWAY_URL +
           "/api/ethereum/load/" +
           contractAddress
       )
@@ -191,7 +191,7 @@ const ethereumService = {
   subscribeBlockchainEvents: function(success, failure) {
     xhrService
       .makeDirectCall(
-        store.state.constants.ethGatewayUrl +
+        process.env.VUE_APP_ETH_GATEWAY_URL +
           "/api/ethereum" +
           "/subscribe/blocks"
       )
@@ -205,7 +205,7 @@ const ethereumService = {
   fetchBlockchainItems: function(success, failure) {
     xhrService
       .makeDirectCall(
-        store.state.constants.ethGatewayUrl + "/api/ethereum/fetch"
+        process.env.VUE_APP_ETH_GATEWAY_URL + "/api/ethereum/fetch"
       )
       .then(function(response) {
         success(response.details);
@@ -217,7 +217,7 @@ const ethereumService = {
   fetchBlockchainItem: function(data, success) {
     xhrService
       .makeDirectCall(
-        store.state.constants.ethGatewayUrl +
+        process.env.VUE_APP_ETH_GATEWAY_URL +
           "/api/ethereum" +
           "/fetch/" +
           data.timestamp
@@ -229,7 +229,7 @@ const ethereumService = {
   deployContract: function(regData, success, failure) {
     xhrService
       .makeDirectCall(
-        store.state.constants.ethGatewayUrl + "/api/ethereum/deploy"
+        process.env.VUE_APP_ETH_GATEWAY_URL + "/api/ethereum/deploy"
       )
       .then(function(response) {
         success(response.details);

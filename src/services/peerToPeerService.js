@@ -4,8 +4,6 @@ import utils from "@/services/utils";
 import store from "@/storage/store";
 import notify from "@/services/notify";
 
-const apiKey = process.env.TOK_BOX_API_KEY;
-
 /**
  *  The service is a client to the brightblock sever.
  **/
@@ -145,7 +143,7 @@ const peerToPeerService = {
   },
   start: function() {
     peerToPeerService.session = OT.initSession(
-      apiKey,
+      process.env.VUE_APP_TOK_BOX_API_KEY,
       peerToPeerService.tokbox.sessionId
     );
     peerToPeerService.session.on({

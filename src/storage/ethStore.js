@@ -4,7 +4,6 @@ import ethereumService from "@/services/ethereumService";
 import _ from "lodash";
 import SockJS from "sockjs-client";
 import Stomp from "@stomp/stompjs";
-import store from "@/storage/store";
 
 const ethStore = {
   namespaced: true,
@@ -113,7 +112,7 @@ const ethStore = {
     },
     receiveBlockchainEvents({ commit }) {
       return new Promise(resolve => {
-        const SERVER_URL = store.state.constants.ethGatewayUrl;
+        const SERVER_URL = process.env.VUE_APP_ETH_GATEWAY_URL;
         let socket = new SockJS(SERVER_URL + "/exchanges");
         let stompClient = Stomp.over(socket);
         stompClient.connect(

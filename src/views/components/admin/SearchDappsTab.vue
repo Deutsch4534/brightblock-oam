@@ -138,7 +138,7 @@ export default {
   },
   computed: {
     searchUrl() {
-      return this.$store.state.constants.searchUrl;
+      return process.env.VUE_APP_SEARCH_INDEX_URL;
     },
     domain() {
       return location.hostname;

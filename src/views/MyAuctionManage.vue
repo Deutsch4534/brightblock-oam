@@ -166,7 +166,7 @@ export default {
       return auction;
     },
     debugMode() {
-      return this.$store.getters["isDebugMode"];
+      return process.env.VUE_APP_DEBUG_MODE;
     },
     updateUrl() {
       return `/my-auctions/update/${this.auctionId}`;

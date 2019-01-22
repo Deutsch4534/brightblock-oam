@@ -58,7 +58,7 @@ export default {
       return this.$store.getters["myArtworksStore/editable"](this.artwork.id);
     },
     debugMode() {
-      return this.$store.getters["isDebugMode"];
+      return process.env.VUE_APP_DEBUG_MODE;
     },
     canSell() {
       return this.$store.getters["myArtworksStore/canSell"](this.artwork.id);

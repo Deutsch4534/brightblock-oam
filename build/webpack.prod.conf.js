@@ -11,6 +11,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const env = config.build.env
+console.log('env.NODE_ENV=' + process.env.NODE_ENV)
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -35,8 +36,11 @@ const webpackConfig = merge(baseWebpackConfig, {
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
+    // new webpack.DefinePlugin({
+    //  'process.env': env
+    // }),
     new webpack.DefinePlugin({
-      'process.env': env
+      'process.env': require('../config/prod.env')
     }),
     // extract css into its own file
     new ExtractTextPlugin({

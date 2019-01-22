@@ -7,24 +7,24 @@
   </div>
   <div class="md-layout">
     <div class="md-layout-item md-size-20">Environment:</div>
-    <div class="md-layout-item md-size-80">{{ constants.environment }}</div>
+    <div class="md-layout-item md-size-80">{{ process.env.NODE_ENV }}</div>
   </div>
   <h3>API Settings</h3>
   <div class="md-layout">
     <div class="md-layout-item md-size-20">Shape Shift:</div>
-    <div class="md-layout-item md-size-80">{{ constants.shapeShiftUrl }}</div>
+    <div class="md-layout-item md-size-80">{{ process.env.VUE_APP_SHAPE_SHIFT_URL }}</div>
   </div>
   <div class="md-layout">
     <div class="md-layout-item md-size-20">Gaia Hub:</div>
-    <div class="md-layout-item md-size-80">{{ constants.gaiaHubUrl }}</div>
+    <div class="md-layout-item md-size-80">{{ process.env.VUE_APP_GAIA_HUB_URL }}</div>
   </div>
   <div class="md-layout">
     <div class="md-layout-item md-size-20">Search:</div>
-    <div class="md-layout-item md-size-80">{{ constants.searchUrl }}</div>
+    <div class="md-layout-item md-size-80">{{ process.env.VUE_APP_SEARCH_INDEX_URL }}</div>
   </div>
   <div class="md-layout">
     <div class="md-layout-item md-size-20">Eth Gateway:</div>
-    <div class="md-layout-item md-size-80">{{ constants.ethGatewayUrl }}</div>
+    <div class="md-layout-item md-size-80">{{ process.env.VUE_APP_ETH_GATEWAY_URL }}</div>
   </div>
 
   <h3>Debug Settings</h3>
@@ -63,7 +63,7 @@
   <h3>Webrtc Settings</h3>
   <div class="md-layout">
     <div class="md-layout-item md-size-20">Tokbox API:</div>
-    <div class="md-layout-item md-size-80">{{ constants.apiKey }}</div>
+    <div class="md-layout-item md-size-80">{{ process.env.VUE_APP_TOK_BOX_API_KEY }}</div>
   </div>
 
   <h3>Ethereum Settings</h3>
@@ -126,9 +126,9 @@ export default {
     let hubConfig = localStorage.getItem("blockstack-gaia-hub-config");
     let hubJSON = JSON.parse(hubConfig);
     this.address = hubJSON.address;
-    this.gaiaHubUrl = this.$store.state.constants.gaiaHubUrl;
+    this.gaiaHubUrl = process.env.VUE_APP_GAIA_HUB_URL;
     this.network = ethereumService.getNetworkType();
-    this.networkExpected = process.env.ETHEREUM_NETWORK;
+    this.networkExpected = process.env.VUE_APP_ETHEREUM_NETWORK;
   },
   methods: {
     toggleDebugMode() {
@@ -236,7 +236,7 @@ export default {
       return clientState;
     },
     debugMode() {
-      let debugMode = this.$store.getters["isDebugMode"];
+      let debugMode = process.env.VUE_APP_DEBUG_MODE;
       return debugMode;
     },
     debugModeLabel() {

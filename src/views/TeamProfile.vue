@@ -1,85 +1,108 @@
 <template>
-      <div class="section profile-content">
-        <div class="container">
-          <div class="md-layout">
-            <div class="md-layout-item md-size-50 mx-auto">
-              <div class="profile">
-                <div class="avatar">
-                  <img :src="profile.data.avatar.url" alt="Circle Image" class="img-raised rounded-circle img-fluid">
-                </div>
-                <div class="name">
-                  <h3 class="title">{{profile.data.name[0].text}}</h3>
-                  <h6>{{profile.data.jobtitle[0].text}}</h6>
-                  <md-button href="javascript:void(0)" class="md-just-icon md-simple md-dribbble"><i class="fab fa-dribbble"></i></md-button>
-                  <md-button href="javascript:void(0)" class="md-just-icon md-simple md-twitter"><i class="fab fa-twitter"></i></md-button>
-                  <md-button href="javascript:void(0)" class="md-just-icon md-simple md-pinterest"><i class="fab fa-pinterest"></i></md-button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="description text-center">
-            <p>{{profile.data.jobdescription[0].text}}</p>
-          </div>
-          <div class="profile-tabs">
-            <tabs
-              :tab-name="['Studio', 'Work', 'Favorite']"
-              :tab-icon="['camera', 'palette', 'favorite']"
-              plain
-              nav-pills-icons
-              color-button="success">
-
-              <!-- here you can add your content for tab-content -->
-              <template slot="tab-pane-1">
-                <div class="md-layout">
-                  <div class="md-layout-item md-size-25 ml-auto">
-                    <img :src="tabPane1[0].image" class="rounded">
-                    <img :src="tabPane1[1].image" class="rounded">
-                  </div>
-                  <div class="md-layout-item md-size-25 mr-auto">
-                    <img :src="tabPane1[3].image" class="rounded">
-                    <img :src="tabPane1[2].image" class="rounded">
-                  </div>
-                </div>
-              </template>
-              <template slot="tab-pane-2">
-                <div class="md-layout">
-                  <div class="md-layout-item md-size-25 ml-auto">
-                    <img :src="tabPane2[0].image" class="rounded">
-                    <img :src="tabPane2[1].image" class="rounded">
-                    <img :src="tabPane2[2].image" class="rounded">
-                  </div>
-                  <div class="md-layout-item md-size-25 mr-auto">
-                    <img :src="tabPane2[3].image" class="rounded">
-                    <img :src="tabPane2[4].image" class="rounded">
-                  </div>
-                </div>
-              </template>
-              <template slot="tab-pane-3">
-                <div class="md-layout">
-                  <div class="md-layout-item md-size-25 ml-auto">
-                    <img :src="tabPane3[0].image" class="rounded">
-                    <img :src="tabPane3[1].image" class="rounded">
-                  </div>
-                  <div class="md-layout-item md-size-25 mr-auto">
-                    <img :src="tabPane3[2].image" class="rounded">
-                    <img :src="tabPane3[3].image" class="rounded">
-                    <img :src="tabPane3[4].image" class="rounded">
-                  </div>
-                </div>
-              </template>
-            </tabs>
-          </div>
-        </div>
-      </div>
+<mdb-container>
+  <section class="text-center my-5 mt-5 pt-5" :key="forceRender">
+    <mdb-row class="text-center">
+      <mdb-col>
+        <mdb-testimonial>
+          <mdb-avatar class="mx-auto mb-4">
+            <img :src="profile.data.avatar.url" class="rounded-circle img-fluid" alt="First sample avatar image" width="200px"/>
+          </mdb-avatar>
+          <p class="mt-3 mx-5">
+            <mdb-icon icon="quote-left"></mdb-icon> <span v-html="profile.data.jobdescription[0].text"></span>
+          </p>
+          <h4 class="font-weight-bold">{{profile.data.name[0].text}}</h4>
+          <h6 class="font-weight-bold my-3">{{profile.data.jobtitle[0].text}}</h6>
+          <mdb-icon icon="star" class="blue-text"> </mdb-icon>
+          <mdb-icon icon="star" class="blue-text"> </mdb-icon>
+          <mdb-icon icon="star" class="blue-text"> </mdb-icon>
+          <mdb-icon icon="star" class="blue-text"> </mdb-icon>
+          <mdb-icon icon="star-half-alt" class="blue-text"> </mdb-icon>
+        </mdb-testimonial>
+      </mdb-col>
+    </mdb-row>
+  </section>
+  <!--
+  <section class="text-center my-5">
+    <h2 class="h1-responsive font-weight-bold my-5">Our best projects</h2>
+    <p class="grey-text w-responsive mx-auto mb-5">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit est laborum.</p>
+    <mdb-row class="text-center">
+      <mdb-col lg="4" md="12" class="mb-lg-0 mb-4">
+        <mdb-view class="overlay rounded z-depth-1">
+          <img src="https://mdbootstrap.com/img/Photos/Others/images/58.jpg" alt="sample photo" class="img-fluid"/>
+          <a>
+            <mdb-mask waves overlay="white-slight"/>
+          </a>
+        </mdb-view>
+        <mdb-card-body class="pb-0">
+          <h4 class="font-weight-bold my-3">Title of the news</h4>
+          <p class="grey-text">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae.</p>
+          <mdb-btn color="indigo" size="sm"><mdb-icon icon="clone" class="left"/> View project</mdb-btn>
+        </mdb-card-body>
+      </mdb-col>
+      <mdb-col lg="4" md="12" class="mb-lg-0 mb-4">
+        <mdb-view class="overlay rounded z-depth-1">
+          <img src="https://mdbootstrap.com/img/Photos/Others/project4.jpg" alt="sample photo" class="img-fluid"/>
+          <a>
+            <mdb-mask waves overlay="white-slight"/>
+          </a>
+        </mdb-view>
+        <mdb-card-body class="pb-0">
+          <h4 class="font-weight-bold my-3">Title of the news</h4>
+          <p class="grey-text">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae.</p>
+          <mdb-btn color="indigo" size="sm"><mdb-icon icon="clone" class="left"/> View project</mdb-btn>
+        </mdb-card-body>
+      </mdb-col>
+      <mdb-col lg="4" md="12" class="mb-lg-0 mb-4">
+        <mdb-view class="overlay rounded z-depth-1">
+          <img src="https://mdbootstrap.com/img/Photos/Others/images/88.jpg" alt="sample photo" class="img-fluid"/>
+          <a>
+            <mdb-mask waves overlay="white-slight"/>
+          </a>
+        </mdb-view>
+        <mdb-card-body class="pb-0">
+          <h4 class="font-weight-bold my-3">Title of the news</h4>
+          <p class="grey-text">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae.</p>
+          <mdb-btn color="indigo" size="sm"><mdb-icon icon="clone" class="left"/> View project</mdb-btn>
+        </mdb-card-body>
+      </mdb-col>
+    </mdb-row>
+  </section>
+  -->
+</mdb-container>
 </template>
 
 <script>
+import { mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardBody, mdbCardUp, mdbAvatar, mdbIcon, mdbCarousel, mdbCarouselItem, mdbTestimonial } from 'mdbvue';
+
 // import { Tabs } from "@/components";
 export default {
-  components: {},
+components: {
+  mdbContainer,
+  mdbRow,
+  mdbCol,
+  mdbCard,
+  mdbCardBody,
+  mdbCardUp,
+  mdbAvatar,
+  mdbIcon,
+  mdbCarousel,
+  mdbCarouselItem,
+  mdbTestimonial
+},
   bodyClass: "profile-page",
   data() {
     return {
+      forceRender: null,
+      profile: {
+        data: {
+          name: [{ text: "Unknown" }],
+          jobtitle: [{ text: "Unknown" }],
+          jobdescription: [{ text: "Unknown" }],
+          avatar: {
+            url: require("@/assets/img/faces/avatar.jpg")
+          }
+        }
+      },
       tabPane1: [
         { image: require("@/assets/img/examples/studio-1.jpg") },
         { image: require("@/assets/img/examples/studio-2.jpg") },
@@ -117,40 +140,15 @@ export default {
     let profile = this.$store.getters["userProfilesStore/getTeamProfile"](
       this.profileId
     );
-    if (!profile.id) {
-      let $self = this;
-      this.$prismic.client.getByID(this.profileId).then(function(profile) {
-        $self.$store.commit("userProfilesStore/addTeamProfile", profile);
-      });
-    }
+    let $self = this;
+    this.$prismic.client.getByID(this.profileId).then(function(profile) {
+      $self.$store.commit("userProfilesStore/addTeamProfile", profile);
+      $self.profile = profile;
+    });
   },
-  computed: {
-    profile() {
-      return this.$store.getters["userProfilesStore/getTeamProfile"](
-        this.profileId
-      );
-    }
-  }
+  computed: {}
 };
 </script>
 
 <style scoped>
-.section {
-  padding: 0;
-}
-
-.profile-tabs /deep/ {
-  .md-card-tabs .md-list {
-    justify-content: center;
-  }
-
-  [class*="tab-pane-"] {
-    margin-top: 3.213rem;
-    padding-bottom: 50px;
-
-    img {
-      margin-bottom: 2.142rem;
-    }
-  }
-}
 </style>

@@ -5,14 +5,12 @@
   <mdb-mask class="gradient d-flex justify-content-center align-items-center">
     <mdb-container>
       <mdb-row>
-        <div class="white-text text-center text-md-left col-md-6 mt-xl-5 mb-5">
-          <h1 class="h1-responsive font-weight-bold mt-sm-5">Make purchases with our app </h1>
-          <hr class="hr-light"/>
-          <h6 class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem repellendus quasi fuga nesciunt
-          dolorum nulla magnam veniam sapiente, fugiat! Commodi sequi non animi ea dolor molestiae
-          iste.</h6>
-          <mdb-btn color="white">Download</mdb-btn>
-          <mdb-btn outline="white">Learn More</mdb-btn>
+        <div class="white-text text-center text-md-left col-md-5 mt-xl-4 mb-4">
+          <h1 class="h1-responsive font-weight-bold mt-sm-5">{{title}}</h1>
+          <hr class="hr-light" v-if="title.length > 0"/>
+          <h6 class="mb-4" v-if="tagline.length > 0">{{tagline}}</h6>
+          <!-- <mdb-btn color="white" v-if="title.length > 0">Download</mdb-btn> -->
+          <mdb-btn outline="white" v-if="title.length > 0">Learn More</mdb-btn>
         </div>
       </mdb-row>
     </mdb-container>
@@ -22,7 +20,16 @@
 
 <mdb-container>
   <mdb-row class="py-5">
+    <mission-section/>
+  </mdb-row>
+  <mdb-row class="py-5">
     <team-section/>
+  </mdb-row>
+  <mdb-row class="py-5">
+    <contact-section/>
+  </mdb-row>
+  <mdb-row class="py-5">
+    <donate-section/>
   </mdb-row>
 </mdb-container>
 </div>
@@ -30,17 +37,17 @@
 
 <script>
 import { mdbContainer, mdbRow, mdbCol, mdbNavbar, mdbNavbarToggler, mdbNavbarNav, mdbNavItem, mdbInput, mdbView, mdbMask, mdbBtn, mdbNavbarBrand } from 'mdbvue';
-import Contact from "./components/brightblock/Contact";
-import Mission from "./components/brightblock/Mission";
+import ContactSection from "./components/brightblock/ContactSection";
+import MissionSection from "./components/brightblock/MissionSection";
 import TeamSection from "./components/brightblock/TeamSection";
-import Donate from "./components/brightblock/Donate";
+import DonateSection from "./components/brightblock/DonateSection";
 
 export default {
   components: {
-    Contact,
-    Mission,
+    ContactSection,
+    MissionSection,
     TeamSection,
-    Donate,
+    DonateSection,
     mdbContainer,
     mdbRow,
     mdbCol,
@@ -56,19 +63,28 @@ export default {
   },
   name: "brightBlock",
   data() {
-    return {};
+    return {
+      imageUrl: null,
+      title: '',
+      tagline: ''
+    };
   },
-  props: {
-    image: {
-      type: String,
-      default: require("@/assets/img/brightblock/gallery.png")
+  created() {
+    this.getContent();
+  },
+  methods: {
+    getContent() {
+      this.$prismic.client.getSingle("home").then(document => {
+        this.title = document.data.title[0].text;
+        this.tagline = document.data.richcontent[0].text;
+        this.imageUrl = document.data.bgimage.url;
+      });
     }
   },
-  methods: {},
   computed: {
     headerStyle() {
       return {
-        backgroundImage: `url(${this.image})`
+        backgroundImage: `url(${this.imageUrl})`
       };
     }
   }

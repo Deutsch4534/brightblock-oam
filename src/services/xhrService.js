@@ -1,7 +1,5 @@
 import axios from "axios";
 
-const SERVER_URL = process.env.ETH_GATEWAY_URL;
-
 const xhrService = {
   makeDirectCall: function(url) {
     return new Promise((resolve, reject) => {
@@ -19,9 +17,11 @@ const xhrService = {
     });
   },
   makeGetCall: function(command, args) {
+    console.log("My process: ", process);
+    console.log("My environment: ", process.env);
     let callInfo = {
       method: "get",
-      url: SERVER_URL + command,
+      url: process.env.VUE_APP_ETH_GATEWAY_URL + command,
       headers: {
         "Content-Type": "application/json"
       }
@@ -46,7 +46,7 @@ const xhrService = {
   makePostCall: function(command, data) {
     let callInfo = {
       method: "post",
-      url: SERVER_URL + command,
+      url: process.env.VUE_APP_ETH_GATEWAY_URL + command,
       headers: {
         "Content-Type": "application/json"
       }

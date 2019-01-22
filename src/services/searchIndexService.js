@@ -165,7 +165,7 @@ const searchIndexService = {
   makePostCall: function(command, data) {
     let callInfo = {
       method: "post",
-      url: store.state.constants.searchUrl + command,
+      url: process.env.VUE_APP_SEARCH_INDEX_URL + command,
       headers: {
         "Content-Type": "application/json"
       }
@@ -187,7 +187,7 @@ const searchIndexService = {
   makeGetCall: function(command, args) {
     let callInfo = {
       method: "get",
-      url: store.state.constants.searchUrl + command,
+      url: process.env.VUE_APP_SEARCH_INDEX_URL + command,
       headers: {
         "Content-Type": "application/json"
       }

@@ -1,10 +1,10 @@
 <template>
-<div class="section section-contacts" id="DonateSection">
-  <div class="container">
-    <div class="md-layout">
-      <div class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto">
-        <h2 class="text-center title">{{title}}</h2>
-        <h4 class="text-center description">{{description}}</h4>
+<mdb-container id="DonateSection">
+  <section class="text-center my-5 mx-5 px-5">
+    <h2 class="h1-responsive font-weight-bold my-5">{{title}}</h2>
+    <p class="lead grey-text w-responsive mx-auto mb-5">{{description}}</p>
+    <mdb-row>
+      <mdb-col md="8 mx-auto">
         <form class="contact-form">
             <div class="md-layout text-center">
               <div class="md-layout-item md-size-100 md-xsmall-size-100">
@@ -18,18 +18,26 @@
               </div>
             </div>
         </form>
-      </div>
-    </div>
-  </div>
-</div>
+      </mdb-col>
+    </mdb-row>
+  </section>
+</mdb-container>
 </template>
 
 <script>
 import QRCode from "qrcode";
+import { mdbContainer, mdbRow, mdbCol, mdbIcon, mdbBtn } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "Donate",
+  components: {
+    mdbContainer,
+    mdbRow,
+    mdbCol,
+    mdbIcon,
+    mdbBtn
+  },
   data() {
     return {
       title: "",

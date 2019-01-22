@@ -2,15 +2,15 @@
 <!--Navbar-->
 <mdb-navbar dark position="top" class="blue-grey" scrolling>
   <!-- mdbNavbar brand -->
-  <mdb-navbar-brand href="https://www.brightblock.org/">
+  <mdb-navbar-brand href="/">
     BrightBlock
   </mdb-navbar-brand>
   <mdb-navbar-toggler>
     <mdb-navbar-nav right>
-      <mdb-nav-item href="#" waves-fixed>{{link1}}</mdb-nav-item>
-      <mdb-nav-item href="#" waves-fixed>{{link2}}</mdb-nav-item>
-      <mdb-nav-item href="#" waves-fixed>{{link3}}</mdb-nav-item>
-      <mdb-nav-item href="#" waves-fixed>{{link4}}</mdb-nav-item>
+      <li class="nav-item ripple-parent" @click="scrollToElement(link1 + 'Section', $event)"><router-link to="/" name="sectionUrl(link1 + 'Section')" class="nav-link navbar-link" >{{link1}}</router-link></li>
+      <li class="nav-item ripple-parent" @click="scrollToElement(link2 + 'Section', $event)"><router-link to="/" name="sectionUrl(link2 + 'Section')" class="nav-link navbar-link">{{link2}}</router-link></li>
+      <li class="nav-item ripple-parent" @click="scrollToElement(link3 + 'Section', $event)"><router-link to="/" name="sectionUrl(link3 + 'Section')" class="nav-link navbar-link">{{link3}}</router-link></li>
+      <li class="nav-item ripple-parent" @click="scrollToElement(link4 + 'Section', $event)"><router-link to="/" name="sectionUrl(link4 + 'Section')" class="nav-link navbar-link">{{link4}}</router-link></li>
     </mdb-navbar-nav>
   </mdb-navbar-toggler>
 </mdb-navbar>
@@ -32,10 +32,12 @@ function resizeThrottler(actualResizeHandler) {
 }
 
 import { mdbNavbar, mdbNavItem, mdbNavbarNav, mdbNavbarToggler, mdbContainer, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle, mdbInput, mdbNavbarBrand, mdbIcon, mdbRow } from 'mdbvue';
+import AccountLinks from "@/layout/AccountLinks";
 
 export default {
   name: 'NavbarPage',
   components: {
+    AccountLinks,
     mdbNavbar,
     mdbNavItem,
     mdbNavbarNav,
@@ -136,10 +138,17 @@ export default {
     scrollListener() {
       resizeThrottler(this.handleScroll);
     },
-    scrollToElement() {
-      let element_id = document.getElementById("downloadSection");
+    sectionUrl(link) {
+      return `/#${link}`;
+    },
+    scrollToElement(element, event) {
+      let domain = location.href;
+      if (domain.indexOf("team") === -1) {
+        event.preventDefault();
+      }
+      let element_id = document.getElementById(element);
       if (element_id) {
-        element_id.scrollIntoView({ block: "end", behavior: "smooth" });
+        element_id.scrollIntoView({ block: "start", behavior: "smooth" });
       }
     }
   },

@@ -17,7 +17,7 @@ import Profile from "./views/Profile.vue";
 import TeamProfile from "./views/TeamProfile.vue";
 import Navbar1 from "./layout/Navbar1.vue";
 // import BBMainNavbar from "./layout/BBMainNavbar.vue";
-import SecondNavbar from "./layout/SecondNavbar.vue";
+// import SecondNavbar from "./layout/SecondNavbar.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 
@@ -78,7 +78,7 @@ const router = new Router({
       name: "teamProfile",
       components: {
         default: TeamProfile,
-        header: SecondNavbar,
+        header: Navbar1,
         footer: MainFooter
       },
       props: {

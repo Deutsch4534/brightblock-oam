@@ -1,10 +1,9 @@
-import store from "@/storage/store";
 import xhrService from "@/services/xhrService";
 
 const bitcoinService = {
   fetchClientState: function(success, failure) {
     let callee =
-      store.state.constants.btcGatewayUrl + "/bitcoin/getblockchaininfo";
+      process.env.VUE_APP_BTC_GATEWAY_URL + "/bitcoin/getblockchaininfo";
     xhrService
       .makeDirectCall(callee)
       .then(function(response) {
@@ -15,7 +14,7 @@ const bitcoinService = {
       });
   },
   fetchBalance: function(success, failure) {
-    let callee = store.state.constants.btcGatewayUrl + "/bitcoin/getbalance";
+    let callee = process.env.VUE_APP_BTC_GATEWAY_URL + "/bitcoin/getbalance";
     xhrService
       .makeDirectCall(callee)
       .then(function(response) {

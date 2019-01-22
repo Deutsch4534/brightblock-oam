@@ -118,7 +118,7 @@ export default {
       return url;
     },
     debugMode() {
-      return this.$store.getters["isDebugMode"];
+      return process.env.VUE_APP_DEBUG_MODE;
     }
   }
 };

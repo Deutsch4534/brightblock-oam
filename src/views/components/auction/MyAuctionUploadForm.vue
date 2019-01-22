@@ -97,13 +97,12 @@
 <script>
 import moment from "moment";
 // import { Datetime } from "vue-datetime";
-import { validationMixin } from "vuelidate";
-import { required, minLength } from "vuelidate/lib/validators";
+// import { required, minLength } from "vuelidate/lib/validators";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyAuctionUploadForm",
-  mixins: [validationMixin],
+//  mixins: [validationMixin],
 //  components: { datetime: Datetime },
   props: ["auctionId", "mode"],
   data() {
@@ -148,22 +147,6 @@ export default {
     username() {
       let profile = this.$store.getters["myAccountStore/getMyProfile"];
       return profile.username;
-    }
-  },
-  validations: {
-    auction: {
-      title: {
-        required,
-        minLength: minLength(1)
-      },
-      description: {
-        required,
-        minLength: minLength(1)
-      },
-      sealedAddress: {},
-      keywords: {
-        required
-      }
     }
   },
   methods: {

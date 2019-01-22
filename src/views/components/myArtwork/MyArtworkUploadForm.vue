@@ -135,13 +135,13 @@
 
 <script>
 import MyArtworkManageImage from "./MyArtworkManageImage";
-import { validationMixin } from "vuelidate";
-import { required, minLength, maxLength } from "vuelidate/lib/validators";
+// import { validationMixin } from "vuelidate";
+// import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyArtworkUploadForm",
-  mixins: [validationMixin],
+//  mixins: [validationMixin],
   components: { MyArtworkManageImage },
   props: ["artworkId", "mode", "formTitle"],
   data() {
@@ -168,35 +168,6 @@ export default {
     );
   },
   computed: {},
-  validations: {
-    artwork: {
-      title: {
-        required,
-        minLength: minLength(1)
-      },
-      description: {
-        required,
-        minLength: minLength(1)
-      },
-      keywords: {
-        required
-      },
-      owner: {
-        required
-      },
-      artist: {
-        required
-      },
-      artwork: {
-        required
-      },
-      editions: {
-        required,
-        minLength: minLength(1),
-        maxLength: maxLength(10)
-      }
-    }
-  },
   methods: {
     upload: function() {
       this.alertMessage =
