@@ -9,8 +9,9 @@ import { getFile } from "blockstack";
  **/
 const artworkSearchService = {
   findArtworks: function(query, success, failure) {
+    let domain = location.hostname;
     searchIndexService
-      .searchDappsIndex("artwork", query.term, query.query)
+      .searchDappsIndex(domain, "artwork", query.term, query.query)
       .then(function(results) {
         if (!results || results.length === 0) {
           success();

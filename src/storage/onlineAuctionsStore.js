@@ -229,8 +229,9 @@ const onlineAuctionsStore = {
         if (auction) {
           resolve(auction);
         } else {
+          let domain = location.hostname;
           searchIndexService
-            .searchDappsIndex("auction", "id", auctionId)
+            .searchDappsIndex(domain, "auction", "id", auctionId)
             .then(auctionsFromSearch => {
               if (auctionsFromSearch && auctionsFromSearch.length === 1) {
                 auctionSearchService
@@ -262,8 +263,9 @@ const onlineAuctionsStore = {
     },
     fetchOnlineAuctions({ commit }) {
       return new Promise(resolve => {
+        let domain = location.hostname;
         searchIndexService
-          .searchDappsIndex("auction", "title", "*")
+          .searchDappsIndex(domain, "auction", "title", "*")
           .then(auctionsFromSearch => {
             // commit('onlineAuctions', auctionsFromSearch)
             for (var key in auctionsFromSearch) {

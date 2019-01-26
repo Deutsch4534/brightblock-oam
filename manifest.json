@@ -1,0 +1,10 @@
+{
+  "name": "Transit8",
+  "start_url": "https://www.transit8.com",
+  "description": "A decentralised art market and auction platform.",
+  "icons": [{
+    "src": "https://www.transit8.com/static/images/about-us.jpg",
+    "sizes": "192x192",
+    "type": "image/png"
+  }]
+}

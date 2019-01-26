@@ -1,17 +1,16 @@
 <template>
 <div class="container">
-  <div class="md-layout">
-    <div class="md-layout-item md-size-25 md-xsmall-size-25">
-      <aside class="">
-        <h5><small>Admin Actions</small></h5>
-        <ul class="list-unstyled">
-          <li><a href="#/admin/settings">Settings</a></li>
-          <li><a href="#/admin/registrations">Ethereum Blockchain</a></li>
-          <li><a href="#/search-index-manager">Search Settings</a></li>
-        </ul>
-      </aside>
+  <div class="row">
+    <div class="col-md-2">
+      <h5><small>Admin Actions</small></h5>
+      <ul class="list-unstyled">
+        <li><a href="#/admin/settings">Settings</a></li>
+        <li><a href="#/admin/registrations">Ethereum Blockchain</a></li>
+        <li><a href="#/admin/build-index">Build Index</a></li>
+        <li><a href="#/admin/query-index">Query Index</a></li>
+      </ul>
     </div>
-    <div class="md-layout-item md-size-75 md-xsmall-size-75">
+    <div class="col-md-10">
       <router-view></router-view>
     </div>
   </div>
@@ -55,7 +54,7 @@ export default {
 </script>
 <style>
 .section-download {
-  .md-button + .md-button {
+  .btn + .btn {
     margin-left: 5px;
   }
 }

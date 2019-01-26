@@ -1,5 +1,5 @@
 <template>
-<div class="md-layout">
+<div class="row">
   <h2 class="title">Registered Artworks ({{numberRegistered}} registered)</h2>
   <div v-for="(registration, index) in registrations" :key="index">
     <p>{{index}} : {{registration}}</p>

@@ -1,14 +1,14 @@
 <template>
-<div>
-  <div class="md-layout">
-    <div class="md-layout-item md-size-100">
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 ">
       <h3>Messaging</h3>
-      <md-field>
+      <div class="row">
         <label>Messages</label>
-        <md-textarea class="form-control" v-model="message" v-on:keyup.13.prevent="sendMessage"></md-textarea>
-      </md-field>
+        <textarea class="form-control" v-model="message" v-on:keyup.13.prevent="sendMessage"></textarea>
+      </div>
     </div>
-    <div class="md-layout-item md-size-100">
+    <div class="col-md-12 ">
       <md-content class="md-scrollbar">
         <div v-for="(message, index) of messages" :key="index">
           {{message.username}}: {{message.content}} <br/>

@@ -33,7 +33,7 @@ const store = new Vuex.Store({
   },
   getters: {
     isDebugMode: state => {
-      return process.env.VUE_APP_DEBUG_MODE;
+      return state.constants.debugMode;
     },
     serverTime: state => {
       return state.serverTime;

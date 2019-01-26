@@ -5,7 +5,7 @@ import App from "./App.vue";
 import Vuex from "vuex";
 import router from "./router";
 import store from "@/storage/store";
-// import Notifications from "vue-notification";
+import Notifications from "vue-notification";
 import PrismicVue from "prismic-vue";
 import linkResolver from "./prismic/linkResolver";
 
@@ -21,10 +21,10 @@ import ethereumService from "@/services/ethereumService";
 Vue.config.productionTip = false;
 
 Vue.use(Vuex);
-// Vue.use(Notifications);
+Vue.use(Notifications);
 // Vue.use(Datetime);
 Vue.use(PrismicVue, {
-  endpoint: "https://brightblock.prismic.io/api/v2",
+  endpoint: "https://transit8.prismic.io/api/v2",
   linkResolver
 });
 

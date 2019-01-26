@@ -1,9 +1,9 @@
 <template>
-<div class="md-layout md-gutter">
-  <div class="md-layout-item md-size-25 md-xsmall-size-100">
+<div class="row">
+  <div class="col-md-4 md-xsmall-size-100">
     <img :src="artwork.image" :alt="artwork.title">
   </div>
-  <div class="md-layout-item md-size-75 md-xsmall-size-100">
+  <div class="col-md-8 md-xsmall-size-100">
     <h4 class="media-heading">{{artwork.title}}</h4>
     {{artwork.description}}
   </div>

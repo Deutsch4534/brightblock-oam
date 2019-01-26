@@ -15,13 +15,13 @@ const myArtworksStore = {
   getters: {
     bcstatus: (state, getters) => id => {
       let artwork = getters.myArtwork(id);
-      if (!artwork.bcitem || artwork.bcitem.itemIndex < 0) {
-        artwork.bcitem = {
-          status: "new",
-          itemIndex: -1
-        };
+      if (artwork && artwork.bcitem && artwork.bcitem.status) {
+        return artwork.bcitem.status;
       }
-      return artwork.bcitem.status;
+      return {
+        status: "new",
+        itemIndex: -1
+      };
     },
     canSell: (state, getters) => id => {
       let artwork = getters.myArtwork(id);

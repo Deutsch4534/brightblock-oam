@@ -1,20 +1,20 @@
 <template>
 <footer class="page-footer fixed-bottom">
   <div class="container">
-    <div class="md-layout md-gutter md-alignment-bottom-space-between">
-      <div class="md-layout-item md-medium-size-30 md-small-size-50 md-xsmall-size-100">
+    <div class="row">
+      <div class="col-md-4">
         <span v-html="fiatMessage"></span>
       </div>
-      <div class="md-layout-item md-medium-size-20 md-small-size-50 md-xsmall-size-100">
+      <div class="col-md-2">
         <span v-html="ethMessage"></span>
       </div>
-      <div class="md-layout-item md-medium-size-20 md-small-size-50 md-xsmall-size-100">
+      <div class="col-md-2">
         <span v-html="btcMessage"></span>
       </div>
-      <div class="md-layout-item md-medium-size-30 md-small-size-50 md-xsmall-size-100">
-        <md-button :disabled="!purchaseState.canBuy" v-bind:class="{ 'md-primary': purchaseState.canBuy, 'md-gray': !purchaseState.canBuy }"  @click="buyArtwork()">
-          <md-icon>buy</md-icon> buy
-        </md-button>
+      <div class="col-md-4">
+        <button :disabled="!purchaseState.canBuy" v-bind:class="{ 'primary': purchaseState.canBuy, 'md-gray': !purchaseState.canBuy }"  @click="buyArtwork()">
+          <mdb-icon icon="money-bill-alt" /> buy
+        </button>
       </div>
     </div>
   </div>

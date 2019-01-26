@@ -3,8 +3,8 @@
   <div id="publisher" class="col-md-12 col-xs-12"/>
   <div id="subscriber" class="col-md-12 col-xs-12"/>
   <div class="col-md-12" v-if="canPublish">
-    <md-button v-if="publishing" class="md-primary text-uppercase" @click.prevent="unpublish()">stop publishing</md-button>
-    <md-button v-else class="md-primary text-uppercase" @click.prevent="publish()">start publishing</md-button>
+    <button v-if="publishing" class="primary text-uppercase" @click.prevent="unpublish()">stop publishing</button>
+    <button v-else class="primary text-uppercase" @click.prevent="publish()">start publishing</button>
   </div>
 </div>
 </template>

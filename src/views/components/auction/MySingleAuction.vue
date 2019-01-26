@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     debugMode() {
-      return process.env.VUE_APP_DEBUG_MODE;
+      return this.$store.state.constants.debugMode;
     },
     countdown() {
       let serverTime = this.$store.getters["serverTime"];

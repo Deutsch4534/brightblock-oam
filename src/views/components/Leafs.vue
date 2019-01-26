@@ -1,7 +1,7 @@
 <template>
 <div class="page-header header-filter" :style="headerStyle">
-  <div class="md-layout">
-    <div class="md-layout-item">
+  <div class="row">
+    <div class="col-md-12">
       <div class="image-wrapper">
         <img :src="leaf4" alt="leaf4" class="leaf4" v-show="leafShow">
         <img :src="leaf3" alt="leaf3" class="leaf3" v-show="leafShow">

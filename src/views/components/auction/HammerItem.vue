@@ -1,28 +1,28 @@
 <template>
-<div class="md-layout md-gutter">
-  <div class="md-layout-item md-size-100">
+<div class="row">
+  <div class="col-md-12 ">
     <h4>{{artwork.title}}</h4>
     <p>Current Bid: {{currentBidder}} {{currencySymbol}} {{currentBid}} {{item.fiatCurrency}}</p>
     <img :src="artwork.image" :alt="artwork.title"/>
   </div>
-  <div class="md-layout-item md-size-100"  v-if="inplay">
-    <md-button
-          class="md-primary" :class="bidStatusClass"
+  <div class="col-md-12 "  v-if="inplay">
+    <button
+          class="btn btn-primary" :class="bidStatusClass"
           :disabled="paused || item.paused || item.sellingStatus === 'selling'"
-          @click.prevent="bid(nextBid)">Bid {{currencySymbol}} {{nextBid}} {{item.fiatCurrency}}</md-button>
-    <md-button
+          @click.prevent="bid(nextBid)">Bid {{currencySymbol}} {{nextBid}} {{item.fiatCurrency}}</button>
+    <button
           v-if="showSetFinalPriceButton"
-          class="md-primary"
+          class="btn btn-primary"
           v-bind:data-artwork="artwork.id"
           data-toggle="modal"
-          data-target="#setFinalBidPriceModal">Sell ({{currentBid}})</md-button>
+          data-target="#setFinalBidPriceModal">Sell ({{currentBid}})</button>
     <p v-if="selling && !admin" class="center-block text-center mt-3" v-html="sellingMessage"></p>
     <p v-if="item.sellingStatus === 'selling' && artwork.bcitem">confirming...{{artwork.bcitem.itemIndex}}, {{artwork.bcitem.status}}, {{artwork.bcitem.price}}</p>
-    <md-button class="md-primary" v-if="item.sellingStatus === 'selling'" v-on:click="openSetFinalBidPriceDialog">Confirm Price</md-button>
+    <button class="btn btn-primary" v-if="item.sellingStatus === 'selling'" v-on:click="openSetFinalBidPriceDialog">Confirm Price</button>
 
     <span v-if="admin">
-      <md-button v-if="item.paused" class="md-primary" @click.prevent="pauseBidding">Unpause Bidding</md-button>
-      <md-button v-else class="md-primary" @click.prevent="pauseBidding">Pause Bidding</md-button>
+      <button v-if="item.paused" class="primary" @click.prevent="pauseBidding">Unpause Bidding</button>
+      <button v-else class="primary" @click.prevent="pauseBidding">Pause Bidding</button>
     </span>
   </div>
 </div>

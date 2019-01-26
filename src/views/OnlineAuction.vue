@@ -1,19 +1,19 @@
 <template>
   <div class="container">
-    <div class="md-layout">
-      <div class="md-layout-item md-size-100">
+    <div class="row">
+      <div class="col-md-12 ">
         <h1>{{auction.title}} <span>({{artworksSize}} items)</span></h1>
         <p>{{auction.description}}</p>
         <p>{{countdown}}</p>
       </div>
     </div>
-    <div class="md-layout">
-      <div class="md-layout-item md-size-50">
+    <div class="row">
+      <div class="col-md-6">
         <hammer-item :item="hammerItem" :auctionId="auctionId"/>
       </div>
-      <div class="md-layout-item md-size-50">
-        <div class="md-layout" v-if="winning.length > 0">
-          <div class="md-layout-item md-size-50">
+      <div class="col-md-6">
+        <div class="row" v-if="winning.length > 0">
+          <div class="col-md-6">
             <h4>Won items</h4>
             <p v-for="(item, index) of winning" :key="index">
               {{item.itemId}}
@@ -25,8 +25,8 @@
         <message-stream :auctionId="auctionId" :admin="false"/>
       </div>
     </div>
-    <div class="md-layout" v-if="artworksSize > 0">
-      <div class="md-layout-item md-size-100">
+    <div class="row" v-if="artworksSize > 0">
+      <div class="col-md-12 ">
         <h4>Next Items</h4>
         <ul class="list-unstyled">
           <single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :item="item" :auctionId="auctionId"/>

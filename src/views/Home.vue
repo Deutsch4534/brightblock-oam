@@ -48,7 +48,7 @@ export default {
 </script>
 <style>
 .section-download {
-  .md-button + .md-button {
+  .btn + .btn {
     margin-left: 5px;
   }
 }

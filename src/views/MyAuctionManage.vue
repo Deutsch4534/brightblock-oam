@@ -1,30 +1,30 @@
 <template>
 <div class="container">
-  <div class="md-layout">
-    <div class="md-layout-item md-size-100">
+  <div class="row">
+    <div class="col-md-12 ">
       <h1>{{auction.title}} <span v-if="auction.items">({{auction.items.length}} items)</span></h1>
     </div>
-    <div class="md-layout-item md-size-50">
+    <div class="col-md-6">
       <p>{{auction.description}}</p>
       <p>{{countdown}}</p>
     </div>
-    <div class="md-layout-item md-size-50">
+    <div class="col-md-6">
       <p>
-        <router-link :to="updateUrl"><md-button class="md-primary">edit</md-button></router-link>
-        <router-link :to="onlineAuctionUrl"><md-button class="md-primary">view</md-button></router-link>
-        <md-button class="md-primary" @click.prevent="deleteAuction()">delete</md-button>
-        <md-button v-if="auction.privacy === 'private'" class="md-primary" @click.prevent="makePublic()">make public</md-button>
-        <md-button v-else class="md-primary" @click.prevent="makePrivate()">make private</md-button>
+        <router-link :to="updateUrl"><button class="btn btn-primary">edit</button></router-link>
+        <router-link :to="onlineAuctionUrl"><button class="btn btn-primary">view</button></router-link>
+        <button class="btn btn-primary" @click.prevent="deleteAuction()">delete</button>
+        <button v-if="auction.privacy === 'private'" class="primary" @click.prevent="makePublic()">make public</button>
+        <button v-else class="primary" @click.prevent="makePrivate()">make private</button>
       </p>
     </div>
   </div>
-  <div class="md-layout">
-    <div class="md-layout-item md-size-50">
+  <div class="row">
+    <div class="col-md-6">
       <hammer-item :item="hammerItem" :admin="true" :auctionId="auctionId"/>
     </div>
-    <div class="md-layout-item md-size-50">
-      <div class="md-layout" v-if="winning">
-        <div class="md-layout-item md-size-50">
+    <div class="col-md-6">
+      <div class="row" v-if="winning">
+        <div class="col-md-6">
           <h4>Won items</h4>
           <p v-for="(item, index) of winning" :key="index">
             {{item.itemId}}
@@ -36,12 +36,12 @@
       <message-stream :auctionId="auctionId" :admin="true"/>
     </div>
   </div>
-  <div class="md-layout">
-    <div class="md-layout-item md-size-100">
+  <div class="row">
+    <div class="col-md-12 ">
       <h4>Selling Items ({{sellingItemsSize}})</h4>
       <my-single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="true"/>
     </div>
-    <div class="md-layout-item md-size-100">
+    <div class="col-md-12 ">
       <h4>Available Items</h4>
       <my-single-auction-item class="auction-item-container" v-for="(item, index) of availableItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="false"/>
     </div>
@@ -166,7 +166,7 @@ export default {
       return auction;
     },
     debugMode() {
-      return process.env.VUE_APP_DEBUG_MODE;
+      return this.$store.state.constants.debugMode;
     },
     updateUrl() {
       return `/my-auctions/update/${this.auctionId}`;

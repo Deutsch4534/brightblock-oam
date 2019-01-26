@@ -1,23 +1,21 @@
 <template>
-<div>
-  <md-dialog :md-active.sync="showModal" @md-closed="closeModal">
-    <md-dialog-title>Register Artwork</md-dialog-title>
-    <md-dialog-content>
+<mdb-modal size="lg" v-if="showModal" @close="closeModal">
+    <mdb-modal-header>
+        <mdb-modal-title>Register Artwork</mdb-modal-title>
+    </mdb-modal-header>
+    <mdb-modal-body>
       {{message}}
-    </md-dialog-content>
-    <md-dialog-content>
-      <img :src="artwork.image" :alt="artwork.title">
+    </mdb-modal-body>
+    <mdb-modal-body>
+      <img :src="artwork.image" :alt="artwork.title" class="img-fluid">
       <h4>{{artwork.title}}</h4>
       <p>{{myArtist.name}}</p>
-    </md-dialog-content>
-    <md-dialog-actions v-if="canRegister">
-      <!--
-      <md-button class="md-primary" :disabled="registered" @click="registerArtworkBitcoin()" v-if="!message">Register Bitcoin</md-button>
-      -->
-      <md-button class="md-primary" :disabled="registered" @click="registerArtworkEthereum()" v-if="!message">Register Ethereum</md-button>
-    </md-dialog-actions>
-  </md-dialog>
-</div>
+    </mdb-modal-body>
+    <mdb-modal-footer v-if="!message">
+        <mdb-btn v-if="bitcoin" color="primary" size="sm" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn>
+        <mdb-btn v-else color="primary" size="sm" :disabled="registered" @click="registerArtworkEthereum()">Register Ethereum ({{networkName}})</mdb-btn>
+    </mdb-modal-footer>
+</mdb-modal>
 </template>
 
 <script>
@@ -25,10 +23,19 @@ import utils from "@/services/utils";
 import notify from "@/services/notify";
 import ethereumService from "@/services/ethereumService";
 // import OpenTimestamps from "javascript-opentimestamps";
+import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbBtn } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "RegisterArtwork",
+  components: {
+    mdbModal,
+    mdbModalHeader,
+    mdbModalTitle,
+    mdbModalBody,
+    mdbModalFooter,
+    mdbBtn
+  },
   data() {
     return {
       message: null,
@@ -47,6 +54,12 @@ export default {
     fiatRates() {
       return this.$store.getters["conversionStore/getFiatRates"];
     },
+    networkName() {
+      return this.$store.state.ethStore.clientState.metaMaskNetwork.networkName;
+    },
+    bitcoin() {
+      return this.$store.state.constants.blockchain === "bitcoin";
+    },
     artwork() {
       return this.$store.getters["myArtworksStore/myArtworkOrDefault"](
         this.artworkId
@@ -61,6 +74,9 @@ export default {
       );
     },
     registered() {
+      if (!this.artworkId) {
+        return false;
+      }
       let bcstatus = this.$store.getters["myArtworksStore/bcstatus"](
         this.artworkId
       );
@@ -79,7 +95,6 @@ export default {
   },
   methods: {
     closeModal: function() {
-      this.showModal = false;
       this.$router.push(this.from);
     },
     registerArtworkBitcoin: function() {

@@ -23,7 +23,7 @@ export default {
           : undefined
     };
   },
-  created() {
+  mounted() {
     this.queryString = this.$route.query.query;
     if (!this.queryString) {
       this.queryString = "*";

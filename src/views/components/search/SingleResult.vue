@@ -1,14 +1,14 @@
 <template>
-<div class="md-layout md-gutter">
-  <div class="md-layout-item md-size-25 md-xsmall-size-100">
+<div class="row mb-4">
+  <div class="col-md-4 md-xsmall-size-100">
     <router-link :to="url"><img :src="artwork.image" :alt="artwork.title"></router-link>
   </div>
-  <div class="md-layout-item md-size-50 md-xsmall-size-100">
+  <div class="col-md-6 md-xsmall-size-100">
     <h5 class="mt-0 mb-1">{{artwork.title}}</h5>
     <p class="artwork-caption">{{artwork.description}}</p>
     <p class="artwork-caption">Artist: {{artwork.artist}}</p>
   </div>
-  <div class="md-layout-item md-size-25 md-xsmall-size-100">
+  <div class="col-md-4 md-xsmall-size-100">
     <selling-options :artwork="artwork"/>
   </div>
 </div>
@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     debugMode() {
-      return process.env.VUE_APP_DEBUG_MODE;
+      return this.$store.state.constants.debugMode;
     },
     url() {
       return `/artworks/${this.artwork.owner}/${this.artwork.id}`;
@@ -44,7 +44,4 @@ export default {
 };
 </script>
 <style scoped>
-.md-layout-item {
-  margin-bottom: 20px;
-}
 </style>

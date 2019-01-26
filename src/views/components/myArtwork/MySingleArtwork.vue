@@ -1,35 +1,53 @@
 <template>
-<div class="md-layout md-gutter">
-  <div class="md-layout-item md-size-25 md-xsmall-size-100">
-    <img :src="artwork.image" :alt="artwork.title">
-  </div>
-  <div class="md-layout-item md-size-50 md-xsmall-size-100">
-    <h5 class="mt-0 mb-1">{{artwork.title}}</h5>
-    <p class="artwork-caption">Artist: {{artistProfile.name}}</p>
-    <p class="artwork-caption">{{artwork.description}}</p>
-    <p class="artwork-caption" v-if="debugMode">{{artwork.bcitem}}</p>
-    <div class="md-layout">
-      <div class="md-layout-item md-size-20" v-if="canRegister"><router-link :to="registerUrl">Register</router-link></div>
-      <div class="md-layout-item md-size-20" v-if="canSell">    <router-link :to="registerForSaleUrl">Buy</router-link></div>
-      <div class="md-layout-item md-size-20" v-if="canAuction">    <router-link :to="registerForAuctionUrl">Auction</router-link></div>
-      <div class="md-layout-item md-size-20" v-if="debugMode">  <a @click="deleteArtwork(artwork.id)">Delete</a></div>
-      <div class="md-layout-item md-size-20" v-if="editable">   <router-link :to="editUrl" class="artwork-action">Edit</router-link></div>
-    </div>
-  </div>
-  <div class="md-layout-item md-size-25 md-xsmall-size-100">
-    <selling-options :artwork="artwork"/>
-  </div>
-</div>
+<mdb-container>
+  <mdb-row class="mb-4">
+    <mdb-col lg="5">
+      <mdb-view class="rounded z-depth-2 mb-lg-0 mb-4" hover>
+        <img class="img-fluid" :src="artwork.image" :alt="artwork.title" />
+        <a>
+          <mdb-mask overlay="white-slight" waves/>
+        </a>
+      </mdb-view>
+    </mdb-col>
+    <mdb-col lg="7">
+      <h3 class="font-weight-bold mb-3 p-0">
+        <strong>{{artwork.title}}</strong>
+      </h3>
+      <p>{{artwork.description}}</p>
+      <selling-options :artwork="artwork"/>
+      <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
+      <p>by
+        <a>
+          <strong>{{artistProfile.name}}</strong>
+        </a>, 11/08/2018</p>
+        <mdb-btn color="indigo" size="md" class="waves-light " v-if="canRegister"><router-link :to="registerUrl" class="text-white">Register</router-link></mdb-btn>
+        <mdb-btn color="indigo" size="md" class="waves-light " v-if="canSell"><router-link :to="registerForSaleUrl" class="text-white">Buy</router-link></mdb-btn>
+        <mdb-btn color="indigo" size="md" class="waves-light " v-if="canAuction"><router-link :to="registerForAuctionUrl" class="text-white">Auction</router-link></mdb-btn>
+        <mdb-btn color="indigo" size="md" class="waves-light " v-if="debugMode"><a @click="deleteArtwork(artwork.id)" class="text-white">Delete</a></mdb-btn>
+        <mdb-btn color="indigo" size="md" class="waves-light " v-if="editable"><router-link :to="editUrl" class="text-white">Edit</router-link></mdb-btn>
+    </mdb-col>
+  </mdb-row>
+</mdb-container>
 </template>
 
 <script>
 import SellingOptions from "./SellingOptions";
+import { mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardBody, mdbMask, mdbIcon, mdbView, mdbBtn } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MySingleArtwork",
   components: {
-    SellingOptions
+    SellingOptions,
+    mdbContainer,
+    mdbRow,
+    mdbCol,
+    mdbCard,
+    mdbCardBody,
+    mdbMask,
+    mdbIcon,
+    mdbView,
+    mdbBtn
   },
   props: {
     sold: true,
@@ -58,7 +76,7 @@ export default {
       return this.$store.getters["myArtworksStore/editable"](this.artwork.id);
     },
     debugMode() {
-      return process.env.VUE_APP_DEBUG_MODE;
+      return this.$store.state.constants.debugMode;
     },
     canSell() {
       return this.$store.getters["myArtworksStore/canSell"](this.artwork.id);
@@ -116,7 +134,4 @@ export default {
 };
 </script>
 <style scoped>
-.md-layout-item {
-  margin-bottom: 20px;
-}
 </style>

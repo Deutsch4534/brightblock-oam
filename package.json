@@ -1,7 +1,7 @@
 {
   "name": "BrightBlock",
   "version": "0.1.0",
-  "description": "BrightBlock Auctions",
+  "description": "Transit8 Auctions",
   "author": "M. J. Cohen <mjoecohen@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -12,6 +12,10 @@
     "remove-demo": "del-cli demo demo_build",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mjoecohen/brightblock-oam"
   },
   "dependencies": {
     "@opentok/client": "^2.15.5",
@@ -31,6 +35,7 @@
     "qrcode": "^1.3.3",
     "tls": "0.0.1",
     "vue": "^2.5.21",
+    "vue-notification": "^1.3.13",
     "vue-router": "^3.0.2",
     "vuex": "^3.1.0",
     "vuex-router-sync": "^5.0.0",

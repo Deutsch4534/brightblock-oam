@@ -1,83 +1,46 @@
 <template>
-<!--
-  <div class="wrapper">
-    <div class="section page-header header-filter" :style="headerStyle">
-    </div>
-  </div>
--->
-      <div class="container">
-        <div class="md-layout">
-          <div
-            class="md-layout-item md-size-33 md-small-size-66 md-xsmall-size-100 md-medium-size-40 mx-auto"
-          >
-            <login-card header-color="green">
-              <h4 slot="title" class="card-title">Login with Blockstack</h4>
-              <!--
-              <md-button
-                slot="buttons"
-                href="javascript:void(0)"
-                class="md-just-icon md-simple md-white"
-              >
-                <i class="fab fa-facebook-square"></i>
-              </md-button>
-              <md-button
-                slot="buttons"
-                href="javascript:void(0)"
-                class="md-just-icon md-simple md-white"
-              >
-                <i class="fab fa-twitter"></i>
-              </md-button>
-              <md-button
-                slot="buttons"
-                href="javascript:void(0)"
-                class="md-just-icon md-simple md-white"
-              >
-                <i class="fab fa-google-plus-g"></i>
-              </md-button>
-              -->
-              <!--
-              <p slot="description" class="description">Or Be Classical</p>
-              <md-field class="md-form-group" slot="inputs">
-                <md-icon>face</md-icon>
-                <label>First Name...</label>
-                <md-input v-model="firstname"></md-input>
-              </md-field>
-              <md-field class="md-form-group" slot="inputs">
-                <md-icon>email</md-icon>
-                <label>Email...</label>
-                <md-input v-model="email" type="email"></md-input>
-              </md-field>
-              <md-field class="md-form-group" slot="inputs">
-                <md-icon>lock_outline</md-icon>
-                <label>Password...</label>
-                <md-input v-model="password"></md-input>
-              </md-field>
-              -->
-              <md-button
-                slot="footer"
-                class="md-simple md-success md-lg"
-                v-on:click="loginMultiPlayer"
-              >
-                Login
-              </md-button>
-            </login-card>
-          </div>
-        </div>
-      </div>
+<mdb-container>
+  <!-- modal trigger button -->
+  <mdb-modal v-if="login" @close="closeLogin">
+  <!-- simple login modal  -->
+
+    <mdb-modal-header class="text-center">
+      <mdb-modal-title tag="h4" bold class="w-100">Sign in</mdb-modal-title>
+    </mdb-modal-header>
+    <mdb-modal-body class="mx-3 grey-text">
+    <!--
+      <mdb-input label="Your email" icon="envelope" type="email" class="mb-5" v-modal="email"/>
+      <mdb-input label="Your password" icon="lock" type="password" v-model="password"/>
+    -->
+    </mdb-modal-body>
+    <mdb-modal-footer center>
+      <mdb-btn v-on:click="loginMultiPlayer">Login</mdb-btn>
+    </mdb-modal-footer>
+  </mdb-modal>
+</mdb-container>
 </template>
 
 <script>
-// import { LoginCard } from "@/components";
+import { mdbContainer, mdbBtn, mdbModal, mdbModalHeader, mdbModalBody, mdbModalTitle, mdbModalFooter } from 'mdbvue';
 import myAccountService from "@/services/myAccountService";
 
 export default {
-  components: {},
   bodyClass: "login-page",
+  components: {
+    mdbContainer,
+    mdbBtn,
+    mdbModal,
+    mdbModalHeader,
+    mdbModalBody,
+    mdbModalFooter,
+    mdbModalTitle
+  },
   data() {
     return {
       firstname: null,
       email: null,
-      password: null
+      password: null,
+      login: true
     };
   },
   props: {
@@ -92,10 +55,13 @@ export default {
     }
   },
   methods: {
-    loginMultiPlayer: () => {
+    loginMultiPlayer: function () {
       let res = myAccountService.loginMultiPlayer();
       this.$router.push({ path: "/" });
       return res;
+    },
+    closeLogin: function () {
+      this.$router.push({ path: "/" });
     }
   },
   computed: {

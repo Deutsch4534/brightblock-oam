@@ -1,7 +1,7 @@
 <template>
 <parallax class="page-header header-filter" :style="headerStyle">
-  <div class="md-layout">
-    <div class="md-layout-item">
+  <div class="row">
+    <div class="col-md-12">
       <div class="image-wrapper">
         <div class="brand">
           <h1>{{title}}</h1>

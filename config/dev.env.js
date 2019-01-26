@@ -1,8 +1,6 @@
 'use strict'
 const merge = require('webpack-merge')
 const prodEnv = require('./prod.env')
-const abi = require('./abi/ArtMarket')
-// console.log(abi)
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
@@ -13,5 +11,4 @@ module.exports = merge(prodEnv, {
   VUE_APP_BTC_GATEWAY_URL: '"https://api.brightblock.org"',
   VUE_APP_SEARCH_INDEX_URL: '"http://localhost:8193"',
   VUE_APP_ETHEREUM_NETWORK: '"Ganache"',
-  VUE_APP_ETHEREUM_ABI: '\'' + JSON.stringify(abi) + '\'',
 })

@@ -1,6 +1,4 @@
 'use strict'
-const abi = require('./abi/ArtMarket')
-console.log(abi)
 
 module.exports = {
   NODE_ENV: '"staging"',
@@ -11,5 +9,4 @@ module.exports = {
   VUE_APP_BTC_GATEWAY_URL: '"https://api.brightblock.org"',
   VUE_APP_SEARCH_INDEX_URL: '"https://search.brightblock.org"',
   VUE_APP_ETHEREUM_NETWORK: '"Rinkby (4)"',
-  VUE_APP_ETHEREUM_ABI: '\'' + JSON.stringify(abi) + '\'',
 }

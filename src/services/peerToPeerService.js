@@ -143,7 +143,7 @@ const peerToPeerService = {
   },
   start: function() {
     peerToPeerService.session = OT.initSession(
-      process.env.VUE_APP_TOK_BOX_API_KEY,
+      store.state.constants.apiKey,
       peerToPeerService.tokbox.sessionId
     );
     peerToPeerService.session.on({

@@ -1,110 +1,123 @@
 <template>
-<div class="md-layout">
-  <md-dialog-alert
-    :md-active.sync="showAlert"
-    :md-content="alertMessage"
-    md-confirm-text="OK!" />
-  <form novalidate class="md-layout" @submit.prevent="validateAuction">
-
-    <md-card class="md-layout-item md-size-100 md-small-size-100">
-      <md-card-content>
-        <div class="md-layout">
-          <div class="md-layout-item md-size-100">
-            <md-radio v-model="auction.auctionType" value="webcast">Webcast Auction</md-radio>
-            <md-radio v-model="auction.auctionType" value="sealed">Sealed Bid Auction</md-radio>
-            <md-radio v-model="auction.auctionType" value="timed" :disabled="true">Timed Auction</md-radio>
-            <md-radio v-model="auction.auctionType" value="penny" :disabled="true">Penny Auction</md-radio>
-          </div>
-        </div>
-      </md-card-content>
-    </md-card>
-
-    <md-card class="md-layout-item md-size-100 md-small-size-100">
-      <md-card-content>
+<mdb-container class="mt-5">
+  <!-- Supported elements -->
+  <h2 class="my-5">{{formTitle}}</h2>
+  <hr class="my-5">
+  <form class="needs-validation" novalidate @submit.prevent="checkForm">
+    <div class="row ">
+      <div class="col-md-2 custom-control custom-radio mb-0">
+        <input type="radio" class="custom-control-input" id="customControlValidation2" name="auction.auctionType" v-model="auction.auctionType" value="webcast" required>
+        <label class="custom-control-label" for="customControlValidation2">Webcast Auction</label>
+      </div>
+      <div class="col-md-2 custom-control custom-radio mb-0">
+        <input type="radio" class="custom-control-input" id="customControlValidation3" name="auction.auctionType" v-model="auction.auctionType" value="sealed" required>
+        <label class="custom-control-label" for="customControlValidation3">Sealed Bid Auction</label>
+      </div>
+      <div class="col-md-2 custom-control custom-radio mb-0">
+        <input type="radio" class="custom-control-input" id="customControlValidation1" name="auction.auctionType" v-model="auction.auctionType" value="timed" required>
+        <label class="custom-control-label" for="customControlValidation1">Timed Auction</label>
+      </div>
+      <div class="col-md-2 custom-control custom-radio mb-3">
+        <input type="radio" class="custom-control-input" id="customControlValidation0" name="auction.auctionType" v-model="auction.auctionType" value="penny" required>
+        <label class="custom-control-label" for="customControlValidation0">Penny Auction</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 custom-control custom-radio mb-0">
         <p v-if="errors.length" :key="errors.length">
           <b>Please correct the following error(s):</b>
           <ul>
             <li v-for="(error, index) in errors" :key="index" v-bind:error="error">{{ error }}</li>
           </ul>
         </p>
-      </md-card-content>
+      </div>
+    </div>
 
-      <md-card-content>
-        <div class="md-layout">
-          <div class="md-layout-item md-size-100" v-if="auction.auctionType === 'sealed'">
-            <md-field :class="getValidationClass('sealedAddress')">
-              <label for="title">Destination Bitcoin Address</label>
-              <md-input name="title" id="sealedAddress" v-model="auction.sealedAddress" :disabled="sending" />
-              <span class="md-error" v-if="!$v.auction.sealedAddress.required">The address is required for a sealed bid auction.</span>
-            </md-field>
-          </div>
-          <div class="md-layout-item md-size-100">
-            <md-field :class="getValidationClass('title')">
-              <label for="title">Title</label>
-              <md-input name="title" id="title" v-model="auction.title" :disabled="sending" />
-              <span class="md-error" v-if="!$v.auction.title.required">The title is required</span>
-              <span class="md-error" v-else-if="!$v.auction.title.minlength">Invalid first name</span>
-            </md-field>
-          </div>
-          <div class="md-layout-item md-size-100">
-            <md-field :class="getValidationClass('description')">
-              <label for="description">Description</label>
-              <md-textarea name="description" id="description" v-model="auction.description" required></md-textarea>
-              <span class="md-error">The description is required</span>
-            </md-field>
-          </div>
-          <div class="md-layout-item md-size-100">
-            <md-field :class="getValidationClass('keywords')">
-              <label for="keywords">Keywords</label>
-              <md-textarea name="keywords" id="keywords" v-model="auction.keywords" required></md-textarea>
-              <span class="md-error">Enter some keywords</span>
-            </md-field>
-          </div>
-          <!--
-          <div class="md-layout-item md-size-100" style="margin-top: 30px;" v-if="auction.auctionType === 'webcast' || auction.auctionType === 'sealed'">
-              <datetime type="datetime" v-model="startDate" input-id="startDate">
-                <label for="startDate" slot="before"><md-icon>calendar_today</md-icon> Auction Starts</label>
-                <input id="startDate">
-              </datetime>
-          </div>
-          <div class="md-layout-item md-size-100" v-else>
-            <datetime type="datetime" v-model="endDate" input-id="endDate">
-              <label for="endDate" slot="before"><md-icon>calendar_today</md-icon> Auction Ends</label>
-              <input id="endDate">
-            </datetime>
-          </div>
-          -->
+    <div class="form-row" v-if="auction.auctionType === 'sealed'">
+      <div class="col-md-12 mb-3">
+        <label for="sealedAddress">Destination Bitcoin Address</label>
+        <input type="text" class="form-control" id="sealedAddress" placeholder="Title" v-model="auction.sealedAddress">
+        <div class="invalid-feedback">
+          Please enter sealed address!
         </div>
-      </md-card-content>
-
-      <md-card-content>
-        <div class="md-layout">
-          <div class="md-layout-item md-size-100">
-            <md-radio v-model="auction.privacy" value="public">Public</md-radio>
-            <md-radio v-model="auction.privacy" value="private">Private</md-radio>
-          </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-12 mb-3">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" placeholder="Title" v-model="auction.title" required>
+        <div class="invalid-feedback">
+          Please enter a title!
         </div>
-      </md-card-content>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-12 mb-3">
+        <label for="description">description</label>
+        <textarea type="text" class="form-control" id="description" placeholder="Description" v-model="auction.description" required></textarea>
+        <div class="invalid-feedback">
+          Please enter a description!
+        </div>
+      </div>
+    </div>
 
-      <md-card-actions>
-        <md-button type="submit" class="md-primary">Upload</md-button>
-      </md-card-actions>
-    </md-card>
+    <div class="form-row">
+      <div class="col-md-12 mb-3">
+        <label for="keywords">Keywords or tags</label>
+        <textarea type="text" class="form-control" id="keywords" placeholder="Description" v-model="auction.keywords" required></textarea>
+        <div class="invalid-feedback">
+          Please enter some keywords!
+        </div>
+      </div>
+    </div>
+
+    <div class="row ">
+      <div class="col-md-2 custom-control custom-radio mb-0">
+        <input type="radio" class="custom-control-input" id="Public" name="auction.privacy" v-model="auction.privacy" value="public" required>
+        <label class="custom-control-label" for="Public">Public</label>
+      </div>
+      <div class="col-md-2 custom-control custom-radio mb-0">
+        <input type="radio" class="custom-control-input" id="Private" name="auction.privacy" v-model="auction.privacy" value="private" required>
+        <label class="custom-control-label" for="Private">Private</label>
+      </div>
+    </div>
+
+    <mdb-row>
+      <mdb-col col="6">
+        <mdb-time-picker
+          :id="'timePickerTwo'"
+          :placeholder="'Select your time'"
+          :label="'format: 24h'"
+          :hoursFormat="24"
+          @getValue="getTimePickerValue"
+        />
+      </mdb-col>
+    </mdb-row>
+
+    <mdb-btn type="submit">Submit</mdb-btn>
   </form>
-</div>
+</mdb-container>
 </template>
 
 <script>
 import moment from "moment";
-// import { Datetime } from "vue-datetime";
-// import { required, minLength } from "vuelidate/lib/validators";
+import { mdbBtn } from "mdbvue";
+import { mdbTimePicker, mdbContainer, mdbRow, mdbCol } from 'mdbvue';
+import { mdbDatePicker } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyAuctionUploadForm",
-//  mixins: [validationMixin],
-//  components: { datetime: Datetime },
   props: ["auctionId", "mode"],
+  components: {
+    mdbContainer,
+    mdbBtn,
+    mdbTimePicker,
+    mdbContainer,
+    mdbRow,
+    mdbCol,
+    mdbDatePicker
+  },
   data() {
     return {
       errors: [],
@@ -123,6 +136,35 @@ export default {
         privacy: "public",
         sellingList: [],
         sealedAddress: null
+      },
+      startDate: {
+        date: ''
+      },
+      option: {
+        type: 'day',
+        week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+        month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        format: 'YYYY-MM-DD',
+        placeholder: 'Please choose a date',
+        inputStyle: {
+          'display': 'inline-block',
+          'padding': '6px',
+          'line-height': '22px',
+          'font-size': '16px',
+          'border': '2px solid #fff',
+          'box-shadow': '0 1px 3px 0 rgba(0, 0, 0, 0.2)',
+          'border-radius': '2px',
+          'color': '#5F5F5F'
+        },
+        color: {
+          header: 'primary',
+          headerText: 'white',
+          checkedDay: 'primary'
+        },
+        buttons: {
+          ok: 'Ok',
+          cancel: 'Cancel'
+        }
       }
     };
   },
@@ -152,7 +194,6 @@ export default {
   methods: {
     upload: function() {
       if (this.validate()) {
-        this.openModal();
         let profile = this.$store.getters["myAccountStore/getMyProfile"];
         this.auction.auctioneer = profile.username;
         this.auction.administrator = profile.username;
@@ -185,33 +226,18 @@ export default {
         }
       }
     },
-    openModal() {},
-    closeModal() {},
-    validations() {
-      if (this.auction.auctionType === "sealed") {
-        return {
-          sealedAddress: {
-            required
-          }
-        };
-      }
+    getPickerValue(value) {
+      console.log(value);
     },
-    getValidationClass(fieldName) {
-      const field = this.$v.auction[fieldName];
-      if (field) {
-        /**
-        if (fieldName === "sealedAddress") {
-          if (this.auction.auctionType === "sealed") {
-            if (!this.auction.sealedAddress) {
-              field.$invalid = true;
-              field.$dirty = true;
-            }
-          }
-        }
-        **/
-        return {
-          "md-invalid": field.$invalid && field.$dirty
-        };
+    getTimePickerValue(value) {
+      console.log(value);
+    },
+    closeModal() {},
+    checkForm(event) {
+      event.preventDefault();
+      event.target.classList.add('was-validated');
+      if (this.auction.auctionType === "sealed") {
+        this.showSealedError = true;
       }
     },
     validateAuction() {

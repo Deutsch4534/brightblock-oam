@@ -1,6 +1,6 @@
 <template>
-<div class="md-layout md-gutter">
-  <div class="md-layout-item md-size-25 md-xsmall-size-100">
+<div class="row">
+  <div class="col-md-4 md-xsmall-size-100">
     <img :src="artwork.image" :alt="artwork.title" >
   </div>
   <div v-if="sellingItem">
@@ -118,13 +118,10 @@ export default {
       return url;
     },
     debugMode() {
-      return process.env.VUE_APP_DEBUG_MODE;
+      return this.$store.state.constants.debugMode;
     }
   }
 };
 </script>
 <style scoped>
-.md-layout-item {
-  margin-bottom: 20px;
-}
 </style>

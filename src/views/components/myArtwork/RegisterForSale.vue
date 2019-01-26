@@ -1,59 +1,76 @@
 <template>
-<div>
-  <md-dialog :md-active.sync="showModal" @md-closed="closeModal">
-    <md-dialog-title>Sell via Buy Now</md-dialog-title>
-    <md-dialog-content v-if="message">
+<mdb-modal size="lg" v-if="showModal" @close="closeModal">
+    <mdb-modal-header>
+        <mdb-modal-title>Sell via Buy Now</mdb-modal-title>
+    </mdb-modal-header>
+    <mdb-modal-body  v-if="message">
       {{message}}
-    </md-dialog-content>
-    <md-dialog-content v-else>
-      <h5 class="modal-title">{{artwork.title}}</h5>
-      <p class="form-text text-muted">Note: set the value to 0 to remove from sale.</p>
-      <form @submit.prevent="setPrice">
-        <p>This item can be bought for the price you specify.</p>
-        <p v-if="errors.length" :key="errors.length">
-          <b>Please correct the following error(s):</b>
-          <ul>
-            <li v-for="error in errors" :key="error.id">{{ error.message }}</li>
-          </ul>
-        </p>
-        <div class="md-layout-item md-size-100">
-          <md-field>
-            <label>Select Currency</label>
-            <md-select v-model="currency" id="currency" name="currency">
-              <md-option v-for="(value,key) in fiatRates" :key="key" :value="key">{{ key }}</md-option>
-            </md-select>
-          </md-field>
-          <p class="">
-            {{conversionMessage}}
-          </p>
-        </div>
+    </mdb-modal-body>
+    <mdb-modal-body v-else>
 
-        <div class="md-layout-item md-size-100">
-          <md-field>
-            <label>Amount {{currencySymbol}}</label>
-            <md-input v-model="amount" type="number" step="50" placeholder="Sale value of artwork"></md-input>
-          </md-field>
-          <p id="amountHelpBlock" class="">
-            {{valueInBitcoin}} Btc / {{valueInEther}} Eth
-          </p>
+    <h5 class="modal-title">{{artwork.title}}</h5>
+    <p class="form-text text-muted">Note: set the value to 0 to remove from sale.</p>
+    <form @submit.prevent="setPrice">
+      <p>This item can be bought for the price you specify.</p>
+      <p v-if="errors.length" :key="errors.length">
+        <b>Please correct the following error(s):</b>
+        <ul>
+          <li v-for="error in errors" :key="error.id">{{ error.message }}</li>
+        </ul>
+      </p>
+      <div class="form-row">
+        <div class="col-md-12 mb-3">
+          <label for="validationCustom01">Select Currency</label>
+          <select v-model="currency" id="currency" name="currency">
+            <option v-for="(value,key) in fiatRates" :key="key" :value="key">{{ key }}</option>
+          </select>
+          <div class="invalid-feedback">
+          Please select the currency!
+          </div>
         </div>
-      </form>
-    </md-dialog-content>
-    <md-dialog-actions>
-      <md-button class="md-primary" @click.prevent="setPrice" v-if="!message">Set Price</md-button>
-    </md-dialog-actions>
-  </md-dialog>
-</div>
+        <p class="">
+          {{conversionMessage}}
+        </p>
+      </div>
+
+      <div class="form-row">
+        <div class="col-md-12 mb-3">
+          <label for="validationCustom01">Amount {{currencySymbol}}</label>
+          <input type="number" class="form-control" id="validationCustom01" step="50" placeholder="Sale value of artwork" v-model="amount" required>
+          <div class="invalid-feedback">
+            Please enter the amount!
+          </div>
+        </div>
+        <p id="amountHelpBlock" class="">
+          {{valueInBitcoin}} Btc / {{valueInEther}} Eth
+        </p>
+      </div>
+    </form>
+
+    </mdb-modal-body>
+    <mdb-modal-footer>
+        <mdb-btn color="primary" size="sm" @click="setPrice" v-if="!message">Set Price</mdb-btn>
+    </mdb-modal-footer>
+</mdb-modal>
 </template>
 
 <script>
 import notify from "@/services/notify";
 import ethereumService from "@/services/ethereumService";
 import moneyUtils from "@/services/moneyUtils";
+import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbBtn } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "RegisterForSale",
+  components: {
+    mdbModal,
+    mdbModalHeader,
+    mdbModalTitle,
+    mdbModalBody,
+    mdbModalFooter,
+    mdbBtn
+  },
   data() {
     return {
       errors: [],
@@ -110,7 +127,6 @@ export default {
     },
 
     closeModal: function() {
-      this.showModal = false;
       this.$router.push(this.from);
     },
 

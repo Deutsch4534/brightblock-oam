@@ -1,155 +1,167 @@
 <template>
-<div class="md-layout">
-  <md-dialog-alert
-    :md-active.sync="showAlert"
-    :md-content="alertMessage"
-    md-confirm-text="OK!" />
-  <form novalidate class="md-layout" @submit.prevent="validateArtwork">
-    <md-card class="md-layout-item md-size-50 md-small-size-100">
-      <md-card-header>
-        <div class="md-title">{{formTitle}}</div>
-      </md-card-header>
-      <md-card-content>
-        <div class="md-layout">
-          <div class="md-layout-item md-size-100">
-            <md-field :class="getValidationClass('title')">
-              <label for="title">Title</label>
-              <md-input name="title" id="title" v-model="artwork.title" :disabled="sending" />
-              <span class="md-error" v-if="!$v.artwork.title.required">The title name is required</span>
-              <span class="md-error" v-else-if="!$v.artwork.title.minlength">Invalid first name</span>
-            </md-field>
-          </div>
-          <div class="md-layout-item md-size-100">
-            <md-field :class="getValidationClass('description')">
-              <label for="description">Description</label>
-              <md-textarea name="description" id="description" v-model="artwork.description" required></md-textarea>
-              <span class="md-error">The description is required</span>
-            </md-field>
-          </div>
-          <div class="md-layout-item md-size-100">
-            <md-field :class="getValidationClass('keywords')">
-              <label for="keywords">Keywords</label>
-              <md-textarea name="keywords" id="keywords" v-model="artwork.keywords" required></md-textarea>
-              <span class="md-error">Enter some keywords</span>
-            </md-field>
-          </div>
-          <div class="md-layout-item md-size-100">
-            <md-field :class="getValidationClass('editions')">
-              <label for="editions">editions</label>
-              <md-input name="editions" id="title" autocomplete="editions" v-model="artwork.editions" :disabled="sending" />
-              <span class="md-error" v-if="!$v.artwork.editions">Number of editions is required</span>
-              <span class="md-error" v-else-if="!$v.artwork.editions.minlength">At least 1 edition.</span>
-              <span class="md-error" v-else-if="!$v.artwork.editions.maxlength">At most 10 editions.</span>
-            </md-field>
-          </div>
-          <div class="md-layout-item md-size-100">
-            <md-field :class="getValidationClass('owner')">
-              <label for="owner">owner</label>
-              <md-input name="owner" type="text" id="title" autocomplete="owner" v-model="artwork.owner" :disabled="sending" />
-              <span class="md-error" v-if="!$v.artwork.owner.required">The owner is required</span>
-            </md-field>
-          </div>
-          <div class="md-layout-item md-size-100">
-            <md-field :class="getValidationClass('artist')">
-              <label for="artist">artist</label>
-              <md-input name="owner" type="text" id="title" autocomplete="artist" v-model="artwork.artist" :disabled="sending" />
-              <span class="md-error" v-if="!$v.artwork.artist.required">The artist is required</span>
-            </md-field>
-          </div>
-        </div>
-      </md-card-content>
-      <md-card-actions>
-        <md-button type="submit" class="md-primary">Upload</md-button>
-      </md-card-actions>
-    </md-card>
+<mdb-container class="mt-5">
+  <!-- Supported elements -->
+  <h2 class="my-5">{{formTitle}}</h2>
+  <hr class="my-5">
+  <form class="needs-validation" novalidate @submit.prevent="checkForm">
 
-    <md-card class="md-layout-item md-size-50 md-small-size-100">
-      <md-card-content>
-        <div class="md-layout">
-          <div class="md-layout-item md-size-100">
-            <md-radio v-model="artwork.itemType" value="digiart">Digital</md-radio>
-            <md-radio v-model="artwork.itemType" value="physart">Physical</md-radio>
-            <md-radio v-model="artwork.itemType" value="photoart">Photographic</md-radio>
-          </div>
-          <div class="md-layout-item md-size-100" v-if="artwork.itemType === 'digiart' || artwork.itemType === 'photoart'">
-            <div class="md-title">Artwork Images</div>
-            <md-field :class="getValidationClass('artwork')">
-              <div class="md-error" v-if="!$v.artwork.artwork.required">The artwork is required</div>
-            </md-field>
-          </div>
-          <div class="md-layout-item md-size-100" style="margin-top: 20px;" v-if="artwork.itemType === 'digiart' || artwork.itemType === 'photoart'">
-            <div id="load-artwork">
+  <div class="form-row">
+    <div class="col-md-12 mb-3">
+      <label for="validationCustom01">Title of Artwork</label>
+      <input type="text" class="form-control" id="validationCustom01" placeholder="Title" v-model="artwork.title" required>
+      <div class="invalid-feedback">
+        Please enter a title!
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-md-12 mb-3">
+      <label for="validationCustom02">Description of Artwork</label>
+      <textarea type="text" class="form-control" id="validationCustom02" placeholder="Description" v-model="artwork.description" required></textarea>
+      <div class="invalid-feedback">
+        Please enter a description!
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-md-12 mb-3">
+      <label for="validationCustom03">Keywords or tags</label>
+      <textarea type="text" class="form-control" id="validationCustom03" placeholder="Description" v-model="artwork.keywords" required></textarea>
+      <div class="invalid-feedback">
+        Please enter some keywords!
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-md-12 mb-3">
+      <label for="validationCustom04">Editions</label>
+      <input class="form-control" id="validationCustom04" type="number" placeholder="Editions" v-model="artwork.editions" required>
+      <div class="invalid-feedback">
+        Please enter number of editions!
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-md-6 mb-3">
+      <label for="validationCustom05">Owner</label>
+      <input type="text" class="form-control" id="validationCustom05" placeholder="Owner" v-model="artwork.owner" required>
+      <div class="invalid-feedback">
+        Please enter the owner!
+      </div>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label for="validationCustom06">Artist</label>
+      <input type="text" class="form-control" id="validationCustom06" placeholder="Artist" v-model="artwork.artist" required>
+      <div class="invalid-feedback">
+        Please enter the artist!
+      </div>
+    </div>
+  </div>
+
+  <div class="row ">
+    <div class="col-md-2 custom-control custom-radio mb-0">
+      <input type="radio" class="custom-control-input" id="customControlValidation2" name="artwork.itemType" v-model="artwork.itemType" value="digiart" required>
+      <label class="custom-control-label" for="customControlValidation2">Digital</label>
+    </div>
+    <div class="col-md-2 custom-control custom-radio mb-0">
+      <input type="radio" class="custom-control-input" id="customControlValidation3" name="artwork.itemType" v-model="artwork.itemType" value="physart" required>
+      <label class="custom-control-label" for="customControlValidation3">Physical</label>
+    </div>
+    <div class="col-md-2 custom-control custom-radio mb-3">
+      <input type="radio" class="custom-control-input" id="customControlValidation1" name="artwork.itemType" v-model="artwork.itemType" value="photoart" required>
+      <label class="custom-control-label" for="customControlValidation1">Photographic</label>
+    </div>
+  </div>
+  <mdb-row>
+    <mdb-col md="4" v-if="artwork.itemType === 'digiart' || artwork.itemType === 'photoart'">
+      <mdb-card>
+        <mdb-card-body>
+          <mdb-card-title>Digital Artwork</mdb-card-title>
+          <mdb-card-text>
+            <div class="text-danger" v-if="showAttachArt">
+              Attach you artwork by dragging on to the box below.
+            </div>
+            <div class="load-artwork">
               <div class="drop_area" @drop.prevent="loadArtwork" @dragover.prevent>
                 Drop artwork file here!
               </div>
             </div>
-            <my-artwork-manage-image v-for="(file, index) in artwork.artwork" :key="index" :file="file"/>
-            <div class="form-group pull-right" v-if="artwork.artwork.length > 0">
-              <button type="submit" class="btn btn-default" @click.prevent="deleteArtwork()">Restart Artwork</button>
+          </mdb-card-text>
+          <mdb-btn color="primary" v-on:click="deleteArtwork" v-if="artwork.artwork.length > 0">Restart Artwork</mdb-btn>
+        </mdb-card-body>
+      </mdb-card>
+      <my-artwork-manage-image v-for="(file, index) in artwork.artwork" :key="index" :file="file"/>
+    </mdb-col>
+    <mdb-col md="4" v-if="artwork.itemType === 'physart'">
+      <mdb-card>
+        <mdb-card-body>
+          <mdb-card-title>Supporting Documents</mdb-card-title>
+          <mdb-card-text>
+            <div class="text-danger" v-if="showAttachDocs">
+              Attach you artwork by dragging on to the box below.
             </div>
-          </div>
-        </div>
-        <!-- end layout -->
-      </md-card-content>
-
-      <md-card-content>
-        <div class="md-layout">
-          <div class="md-layout-item md-small-size-100">
-            <div class="md-title">Other Images</div>
-            <div id="load-artwork">
-              <div class="drop_area" @drop.prevent="loadImageFiles" @dragover.prevent>
-                Drop your images of your art here!
-              </div>
-            </div>
-            <my-artwork-manage-image v-for="(file, index) in artwork.images" :key="index" :file="file"/>
-            <div class="form-group pull-right" v-if="artwork.images.length > 0">
-              <button type="submit" class="btn btn-default" @click.prevent="deleteImages()">Restart Images</button>
-            </div>
-          </div>
-        </div>
-        <!-- end layout -->
-      </md-card-content>
-
-      <md-card-content>
-        <div class="md-layout">
-          <div class="md-layout-item md-small-size-100">
-            <div class="md-title">Supporting Documents</div>
-            <div id="load-artwork">
+            <div class="load-artwork">
               <div class="drop_area" @drop.prevent="loadSupportingFiles" @dragover.prevent>
-                Drop supporting documents here!
+                Drop your supporting documents here!
               </div>
             </div>
-            <my-artwork-manage-image v-for="(file, index) in artwork.supportingDocuments" :key="index" :file="file"/>
-            <div class="form-group pull-right" v-if="artwork.supportingDocuments.length > 0">
-              <button type="submit" class="btn btn-default" @click.prevent="deleteDocuments()">Restart Documents</button>
-            </div>
-          </div>
-        </div>
-        <!-- end layout -->
-      </md-card-content>
-      <md-progress-bar md-mode="indeterminate" v-if="sending" />
-    </md-card>
+          </mdb-card-text>
+          <mdb-btn color="primary" @click="deleteDocuments" v-if="artwork.supportingDocuments.length > 0">Restart Documents</mdb-btn>
+        </mdb-card-body>
+      </mdb-card>
+      <my-artwork-manage-image v-for="(file, index) in artwork.supportingDocuments" :key="index" :file="file"/>
+    </mdb-col>
+    <mdb-col md="4">
+      <mdb-card>
+        <mdb-card-body>
+          <mdb-card-title>Other Images</mdb-card-title>
+          <mdb-card-text>
+              <div class="load-artwork">
+                <div class="drop_area" @drop.prevent="loadImageFiles" @dragover.prevent>
+                  Drop your images of your art here!
+                </div>
+              </div>
+          </mdb-card-text>
+          <mdb-btn color="primary" @click="deleteImages" v-if="artwork.images.length > 0">Restart Images</mdb-btn>
+        </mdb-card-body>
+      </mdb-card>
+      <my-artwork-manage-image v-for="(file, index) in artwork.images" :key="index" :file="file"/>
+    </mdb-col>
+  </mdb-row>
+  <mdb-btn type="submit">Submit</mdb-btn>
   </form>
-</div>
+</mdb-container>
 </template>
 
 <script>
+import { mdbCol, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
 import MyArtworkManageImage from "./MyArtworkManageImage";
-// import { validationMixin } from "vuelidate";
-// import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyArtworkUploadForm",
-//  mixins: [validationMixin],
-  components: { MyArtworkManageImage },
+  components: {
+    MyArtworkManageImage,
+    mdbContainer,
+    mdbCol,
+    mdbRow,
+    mdbCard,
+    mdbCardImage,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardText,
+    mdbBtn
+  },
   props: ["artworkId", "mode", "formTitle"],
   data() {
     return {
       errors: [],
+      showAttachArt: false,
+      showAttachDocs: false,
       sending: false,
       showAlert: false,
       alertMessage: null,
+      bgImage: require("@/assets/img/upload-icon-3.png"),
       artwork: {
         itemType: "digiart",
         keywords: "Photography,Illustration.3D,2D,Film & Video,Mix-media",
@@ -167,7 +179,17 @@ export default {
       this.artworkId
     );
   },
-  computed: {},
+  computed: {
+    headerStyle() {
+      return {
+        "margin-top": "0px",
+        "background-image": `url(/assets/img/upload-icon-3.png)`,
+        "background-repeat": "no-repeat",
+        "background-size": "cover",
+        "background-position": "center center"
+      };
+    },
+  },
   methods: {
     upload: function() {
       this.alertMessage =
@@ -191,35 +213,11 @@ export default {
           });
       }
     },
-    getValidationClass(fieldName) {
-      const field = this.$v.artwork[fieldName];
-      if (field) {
-        return {
-          "md-invalid": field.$invalid && field.$dirty
-        };
-      }
-    },
-    clearForm() {
-      this.$v.$reset();
-      this.artwork.title = null;
-      this.artwork.description = null;
-      this.artwork.keywords = null;
-      this.artwork.itemType = null;
-      this.artwork.editions = 1;
-      this.artwork.owner = null;
-      this.artwork.artist = null;
-    },
-    validateArtwork() {
-      this.$v.$touch();
-      if (!this.$v.$invalid) {
-        this.upload();
-      } else {
-        this.showAlert = true;
-        console.log("errros", this.$v);
-        this.alertMessage = "Please fix the form errors indicated in red.. ";
-      }
-    },
-    validate: function() {
+    checkForm(event) {
+      event.preventDefault();
+      event.target.classList.add('was-validated');
+      this.showAttachArt = false;
+      this.showAttachDocs = false;
       this.errors = [];
       if (!this.artwork.title) {
         this.errors.push("title required.");
@@ -241,12 +239,21 @@ export default {
         this.artwork.artwork &&
         this.artwork.artwork.length === 0
       ) {
+        this.showAttachArt = true;
+        this.errors.push("Please attach an artwork.");
+      }
+      if (
+        this.artwork.itemType === "physart" &&
+        this.artwork.supportingDocuments &&
+        this.artwork.supportingDocuments.length === 0
+      ) {
+        this.showAttachDocs = true;
         this.errors.push("Please attach an artwork.");
       }
       if (this.errors.length > 0) {
         return false;
       } else {
-        return true;
+        this.upload();
       }
     },
     deleteImages: function() {
@@ -268,6 +275,8 @@ export default {
       this.load(e, this.artwork.images, 3);
     },
     load: function(e, arrayToLoad, limit) {
+      this.showAttachArt = false;
+      this.showAttachDocs = false;
       let userFiles = e.dataTransfer.files;
       let fileObject = null;
       for (let i = 0; i < userFiles.length; i++) {
@@ -294,9 +303,9 @@ export default {
 };
 </script>
 <style>
-#load-artwork {
+.load-artwork {
   height: 90px;
-  background: #ccc;
+  background-image: require("@/assets/img/upload-icon-3.png");
   text-align: center;
   padding: 20px;
   font-size: 1.2em;

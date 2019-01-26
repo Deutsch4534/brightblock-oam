@@ -113,8 +113,7 @@ const searchIndexService = {
     });
   },
 
-  searchDappsIndex: function(objType, term, query) {
-    let domain = location.hostname;
+  searchDappsIndex: function(domain, objType, term, query) {
     return new Promise(function(resolve) {
       searchIndexService
         .makeGetCall(
@@ -165,7 +164,7 @@ const searchIndexService = {
   makePostCall: function(command, data) {
     let callInfo = {
       method: "post",
-      url: process.env.VUE_APP_SEARCH_INDEX_URL + command,
+      url: store.state.constants.searchUrl + command,
       headers: {
         "Content-Type": "application/json"
       }
@@ -187,7 +186,7 @@ const searchIndexService = {
   makeGetCall: function(command, args) {
     let callInfo = {
       method: "get",
-      url: process.env.VUE_APP_SEARCH_INDEX_URL + command,
+      url: store.state.constants.searchUrl + command,
       headers: {
         "Content-Type": "application/json"
       }

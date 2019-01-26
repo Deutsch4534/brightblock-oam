@@ -1,4 +1,5 @@
 import axios from "axios";
+import store from "@/storage/store";
 
 const xhrService = {
   makeDirectCall: function(url) {
@@ -17,11 +18,9 @@ const xhrService = {
     });
   },
   makeGetCall: function(command, args) {
-    console.log("My process: ", process);
-    console.log("My environment: ", process.env);
     let callInfo = {
       method: "get",
-      url: process.env.VUE_APP_ETH_GATEWAY_URL + command,
+      url: store.state.constants.ethGatewayUrl + command,
       headers: {
         "Content-Type": "application/json"
       }
@@ -46,7 +45,7 @@ const xhrService = {
   makePostCall: function(command, data) {
     let callInfo = {
       method: "post",
-      url: process.env.VUE_APP_ETH_GATEWAY_URL + command,
+      url: store.state.constants.ethGatewayUrl + command,
       headers: {
         "Content-Type": "application/json"
       }

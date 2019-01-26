@@ -1,42 +1,38 @@
 <template>
-<div class="md-layout">
-  <div class="md-layout-item">
-    <img :src=file.dataUrl alt="none"/>
-  </div>
-  <div class="md-layout-item">
-    {{ file.name }} ({{ file.size }}) type: {{ file.type }}
-  </div>
-  <div class="md-layout-item">
-    Last Changed: {{ file.lastModifiedDate }}
-  </div>
-</div>
+<mdb-card>
+  <mdb-card-image :src="file.dataUrl" alt="Card image cap"></mdb-card-image>
+  <mdb-card-body>
+    <mdb-card-title>{{ file.name }}</mdb-card-title>
+    <mdb-card-text>({{ file.size }}) type: {{ file.type }}</mdb-card-text>
+    <mdb-card-text>Last Changed: {{ file.lastModifiedDate }}</mdb-card-text>
+  </mdb-card-body>
+</mdb-card>
 </template>
 
 <script>
+import { mdbCol, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
+
 export default {
   props: ["file"],
+  name: "MyArtworkManageImage",
+  components: {
+    mdbContainer,
+    mdbCol,
+    mdbRow,
+    mdbCard,
+    mdbCardImage,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardText,
+    mdbBtn
+  },
   data() {
     return {};
   },
   mounted() {},
   methods: {},
-  components: {}
 };
 </script>
 
 <style scoped>
-#item-images {
-  width: 100px;
-  height: 40px;
-  border: 1pt dashed #ccc;
-}
-#drop_area {
-  width: 100%;
-  height: 50px;
-  background-color: #00f3f3;
-  text-align: center;
-  padding: 20px;
-  padding: 5px;
-  border: 1pt dashed #3366dd;
-}
 </style>

@@ -4,21 +4,18 @@ import Router from "vue-router";
 import Admin from "./views/Admin.vue";
 import AdminSettings from "./views/components/admin/AdminSettings";
 import AdminRegistrations from "./views/components/admin/AdminRegistrations";
-import SearchIndexManager from "./views/components/admin/SearchIndexManager";
-import SearchBuilderTab from "./views/components/admin/SearchBuilderTab";
-import SearchDappsTab from "./views/components/admin/SearchDappsTab";
+import AdminBuildIndex from "./views/components/admin/AdminBuildIndex";
+import AdminQueryIndex from "./views/components/admin/AdminQueryIndex";
 
 // import Home from "./views/Home.vue";
-import BrightBlock from "./views/BrightBlock.vue";
+// import Intro from "./views/Intro.vue";
+import Home from "./views/Home.vue";
 import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
 import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
 import TeamProfile from "./views/TeamProfile.vue";
-import Navbar1 from "./layout/Navbar1.vue";
-// import BBMainNavbar from "./layout/BBMainNavbar.vue";
-// import SecondNavbar from "./layout/SecondNavbar.vue";
-import MainNavbar from "./layout/MainNavbar.vue";
+import Navbar from "./layout/Navbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 
 import Artwork from "./views/Artwork";
@@ -49,10 +46,10 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      name: "home",
+      name: "index",
       components: {
-        default: BrightBlock,
-        header: Navbar1,
+        default: Index,
+        header: Navbar,
         footer: MainFooter
       },
       props: {
@@ -61,16 +58,11 @@ const router = new Router({
       }
     },
     {
-      path: "/brightBlock",
-      name: "brightBlock",
-      components: {
-        default: BrightBlock,
-        header: Navbar1,
-        footer: MainFooter
-      },
+      path: "/login",
+      name: "login",
+      components: { default: Login, header: Navbar, footer: MainFooter },
       props: {
-        header: { colorOnScroll: 400 },
-        footer: { backgroundColor: "black" }
+        header: { colorOnScroll: 400 }
       }
     },
     {
@@ -78,7 +70,7 @@ const router = new Router({
       name: "teamProfile",
       components: {
         default: TeamProfile,
-        header: Navbar1,
+        header: Navbar,
         footer: MainFooter
       },
       props: {
@@ -91,7 +83,7 @@ const router = new Router({
       name: "profile",
       components: {
         default: Profile,
-        header: MainNavbar,
+        header: Navbar,
         footer: MainFooter
       },
       props: {
@@ -100,9 +92,9 @@ const router = new Router({
       }
     },
     {
-      path: "/index",
-      name: "index",
-      components: { default: Index, header: MainNavbar, footer: MainFooter },
+      path: "/home",
+      name: "home",
+      components: { default: Home, header: Navbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
@@ -111,7 +103,7 @@ const router = new Router({
     {
       path: "/landing",
       name: "landing",
-      components: { default: Landing, header: MainNavbar, footer: MainFooter },
+      components: { default: Landing, header: Navbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
@@ -120,7 +112,7 @@ const router = new Router({
     {
       path: "/search",
       name: "search",
-      components: { default: Search, header: Navbar1, footer: MainFooter },
+      components: { default: Search, header: Navbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
@@ -129,18 +121,10 @@ const router = new Router({
     {
       path: "/artworks/:owner/:artworkId",
       name: "artwork",
-      components: { default: Artwork, header: MainNavbar, footer: MainFooter },
+      components: { default: Artwork, header: Navbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
-      }
-    },
-    {
-      path: "/login",
-      name: "login",
-      components: { default: Login, header: MainNavbar, footer: MainFooter },
-      props: {
-        header: { colorOnScroll: 400 }
       }
     },
     {
@@ -148,7 +132,7 @@ const router = new Router({
       name: "myArtworkUpdate",
       components: {
         default: MyArtworkUpdate,
-        header: MainNavbar,
+        header: Navbar,
         footer: MainFooter
       },
       meta: { requiresAuth: true }
@@ -158,7 +142,7 @@ const router = new Router({
       name: "myArtworkUpload",
       components: {
         default: MyArtworkUpload,
-        header: MainNavbar,
+        header: Navbar,
         footer: MainFooter
       },
       meta: { requiresAuth: true }
@@ -168,7 +152,7 @@ const router = new Router({
       name: "my-artworks",
       components: {
         default: MyArtworks,
-        header: MainNavbar,
+        header: Navbar,
         footer: MainFooter
       },
       meta: { requiresAuth: true },
@@ -199,17 +183,17 @@ const router = new Router({
       name: "onlineAuction",
       components: {
         default: OnlineAuction,
-        header: MainNavbar,
+        header: Navbar,
         footer: MainFooter
       }
     },
     {
       path: "/online-auctions",
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
       name: "onlineAuctions",
       components: {
         default: OnlineAuctions,
-        header: MainNavbar,
+        header: Navbar,
         footer: MainFooter
       }
     },
@@ -218,7 +202,7 @@ const router = new Router({
       meta: { requiresAuth: true },
       components: {
         default: MyAuctionManage,
-        header: MainNavbar,
+        header: Navbar,
         footer: MainFooter
       }
     },
@@ -227,7 +211,7 @@ const router = new Router({
       meta: { requiresAuth: true },
       components: {
         default: MyAuctionUpdate,
-        header: MainNavbar,
+        header: Navbar,
         footer: MainFooter
       }
     },
@@ -236,7 +220,7 @@ const router = new Router({
       meta: { requiresAuth: true },
       components: {
         default: MyAuctionUpload,
-        header: MainNavbar,
+        header: Navbar,
         footer: MainFooter
       }
     },
@@ -244,7 +228,7 @@ const router = new Router({
       path: "/my-auctions",
       components: {
         default: MyAuctions,
-        header: MainNavbar,
+        header: Navbar,
         footer: MainFooter
       },
       meta: { requiresAuth: true },
@@ -259,24 +243,17 @@ const router = new Router({
       path: "/admin",
       name: "admin",
       meta: { requiresAuth: true },
-      components: { default: Admin, header: MainNavbar, footer: MainFooter },
+      components: { default: Admin, header: Navbar, footer: MainFooter },
       children: [
         {
-          path: "/search-index-manager",
-          name: "searchIndexManager",
-          component: SearchIndexManager,
-          children: [
-            {
-              path: "/search-index-manager/search-names",
-              name: "searchBuilderTab",
-              component: SearchBuilderTab
-            },
-            {
-              path: "/search-index-manager/search-dapps",
-              name: "searchDappsTab",
-              component: SearchDappsTab
-            }
-          ]
+          path: "/admin/build-index",
+          name: "adminBuildIndex",
+          component: AdminBuildIndex
+        },
+        {
+          path: "/admin/query-index",
+          name: "adminQueryIndex",
+          component: AdminQueryIndex
         },
         {
           path: "/admin/settings",

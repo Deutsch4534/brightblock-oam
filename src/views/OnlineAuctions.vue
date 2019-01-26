@@ -1,7 +1,7 @@
 <template>
 <div class="container">
-  <div class="md-layout">
-    <div class="md-layout-item md-size-50">
+  <div class="row">
+    <div class="col-md-6">
       <md-card>
         <md-card-header>webcast auctions</md-card-header>
         <md-card-content>
@@ -9,7 +9,7 @@
         </md-card-content>
       </md-card>
     </div>
-    <div class="md-layout-item md-size-50">
+    <div class="col-md-6">
       <md-card>
         <md-card-header>sealed auctions</md-card-header>
         <md-card-content>
@@ -18,8 +18,8 @@
       </md-card>
     </div>
   </div>
-  <div class="md-layout">
-    <div class="md-layout-item md-size-50">
+  <div class="row">
+    <div class="col-md-6">
       <md-card>
         <md-card-header>past auctions</md-card-header>
         <md-card-content>

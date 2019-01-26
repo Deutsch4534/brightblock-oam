@@ -1,23 +1,14 @@
 <template>
   <div id="app">
     <router-view name="header"/>
-    <div class="wrapper">
-      <div class="main main-raised">
-        <router-view/>
-      </div>
-    </div>
+    <router-view class="main raised"/>
     <router-view name="footer"/>
   </div>
 </template>
 <script>
-import Leafs from "./views/components/Leafs";
-import Leafless from "./views/components/Leafless";
 
 export default {
-  components: {
-    Leafs,
-    Leafless
-  },
+  components: {},
   bodyClass: "index-page",
   data() {
     return {
@@ -34,7 +25,7 @@ export default {
 </script>
 <style>
 .section-download {
-  .md-button + .md-button {
+  .btn + .btn {
     margin-left: 5px;
   }
 }
@@ -43,5 +34,13 @@ export default {
   .btn-container {
     display: flex;
   }
+}
+
+.raised {
+  border-radius: 10px;
+  position: relative;
+  top: 35px;
+  margin: auto auto;
+  padding: 25px;
 }
 </style>

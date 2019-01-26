@@ -1,5 +1,5 @@
 <template>
-<div class="md-layout">
+<div class="row">
   <last-artwork v-for="(artwork, index) in artworks" :key="index" :artwork="artwork"/>
 </div>
 </template>
