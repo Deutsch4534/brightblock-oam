@@ -1,27 +1,28 @@
 <template>
-<!-- Main navigation -->
+<!-- Main navigation 424f95 -->
 <header>
-<mdb-navbar :color="'primary'" position="top" dark href="#" transparent scrolling>
+<mdb-navbar :color="'stylish'" position="top" dark href="#" transparent scrolling>
   <!-- mdbNavbar brand -->
   <mdb-navbar-brand>
-    <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link>
+    <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
   </mdb-navbar-brand>
   <mdb-navbar-toggler>
-    <mdb-navbar-nav left>
-      <li class="nav-item ripple-parent" @click="scrollToElement(link1 + 'Section', $event)"><router-link to="/" name="sectionUrl(link1 + 'Section')" class="nav-link navbar-link" >{{link1}}</router-link></li>
-      <li class="nav-item ripple-parent" @click="scrollToElement(link2 + 'Section', $event)"><router-link to="/" name="sectionUrl(link2 + 'Section')" class="nav-link navbar-link">{{link2}}</router-link></li>
-      <li class="nav-item ripple-parent" @click="scrollToElement(link3 + 'Section', $event)"><router-link to="/" name="sectionUrl(link3 + 'Section')" class="nav-link navbar-link">{{link3}}</router-link></li>
-      <li class="nav-item ripple-parent" @click="scrollToElement(link4 + 'Section', $event)"><router-link to="/" name="sectionUrl(link4 + 'Section')" class="nav-link navbar-link">{{link4}}</router-link></li>
+    <mdb-navbar-nav mx-auto>
+      <li class="nav-item ripple-parent" @click="scrollToElement('TeamSection', $event)"><router-link to="/" name="sectionUrl('TeamSectionSection')" class="nav-link navbar-link" >Team</router-link></li>
+      <li class="nav-item ripple-parent" @click="scrollToElement('ContactSection', $event)"><router-link to="/" name="sectionUrl('ContactSection')" class="nav-link navbar-link">Contact</router-link></li>
     </mdb-navbar-nav>
     <mdb-navbar-nav right>
-      <auction-links/>
-      <li v-if="!loggedIn" class="nav-item ripple-parent" @click="scrollToElement(link4 + 'Section', $event)"><router-link to="/login" class="nav-link navbar-link"><mdb-icon icon="fingerprint" /> login</router-link></li>
+      <form class="form-inline">
+        <mdb-input label="Search" type="text" class="active-pink active-pink-2 mt-0 mb-3" v-model="query"/>
+        <mdb-btn outline="white" size="sm" class="my-0" type="submit" @click="doSearch">Search</mdb-btn>
+      </form>
+      <li v-if="!loggedIn" class="nav-item ripple-parent"><router-link to="/login" class="nav-link navbar-link"><mdb-icon icon="fingerprint" /> login</router-link></li>
       <account-links v-if="loggedIn"/>
     </mdb-navbar-nav>
   </mdb-navbar-toggler>
 </mdb-navbar>
   <!-- Full Page Intro https://mdbootstrap.com/img/Photos/Others/img%20%2848%29.jpg -->
-  <div class="view jarallax" :style="headerStyle" v-if="homePage">
+  <div class="view jarallax" :style="headerStyle">
     <!-- Mask & flexbox options-->
     <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
       <!-- Content -->
@@ -71,11 +72,13 @@ function resizeThrottler(actualResizeHandler) {
 import { mdbContainer, mdbIcon, mdbRow, mdbCol, mdbNavbar, mdbNavbarToggler, mdbNavbarNav, mdbNavItem, mdbInput, mdbView, mdbMask, mdbBtn, mdbNavbarBrand } from 'mdbvue';
 import AccountLinks from "@/layout/AccountLinks";
 import AuctionLinks from "@/layout/AuctionLinks";
+import artworkSearchService from "@/services/artworkSearchService";
 
 export default {
   name: 'Navbar',
   data() {
     return {
+      query: '',
       link1: "team",
       link2: "mission",
       link3: "contact",
@@ -85,8 +88,7 @@ export default {
       taglink1: '',
       taglink2: '',
       bgImage: null,
-      logo1: require("@/assets/img/T8_Symbol_black.png"),
-      logo: require("@/assets/img/transit8-logo.jpg")
+      logo: require("@/assets/img/logo/T_8_Symbolmark_white.png")
     };
   },
   components: {
@@ -119,8 +121,8 @@ export default {
         "background-position": "center center"
       };
     },
-    homePage() {
-      return this.$route.path === "home";
+    splashPage() {
+      return this.$route.name === "index";
     },
     loggedIn() {
       let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
@@ -157,10 +159,12 @@ export default {
       });
     },
     doSearch() {
-      if (!this.query) {
-        this.query = "*";
+      let qString = this.query;
+      if (!this.query || this.query.length === 0) {
+        qString = "*";
       }
-      this.$router.push("/search?query=" + this.query);
+      artworkSearchService.newQuery(qString);
+      this.$router.push("/search?query=" + qString);
     },
     toggleNavbarMobile() {
       this.NavbarStore.showNavbar = !this.NavbarStore.showNavbar;
@@ -193,6 +197,9 @@ export default {
       let element_id = document.getElementById(element);
       if (element_id) {
         element_id.scrollIntoView({ block: "start", behavior: "smooth" });
+        // setTimeout(() => {
+        //    window.scrollBy(0, -40);
+        //  }, 700);
       }
     },
     logout() {
@@ -216,11 +223,11 @@ export default {
   margin: 0;
 }
 .top-nav-collapse {
-  background-color: #424f95 !important;
+  background-color: #333 !important;
 }
 @media (max-width: 990px){
   .navbar {
-    background-color: #424f95 !important;
+    background-color: #333 !important;
   }
 }
 .view {
@@ -228,7 +235,16 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
-  height: calc(100vh - 60px);
+  height: calc(120vh - 60px);
+}
+.view2 {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  height: calc(15vh - 60px);
+}
+.jarallax2 {
+  min-height: 100px;
 }
 .gradient {
   background: -moz-linear-gradient(45deg, rgba(42, 27, 161, 0.7), rgba(29, 210, 177, 0.7) 100%);

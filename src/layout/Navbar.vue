@@ -1,65 +1,28 @@
 <template>
-<!-- Main navigation -->
+<!-- Main navigation 424f95 -->
 <header>
-<mdb-navbar :color="'primary'" position="top" dark href="#" transparent scrolling>
+<mdb-navbar :color="'stylish'" position="top" dark href="#" scrolling>
   <!-- mdbNavbar brand -->
   <mdb-navbar-brand>
-    <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link>
+    <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
   </mdb-navbar-brand>
   <mdb-navbar-toggler>
     <mdb-navbar-nav mx-auto>
-      <li class="nav-item ripple-parent" @click="scrollToElement(link1 + 'Section', $event)"><router-link to="/" name="sectionUrl(link1 + 'Section')" class="nav-link navbar-link" >{{link1}}</router-link></li>
-      <li class="nav-item ripple-parent" @click="scrollToElement(link2 + 'Section', $event)"><router-link to="/" name="sectionUrl(link2 + 'Section')" class="nav-link navbar-link">{{link2}}</router-link></li>
-      <li class="nav-item ripple-parent" @click="scrollToElement(link3 + 'Section', $event)"><router-link to="/" name="sectionUrl(link3 + 'Section')" class="nav-link navbar-link">{{link3}}</router-link></li>
-      <li class="nav-item ripple-parent" @click="scrollToElement(link4 + 'Section', $event)"><router-link to="/" name="sectionUrl(link4 + 'Section')" class="nav-link navbar-link">{{link4}}</router-link></li>
-      <auction-links/>
       <li class="nav-item ripple-parent"><router-link to="/home" class="nav-link navbar-link">Gallery</router-link></li>
+      <li class="nav-item ripple-parent"><router-link to="/artists" class="nav-link navbar-link">Artists</router-link/></li>
+      <li class="nav-item ripple-parent"><router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link/></li>
+      <auction-links/>
     </mdb-navbar-nav>
     <mdb-navbar-nav right>
       <form class="form-inline">
-        <mdb-input label="Search" type="text" class="active-pink active-pink-2 mt-0 mb-3"/>
-        <mdb-btn outline="success" size="sm" class="my-0" type="submit" @click="doSearch">Search</mdb-btn>
+        <mdb-input label="Search" type="text" class="active-pink active-pink-2 mt-0 mb-3" v-model="query"/>
+        <mdb-btn outline="white" size="sm" class="my-0" type="submit" @click="doSearch">Search</mdb-btn>
       </form>
       <li v-if="!loggedIn" class="nav-item ripple-parent" @click="scrollToElement(link4 + 'Section', $event)"><router-link to="/login" class="nav-link navbar-link"><mdb-icon icon="fingerprint" /> login</router-link></li>
       <account-links v-if="loggedIn"/>
     </mdb-navbar-nav>
   </mdb-navbar-toggler>
 </mdb-navbar>
-  <div class="view2 jarallax2" :style="headerStyle" v-if="!homePage">
-    <!-- Mask & flexbox options-->
-    <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-    </div>
-  </div>
-  <!-- Full Page Intro https://mdbootstrap.com/img/Photos/Others/img%20%2848%29.jpg -->
-  <div class="view jarallax" :style="headerStyle" v-else>
-    <!-- Mask & flexbox options-->
-    <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-      <!-- Content -->
-      <div class="container">
-        <!--Grid row-->
-        <div class="row">
-          <!--Grid column-->
-          <div class="col-md-12 mb-4 white-text text-center">
-            <h1 class="h1-reponsive white-text text-uppercase font-weight-bold mb-0 pt-md-5 pt-5 wow fadeInDown"
-              data-wow-delay="0.3s"><strong>{{title}}</strong></h1>
-            <hr class="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s">
-            <h5 class="text-uppercase mb-4 white-text wow fadeInDown" data-wow-delay="0.4s"><strong v-html="tagline"></strong></h5>
-            <mdb-btn outline="white" v-if="taglink1.length > 0" v-html="taglink1"></mdb-btn>
-            <mdb-btn outline="white" v-if="taglink2.length > 0" v-html="taglink2"></mdb-btn>
-            <!--
-            <a mdbBtn color="white" outline="true" mdbWavesEffect class="wow fadeInDown" data-wow-delay="0.4s">portfolio</a>
-            <a mdbBtn color="white" outline="true" mdbWavesEffect class="wow fadeInDown" data-wow-delay="0.4s">About me</a>
-            -->
-          </div>
-          <!--Grid column-->
-        </div>
-        <!--Grid row-->
-      </div>
-      <!-- Content -->
-    </div>
-    <!-- Mask & flexbox options-->
-  </div>
-  <!-- Full Page Intro -->
 </header>
 <!-- Main navigation -->
 </template>
@@ -81,6 +44,7 @@ function resizeThrottler(actualResizeHandler) {
 import { mdbContainer, mdbIcon, mdbRow, mdbCol, mdbNavbar, mdbNavbarToggler, mdbNavbarNav, mdbNavItem, mdbInput, mdbView, mdbMask, mdbBtn, mdbNavbarBrand } from 'mdbvue';
 import AccountLinks from "@/layout/AccountLinks";
 import AuctionLinks from "@/layout/AuctionLinks";
+import artworkSearchService from "@/services/artworkSearchService";
 
 export default {
   name: 'Navbar',
@@ -96,8 +60,7 @@ export default {
       taglink1: '',
       taglink2: '',
       bgImage: null,
-      logo1: require("@/assets/img/T8_Symbol_black.png"),
-      logo: require("@/assets/img/transit8-logo.jpg")
+      logo: require("@/assets/img/logo/T_8_Symbolmark_white.png")
     };
   },
   components: {
@@ -129,9 +92,6 @@ export default {
         "background-size": "cover",
         "background-position": "center center"
       };
-    },
-    homePage() {
-      return this.$route.name === "index";
     },
     loggedIn() {
       let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
@@ -168,18 +128,12 @@ export default {
       });
     },
     doSearch() {
+      let qString = this.query;
       if (!this.query || this.query.length === 0) {
-        this.query = "*";
+        qString = "*";
       }
-      if (this.$route.name === "search") {
-        this.$store.dispatch(
-          "artworkSearchStore/fetchSearchResults",
-          { term: "title", query: this.queryString },
-          { root: true }
-        );
-      } else {
-        this.$router.push("/search?query=" + this.query);
-      }
+      artworkSearchService.newQuery(qString);
+      this.$router.push("/search?query=" + qString);
     },
     toggleNavbarMobile() {
       this.NavbarStore.showNavbar = !this.NavbarStore.showNavbar;
@@ -234,42 +188,20 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+header {
+  min-height: 80px;
+}
 .navbar .md-form {
   margin: 0;
 }
 .top-nav-collapse {
-  background-color: #424f95 !important;
+  background-color: #333 !important;
 }
 @media (max-width: 990px){
   .navbar {
-    background-color: #424f95 !important;
+    background-color: #333 !important;
   }
 }
-.view {
-  background-image: url('https://mdbootstrap.com/img/Photos/Others/architecture.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  height: calc(100vh - 60px);
-}
-.view2 {
-  background-image: url('https://mdbootstrap.com/img/Photos/Others/architecture.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  height: calc(15vh - 60px);
-}
 .jarallax2 {
-  min-height: 100px;
-}
-.gradient {
-  background: -moz-linear-gradient(45deg, rgba(42, 27, 161, 0.7), rgba(29, 210, 177, 0.7) 100%);
-  background: -webkit-linear-gradient(45deg, rgba(42, 27, 161, 0.7), rgba(29, 210, 177, 0.7) 100%);
-  background: -webkit-gradient(linear, 45deg, from(rgba(42, 27, 161, 0.7)), to(rgba(29, 210, 177, 0.7)));
-  background: -o-linear-gradient(45deg, rgba(42, 27, 161, 0.7), rgba(29, 210, 177, 0.7) 100%);
-  background: linear-gradient(45deg, rgba(42, 27, 161, 0.7), rgba(29, 210, 177, 0.7) 100%);
-}
-h6 {
-  line-height: 1.7;
 }
 </style>

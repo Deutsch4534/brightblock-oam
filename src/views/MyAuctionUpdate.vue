@@ -1,9 +1,6 @@
 <template>
 <div class="container">
-  <div class="row">
-    <h1>Update Auction</h1>
-    <my-auction-upload-form :auctionId="auctionId" :mode="'update'"/>
-  </div>
+  <my-auction-upload-form :auctionId="auctionId" :mode="'update'"/>
 </div>
 </template>
 

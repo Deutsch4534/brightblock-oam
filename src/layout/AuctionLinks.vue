@@ -1,6 +1,6 @@
 <template>
   <mdb-dropdown tag="li" class="nav-item">
-    <mdb-dropdown-toggle tag="a" class="dropright" navLink color="" slot="toggle" waves-fixed>Artwork</mdb-dropdown-toggle>
+    <mdb-dropdown-toggle tag="a" class="dropright" navLink color="" slot="toggle" waves-fixed>My Portfolio</mdb-dropdown-toggle>
     <mdb-dropdown-menu class="dropdown-menu-left">
       <mdb-dropdown-item v-if="loggedIn">
         <router-link
@@ -14,13 +14,6 @@
           class="dropdown-item"
           to="/my-artwork/upload"
           >Upload Artwork</router-link
-        >
-      </mdb-dropdown-item>
-      <mdb-dropdown-item>
-        <router-link
-          class="dropdown-item"
-          to="/online-auctions"
-          >Auctions</router-link
         >
       </mdb-dropdown-item>
       <mdb-dropdown-item v-if="loggedIn">

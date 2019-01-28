@@ -41,6 +41,5 @@ export default {
   position: relative;
   top: 35px;
   margin: auto auto;
-  padding: 25px;
 }
 </style>

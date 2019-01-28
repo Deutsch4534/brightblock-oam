@@ -1,7 +1,7 @@
 <template>
 
 <!-- Footer -->
-<mdb-footer color="blue-grey" class="font-small pt-4">
+<mdb-footer color="blue-grey" class="font-small pt-4" sticky>
   <mdb-container class="text-left">
     <mdb-row>
       <mdb-col sm="6">

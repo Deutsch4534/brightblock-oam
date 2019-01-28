@@ -1,5 +1,5 @@
 <template>
-<footer class="page-footer fixed-bottom">
+<div class="header">
   <div class="container">
     <div class="row">
       <div class="col-md-4">
@@ -18,13 +18,18 @@
       </div>
     </div>
   </div>
-</footer>
+</div>
 </template>
 
 <script>
+import { mdbIcon } from 'mdbvue';
+
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "BuyArtworkForm",
+  components: {
+    mdbIcon
+  },
   props: {
     purchaseState: {},
     artwork: {

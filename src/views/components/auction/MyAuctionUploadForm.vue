@@ -10,20 +10,22 @@
         <label class="custom-control-label" for="customControlValidation2">Webcast Auction</label>
       </div>
       <div class="col-md-2 custom-control custom-radio mb-0">
-        <input type="radio" class="custom-control-input" id="customControlValidation3" name="auction.auctionType" v-model="auction.auctionType" value="sealed" required>
-        <label class="custom-control-label" for="customControlValidation3">Sealed Bid Auction</label>
-      </div>
-      <div class="col-md-2 custom-control custom-radio mb-0">
         <input type="radio" class="custom-control-input" id="customControlValidation1" name="auction.auctionType" v-model="auction.auctionType" value="timed" required>
         <label class="custom-control-label" for="customControlValidation1">Timed Auction</label>
+      </div>
+      <!--
+      <div class="col-md-2 custom-control custom-radio mb-0">
+        <input type="radio" class="custom-control-input" id="customControlValidation3" name="auction.auctionType" v-model="auction.auctionType" value="sealed" required>
+        <label class="custom-control-label" for="customControlValidation3">Sealed Bid Auction</label>
       </div>
       <div class="col-md-2 custom-control custom-radio mb-3">
         <input type="radio" class="custom-control-input" id="customControlValidation0" name="auction.auctionType" v-model="auction.auctionType" value="penny" required>
         <label class="custom-control-label" for="customControlValidation0">Penny Auction</label>
       </div>
+      -->
     </div>
-    <div class="row">
-      <div class="col-md-2 custom-control custom-radio mb-0">
+    <div class="row mt-3">
+      <div class="col-md-12">
         <p v-if="errors.length" :key="errors.length">
           <b>Please correct the following error(s):</b>
           <ul>
@@ -45,7 +47,7 @@
     <div class="form-row">
       <div class="col-md-12 mb-3">
         <label for="title">Title</label>
-        <input type="text" class="form-control" id="title" placeholder="Title" v-model="auction.title" required>
+        <input type="text" class="form-control" id="title" placeholder="Title of the auction" v-model="auction.title" required>
         <div class="invalid-feedback">
           Please enter a title!
         </div>
@@ -54,7 +56,7 @@
     <div class="form-row">
       <div class="col-md-12 mb-3">
         <label for="description">description</label>
-        <textarea type="text" class="form-control" id="description" placeholder="Description" v-model="auction.description" required></textarea>
+        <textarea type="text" class="form-control" id="description" placeholder="Description of your auction" v-model="auction.description" required></textarea>
         <div class="invalid-feedback">
           Please enter a description!
         </div>
@@ -64,35 +66,37 @@
     <div class="form-row">
       <div class="col-md-12 mb-3">
         <label for="keywords">Keywords or tags</label>
-        <textarea type="text" class="form-control" id="keywords" placeholder="Description" v-model="auction.keywords" required></textarea>
+        <textarea type="text" class="form-control" id="keywords" placeholder="Enter keywords / tags separated by commas" v-model="auction.keywords" required></textarea>
         <div class="invalid-feedback">
           Please enter some keywords!
         </div>
       </div>
     </div>
 
-    <div class="row ">
-      <div class="col-md-2 custom-control custom-radio mb-0">
-        <input type="radio" class="custom-control-input" id="Public" name="auction.privacy" v-model="auction.privacy" value="public" required>
-        <label class="custom-control-label" for="Public">Public</label>
+    <div class="row my-3 ml-5">
+      <div class="col-md-4 custom-control">
+        <input type="radio" class="custom-control-input" id="custom-public" v-model="auction.privacy" value="public">
+        <label class="custom-control-label mr-5" for="custom-public">Public</label>
       </div>
-      <div class="col-md-2 custom-control custom-radio mb-0">
-        <input type="radio" class="custom-control-input" id="Private" name="auction.privacy" v-model="auction.privacy" value="private" required>
-        <label class="custom-control-label" for="Private">Private</label>
+      <div class="col-md-4 custom-control">
+        <input type="radio" class="custom-control-input" id="custom-private" v-model="auction.privacy" value="private">
+        <label class="custom-control-label" for="custom-private">Private</label>
       </div>
     </div>
 
-    <mdb-row>
-      <mdb-col col="6">
-        <mdb-time-picker
-          :id="'timePickerTwo'"
-          :placeholder="'Select your time'"
-          :label="'format: 24h'"
-          :hoursFormat="24"
-          @getValue="getTimePickerValue"
-        />
-      </mdb-col>
-    </mdb-row>
+    <div class="form-group">
+      <datetime type="datetime" v-model="startDate" input-id="startDate">
+        <label for="startDate" slot="before">Bidding Starts&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        <input id="startDate" class="form-control">
+      </datetime>
+    </div>
+
+    <div class="form-group" v-if="auction.auctionType === 'timed'">
+      <datetime type="datetime" v-model="endDate" input-id="endDate">
+        <label for="endDate" slot="before">Bidding Ends&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        <input id="endDate" class="form-control">
+      </datetime>
+    </div>
 
     <mdb-btn type="submit">Submit</mdb-btn>
   </form>
@@ -102,8 +106,8 @@
 <script>
 import moment from "moment";
 import { mdbBtn } from "mdbvue";
-import { mdbTimePicker, mdbContainer, mdbRow, mdbCol } from 'mdbvue';
-import { mdbDatePicker } from 'mdbvue';
+import { mdbContainer, mdbRow, mdbCol } from 'mdbvue';
+import { Datetime } from 'vue-datetime'
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -112,61 +116,28 @@ export default {
   components: {
     mdbContainer,
     mdbBtn,
-    mdbTimePicker,
     mdbContainer,
     mdbRow,
     mdbCol,
-    mdbDatePicker
+    datetime: Datetime
   },
-  data() {
+  data () {
     return {
+      isModalActive: false,
       errors: [],
-      sending: false,
-      showAlert: false,
-      alertMessage: null,
-      formTitle: "Upload Auction",
+      formTitle: "Auction Details",
       startDate: null,
       endDate: null,
       auction: {
-        title: "",
-        description: "",
-        keywords: "",
-        auctioneer: "",
+        title: null,
+        description: null,
+        keywords: null,
+        auctioneer: '',
+        privacy: 'public',
         auctionType: "webcast",
-        privacy: "public",
-        sellingList: [],
-        sealedAddress: null
+        sellingList: []
       },
-      startDate: {
-        date: ''
-      },
-      option: {
-        type: 'day',
-        week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-        month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        format: 'YYYY-MM-DD',
-        placeholder: 'Please choose a date',
-        inputStyle: {
-          'display': 'inline-block',
-          'padding': '6px',
-          'line-height': '22px',
-          'font-size': '16px',
-          'border': '2px solid #fff',
-          'box-shadow': '0 1px 3px 0 rgba(0, 0, 0, 0.2)',
-          'border-radius': '2px',
-          'color': '#5F5F5F'
-        },
-        color: {
-          header: 'primary',
-          headerText: 'white',
-          checkedDay: 'primary'
-        },
-        buttons: {
-          ok: 'Ok',
-          cancel: 'Cancel'
-        }
-      }
-    };
+    }
   },
   mounted() {
     let auction = this.$store.getters["myAuctionsStore/myAuction"](
@@ -193,44 +164,36 @@ export default {
   },
   methods: {
     upload: function() {
-      if (this.validate()) {
-        let profile = this.$store.getters["myAccountStore/getMyProfile"];
-        this.auction.auctioneer = profile.username;
-        this.auction.administrator = profile.username;
-        this.auction.startDate = moment(this.startDate).valueOf();
-        this.auction.endDate = moment(this.endDate).valueOf();
-        if (!this.auction.auctionType) {
-          this.auction.auctionType = "webcast";
-        }
-        if (!this.auction.messages) {
-          this.auction.messages = [];
-        }
-        if (this.mode === "update") {
-          this.auction.auctionId = this.auctionId;
-          this.$store
-            .dispatch("myAuctionsStore/updateAuction", this.auction)
-            .then(auction => {
-              this.auction = auction;
-              this.closeModal();
-              this.$router.push("/my-auctions");
-            });
-        } else {
-          this.auction.auctionId = moment({}).valueOf();
-          this.$store
-            .dispatch("myAuctionsStore/uploadAuction", this.auction)
-            .then(auction => {
-              this.auction = auction;
-              this.closeModal();
-              this.$router.push("/my-auctions");
-            });
-        }
+      let profile = this.$store.getters["myAccountStore/getMyProfile"];
+      this.auction.auctioneer = profile.username;
+      this.auction.administrator = profile.username;
+      this.auction.startDate = moment(this.startDate).valueOf();
+      this.auction.endDate = moment(this.endDate).valueOf();
+      if (!this.auction.auctionType) {
+        this.auction.auctionType = "webcast";
       }
-    },
-    getPickerValue(value) {
-      console.log(value);
-    },
-    getTimePickerValue(value) {
-      console.log(value);
+      if (!this.auction.messages) {
+        this.auction.messages = [];
+      }
+      if (this.mode === "update") {
+        this.auction.auctionId = this.auctionId;
+        this.$store
+          .dispatch("myAuctionsStore/updateAuction", this.auction)
+          .then(auction => {
+            this.auction = auction;
+            this.closeModal();
+            this.$router.push("/my-auctions");
+          });
+      } else {
+        this.auction.auctionId = moment({}).valueOf();
+        this.$store
+          .dispatch("myAuctionsStore/uploadAuction", this.auction)
+          .then(auction => {
+            this.auction = auction;
+            this.closeModal();
+            this.$router.push("/my-auctions");
+          });
+      }
     },
     closeModal() {},
     checkForm(event) {
@@ -239,19 +202,6 @@ export default {
       if (this.auction.auctionType === "sealed") {
         this.showSealedError = true;
       }
-    },
-    validateAuction() {
-      this.$v.$touch();
-      this.validate();
-      if (!this.$v.$invalid && this.errors.length === 0) {
-        this.upload();
-      } else {
-        this.showAlert = true;
-        console.log("errros", this.$v);
-        this.alertMessage = "Please fix the form errors indicated in red.. ";
-      }
-    },
-    validate: function() {
       this.errors = [];
       if (!this.auction.title) {
         this.errors.push("title required.");
@@ -279,7 +229,7 @@ export default {
       if (this.errors.length > 0) {
         return false;
       } else {
-        return true;
+        this.upload();
       }
     }
   }

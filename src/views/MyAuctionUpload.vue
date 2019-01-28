@@ -1,9 +1,6 @@
 <template>
-<div class="container wide">
-  <div class="row">
-    <h1>Upload Auction</h1>
-    <my-auction-upload-form :mode="'upload'"/>
-  </div>
+<div class="container">
+  <my-auction-upload-form :mode="'upload'"/>
 </div>
 </template>
 

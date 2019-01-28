@@ -12,9 +12,9 @@ import linkResolver from "./prismic/linkResolver";
 import { CONSTANTS } from "@/storage/constants";
 // import notify from "@/services/notify";
 import ethereumService from "@/services/ethereumService";
-// import Datetime from "vue-datetime";
+import Datetime from "vue-datetime";
 // You need a specific loader for CSS files
-// import "vue-datetime/dist/vue-datetime.css";
+import "vue-datetime/dist/vue-datetime.css";
 
 // require('dotenv').config();
 
@@ -22,7 +22,7 @@ Vue.config.productionTip = false;
 
 Vue.use(Vuex);
 Vue.use(Notifications);
-// Vue.use(Datetime);
+Vue.use(Datetime);
 Vue.use(PrismicVue, {
   endpoint: "https://transit8.prismic.io/api/v2",
   linkResolver

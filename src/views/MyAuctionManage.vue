@@ -53,7 +53,6 @@
 import WatchersStream from "./components/rtc/WatchersStream";
 import MessageStream from "./components/rtc/MessageStream";
 import VideoStream from "./components/rtc/VideoStream";
-import MySingleAuction from "./components/auction/MySingleAuction";
 import MySingleAuctionItem from "./components/auction/MySingleAuctionItem";
 import HammerItem from "./components/auction/HammerItem";
 
@@ -69,7 +68,6 @@ export default {
   components: {
     WatchersStream,
     HammerItem,
-    MySingleAuction,
     MySingleAuctionItem,
     VideoStream,
     MessageStream

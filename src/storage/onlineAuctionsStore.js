@@ -88,6 +88,14 @@ const onlineAuctionsStore = {
       );
       return auctions;
     },
+    timedAuctions: state => {
+      // let serverTime = store.getters["serverTime"];
+      let now = new Date().getTime();
+      let auctions = state.onlineAuctions.filter(
+        auction => auction.startDate > now && auction.auctionType === "timed"
+      );
+      return auctions;
+    },
     sealedAuctions: state => {
       let auctions = state.onlineAuctions.filter(
         auction => auction.auctionType === "sealed"

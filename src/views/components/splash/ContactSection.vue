@@ -1,11 +1,21 @@
 <template>
-<mdb-container id="ContactSection">
+<mdb-container fluid id="ContactSection" class="p-5 text-white">
     <section class="my-5 mx-5 px-5">
-      <h2 class="h1-responsive font-weight-bold text-center my-5">{{title}}</h2>
-      <p class="text-center w-responsive mx-auto pb-5">{{description}}</p>
+      <h2 class="h1-responsive font-weight-bold mt-5">{{title}}</h2>
       <mdb-row>
-        <mdb-col md="9" class="md-0 mb-5">
-          <form>
+        <mdb-col md="6" class="md-0 p-5">
+          <div class="col-md-12">
+            <router-link to="/" class="navbar-brand"><img :src="logo" height="100px" alt="t8 logo"></router-link>
+          </div>
+          <div class="col-md-12">
+            <h5 class="my-4">Contact Info</h5>
+            <p>Brighton, UK</p>
+            <p>Phone: +49 6579 3 456</p>
+            <p>Email: contact@transit8.com</p>
+          </div>
+        </mdb-col>
+        <mdb-col md="6" class="text-white">
+          <form class="text-white">
             <mdb-row>
               <mdb-col md="6">
                 <div class="md-form mb-0">
@@ -32,26 +42,10 @@
                 </div>
               </mdb-col>
             </mdb-row>
+            <div class="text-center text-md-left">
+              <span size="md" @click="submit">SUBMIT</span>
+            </div>
           </form>
-          <div class="text-center text-md-left">
-            <mdb-btn color="primary" size="md">Send</mdb-btn>
-          </div>
-        </mdb-col>
-        <mdb-col md="3" class="text-center">
-          <ul class="list-unstyled mb-0">
-            <li>
-              <mdb-icon icon="map-marker" size="2x" class="blue-text"/>
-              <p><a href="https://goo.gl/maps/Riqykau1J1x">Brighton, BN1 1AL</a></p>
-            </li>
-            <li>
-              <mdb-icon icon="phone" size="2x" class="blue-text mt-4"/>
-              <p>...</p>
-            </li>
-            <li>
-              <mdb-icon icon="envelope" size="2x" class="blue-text mt-4"/>
-              <p>contact@example.com</p>
-            </li>
-          </ul>
         </mdb-col>
       </mdb-row>
     </section>
@@ -83,7 +77,8 @@ export default {
       message: "",
       description: "",
       fields: [],
-      buttonText: null
+      buttonText: null,
+      logo: require("@/assets/img/logo/T_8_Symbolmark_white.png")
     };
   },
   created() {
@@ -96,10 +91,17 @@ export default {
         this.description = document.data.description[0].text;
         this.form = document.data.form[0].text;
       });
+    },
+    submit() {
+      console.log("Code to send message needed here.. " + this.message);
+      // send the message
     }
   }
 };
 </script>
 
 <style scoped>
+#ContactSection {
+  background-color: #5400E8;
+}
 </style>

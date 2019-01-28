@@ -1,5 +1,5 @@
 <template>
-<figure class="figure">
+<figure class="figure mr-4">
   <router-link :to="artworkUrl">
     <img :src="artwork.image" alt="artwork.title" class="figure-img img-fluid z-depth-1" style="width: 400px">
   </router-link>

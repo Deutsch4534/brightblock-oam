@@ -8,6 +8,34 @@ import { getFile } from "blockstack";
  *  The service is a client to the brightblock sever side grpc client.
  **/
 const artworkSearchService = {
+  newQuery(queryString) {
+    store.commit("artworkSearchStore/clearSearchResults");
+    searchIndexService
+      .searchDappsIndex(
+        location.hostname,
+        "artwork",
+        "title",
+        queryString
+      )
+      .then(searchResults => {
+        searchResults.forEach(function(searchResult) {
+          artworkSearchService.userArtwork(
+            Number(searchResult.id),
+            searchResult.owner,
+            function(artwork) {
+              store.commit("artworkSearchStore/addSearchResult", artwork);
+            },
+            function(error) {
+              console.log("Error fetching recent artworks: ", error);
+            }
+          );
+        });
+      })
+      .catch(e => {
+        console.log("Unable to contact search index.", e);
+      });
+  },
+
   findArtworks: function(query, success, failure) {
     let domain = location.hostname;
     searchIndexService

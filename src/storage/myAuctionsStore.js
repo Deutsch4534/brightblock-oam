@@ -25,6 +25,14 @@ const myAuctionsStore = {
         moment(auction.startDate).isBefore(now)
       );
     },
+    myAuctionsByType: state => atype => {
+      // let serverTime = store.getters["serverTime"];
+      let now = new Date().getTime();
+      let auctions = state.onlineAuctions.filter(
+        auction => auction.startDate > now && auction.auctionType === atype
+      );
+      return auctions;
+    },
     myAuctionsFuture: state => {
       let now = moment({});
       return state.myAuctions.filter(auction =>

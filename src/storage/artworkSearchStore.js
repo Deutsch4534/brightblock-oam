@@ -1,4 +1,3 @@
-// artworkSearchStore.js
 import artworkSearchService from "@/services/artworkSearchService";
 import _ from "lodash";
 import utils from "../services/utils";
@@ -15,6 +14,9 @@ const artworkSearchStore = {
   getters: {
     getArtworks: state => {
       return state.artworks;
+    },
+    getQuery: state => {
+      return state.query;
     },
     getSearchResults: state => {
       return state.searchResults;
@@ -45,7 +47,7 @@ const artworkSearchStore = {
     getArtistsPage: state => {
       return state.artists;
     },
-    getHomePageArtworks: (state, getters) => {
+    homePageArtworks: (state, getters) => {
       let registered = getters.getRegisteredArtworks;
       return registered.slice(0, 6);
     },

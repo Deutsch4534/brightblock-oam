@@ -1,44 +1,38 @@
 <template>
-<div class="container">
-  <div class="row">
-    <div class="col-md-6">
-      <md-card>
-        <md-card-header>webcast auctions</md-card-header>
-        <md-card-content>
-          <single-auction v-for="(auction, index) of webcastAuctions" :key="index" :auction="auction"/>
-        </md-card-content>
-      </md-card>
-    </div>
-    <div class="col-md-6">
-      <md-card>
-        <md-card-header>sealed auctions</md-card-header>
-        <md-card-content>
-          <single-auction v-for="(auction, index) of sealedAuctions" :key="index" :auction="auction"/>
-        </md-card-content>
-      </md-card>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      <md-card>
-        <md-card-header>past auctions</md-card-header>
-        <md-card-content>
-          <single-auction v-for="auction of pastAuctions" :key="auction.auctionId" :auction="auction"/>
-        </md-card-content>
-      </md-card>
-    </div>
-  </div>
-</div>
+<mdb-container>
+  <mdb-row v-if="auctionsSize > 0">
+    <div class="col-md-12"><h2>Auctions</h2></div>
+    <single-auction v-for="(auction, index) of onlineAuctions" :key="index" :auction="auction"/>
+  </mdb-row>
+  <hr/>
+  <mdb-row v-if="auctionsArchiveSize > 0">
+  <div class="col-md-12"><h2>Archives</h2></div>
+    <single-auction v-for="(auction, index) of pastAuctions" :key="index" :auction="auction" :atype="'archive'"/>
+  </mdb-row>
+</mdb-container>
+
 </template>
 
 <script>
 import SingleAuction from "./components/auction/SingleAuction";
+import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
+import { mdbContainer, mdbRow } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "OnlineAuctions",
   bodyClass: "index-page",
-  components: { SingleAuction },
+  components: {
+    mdbContainer,
+    mdbRow,
+    mdbCard,
+    mdbCardImage,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardText,
+    mdbBtn,
+    SingleAuction
+  },
   data() {
     return {};
   },
@@ -52,11 +46,11 @@ export default {
     auctionsSize() {
       return this.$store.getters["onlineAuctionsStore/onlineAuctions"].length;
     },
-    webcastAuctions() {
-      return this.$store.getters["onlineAuctionsStore/webcastAuctions"];
+    auctionsArchiveSize() {
+      return this.$store.getters["onlineAuctionsStore/pastAuctions"].length;
     },
-    sealedAuctions() {
-      return this.$store.getters["onlineAuctionsStore/sealedAuctions"];
+    onlineAuctions() {
+      return this.$store.getters["onlineAuctionsStore/onlineAuctions"];
     },
     pastAuctions() {
       return this.$store.getters["onlineAuctionsStore/pastAuctions"];

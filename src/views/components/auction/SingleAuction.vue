@@ -1,21 +1,34 @@
 <template>
-<div class="row">
-  <div class="col-md-12  md-xsmall-size-100">
-    <h3><router-link :to="auctionUrl">{{auction.title}}</router-link></h3>
-    <p>{{auction.description}}</p>
-    <p>{{countdown}}</p>
-  </div>
+<div class="col-md-4">
+<mdb-card class="mb-3">
+  <mdb-card-image :src="require('@/assets/img/missing/auction4.jpg')" alt="Auction Logo"></mdb-card-image>
+  <mdb-card-body>
+    <mdb-card-title>{{auction.title}}</mdb-card-title>
+    <mdb-card-text>{{auction.description}}</mdb-card-text>
+    <mdb-card-text>{{countdown}}</mdb-card-text>
+    <router-link v-if="canJoin" :to="onlineAuctionUrl"><mdb-btn color="primary">Join</mdb-btn></router-link>
+    <router-link v-if="isAdministrator" :to="manageUrl"><mdb-btn color="primary">Manage</mdb-btn></router-link>
+  </mdb-card-body>
+</mdb-card>
 </div>
 </template>
 
 <script>
 import utils from "@/services/utils";
 import moment from "moment";
+import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "SingleAuction",
-  components: {},
+  components: {
+    mdbCard,
+    mdbCardImage,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardText,
+    mdbBtn,
+  },
   props: {
     auction: {
       type: Object,
@@ -23,6 +36,8 @@ export default {
         return {};
       }
     },
+    atype: null,
+    bgImage: require("@/assets/img/missing/auction4.jpg"),
     future: false
   },
   methods: {
@@ -31,10 +46,20 @@ export default {
     }
   },
   computed: {
-    auctionUrl() {
+    onlineAuctionUrl() {
       return `/online-auction/${this.auction.administrator}/${
         this.auction.auctionId
       }`;
+    },
+    manageUrl() {
+      return `/my-auctions/manage/${this.auction.auctionId}`;
+    },
+    canJoin() {
+      return this.atype !== "archive";
+    },
+    isAdministrator() {
+      let userProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      return this.auction.administrator === userProfile.username;
     },
     countdown() {
       let serverTime = this.$store.getters["serverTime"];

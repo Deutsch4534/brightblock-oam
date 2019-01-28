@@ -2,7 +2,7 @@
 <mdb-jumbotron class="mb-0 text-center hoverable p-4">
   <mdb-row>
     <mdb-col md="4" offsetMd="1" class="m-3">
-      <mdb-view :src="artwork.image"  :alt="artwork.title">
+      <mdb-view :src="artwork.image" :alt="artwork.title">
         <a><mdb-mask waves overlay="white-slight"/></a>
       </mdb-view>
     </mdb-col>
@@ -14,10 +14,27 @@
       <p class="font-weight-normal">{{artwork.description}}</p>
       <p class="font-weight-normal">by <a><strong>{{artist.name}}</strong></a>, 19/08/2016</p>
       <p class="keywords">Keywords ︱ {{aboutArtwork.keywords}}</p>
-      <buy-artwork-form v-if="isRegistered" :purchaseState="purchaseState" :artwork="artwork" @buy="buyArtwork()"/>
-      <p v-else>Artwork not registered on blockchain</p>
+      <mdb-btn tag="a" gradient="purple" rounded class="mb-4">Button</mdb-btn>
+      <buy-artwork-form v-sticky="{ zIndex: 12, stickyTop: 50 }" :purchaseState="purchaseState" :artwork="artwork" @buy="buyArtwork()"/>
     </mdb-col>
   </mdb-row>
+</mdb-jumbotron>
+
+<mdb-jumbotron class="mb-0 text-center">
+  <mdb-card-title class="pb-2 h4"><strong>{{artwork.title}}</strong></mdb-card-title>
+  <mdb-view class="rounded-top" :src="artwork.image" :alt="artwork.title">
+    <a><mdb-mask waves overlay="white-slight"/></a>
+  </mdb-view>
+  <mdb-card-body class="text-center">
+    <h3 class="card-title h3 my-4"><strong></strong></h3>
+    <p class="card-text py-2">{{artwork.description}}</p>
+    <p>
+      By: {{artist.name}}<br />
+    </p>
+    <p class="keywords">Keywords ︱ {{aboutArtwork.keywords}}</p>
+    <mdb-btn tag="a" gradient="purple" rounded class="mb-4">Button</mdb-btn>
+    <buy-artwork-form v-sticky="{ zIndex: 12, stickyTop: 50 }" :purchaseState="purchaseState" :artwork="artwork" @buy="buyArtwork()"/>
+  </mdb-card-body>
 </mdb-jumbotron>
 </template>
 
@@ -28,8 +45,8 @@ import ethereumService from "@/services/ethereumService";
 import notify from "@/services/notify";
 import moneyUtils from "@/services/moneyUtils";
 import { Sticky } from 'mdbvue';
-import { mdbIcon, mdbMask, mdbView, mdbJumbotron, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
-import { mdbContainer, mdbCol, mdbRow } from 'mdbvue';
+import { mdbMask, mdbView, mdbJumbotron, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
+import { mdbContainer, mdbRow } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -43,8 +60,6 @@ export default {
     AboutArtwork,
     mdbContainer,
     mdbRow,
-    mdbCol,
-    mdbIcon,
     mdbMask,
     mdbCard,
     mdbCardImage,
@@ -79,15 +94,19 @@ export default {
       })
       .then(artwork => {
         this.artwork = artwork;
-        if (artwork) {
-          let bcdata = artwork.bcitem;
-          if (bcdata && bcdata.itemIndex > -1) {
-            // check for redirect to auctions...
-            if (this.artwork.saleData.auctionId) {
-              this.$router.push(
-                "/online-auction/" + artwork.owner + "/" + artwork.saleData.auctionId
-              );
-            }
+        if (
+          this.artwork &&
+          this.artwork.bcitem &&
+          this.artwork.bcitem.itemIndex > -1
+        ) {
+          // check for redirect to auctions...
+          if (this.artwork.saleData.auctionId) {
+            this.$router.push(
+              "/online-auction/" +
+                this.artwork.owner +
+                "/" +
+                this.artwork.saleData.auctionId
+            );
           }
         }
       });
@@ -132,14 +151,6 @@ export default {
         canBuy: username && forSale && priceSet && ownedBySomeElse
       };
       return purchaseState;
-    },
-    isRegistered() {
-      let artwork = this.artwork;
-      try {
-        return artwork.bcitem && artwork.bcitem.itemId && artwork.bcitem.itemId > 0;
-      } catch (e) {
-        return false;
-      }
     },
     artworks() {
       let artwork = this.artwork;
@@ -221,8 +232,3 @@ export default {
   }
 };
 </script>
-<style>
-.view img {
-  width: 100%;
-}
-</style>

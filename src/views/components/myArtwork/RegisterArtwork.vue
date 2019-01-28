@@ -1,5 +1,5 @@
 <template>
-<mdb-modal size="lg" v-if="showModal" @close="closeModal">
+<mdb-modal size="lg" @close="closeModal">
     <mdb-modal-header>
         <mdb-modal-title>Register Artwork</mdb-modal-title>
     </mdb-modal-header>
@@ -39,7 +39,6 @@ export default {
   data() {
     return {
       message: null,
-      showModal: true,
       artworkId: null,
       from: "/my-artworks"
     };

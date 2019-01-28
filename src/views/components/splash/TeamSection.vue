@@ -4,7 +4,7 @@
       <h2 class="h1-responsive font-weight-bold my-5">{{title}}</h2>
       <p class="grey-text w-responsive mx-auto mb-5">{{description}}</p>
       <mdb-row>
-        <mdb-col lg="6" md="6"  class="mx-auto mb-lg-0 mb-5 pb-5" v-for="(profile, index) in profiles" :key="index">
+        <mdb-col class="col-md-4 mx-auto mb-lg-0 mb-5 pb-5" v-for="(profile, index) in profiles" :key="index">
           <router-link :to="profileUrl(profile)"><mdb-avatar tag="img" :src="profile.data.avatar.url" height="120px" alt="Thumbnail Image" circle class="z-depth-1"/></router-link>
           <h5 class="font-weight-bold mt-4 mb-3">{{profile.data.name[0].text}}</h5>
           <p class="text-uppercase blue-text">{{profile.data.jobtitle[0].text}}</p>

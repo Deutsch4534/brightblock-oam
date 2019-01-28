@@ -1,16 +1,18 @@
 <template>
 <div class="col-sm-5">
   <div v-if="sellingBuyNow">
-    <h6>Selling By Buy Now</h6>
-    {{sellingCurrencySymbol}} {{artwork.saleData.amount}} {{sellingCurrency}} / {{valueInEther}} Eth / {{valueInBitcoin}} Btc<br>
+    <h6>Available to buy..</h6>
+    {{sellingCurrencySymbol}} {{sellingAmount}} {{sellingCurrency}} / {{valueInEther}} Eth / {{valueInBitcoin}} Btc<br>
   </div>
   <div v-else-if="sellingAuction">
     <h6>Selling in Auction</h6>
-    Reserve: {{sellingCurrencySymbol}} {{artwork.saleData.reserve}}
-    <br> {{sellingCurrency}} / {{valueReserveInEther}} Eth / {{valueReserveInBitcoin}} Btc
-    <br>
-    <router-link :to="manageAuctionUrl" v-if="canManageAuction">manage |</router-link>
-    <router-link :to="publicAuctionUrl">go to auction</router-link>
+    <div v-if="debugMode">
+      Reserve: {{sellingCurrencySymbol}} {{artwork.saleData.reserve}}
+      <br> {{sellingCurrency}} / {{valueReserveInEther}} Eth / {{valueReserveInBitcoin}} Btc
+      <br>
+      <router-link :to="manageAuctionUrl" v-if="canManageAuction">manage |</router-link>
+      <router-link :to="publicAuctionUrl">go to auction</router-link>
+    </div>
   </div>
   <div v-else>
     <h6>Not Selling</h6>
@@ -35,12 +37,25 @@ export default {
   mounted() {},
   computed: {
     sellingBuyNow() {
-      return this.artwork.saleData.soid === 1;
+      let priceSet = this.artwork.bcitem && this.artwork.bcitem.price > 0;
+      return priceSet && this.artwork.saleData.soid === 1;
+    },
+    debugMode() {
+      let debugMode = this.$store.state.constants.debugMode;
+      return debugMode;
     },
     sellingAuction() {
       return (
         this.artwork.saleData.soid === 2 && this.artwork.saleData.auctionId > 0
       );
+    },
+    sellingAmount() {
+      let priceSet = this.artwork.bcitem && this.artwork.bcitem.price > 0;
+      if (priceSet) {
+        return this.artwork.saleData.amount;
+      } else {
+        return 0;
+      }
     },
     canManageAuction() {
       let auction = this.$store.getters["myAuctionsStore/myAuction"](

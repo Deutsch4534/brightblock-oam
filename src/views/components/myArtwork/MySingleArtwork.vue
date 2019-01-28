@@ -14,17 +14,18 @@
         <strong>{{artwork.title}}</strong>
       </h3>
       <p>{{artwork.description}}</p>
-      <selling-options :artwork="artwork"/>
+      <selling-options :artwork="artwork" v-if="!sold"/>
       <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
       <p>by
         <a>
           <strong>{{artistProfile.name}}</strong>
         </a>, 11/08/2018</p>
-        <mdb-btn color="indigo" size="md" class="waves-light " v-if="canRegister"><router-link :to="registerUrl" class="text-white">Register</router-link></mdb-btn>
-        <mdb-btn color="indigo" size="md" class="waves-light " v-if="canSell"><router-link :to="registerForSaleUrl" class="text-white">Buy</router-link></mdb-btn>
-        <mdb-btn color="indigo" size="md" class="waves-light " v-if="canAuction"><router-link :to="registerForAuctionUrl" class="text-white">Auction</router-link></mdb-btn>
-        <mdb-btn color="indigo" size="md" class="waves-light " v-if="debugMode"><a @click="deleteArtwork(artwork.id)" class="text-white">Delete</a></mdb-btn>
-        <mdb-btn color="indigo" size="md" class="waves-light " v-if="editable"><router-link :to="editUrl" class="text-white">Edit</router-link></mdb-btn>
+        <router-link :to="registerUrl" class="text-white"><mdb-btn color="indigo" size="md" class="waves-light " v-if="canRegister">Register</mdb-btn></router-link>
+        <router-link :to="registerForSaleUrl" class="text-white"><mdb-btn color="indigo" size="md" class="waves-light " v-if="canSell">Buy</mdb-btn></router-link>
+        <router-link :to="registerForAuctionUrl" class="text-white"><mdb-btn color="indigo" size="md" class="waves-light " v-if="canAuction">Auction</mdb-btn></router-link>
+        <a @click="deleteArtwork(artwork.id)" class="text-white"><mdb-btn color="indigo" size="md" class="waves-light " v-if="debugMode">Delete</mdb-btn></a>
+        <router-link :to="editUrl" class="text-white"><mdb-btn color="indigo" size="md" class="waves-light " v-if="editable">Edit</mdb-btn></router-link>
+        <router-link :to="buyNowUrl" class="text-white"><mdb-btn color="indigo" size="md" class="waves-light ">Open</mdb-btn></router-link>
     </mdb-col>
   </mdb-row>
 </mdb-container>
@@ -107,6 +108,9 @@ export default {
     },
     editUrl() {
       return `/my-artwork/update/${this.artwork.id}`;
+    },
+    buyNowUrl() {
+      return `/artworks/${this.artwork.owner}/${this.artwork.id}`;
     },
     registerUrl() {
       return `/my-artwork/register/${this.artwork.id}`;

@@ -41,7 +41,7 @@ export default {
   methods: {},
   computed: {
     artworks() {
-      return this.$store.getters["artworkSearchStore/getHomePageArtworks"];
+      return this.$store.getters["artworkSearchStore/homePageArtworks"];
     },
     signupImage() {
       return {

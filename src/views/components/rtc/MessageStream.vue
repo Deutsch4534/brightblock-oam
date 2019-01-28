@@ -8,12 +8,10 @@
         <textarea class="form-control" v-model="message" v-on:keyup.13.prevent="sendMessage"></textarea>
       </div>
     </div>
-    <div class="col-md-12 ">
-      <md-content class="md-scrollbar">
+    <div class="col-md-12 scrolly">
         <div v-for="(message, index) of messages" :key="index">
           {{message.username}}: {{message.content}} <br/>
         </div>
-      </md-content>
     </div>
   </div>
 </div>
@@ -74,7 +72,7 @@ export default {
 };
 </script>
 <style>
-.md-content {
+.scrolly {
   max-width: 400px;
   max-height: 200px;
   overflow: auto;
