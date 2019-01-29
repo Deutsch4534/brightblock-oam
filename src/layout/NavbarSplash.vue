@@ -13,8 +13,8 @@
     </mdb-navbar-nav>
     <mdb-navbar-nav right>
       <form class="form-inline">
-        <mdb-input label="Search" type="text" class="search-input active-pink active-pink-2 mt-0 mb-3" v-model="query"/>
-        <mdb-btn outline="white" size="sm" class="search-button my-0" type="submit" @click="doSearch">Search</mdb-btn>
+        <mdb-input label="Search" type="text" class="active-white active-white-2 mt-0 mb-3" v-model="query"/>
+        <mdb-btn outline="white" size="sm" class="my-0" type="submit" @click="doSearch">Search</mdb-btn>
       </form>
       <li v-if="!loggedIn" class="nav-item ripple-parent"><router-link to="/login" class="nav-link navbar-link"><mdb-icon icon="fingerprint" /> login</router-link></li>
       <account-links v-if="loggedIn"/>
@@ -251,21 +251,4 @@ export default {
 h6 {
   line-height: 1.7;
 }
-.md-form.label.active {
-  color: green;
-}
-.search-button {
-    border-color: #ff0;
-}
-.search-input {
-    border-color: #ff0;
-}
-.btn-outline-white {
-    border: 2px solid #fff !important;
-    background-color: transparent !important;
-    color: #fff !important;
-  }
-  .navbar.navbar-dark form .md-form input {
-      border-bottom: 1px solid #000;
-  }
-  </style>
+</style>

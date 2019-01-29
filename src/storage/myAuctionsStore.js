@@ -125,8 +125,9 @@ const myAuctionsStore = {
       let index = _.findIndex(auction.items, function(o) {
         return o.itemId === data.itemId;
       });
-      auction.items[index].sellingStatus = "selling";
+      auction.items[index].sellingStatus = "sold";
       auction.items[index].paused = true;
+      auction.items[index].finished = true;
       store.dispatch("myAuctionsStore/updateAuction", auction).then(() => {
         peerToPeerService.sendPeerSignal({
           type: "wa-item-selling",

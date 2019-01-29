@@ -1,5 +1,14 @@
 <template>
-<div class="container" v-if="artworksSize === 0">
+<div class="container" v-if="finished">
+  <div class="row">
+    <div class="col-md-12 ">
+      <h1>{{auction.title}}</h1>
+      <p>{{auction.description}}</p>
+      <p class="text-warning">The auction has finished - thanks for your interest.</p>
+    </div>
+  </div>
+</div>
+<div class="container" v-else-if="artworksSize === 0">
   <div class="row">
     <div class="col-md-12 ">
       <h1>{{auction.title}}</h1>
@@ -182,6 +191,21 @@ export default {
         this.auctionId
       );
       return auction && auction.items ? auction.items.length : 0;
+    },
+    finished() {
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
+        this.auctionId
+      );
+      if (!auction || !auction.items) {
+        return true;
+      }
+      let over = true;
+      auction.items.forEach(function(item) {
+        if (!item.finished) {
+          over = false;
+        }
+      });
+      return over;
     },
     countdown() {
       let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](

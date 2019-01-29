@@ -15,8 +15,8 @@
     </mdb-navbar-nav>
     <mdb-navbar-nav right>
       <form class="form-inline">
-        <mdb-input label="Search" type="text" class="active-white active-white-2 mt-0 mb-3" v-model="query"/>
-        <mdb-btn outline="" size="sm" class="my-0" type="submit" @click="doSearch">Search</mdb-btn>
+        <mdb-input label="Search" type="text" class="active-pink active-pink-2 mt-0 mb-3" v-model="query"/>
+        <mdb-btn outline="white" size="sm" class="my-0" type="submit" @click="doSearch">Search</mdb-btn>
       </form>
       <li v-if="!loggedIn" class="nav-item ripple-parent" @click="scrollToElement(link4 + 'Section', $event)"><router-link to="/login" class="nav-link navbar-link"><mdb-icon icon="fingerprint" /> login</router-link></li>
       <account-links v-if="loggedIn"/>

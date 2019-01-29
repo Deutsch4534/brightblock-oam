@@ -10,10 +10,15 @@
 </template>
 
 <script>
+import { mdbMedia, mdbMediaBody } from 'mdbvue';
+
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "SingleAuctionItem",
-  components: {},
+  components: {
+    mdbMedia,
+    mdbMediaBody
+  },
   props: {
     auctionId: null,
     item: {
