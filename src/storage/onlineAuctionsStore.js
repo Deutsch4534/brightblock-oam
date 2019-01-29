@@ -180,6 +180,21 @@ const onlineAuctionsStore = {
       store.commit("onlineAuctionsStore/onlineAuction", auction);
     },
 
+    unpauseItemEvent(state, data) {
+      let auctionId = data.auctionId;
+      let auction = state.onlineAuctions.filter(
+        auction => auction.auctionId === auctionId
+      )[0];
+      if (!auction) {
+        console.log(
+          "Auction not found - this means the logged in user is the administrator and the auction has already been updated in myAuctionsStore."
+        );
+        return;
+      }
+      biddingUtils.unpauseBidding(auction, data.itemId);
+      store.commit("onlineAuctionsStore/onlineAuction", auction);
+    },
+
     newPeer(state, data) {
       let index = _.findIndex(state.onlinePeers, function(o) {
         return o.username === data.username;

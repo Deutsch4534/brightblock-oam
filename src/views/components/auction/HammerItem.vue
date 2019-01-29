@@ -21,7 +21,7 @@
     <button class="btn btn-white" v-if="item.sellingStatus === 'selling'" v-on:click="openSetFinalBidPriceDialog">Confirm Price</button>
 
     <span v-if="admin">
-      <button v-if="item.paused" class="btn btn-white" @click.prevent="pauseBidding">Unpause Bidding</button>
+      <button v-if="item.paused" class="btn btn-white" @click.prevent="unpauseBidding">Unpause Bidding</button>
       <button v-else class="btn btn-white" @click.prevent="pauseBidding">Pause Bidding</button>
     </span>
   </div>
@@ -53,12 +53,26 @@ export default {
     };
   },
   methods: {
+    unpauseBidding() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      let message = "Ready to go again now...";
+      let messageData = {
+        content: message,
+        username: myProfile.username,
+        auctionId: this.auctionId
+      };
+      this.$store.commit("myAuctionsStore/messageEvent", messageData);
+
+      let data = {
+        username: myProfile.username,
+        auctionId: this.auctionId,
+        itemId: this.item.itemId
+      };
+      this.$store.commit("myAuctionsStore/unpauseItemEvent", data);
+    },
     pauseBidding() {
       let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      let message = "Pausing the auction to wait for bidders to catch up...";
-      if (this.item.paused) {
-        message = "Ready to go again now...";
-      }
+      let message = "Pausing the auction, waiting for bidders...";
       let messageData = {
         content: message,
         username: myProfile.username,

@@ -141,12 +141,25 @@ const myAuctionsStore = {
         auction => auction.auctionId === data.auctionId
       )[0];
       biddingUtils.pauseBidding(auction, data.itemId);
-      peerToPeerService.sendPeerSignal({
-        type: "wa-item-pause",
-        data: data
+      store.dispatch("myAuctionsStore/updateAuction", auction).then(() => {
+        peerToPeerService.sendPeerSignal({
+          type: "wa-item-pause",
+          data: data
+        });
       });
-      // store.dispatch("myAuctionsStore/updateAuction", auction).then(() => {
-      // });
+    },
+
+    unpauseItemEvent(state, data) {
+      let auction = state.myAuctions.filter(
+        auction => auction.auctionId === data.auctionId
+      )[0];
+      biddingUtils.unpauseBidding(auction, data.itemId);
+      store.dispatch("myAuctionsStore/updateAuction", auction).then(() => {
+        peerToPeerService.sendPeerSignal({
+          type: "wa-item-unpause",
+          data: data
+        });
+      });
     },
 
     myAuctions(state, auctions) {

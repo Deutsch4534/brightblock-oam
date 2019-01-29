@@ -141,11 +141,14 @@ const biddingUtils = {
     let index = _.findIndex(auction.items, function(o) {
       return o.itemId === itemId;
     });
-    if (auction.items[index].paused) {
-      auction.items[index].paused = false;
-    } else {
-      auction.items[index].paused = true;
-    }
+    auction.items[index].paused = true;
+  },
+
+  unpauseBidding(auction, itemId) {
+    let index = _.findIndex(auction.items, function(o) {
+      return o.itemId === itemId;
+    });
+    auction.items[index].paused = false;
   }
 };
 

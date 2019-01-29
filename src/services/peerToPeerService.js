@@ -116,6 +116,8 @@ const peerToPeerService = {
       store.commit("onlineAuctionsStore/receiveBidEvent", data);
     } else if (event.type === "signal:wa-item-pause") {
       store.commit("onlineAuctionsStore/pauseItemEvent", data);
+    } else if (event.type === "signal:wa-item-unpause") {
+      store.commit("onlineAuctionsStore/unpauseItemEvent", data);
     } else if (event.type === "signal:wa-item-selling") {
       store.commit("onlineAuctionsStore/sellItemEvent", data);
     } else if (event.type === "signal:wa-item-activate") {
@@ -236,6 +238,10 @@ const peerToPeerService = {
     );
     peerToPeerService.session.on(
       "signal:wa-item-pause",
+      peerToPeerService.peerSignal
+    );
+    peerToPeerService.session.on(
+      "signal:wa-item-unpause",
       peerToPeerService.peerSignal
     );
     peerToPeerService.session.on(
