@@ -141,12 +141,12 @@ const myAuctionsStore = {
         auction => auction.auctionId === data.auctionId
       )[0];
       biddingUtils.pauseBidding(auction, data.itemId);
-      store.dispatch("myAuctionsStore/updateAuction", auction).then(() => {
-        peerToPeerService.sendPeerSignal({
-          type: "wa-item-pause",
-          data: data
-        });
+      peerToPeerService.sendPeerSignal({
+        type: "wa-item-pause",
+        data: data
       });
+      // store.dispatch("myAuctionsStore/updateAuction", auction).then(() => {
+      // });
     },
 
     myAuctions(state, auctions) {

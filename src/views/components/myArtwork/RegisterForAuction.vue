@@ -68,7 +68,7 @@
     </form>
     </mdb-modal-body>
     <mdb-modal-footer>
-      <mdb-btn color="primary" @click.prevent="addToAuction" size="sm">Save</mdb-btn>
+      <mdb-btn color="white" @click="addToAuction" size="md">Save</mdb-btn>
     </mdb-modal-footer>
 </mdb-modal>
 </template>

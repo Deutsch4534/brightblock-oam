@@ -4,7 +4,7 @@
   <h2 class="my-5">{{formTitle}}</h2>
   <hr class="my-5">
   <form class="needs-validation" novalidate @submit.prevent="checkForm">
-    <div class="row ">
+    <div class="row">
       <div class="col-md-2 custom-control custom-radio mb-0">
         <input type="radio" class="custom-control-input" id="customControlValidation2" name="auction.auctionType" v-model="auction.auctionType" value="webcast" required>
         <label class="custom-control-label" for="customControlValidation2">Webcast Auction</label>
@@ -24,6 +24,7 @@
       </div>
       -->
     </div>
+
     <div class="row mt-3">
       <div class="col-md-12">
         <p v-if="errors.length" :key="errors.length">
@@ -35,70 +36,80 @@
       </div>
     </div>
 
-    <div class="form-row" v-if="auction.auctionType === 'sealed'">
-      <div class="col-md-12 mb-3">
-        <label for="sealedAddress">Destination Bitcoin Address</label>
-        <input type="text" class="form-control" id="sealedAddress" placeholder="Title" v-model="auction.sealedAddress">
-        <div class="invalid-feedback">
-          Please enter sealed address!
+    <div class="row">
+      <div class="col-md-8">
+        <div class="form-row" v-if="auction.auctionType === 'sealed'">
+          <div class="col-md-12 mb-3">
+            <label for="sealedAddress">Destination Bitcoin Address</label>
+            <input type="text" class="form-control" id="sealedAddress" placeholder="Title" v-model="auction.sealedAddress">
+            <div class="invalid-feedback">
+              Please enter sealed address!
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-md-12 mb-3">
-        <label for="title">Title</label>
-        <input type="text" class="form-control" id="title" placeholder="Title of the auction" v-model="auction.title" required>
-        <div class="invalid-feedback">
-          Please enter a title!
+        <div class="form-row">
+          <div class="col-md-12 mb-3">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" placeholder="Title of the auction" v-model="auction.title" required>
+            <div class="invalid-feedback">
+              Please enter a title!
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-md-12 mb-3">
-        <label for="description">description</label>
-        <textarea type="text" class="form-control" id="description" placeholder="Description of your auction" v-model="auction.description" required></textarea>
-        <div class="invalid-feedback">
-          Please enter a description!
+        <div class="form-row">
+          <div class="col-md-12 mb-3">
+            <label for="description">description</label>
+            <textarea type="text" class="form-control" id="description" placeholder="Description of your auction" v-model="auction.description" required></textarea>
+            <div class="invalid-feedback">
+              Please enter a description!
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="col-md-12 mb-3">
-        <label for="keywords">Keywords or tags</label>
-        <textarea type="text" class="form-control" id="keywords" placeholder="Enter keywords / tags separated by commas" v-model="auction.keywords" required></textarea>
-        <div class="invalid-feedback">
-          Please enter some keywords!
+        <div class="form-row">
+          <div class="col-md-12 mb-3">
+            <label for="keywords">Keywords or tags</label>
+            <textarea type="text" class="form-control" id="keywords" placeholder="Enter keywords / tags separated by commas" v-model="auction.keywords" required></textarea>
+            <div class="invalid-feedback">
+              Please enter some keywords!
+            </div>
+          </div>
         </div>
+        <div class="row my-3 ml-5">
+          <div class="col-md-4 custom-control">
+            <input type="radio" class="custom-control-input" id="custom-public" v-model="auction.privacy" value="public">
+            <label class="custom-control-label mr-5" for="custom-public">Public</label>
+          </div>
+          <div class="col-md-4 custom-control">
+            <input type="radio" class="custom-control-input" id="custom-private" v-model="auction.privacy" value="private">
+            <label class="custom-control-label" for="custom-private">Private</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <datetime type="datetime" v-model="startDate" input-id="startDate">
+            <label for="startDate" slot="before">Bidding Starts&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <input id="startDate" class="form-control">
+          </datetime>
+        </div>
+
+        <div class="form-group" v-if="auction.auctionType === 'timed'">
+          <datetime type="datetime" v-model="endDate" input-id="endDate">
+            <label for="endDate" slot="before">Bidding Ends&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <input id="endDate" class="form-control">
+          </datetime>
+        </div>
+
+        <mdb-btn type="submit" class="white">Submit</mdb-btn>
+
+      </div>
+
+      <div class="col-md-4">
+        <h4>Set Auction Logo</h4>
+        <p class="muted"><small>Size limit: 500Kb</small></p>
+        <media-upload :sizeLimit="'500'" :quantityLimit="'1'" @updateMedia="setLogo($event)"/>
+        <p class="muted"><small>{{auction.logo.name}}</small></p>
       </div>
     </div>
-
-    <div class="row my-3 ml-5">
-      <div class="col-md-4 custom-control">
-        <input type="radio" class="custom-control-input" id="custom-public" v-model="auction.privacy" value="public">
-        <label class="custom-control-label mr-5" for="custom-public">Public</label>
-      </div>
-      <div class="col-md-4 custom-control">
-        <input type="radio" class="custom-control-input" id="custom-private" v-model="auction.privacy" value="private">
-        <label class="custom-control-label" for="custom-private">Private</label>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <datetime type="datetime" v-model="startDate" input-id="startDate">
-        <label for="startDate" slot="before">Bidding Starts&nbsp;&nbsp;&nbsp;&nbsp;</label>
-        <input id="startDate" class="form-control">
-      </datetime>
-    </div>
-
-    <div class="form-group" v-if="auction.auctionType === 'timed'">
-      <datetime type="datetime" v-model="endDate" input-id="endDate">
-        <label for="endDate" slot="before">Bidding Ends&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-        <input id="endDate" class="form-control">
-      </datetime>
-    </div>
-
-    <mdb-btn type="submit">Submit</mdb-btn>
   </form>
 </mdb-container>
 </template>
@@ -108,6 +119,7 @@ import moment from "moment";
 import { mdbBtn } from "mdbvue";
 import { mdbContainer, mdbRow, mdbCol } from 'mdbvue';
 import { Datetime } from 'vue-datetime'
+import MediaUpload from "../MediaUpload";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -119,7 +131,8 @@ export default {
     mdbContainer,
     mdbRow,
     mdbCol,
-    datetime: Datetime
+    datetime: Datetime,
+    MediaUpload
   },
   data () {
     return {
@@ -135,7 +148,8 @@ export default {
         auctioneer: '',
         privacy: 'public',
         auctionType: "webcast",
-        sellingList: []
+        sellingList: [],
+        logo: {}
       },
     }
   },
@@ -181,7 +195,6 @@ export default {
           .dispatch("myAuctionsStore/updateAuction", this.auction)
           .then(auction => {
             this.auction = auction;
-            this.closeModal();
             this.$router.push("/my-auctions");
           });
       } else {
@@ -190,12 +203,13 @@ export default {
           .dispatch("myAuctionsStore/uploadAuction", this.auction)
           .then(auction => {
             this.auction = auction;
-            this.closeModal();
             this.$router.push("/my-auctions");
           });
       }
     },
-    closeModal() {},
+    setLogo (mediaObjects) {
+      this.auction.logo = mediaObjects[0];
+    },
     checkForm(event) {
       event.preventDefault();
       event.target.classList.add('was-validated');

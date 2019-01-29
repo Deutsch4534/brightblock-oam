@@ -1,13 +1,13 @@
 <template>
 <div class="col-md-4 col-sm-6 col-xs-12 mb-3">
   <mdb-card>
-    <mdb-card-image :src="require('@/assets/img/missing/auction4.jpg')" alt="Auction Logo"></mdb-card-image>
+    <mdb-card-image :src="logo" alt="Auction Logo"></mdb-card-image>
     <mdb-card-body>
       <mdb-card-title>{{auction.title}}</mdb-card-title>
       <mdb-card-text>{{auction.description}}</mdb-card-text>
       <mdb-card-text>{{countdown}}</mdb-card-text>
-      <router-link v-if="canJoin" :to="onlineAuctionUrl"><mdb-btn color="primary">Join</mdb-btn></router-link>
-      <router-link v-if="isAdministrator" :to="manageUrl"><mdb-btn color="primary">Manage</mdb-btn></router-link>
+      <router-link v-if="canJoin" :to="onlineAuctionUrl"><mdb-btn color="white">Join</mdb-btn></router-link>
+      <router-link v-if="isAdministrator" :to="manageUrl"><mdb-btn color="white">Manage</mdb-btn></router-link>
     </mdb-card-body>
   </mdb-card>
 </div>
@@ -50,6 +50,12 @@ export default {
       return `/online-auction/${this.auction.administrator}/${
         this.auction.auctionId
       }`;
+    },
+    logo() {
+      if (this.auction.logo) {
+        return this.auction.logo.dataUrl;
+      }
+      return require('@/assets/img/missing/auction4.jpg');
     },
     manageUrl() {
       return `/my-auctions/manage/${this.auction.auctionId}`;

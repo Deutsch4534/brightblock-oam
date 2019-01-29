@@ -1,8 +1,6 @@
 <template>
-<div class="container">
   <div class="row">
-    <div class="col-md-12 ">
-      <h3>Messaging</h3>
+    <div class="col-md-12">
       <div class="row">
         <label>Messages</label>
         <textarea class="form-control" v-model="message" v-on:keyup.13.prevent="sendMessage"></textarea>
@@ -14,7 +12,6 @@
         </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>

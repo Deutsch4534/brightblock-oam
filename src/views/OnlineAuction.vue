@@ -25,6 +25,7 @@
       <p>{{countdown}}</p>
     </div>
   </div>
+  <hr class="my-5">
   <div class="row">
     <div class="col-md-6">
       <hammer-item :item="hammerItem" :auctionId="auctionId"/>
@@ -43,6 +44,7 @@
       <message-stream :auctionId="auctionId" :admin="false"/>
     </div>
   </div>
+  <hr class="my-5">
   <div class="row" v-if="artworksSize > 0">
     <div class="col-md-12 ">
       <h4>Next Items</h4>

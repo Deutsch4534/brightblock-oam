@@ -1,11 +1,11 @@
 <template>
 <div class="container">
   <router-view/>
-  <div class="title">
+  <div class="title my-5">
     <h2>Artworks <span>({{numberArtworksUnsold}})</span></h2>
   </div>
   <my-artworks-list :artworks="unsold" :sold="false" :show-load-button="false" :chunks="6"/>
-  <div class="title">
+  <div class="title my-5">
     <h2>Sold Artworks <span>({{numberArtworksSold}})</span></h2>
   </div>
   <my-artworks-list :artworks="sold" :sold="true" :show-load-button="false" :chunks="6"/>

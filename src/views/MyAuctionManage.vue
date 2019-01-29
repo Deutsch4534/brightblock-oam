@@ -1,23 +1,31 @@
 <template>
 <div class="container">
   <div class="row">
-    <div class="col-md-12 ">
-      <h1>{{auction.title}} <span v-if="auction.items">({{auction.items.length}} items)</span></h1>
+    <div class="col-md-12">
+      <h1>Auction Management</h1>
     </div>
     <div class="col-md-6">
+      <h3>{{auction.title}} <span v-if="auction.items">({{auction.items.length}} items)</span></h3>
       <p>{{auction.description}}</p>
+      <p>
+        <a v-if="auction.privacy === 'private'" @click.prevent="makePublic()"><mdb-icon icon="lock"/> Unpublished</a>
+        <a v-else @click.prevent="makePrivate()"><mdb-icon icon="unlock"/> Published.</a>
+      </p>
       <p>{{countdown}}</p>
     </div>
     <div class="col-md-6">
       <p>
-        <router-link :to="updateUrl"><button class="btn btn-primary">edit</button></router-link>
-        <router-link :to="onlineAuctionUrl"><button class="btn btn-primary">view</button></router-link>
-        <button class="btn btn-primary" @click.prevent="deleteAuction()">delete</button>
+        <router-link :to="updateUrl"><mdb-btn color="white">Edit</mdb-btn></router-link>
+        <router-link :to="onlineAuctionUrl"><mdb-btn color="white">View</mdb-btn></router-link>
+        <mdb-btn color="danger" @click.prevent="deleteAuction()">Delete</mdb-btn>
+        <!--
         <button v-if="auction.privacy === 'private'" class="btn btn-primary" @click.prevent="makePublic()">make public</button>
         <button v-else class="btn btn-primary" @click.prevent="makePrivate()">make private</button>
+        -->
       </p>
     </div>
   </div>
+  <hr class="hr-dark my-5">
   <div class="row" v-if="hammerItem">
     <div class="col-md-6">
       <hammer-item :item="hammerItem" :admin="true" :auctionId="auctionId"/>
@@ -37,15 +45,15 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 mt-5">
       <h4>Items ({{sellingItemsSize}})</h4>
       <ul class="list-unstyled">
         <my-single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="true"/>
       </ul>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12 mt-5">
       <h4>Available Items</h4>
-      <ul class="list-unstyled">
+      <ul class="list-unstyled mt-5">
         <my-single-auction-item class="auction-item-container" v-for="(item, index) of availableItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="false"/>
       </ul>
     </div>
@@ -64,12 +72,15 @@ import utils from "@/services/utils";
 import notify from "@/services/notify";
 import peerToPeerService from "@/services/peerToPeerService";
 import eventBus from "@/services/eventBus";
+import { mdbBtn, mdbIcon } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyAuctionManage",
   bodyClass: "index-page",
   components: {
+    mdbBtn,
+    mdbIcon,
     WatchersStream,
     HammerItem,
     MySingleAuctionItem,

@@ -27,7 +27,7 @@ const biddingUtils = {
   },
 
   bidStatusClass(item) {
-    let statusClass = "yellow-bg";
+    let statusClass = "btn-danger";
     try {
       let currentHighestBid = item.bids[item.bids.length - 1];
       if (currentHighestBid) {
@@ -40,7 +40,7 @@ const biddingUtils = {
         // statusClass = 'grey-bg'
       }
     } catch (err) {
-      statusClass = "yellow-bg";
+      statusClass = "btn-danger";
     }
     return statusClass;
   },

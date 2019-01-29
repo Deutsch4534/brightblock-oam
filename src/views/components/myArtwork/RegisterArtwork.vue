@@ -10,6 +10,8 @@
       <img :src="artwork.image" :alt="artwork.title" class="img-fluid">
       <h4>{{artwork.title}}</h4>
       <p>{{myArtist.name}}</p>
+      <p>Registering the artwork on the blockchain creates a Certificate of Authentication that helps show the provenance of the
+      artwork and makes possible our unique ability to pay residuals to artists and galleries on secondary sales, <a href="#">read more..</a></p>
     </mdb-modal-body>
     <mdb-modal-footer v-if="!message">
         <mdb-btn v-if="bitcoin" color="primary" size="sm" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn>

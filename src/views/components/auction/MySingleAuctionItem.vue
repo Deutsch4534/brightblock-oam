@@ -14,9 +14,9 @@
     <p>by
       <a class="font-weight-bold">{{artwork.artist}}</a>, 19/04/2018</p>
     <br/>
-    <a v-if="!item.inplay" href @click.prevent="activateBidding"><mdb-btn color="primary" size="md">Activate Bidding</mdb-btn></a>
-    <a v-else href @click.prevent="deactivateBidding"><mdb-btn color="primary" size="md">Deactivate Bidding</mdb-btn></a>
-    <a href @click.prevent="removeFromAuction"><mdb-btn color="primary" size="md">Remove from Auction</mdb-btn></a>
+    <a v-if="!item.inplay" href @click.prevent="activateBidding"><mdb-btn color="white" size="md">Activate Bidding</mdb-btn></a>
+    <a v-else href @click.prevent="deactivateBidding"><mdb-btn color="white" size="md">Deactivate Bidding</mdb-btn></a>
+    <a href @click.prevent="removeFromAuction"><mdb-btn color="white" size="md">Remove from Auction</mdb-btn></a>
   </mdb-col>
   <mdb-col lg="7" xl="8" v-else>
     <h3 class="font-weight-bold mb-3 p-0">
@@ -26,9 +26,9 @@
     <p>by
       <a class="font-weight-bold">{{artwork.artist}}</a>, 19/04/2018</p>
     <br/>
-    <router-link v-if="artwork.bcitem && artwork.bcitem.itemIndex === -1" :to="registerUrl" class="artwork-action"><mdb-btn color="primary" size="md">Register</mdb-btn></router-link>
+    <router-link v-if="artwork.bcitem && artwork.bcitem.itemIndex === -1" :to="registerUrl" class="artwork-action"><mdb-btn color="white" size="md">Register</mdb-btn></router-link>
     <br/>
-    <router-link v-if="canSell" :to="registerForAuctionUrl"><mdb-btn color="primary" size="md">Add to Auction</mdb-btn></router-link>
+    <router-link v-if="canSell" :to="registerForAuctionUrl"><mdb-btn color="white" size="md">Add to Auction</mdb-btn></router-link>
   </mdb-col>
 </mdb-row>
 

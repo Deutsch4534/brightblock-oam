@@ -5,7 +5,7 @@
     <p>Current Bid: {{currentBidder}} {{currencySymbol}} {{currentBid}} {{item.fiatCurrency}}</p>
     <img :src="artwork.image" :alt="artwork.title"/>
   </div>
-  <div class="col-md-12 "  v-if="inplay">
+  <div class="col-md-12" v-if="inplay">
     <button
           class="btn btn-primary" :class="bidStatusClass"
           :disabled="paused || item.paused || item.sellingStatus === 'selling'"
@@ -18,11 +18,11 @@
           data-target="#setFinalBidPriceModal">Sell ({{currentBid}})</button>
     <p v-if="selling && !admin" class="center-block text-center mt-3" v-html="sellingMessage"></p>
     <p v-if="item.sellingStatus === 'selling' && artwork.bcitem">confirming...{{artwork.bcitem.itemIndex}}, {{artwork.bcitem.status}}, {{artwork.bcitem.price}}</p>
-    <button class="btn btn-primary" v-if="item.sellingStatus === 'selling'" v-on:click="openSetFinalBidPriceDialog">Confirm Price</button>
+    <button class="btn btn-white" v-if="item.sellingStatus === 'selling'" v-on:click="openSetFinalBidPriceDialog">Confirm Price</button>
 
     <span v-if="admin">
-      <button v-if="item.paused" class="primary" @click.prevent="pauseBidding">Unpause Bidding</button>
-      <button v-else class="primary" @click.prevent="pauseBidding">Pause Bidding</button>
+      <button v-if="item.paused" class="btn btn-white" @click.prevent="pauseBidding">Unpause Bidding</button>
+      <button v-else class="btn btn-white" @click.prevent="pauseBidding">Pause Bidding</button>
     </span>
   </div>
 </div>

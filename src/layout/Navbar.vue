@@ -11,7 +11,7 @@
       <li class="nav-item ripple-parent"><router-link to="/home" class="nav-link navbar-link">Gallery</router-link></li>
       <li class="nav-item ripple-parent"><router-link to="/artists" class="nav-link navbar-link">Artists</router-link/></li>
       <li class="nav-item ripple-parent"><router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link/></li>
-      <auction-links/>
+      <auction-links v-if="loggedIn"/>
     </mdb-navbar-nav>
     <mdb-navbar-nav right>
       <form class="form-inline">
