@@ -13,12 +13,12 @@
         <router-link :to="updateUrl"><button class="btn btn-primary">edit</button></router-link>
         <router-link :to="onlineAuctionUrl"><button class="btn btn-primary">view</button></router-link>
         <button class="btn btn-primary" @click.prevent="deleteAuction()">delete</button>
-        <button v-if="auction.privacy === 'private'" class="primary" @click.prevent="makePublic()">make public</button>
-        <button v-else class="primary" @click.prevent="makePrivate()">make private</button>
+        <button v-if="auction.privacy === 'private'" class="btn btn-primary" @click.prevent="makePublic()">make public</button>
+        <button v-else class="btn btn-primary" @click.prevent="makePrivate()">make private</button>
       </p>
     </div>
   </div>
-  <div class="row">
+  <div class="row" v-if="hammerItem">
     <div class="col-md-6">
       <hammer-item :item="hammerItem" :admin="true" :auctionId="auctionId"/>
     </div>
@@ -37,13 +37,17 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-12 ">
-      <h4>Selling Items ({{sellingItemsSize}})</h4>
-      <my-single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="true"/>
+    <div class="col-md-12">
+      <h4>Items ({{sellingItemsSize}})</h4>
+      <ul class="list-unstyled">
+        <my-single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="true"/>
+      </ul>
     </div>
-    <div class="col-md-12 ">
+    <div class="col-md-12">
       <h4>Available Items</h4>
-      <my-single-auction-item class="auction-item-container" v-for="(item, index) of availableItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="false"/>
+      <ul class="list-unstyled">
+        <my-single-auction-item class="auction-item-container" v-for="(item, index) of availableItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="false"/>
+      </ul>
     </div>
   </div>
 </div>
@@ -170,7 +174,7 @@ export default {
       return `/my-auctions/update/${this.auctionId}`;
     },
     hammerItem() {
-      let hammerItem = {};
+      let hammerItem;
       let auction = this.$store.getters["myAuctionsStore/myAuction"](
         this.auctionId
       );

@@ -1,56 +1,29 @@
 <template>
-<mdb-row class="mb-3">
-  <mdb-col lg="5" xl="4">
-    <mdb-view hover class="rounded z-depth-1-half mb-lg-0 mb-4">
-      <img class="img-fluid" :src="artwork.image" :alt="artwork.title" />
-      <a><mdb-mask overlay="white-slight" waves/></a>
-    </mdb-view>
-  </mdb-col>
-  <mdb-col lg="7" xl="8" v-if="sellingItem">
-    <h3 class="font-weight-bold mb-3 p-0">
-      <strong>{{artwork.title}}</strong>
-    </h3>
-    <p class="dark-grey-text">{{artwork.description}}</p>
-    <p>by
-      <a class="font-weight-bold">{{artwork.artist}}</a>, 19/04/2018</p>
+<mdb-media tag="li" class="my-4">
+  <img class="d-flex mr-3" width="250px" :src="artwork.image" :alt="artwork.title" />
+  <mdb-media-body v-if="sellingItem">
+    <h4>{{artwork.title}}</h4>
+    {{artwork.description}}
     <br/>
-    <a v-if="!item.inplay" href @click.prevent="activateBidding"><mdb-btn color="primary" size="md">Activate Bidding</mdb-btn></a>
-    <a v-else href @click.prevent="deactivateBidding"><mdb-btn color="primary" size="md">Deactivate Bidding</mdb-btn></a>
-    <a href @click.prevent="removeFromAuction"><mdb-btn color="primary" size="md">Remove from Auction</mdb-btn></a>
-  </mdb-col>
-  <mdb-col lg="7" xl="8" v-else>
-    <h3 class="font-weight-bold mb-3 p-0">
-      <strong>{{artwork.title}}</strong>
-    </h3>
-    <p class="dark-grey-text">{{artwork.description}}</p>
-    <p>by
-      <a class="font-weight-bold">{{artwork.artist}}</a>, 19/04/2018</p>
+    <a v-if="!item.inplay" href @click.prevent="activateBidding">Activate Bidding</a>
+    <a v-else href @click.prevent="deactivateBidding">Deactivate Bidding</a>
     <br/>
-    <router-link v-if="artwork.bcitem && artwork.bcitem.itemIndex === -1" :to="registerUrl" class="artwork-action"><mdb-btn color="primary" size="md">Register</mdb-btn></router-link>
+    <a href @click.prevent="removeFromAuction">Remove from Auction</a>
+  </mdb-media-body>
+  <mdb-media-body v-else>
+    <h4>{{artwork.title}}</h4>
+    <router-link v-if="artwork.bcitem && artwork.bcitem.itemIndex === -1" :to="registerUrl" class="artwork-action">Register</router-link>
     <br/>
-    <router-link v-if="canSell" :to="registerForAuctionUrl"><mdb-btn color="primary" size="md">Add to Auction</mdb-btn></router-link>
-  </mdb-col>
-</mdb-row>
-
+    <router-link v-if="canSell" :to="registerForAuctionUrl">Add to Auction</router-link>
+  </mdb-media-body>
+</mdb-media>
 </template>
 
 <script>
-import { mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardBody, mdbMask, mdbIcon, mdbView, mdbBtn } from 'mdbvue';
-
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MySingleAuctionItem",
-  components: {
-    mdbContainer,
-    mdbRow,
-    mdbCol,
-    mdbCard,
-    mdbCardBody,
-    mdbMask,
-    mdbIcon,
-    mdbView,
-    mdbBtn
-  },
+  components: {},
   props: {
     auctionId: null,
     sellingItem: false,

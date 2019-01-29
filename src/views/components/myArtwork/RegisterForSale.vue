@@ -18,20 +18,18 @@
           <li v-for="error in errors" :key="error.id">{{ error.message }}</li>
         </ul>
       </p>
-      <div class="form-row">
-        <div class="col-md-12 mb-3">
-          <label for="validationCustom01">Select Currency</label>
-          <select v-model="currency" id="currency" name="currency">
-            <option v-for="(value,key) in fiatRates" :key="key" :value="key">{{ key }}</option>
-          </select>
-          <div class="invalid-feedback">
-          Please select the currency!
-          </div>
+      <div class="col-md-12 mb-3">
+        <label for="validationCustom01">Select Currency</label>
+        <select class="browser-default custom-select" v-model="currency" id="currency" name="currency">
+          <option v-for="(value,key) in fiatRates" :key="key" :value="key">{{ key }}</option>
+        </select>
+        <div class="invalid-feedback">
+        Please select the currency!
         </div>
-        <p class="">
-          {{conversionMessage}}
-        </p>
       </div>
+      <p class="">
+        {{conversionMessage}}
+      </p>
 
       <div class="form-row">
         <div class="col-md-12 mb-3">

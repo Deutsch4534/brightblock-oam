@@ -100,8 +100,16 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 #ContactSection {
   background-color: #5400E8;
 }
+.raised {
+  border-radius: 10px;
+  position: relative;
+  top: 35px;
+  margin: auto auto;
+  margin-bottom: 50px;
+}
+
 </style>

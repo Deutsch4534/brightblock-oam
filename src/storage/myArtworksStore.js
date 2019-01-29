@@ -46,6 +46,7 @@ const myArtworksStore = {
       return getters.unsold.length;
     },
     editable: (state, getters) => id => {
+      // let canReg = getters["canRegister"];
       let artwork = getters.myArtwork(id);
       let userProfile = store.getters["myAccountStore/getMyProfile"];
       return userProfile.username === artwork.owner;

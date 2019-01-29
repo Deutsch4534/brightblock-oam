@@ -1,39 +1,48 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 ">
-        <h1>{{auction.title}} <span>({{artworksSize}} items)</span></h1>
-        <p>{{auction.description}}</p>
-        <p>{{countdown}}</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <hammer-item :item="hammerItem" :auctionId="auctionId"/>
-      </div>
-      <div class="col-md-6">
-        <div class="row" v-if="winning.length > 0">
-          <div class="col-md-6">
-            <h4>Won items</h4>
-            <p v-for="(item, index) of winning" :key="index">
-              {{item.itemId}}
-            </p>
-          </div>
-        </div>
-        <watchers-stream :auctionId="auctionId"/>
-        <video-stream :canPublish="false"/>
-        <message-stream :auctionId="auctionId" :admin="false"/>
-      </div>
-    </div>
-    <div class="row" v-if="artworksSize > 0">
-      <div class="col-md-12 ">
-        <h4>Next Items</h4>
-        <ul class="list-unstyled">
-          <single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :item="item" :auctionId="auctionId"/>
-        </ul>
-      </div>
+<div class="container" v-if="artworksSize === 0">
+  <div class="row">
+    <div class="col-md-12 ">
+      <h1>{{auction.title}}</h1>
+      <p>{{auction.description}}</p>
+      <p class="text-warning">The catalogue for this auction is empty - please check back soon.</p>
     </div>
   </div>
+</div>
+<div class="container" v-else>
+  <div class="row">
+    <div class="col-md-12 ">
+      <h1>{{auction.title}} <span>({{artworksSize}} items)</span></h1>
+      <p>{{auction.description}}</p>
+      <p>{{countdown}}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <hammer-item :item="hammerItem" :auctionId="auctionId"/>
+    </div>
+    <div class="col-md-6">
+      <div class="row" v-if="winning.length > 0">
+        <div class="col-md-6">
+          <h4>Won items</h4>
+          <p v-for="(item, index) of winning" :key="index">
+            {{item.itemId}}
+          </p>
+        </div>
+      </div>
+      <watchers-stream :auctionId="auctionId"/>
+      <video-stream :canPublish="false"/>
+      <message-stream :auctionId="auctionId" :admin="false"/>
+    </div>
+  </div>
+  <div class="row" v-if="artworksSize > 0">
+    <div class="col-md-12 ">
+      <h4>Next Items</h4>
+      <ul class="list-unstyled">
+        <single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :item="item" :auctionId="auctionId"/>
+      </ul>
+    </div>
+  </div>
+</div>
 </template>
 
 <script>

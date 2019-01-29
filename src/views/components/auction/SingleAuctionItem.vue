@@ -1,13 +1,12 @@
 <template>
-<div class="row">
-  <div class="col-md-4 md-xsmall-size-100">
-    <img :src="artwork.image" :alt="artwork.title">
-  </div>
-  <div class="col-md-8 md-xsmall-size-100">
-    <h4 class="media-heading">{{artwork.title}}</h4>
-    {{artwork.description}}
-  </div>
-</div>
+<mdb-media tag="li" class="my-4">
+  <img class="d-flex mr-3" width="250px" :src="artwork.image" :alt="artwork.title" />
+  <mdb-media-body>
+    <h5 class="mt-0 mb-1 font-weight-bold">{{artwork.title}}</h5>
+    <p>{{artwork.description}}</p>
+    <p>By: {{artwork.artist}}</p>
+  </mdb-media-body>
+</mdb-media>
 </template>
 
 <script>

@@ -17,10 +17,9 @@
           <li v-for="error in errors" :key="error.id">{{ error.message }}</li>
         </ul>
       </p>
-      <div class="form-row">
         <div class="col-md-12 mb-3">
           <label for="validationCustom01">Select Currency</label>
-          <select v-model="currency" id="currency" name="currency">
+          <select class="browser-default custom-select" v-model="currency" id="currency" name="currency">
             <option v-for="(value,key) in fiatRates" :key="key" :value="key">{{ key }}</option>
           </select>
           <div class="invalid-feedback">
@@ -30,7 +29,6 @@
         <p class="">
           {{conversionMessage}}
         </p>
-      </div>
 
       <div class="form-row">
         <div class="col-md-12 mb-3">
@@ -50,7 +48,7 @@
           <label for="validationCustom03">Increment {{currencySymbol}}</label>
           <input type="number" class="form-control" id="validationCustom03" step="50" placeholder="increment value" v-model="increment" required>
           <div class="invalid-feedback">
-            Please enter the reserve!
+            Please enter the increment!
           </div>
         </div>
         <p>
@@ -58,15 +56,13 @@
         </p>
       </div>
 
-      <div class="form-row">
-        <div class="col-md-12 mb-3">
-          <label for="validationCustom04">Select Auction</label>
-          <select v-model="auctionId" id="auctionId" name="auctionId">
-            <option v-for="(auction,key) in auctions" :key="key" :value="auction.auctionId">{{ auction.title }}</option>
-          </select>
-          <div class="invalid-feedback">
-            Please select the auction!
-          </div>
+      <div class="col-md-12 mb-3">
+        <label for="validationCustom04">Select Auction</label>
+        <select class="browser-default custom-select" v-model="auctionId" id="auctionId" name="auctionId">
+          <option v-for="(auction,key) in auctions" :key="key" :value="auction.auctionId">{{ auction.title }}</option>
+        </select>
+        <div class="invalid-feedback">
+          Please select the auction!
         </div>
       </div>
     </form>

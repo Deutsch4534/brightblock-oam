@@ -40,6 +40,6 @@ export default {
   border-radius: 10px;
   position: relative;
   top: 35px;
-  margin: auto auto;
+  margin-bottom: 150px;
 }
 </style>
