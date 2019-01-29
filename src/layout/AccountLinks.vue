@@ -13,6 +13,7 @@
           >Admin</router-link
         >
       </mdb-dropdown-item>
+      <!--
       <mdb-dropdown-item>
         <router-link
           class="dropdown-item"
@@ -20,6 +21,7 @@
           >My Account</router-link
         >
       </mdb-dropdown-item>
+      -->
       <mdb-dropdown-item>
         <a
           href="#"

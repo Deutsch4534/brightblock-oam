@@ -8,7 +8,7 @@
       <h3>{{auction.title}} <span v-if="auction.items">({{auction.items.length}} items)</span></h3>
       <p>{{auction.description}}</p>
       <p>
-        <a v-if="auction.privacy === 'private'" @click.prevent="makePublic()"><mdb-icon icon="lock"/> Unpublished</a>
+        <a v-if="auction.privacy === 'private'" @click.prevent="makePublic()"><mdb-icon icon="lock"/> Hidden</a>
         <a v-else @click.prevent="makePrivate()"><mdb-icon icon="unlock"/> Published.</a>
       </p>
       <p>{{countdown}}</p>
@@ -25,7 +25,7 @@
       </p>
     </div>
   </div>
-  <hr class="hr-dark my-5">
+  <hr class="my-5">
   <div class="row" v-if="hammerItem">
     <div class="col-md-6">
       <hammer-item :item="hammerItem" :admin="true" :auctionId="auctionId"/>
@@ -44,14 +44,18 @@
       <message-stream :auctionId="auctionId" :admin="true"/>
     </div>
   </div>
+  <hr class="my-5">
   <div class="row">
-    <div class="col-md-12 mt-5">
+    <div class="col-md-12">
       <h4>Items ({{sellingItemsSize}})</h4>
       <ul class="list-unstyled">
         <my-single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="true"/>
       </ul>
     </div>
-    <div class="col-md-12 mt-5">
+  </div>
+  <hr class="my-5"/>
+  <div class="row">
+    <div class="col-md-12">
       <h4>Available Items</h4>
       <ul class="list-unstyled mt-5">
         <my-single-auction-item class="auction-item-container" v-for="(item, index) of availableItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="false"/>

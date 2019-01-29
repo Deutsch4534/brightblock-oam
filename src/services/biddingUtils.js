@@ -40,7 +40,7 @@ const biddingUtils = {
         // statusClass = 'grey-bg'
       }
     } catch (err) {
-      statusClass = "btn-danger";
+      statusClass = "btn-white";
     }
     return statusClass;
   },

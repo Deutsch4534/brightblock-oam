@@ -229,6 +229,7 @@ export default {
         .catch(e => {
           $self.message = e.message;
           console.log(e.message);
+          $self.closeModal();
         });
     }
   }
