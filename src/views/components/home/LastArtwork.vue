@@ -1,13 +1,15 @@
 <template>
-<figure class="figure mr-4">
-  <router-link :to="artworkUrl">
-    <img :src="artwork.image" alt="artwork.title" class="figure-img img-fluid z-depth-1" style="width: 400px">
-  </router-link>
-  <figcaption class="figure-caption text-right">
-    {{artwork.title}} (By: {{artwork.artist}})
-    <span v-if="debugMode">{{artwork.bcitem.itemIndex}}, Owner: {{artwork.owner}}</span>
-  </figcaption>
-</figure>
+<div class="col-md-4">
+  <figure class="figure mr-4">
+    <router-link :to="artworkUrl">
+      <img :src="artwork.image" alt="artwork.title" class="figure-img img-fluid z-depth-1" style="width: 400px">
+    </router-link>
+    <figcaption class="figure-caption text-right">
+      {{artwork.title}} (By: {{artwork.artist}})
+      <span v-if="debugMode">{{artwork.bcitem.itemIndex}}, Owner: {{artwork.owner}}</span>
+    </figcaption>
+  </figure>
+</div>
 </template>
 
 <script>

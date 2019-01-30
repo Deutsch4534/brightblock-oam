@@ -1,42 +1,62 @@
 <template>
-<div class="row">
-  <div class="col-md-12 ">
-    <h4>{{artwork.title}}</h4>
-    <p>Current Bid: {{currentBidder}} {{currencySymbol}} {{currentBid}} {{item.fiatCurrency}}</p>
-    <img :src="artwork.image" :alt="artwork.title"/>
-  </div>
-  <div class="col-md-12" v-if="inplay">
-    <button
-          class="btn btn-primary" :class="bidStatusClass"
-          :disabled="paused || item.paused || item.sellingStatus === 'selling'"
-          @click.prevent="bid(nextBid)">Bid {{currencySymbol}} {{nextBid}} {{item.fiatCurrency}}</button>
-    <button
-          v-if="showSetFinalPriceButton"
-          class="btn btn-primary"
-          v-bind:data-artwork="artwork.id"
-          data-toggle="modal"
-          data-target="#setFinalBidPriceModal">Sell ({{currentBid}})</button>
-    <p v-if="selling && !admin" class="center-block text-center mt-3" v-html="sellingMessage"></p>
-    <p v-if="item.sellingStatus === 'selling' && artwork.bcitem">confirming...{{artwork.bcitem.itemIndex}}, {{artwork.bcitem.status}}, {{artwork.bcitem.price}}</p>
-    <button class="btn btn-white" v-if="item.sellingStatus === 'selling'" v-on:click="openSetFinalBidPriceDialog">Confirm Price</button>
+<mdb-card dark>
+  <mdb-view hover v-if="inplay">
+    <img class="inplay-image img-fluid" width="100%" :src="artwork.image" :alt="artwork.title"></img>
+    <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+  </mdb-view>
+  <mdb-card-body color="elegant" class="white-text">
+    <mdb-card-title>{{artwork.title}}</mdb-card-title>
+    <hr class="hr-light"/>
+    <div v-if="!loggedIn">
+      Log in to bid!
+    </div>
+    <div v-else>
+      <div v-if="inplay">
+        <p class="font-small mb-3">Current Bid: {{currentBidder}} {{currencySymbol}} {{currentBid}} {{item.fiatCurrency}}</p>
+        <!-- <a class="white-text d-flex justify-content-end"><h5>Read more <mdb-icon icon="angle-double-right" class="pl-1" /></h5></a> -->
+        <button
+              class="btn btn-primary" :class="bidStatusClass"
+              :disabled="paused || item.paused || item.sellingStatus === 'selling'"
+              @click.prevent="bid(nextBid)">Bid {{currencySymbol}} {{nextBid}} {{item.fiatCurrency}}</button>
+        <button
+              v-if="showSetFinalPriceButton"
+              class="btn btn-primary"
+              v-bind:data-artwork="artwork.id"
+              data-toggle="modal"
+              data-target="#setFinalBidPriceModal">Sell ({{currentBid}})</button>
+        <p v-if="selling && !admin" class="center-block text-center mt-3" v-html="sellingMessage"></p>
+        <p v-if="item.sellingStatus === 'selling' && artwork.bcitem">confirming...{{artwork.bcitem.itemIndex}}, {{artwork.bcitem.status}}, {{artwork.bcitem.price}}</p>
+        <button class="btn btn-white" v-if="item.sellingStatus === 'selling'" v-on:click="openSetFinalBidPriceDialog">Confirm Price</button>
 
-    <span v-if="admin">
-      <button v-if="item.paused" class="btn btn-white" @click.prevent="unpauseBidding">Unpause Bidding</button>
-      <button v-else class="btn btn-white" @click.prevent="pauseBidding">Pause Bidding</button>
-    </span>
-  </div>
-</div>
+        <span v-if="admin">
+          <button v-if="item.paused" class="btn btn-white" @click.prevent="unpauseBidding">Unpause Bidding</button>
+          <button v-else class="btn btn-white" @click.prevent="pauseBidding">Pause Bidding</button>
+        </span>
+      </div>
+    </div>
+  </mdb-card-body>
+</mdb-card>
 </template>
 
 <script>
 import peerToPeerService from "@/services/peerToPeerService";
 import moneyUtils from "@/services/moneyUtils";
 import biddingUtils from "@/services/biddingUtils";
+import { mdbCard, mdbView, mdbMask, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "HammerItem",
-  components: {},
+  components: {
+    mdbView,
+    mdbCard,
+    mdbCardImage,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardText,
+    mdbBtn,
+    mdbMask
+  },
   props: {
     auctionId: null,
     admin: false,
@@ -117,9 +137,17 @@ export default {
           image: "/images/missing-image.jpg"
         };
       }
-      return this.$store.getters["artworkSearchStore/getArtwork"](
+      let a = this.$store.getters["artworkSearchStore/getArtwork"](
         this.item.itemId
       );
+      if (!a.image) {
+        a.image = require("@/assets/img/logo/T_8_Symbolmark_black.png");
+      }
+      return a;
+    },
+    loggedIn() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      return myProfile.loggedIn;
     },
     bidStatusClass() {
       return biddingUtils.bidStatusClass(this.item);
@@ -169,3 +197,10 @@ export default {
   }
 };
 </script>
+<style scoped>
+.inplay-image  img {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+</style>

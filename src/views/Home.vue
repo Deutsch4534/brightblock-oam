@@ -1,17 +1,33 @@
 <template>
 <div class="container">
-  <div id="images">
-    <last-artworks :artworks="artworks" class=""/>
-  </div>
+  <mdb-row v-if="auctionsSize > 0">
+    <div class="col-md-12"><h5>Featured Auctions</h5></div>
+    <single-auction v-for="(auction, index) of onlineAuctions" :key="index" :auction="auction"/>
+  </mdb-row>
+  <hr/>
+  <h5>Featured Artworks</h5>
+  <last-artworks :artworks="artworks" class=""/>
 </div>
 </template>
 
 <script>
 import LastArtworks from "./components/home/LastArtworks";
+import SingleAuction from "./components/auction/SingleAuction";
+import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
+import { mdbContainer, mdbRow } from 'mdbvue';
 
 export default {
   components: {
-    LastArtworks
+    LastArtworks,
+    mdbContainer,
+    mdbRow,
+    mdbCard,
+    mdbCardImage,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardText,
+    mdbBtn,
+    SingleAuction
   },
   name: "home",
   bodyClass: "index-page",
@@ -32,11 +48,22 @@ export default {
       password: null
     };
   },
+  created() {
+    this.$store.dispatch("onlineAuctionsStore/fetchOnlineAuctions").then(() => {
+      // loading online auctions
+    });
+  },
   methods: {},
   computed: {
     artworks() {
       return this.$store.getters["artworkSearchStore/homePageArtworks"];
     },
+    auctionsSize() {
+      return this.$store.getters["onlineAuctionsStore/onlineAuctions"].length;
+    },
+    onlineAuctions() {
+      return this.$store.getters["onlineAuctionsStore/onlineAuctions"];
+    }
   },
   mounted() {}
 };

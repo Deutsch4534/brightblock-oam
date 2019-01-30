@@ -15,9 +15,11 @@ export default {
     MyArtworkUploadForm
   },
   data() {
-    return {};
+    return {
+      enabled: false
+    };
   },
-  created() {},
+  mounted() {},
   computed: {},
   methods: {}
 };

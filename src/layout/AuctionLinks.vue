@@ -13,8 +13,7 @@
         <router-link
           class="dropdown-item"
           to="/my-artwork/upload"
-          >Upload Artwork</router-link
-        >
+          >Upload Artwork</router-link>
       </mdb-dropdown-item>
       <mdb-dropdown-item v-if="loggedIn">
         <router-link

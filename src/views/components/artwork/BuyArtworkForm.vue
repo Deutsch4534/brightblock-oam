@@ -1,34 +1,23 @@
 <template>
-<div class="header">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <span v-html="fiatMessage"></span>
-      </div>
-      <div class="col-md-2">
-        <span v-html="ethMessage"></span>
-      </div>
-      <div class="col-md-2">
-        <span v-html="btcMessage"></span>
-      </div>
-      <div class="col-md-4">
-        <button :disabled="!purchaseState.canBuy" v-bind:class="{ 'primary': purchaseState.canBuy, 'md-gray': !purchaseState.canBuy }"  @click="buyArtwork()">
-          <mdb-icon icon="money-bill-alt" /> buy
-        </button>
-      </div>
-    </div>
+<div class="row">
+  <div class="col-md-12">
+    <span class="white-text d-flex justify-content-start" v-html="fiatMessage"></span>
+    <span class="white-text d-flex justify-content-start" v-html="ethMessage"></span>
+    <span class="white-text d-flex justify-content-start" v-html="btcMessage"></span>
+    <a class="white-text d-flex justify-content-end"><mdb-btn :disabled="!purchaseState.canBuy" v-bind:class="{ 'white': purchaseState.canBuy, 'grey': !purchaseState.canBuy }"  @click="buyArtwork()">buy</mdb-btn></a>
   </div>
 </div>
 </template>
 
 <script>
-import { mdbIcon } from 'mdbvue';
+import { mdbIcon, mdbBtn } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "BuyArtworkForm",
   components: {
-    mdbIcon
+    mdbIcon,
+    mdbBtn
   },
   props: {
     purchaseState: {},

@@ -12,6 +12,7 @@
       <mdb-input label="Your email" icon="envelope" type="email" class="mb-5" v-modal="email"/>
       <mdb-input label="Your password" icon="lock" type="password" v-model="password"/>
     -->
+      <p>Login in with your decentralised (<a href="https://blockstack.org/install/" traget="_blank">Blockstack</a>) identity.</p>
     </mdb-modal-body>
     <mdb-modal-footer center>
       <mdb-btn v-on:click="loginMultiPlayer">Login</mdb-btn>

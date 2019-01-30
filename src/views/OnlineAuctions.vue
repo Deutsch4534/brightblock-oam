@@ -5,10 +5,12 @@
     <single-auction v-for="(auction, index) of onlineAuctions" :key="index" :auction="auction"/>
   </mdb-row>
   <hr/>
+  <!--
   <mdb-row v-if="auctionsArchiveSize > 0">
     <div class="col-md-12"><h2>Archives</h2></div>
     <single-auction v-for="(auction, index) of pastAuctions" :key="index" :auction="auction" :atype="'archive'"/>
   </mdb-row>
+  -->
 </mdb-container>
 </template>
 

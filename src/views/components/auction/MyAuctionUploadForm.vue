@@ -106,7 +106,7 @@
       <div class="col-md-4">
         <h4>Set Auction Logo</h4>
         <p class="muted"><small>Size limit: 500Kb</small></p>
-        <media-upload :sizeLimit="'500'" :quantityLimit="'1'" @updateMedia="setLogo($event)"/>
+        <media-upload :logo="auction.logo" :sizeLimit="'500'" :quantityLimit="'1'" @updateMedia="setLogo($event)"/>
         <p class="muted"><small>{{auction.logo.name}}</small></p>
       </div>
     </div>
@@ -174,6 +174,13 @@ export default {
     username() {
       let profile = this.$store.getters["myAccountStore/getMyProfile"];
       return profile.username;
+    },
+    convertToMedia() {
+      if (this.auction && this.auction.logo && this.auction.logo.dataUrl) {
+        let stuff = [];
+        return stuff.push(this.auction.logo);
+      }
+      return [];
     }
   },
   methods: {

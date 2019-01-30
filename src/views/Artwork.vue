@@ -1,24 +1,23 @@
 <template>
-<mdb-jumbotron class="mb-0 text-center hoverable p-4">
-  <mdb-row>
-    <mdb-col md="4" offsetMd="1" class="m-3">
-      <mdb-view :src="artwork.image"  :alt="artwork.title">
-        <a><mdb-mask waves overlay="white-slight"/></a>
-      </mdb-view>
-    </mdb-col>
-    <mdb-col md="7" class="text-md-left ml-3 mt-3">
-      <a href="#!" class="green-text">
-        <h6 class="h6 pb-1"><mdb-icon icon="desktop" class="pr-1"/> Purchase</h6>
-      </a>
-      <h4 class="h4 mb-4">{{artwork.title}}</h4>
-      <p class="font-weight-normal">{{artwork.description}}</p>
-      <p class="font-weight-normal">by <a><strong>{{artist.name}}</strong></a>, 19/08/2016</p>
-      <p class="keywords">Keywords ︱ {{aboutArtwork.keywords}}</p>
-      <buy-artwork-form v-if="isRegistered" :purchaseState="purchaseState" :artwork="artwork" @buy="buyArtwork()"/>
-      <p v-else>Artwork not registered on blockchain</p>
-    </mdb-col>
-  </mdb-row>
-</mdb-jumbotron>
+<div class="container">
+<mdb-card dark>
+  <mdb-view hover>
+    <img class="inplay-image img-fluid" width="100%" :src="artwork.image" :alt="artwork.title"></img>
+    <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+  </mdb-view>
+  <mdb-card-body color="elegant" class="white-text">
+    <mdb-card-title>{{artwork.title}}</mdb-card-title>
+    <hr class="hr-light"/>
+    <p class="font-weight-normal">{{artwork.description}}</p>
+    <p class="font-weight-normal">by <a><strong>{{artist.name}}</strong></a>, 19/08/2016</p>
+    <p class="keywords">Keywords ︱ {{aboutArtwork.keywords}}</p>
+
+    <buy-artwork-form v-if="isRegistered && isPriceSet" :purchaseState="purchaseState" :artwork="artwork" @buy="buyArtwork()"/>
+    <p v-else-if="!isRegistered">Artwork not registered on blockchain.</p>
+    <p v-else-if="!isPriceSet">Artwork is registered on chain but is not currently for sale.</p>
+  </mdb-card-body>
+  </mdb-card>
+</div>
 </template>
 
 <script>
@@ -59,9 +58,10 @@ export default {
     return {
       artwork: {
         type: Object,
+        image: require("@/assets/img/logo/T_8_Symbolmark_black.png"),
         default() {
           return {
-            bcitem: {}
+            bcitem: {},
           };
         }
       },
@@ -136,7 +136,15 @@ export default {
     isRegistered() {
       let artwork = this.artwork;
       try {
-        return artwork.bcitem && artwork.bcitem.itemId && artwork.bcitem.itemId > 0;
+        return artwork.bcitem && artwork.bcitem.itemIndex && artwork.bcitem.itemIndex > 0;
+      } catch (e) {
+        return false;
+      }
+    },
+    isPriceSet() {
+      let artwork = this.artwork;
+      try {
+        return artwork.bcitem && artwork.bcitem.price > 0 && artwork.bcitem.price > 0;
       } catch (e) {
         return false;
       }
@@ -224,5 +232,8 @@ export default {
 <style>
 .view img {
   width: 100%;
+}
+.jumbotron {
+  height: 130vh;
 }
 </style>

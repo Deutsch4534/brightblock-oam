@@ -4,8 +4,8 @@
     <button class="btn btn-primary" @click="routeToBuyNow">Buy Now</button>
   </div>
   <div v-else-if="sellingAuction">
-    <button class="btn btn-primary" @click="routeToPublicAuction">Place Bid</button>
-    <button class="btn btn-primary" @click="routeToManageAuction">Manage Auction</button>
+    <button class="btn btn-white" @click="routeToPublicAuction">Place Bid</button>
+    <button class="btn btn-white" @click="routeToManageAuction">Manage Auction</button>
   </div>
   <div v-else>
     <h6>Not Selling</h6>

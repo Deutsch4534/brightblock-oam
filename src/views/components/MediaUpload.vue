@@ -2,7 +2,7 @@
 <div>
 <mdb-card>
   <mdb-card-body>
-    <mdb-card-title>Upload Media</mdb-card-title>
+    <h5>Upload Media</h5>
     <mdb-card-text>
       <div class="text-danger">{{errorMessage}}</div>
         <div class="load-artwork" v-if="checkQuantity">
@@ -42,14 +42,20 @@ export default {
     mdbCardText,
     mdbBtn
   },
-  props: ["sizeLimit", "quantityLimit"],
+  props: {
+    logo: {}
+  },
   data() {
     return {
+      errorMessage: null,
       mediaObjects: [],
-      errorMessage: null
     };
   },
-  mounted() {},
+  created() {
+    if (this.logo && this.logo.dataUrl) {
+      this.mediaObjects.push(this.logo);
+    }
+  },
   computed: {
     checkQuantity: function() {
       return this.mediaObjects.length < Number(this.quantityLimit);

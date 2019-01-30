@@ -20,12 +20,12 @@
         <a>
           <strong>{{artistProfile.name}}</strong>
         </a>, 11/08/2018</p>
-        <router-link :to="registerUrl" class="text-white"><mdb-btn color="indigo" size="md" class="waves-light " v-if="canRegister">Register</mdb-btn></router-link>
-        <router-link :to="registerForSaleUrl" class="text-white"><mdb-btn color="indigo" size="md" class="waves-light " v-if="canSell">Buy</mdb-btn></router-link>
-        <router-link :to="registerForAuctionUrl" class="text-white"><mdb-btn color="indigo" size="md" class="waves-light " v-if="canAuction">Auction</mdb-btn></router-link>
-        <a @click="deleteArtwork(artwork.id)" class="text-white"><mdb-btn color="indigo" size="md" class="waves-light " v-if="debugMode">Delete</mdb-btn></a>
-        <router-link :to="editUrl" class="text-white"><mdb-btn color="indigo" size="md" class="waves-light " v-if="editable">Edit</mdb-btn></router-link>
-        <router-link :to="buyNowUrl" class="text-white"><mdb-btn color="indigo" size="md" class="waves-light ">Open</mdb-btn></router-link>
+        <router-link :to="registerUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="canRegister">Register</mdb-btn></router-link>
+        <router-link :to="registerForSaleUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="canSell">Buy</mdb-btn></router-link>
+        <router-link :to="registerForAuctionUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="canAuction">Auction</mdb-btn></router-link>
+        <a @click="deleteArtwork(artwork.id)" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="debugMode">Delete</mdb-btn></a>
+        <router-link :to="editUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="editable">Edit</mdb-btn></router-link>
+        <router-link :to="buyNowUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light ">Open</mdb-btn></router-link>
     </mdb-col>
   </mdb-row>
 </mdb-container>

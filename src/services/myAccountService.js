@@ -19,21 +19,38 @@ const myAccountService = {
     };
     let account = loadUserData();
     if (account) {
+      let uname = account.username;
       let person = new Person(account.profile);
+      let name = person.name();
+      if (uname) {
+        if (!name) {
+          let indexOfDot = uname.indexOf(".");
+          name = uname.substring(0, indexOfDot);
+        }
+      }
+      if (!uname && name) {
+        uname = name;
+      }
       let showAdmin =
-        account.username === "mike.personal.id" ||
-        account.username.indexOf("brightblock") > -1 ||
-        account.username.indexOf("antonio") > -1;
+        uname === "mike.personal.id" ||
+        uname.indexOf("brightblock") > -1 ||
+        uname.indexOf("sybellaio") > -1 ||
+        uname.indexOf("rosemarry") > -1 ||
+        uname.indexOf("anton") > -1;
       let privateKey = account.appPrivateKey + "01";
+      let avatarUrl = person.avatarUrl();
+      if (!avatarUrl) {
+        avatarUrl =  require("@/assets/img/missing/anonuser3.png");
+      }
       privateKey = hexStringToECPair(privateKey).toWIF();
       myProfile = {
         loggedIn: true,
         appPrivateKey: privateKey,
         showAdmin: showAdmin,
-        name: person.name(),
+        name: name,
         description: person.description(),
-        avatarUrl: person.avatarUrl(),
-        username: account.username,
+        avatarUrl: avatarUrl,
+        username: uname,
         hubUrl: account.hubUrl,
         apps: account.profile.apps
       };

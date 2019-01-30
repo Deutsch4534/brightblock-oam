@@ -2,6 +2,7 @@
 <mdb-container fluid id="ContactSection" class="p-5 text-white">
     <section class="my-5 mx-5 px-5">
       <h2 class="h1-responsive font-weight-bold mt-5">{{title}}</h2>
+      <p v-html="featureMessage"></p>
       <mdb-row>
         <mdb-col md="6" class="md-0 p-5">
           <div class="col-md-12">
@@ -68,6 +69,7 @@ export default {
     mdbCard,
     mdbCardBody
   },
+  props: ["featureMessage"],
   data() {
     return {
       title: "",
@@ -96,6 +98,8 @@ export default {
       console.log("Code to send message needed here.. " + this.message);
       // send the message
     }
+  },
+  computed: {
   }
 };
 </script>
