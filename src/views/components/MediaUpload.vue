@@ -49,6 +49,8 @@ export default {
     return {
       errorMessage: null,
       mediaObjects: [],
+      sizeLimit: "500",
+      quantityLimit: "1",
     };
   },
   created() {
