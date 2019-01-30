@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-if="'0 = unsold + sold'">
+<div class="container" v-if="noartworks">
   <p>No artworks found in you're portfolio!</p>
   <p><router-link to="/my-artwork/upload">Upload Artwork</router-link> to get started...</p>
 </div>
@@ -43,6 +43,9 @@ export default {
     },
     numberArtworksUnsold() {
       return this.$store.getters["myArtworksStore/numberArtworksUnsold"];
+    },
+    noartworks() {
+      return (this.$store.getters["myArtworksStore/numberArtworksUnsold"] + this.$store.getters["myArtworksStore/numberArtworksSold"]) === 0;
     }
   }
 };
