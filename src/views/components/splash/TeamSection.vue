@@ -1,6 +1,6 @@
 <template>
   <mdb-container id="TeamSection">
-    <section class="mx-5px-5 text-center">
+    <section class="mx-5px-5 text-center border-top border-dark">
       <h2 class="h1-responsive font-weight-bold my-5">{{title}}</h2>
       <p class="grey-text w-responsive mx-auto mb-5">{{description}}</p>
       <mdb-row>

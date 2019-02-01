@@ -1,6 +1,6 @@
 <template>
   <mdb-dropdown tag="li" class="nav-item">
-    <mdb-dropdown-toggle tag="a" class="dropleft" navLink color="stylish" slot="toggle" waves-fixed v-html="avatar"></mdb-dropdown-toggle>
+    <mdb-dropdown-toggle tag="a" class="dropleft pr-1" navLink color="stylish" slot="toggle" waves-fixed v-html="avatar"></mdb-dropdown-toggle>
     <mdb-dropdown-menu class="dropdown-menu-right">
       <mdb-dropdown-item>
         <a class="dropdown-item"><mdb-icon fab icon="500px" /> {{ username }}</a>
@@ -101,3 +101,10 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .dropdown .dropdown-menu .dropdown-item:hover {
+    background: initial;
+    box-shadow: none;
+    color: initial!important;
+  }
+</style>
