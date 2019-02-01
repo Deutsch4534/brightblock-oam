@@ -153,7 +153,6 @@ export default {
     this.getContent();
   },
   updated() {
-    console.log('updated');
     let navbar = document.getElementById("main-navigation");
     navbar.classList.remove("navbar-expand-lg");
   },
@@ -240,14 +239,6 @@ export default {
           this.extraNavClasses = "";
           navbarColor.classList.add("md-transparent");
         }
-      }
-    },
-    showHamburgerMenu() {
-      let navbar = document.getElementById("main-navigation");
-      if(navbar.classList.contains('navbar-expand-lg')){
-        console.log(navbar.classList);
-        navbar.classList.remove("navbar-expand-lg");
-        console.log(navbar.classList);
       }
     },
     scrollListener() {

@@ -20,7 +20,11 @@ export default {
     if (routeName === "brightBlock" || routeName === "profile") {
       this.showLeafs = true;
     }
-  }
+  },
+  updated() {
+    let navbar = document.getElementById("main-navigation");
+    navbar.classList.remove("navbar-expand-lg");
+  },
 };
 </script>
 <style>
