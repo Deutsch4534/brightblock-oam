@@ -1,52 +1,57 @@
 <template>
-<mdb-container fluid id="ContactSection" class="p-5 text-white">
-    <section class="my-5 mx-5 px-5">
-      <h2 class="h1-responsive font-weight-bold mt-5">{{title}}</h2>
+<mdb-container fluid id="ContactSection" class="py-5 text-white">
+    <section class="mt-5 mb-0 px-0">
+      <h2 class="h1-responsive my-5">{{title}}</h2>
       <p v-html="featureMessage"></p>
       <mdb-row>
-        <mdb-col md="6" class="md-0 p-5">
+        <mdb-col md="6" class="md-0 px-0">
           <div class="col-md-12">
             <router-link to="/" class="navbar-brand"><img :src="logo" height="100px" alt="t8 logo"></router-link>
           </div>
           <div class="col-md-12">
             <h5 class="my-4">Contact Info</h5>
-            <p>Brighton, UK</p>
+            <p>Brighton, BN1 1AL UK</p>
             <p>Phone: +49 6579 3 456</p>
             <p>Email: contact@transit8.com</p>
           </div>
         </mdb-col>
         <mdb-col md="6" class="text-white">
-          <form class="text-white">
+          <form class="text-white contact-form">
             <mdb-row>
-              <mdb-col md="6">
-                <div class="md-form mb-0">
+              <mdb-col md="12">
+                <div class="mb-0">
                   <mdb-input type="text" id="contact-name" label="Your name" />
                 </div>
               </mdb-col>
-              <mdb-col md="6">
-                <div class="md-form mb-0">
+              <mdb-col md="12">
+                <div class="mb-0">
                   <mdb-input type="text" id="contact-email" label="Your email" />
                 </div>
               </mdb-col>
             </mdb-row>
             <mdb-row>
               <mdb-col md="12">
-                <div class="md-form mb-0">
+                <div class="mb-0">
                   <mdb-input type="text" id="contact-subject" label="Subject" />
                 </div>
               </mdb-col>
             </mdb-row>
             <mdb-row>
               <mdb-col md="12">
-                <div class="md-form mb-0">
+                <div class="mb-0">
                   <mdb-textarea id="contact-message" label="Your message" />
                 </div>
               </mdb-col>
             </mdb-row>
-            <div class="text-center text-md-left">
-              <span size="md" @click="submit">SUBMIT</span>
+            <div class="text-md-left mt-5 submit">
+              <span type="button" class="h2" @click="submit">SUBMIT</span>
             </div>
           </form>
+        </mdb-col>
+      </mdb-row>
+      <mdb-row>
+        <mdb-col col="12 mt-5">
+         <span class="copyright">© 2018 TRANSIT8. ALL RIGHTS RESERVED.</span>
         </mdb-col>
       </mdb-row>
     </section>
@@ -105,9 +110,6 @@ export default {
 </script>
 
 <style>
-#ContactSection {
-  background-color: #5400E8;
-}
 .raised {
   border-radius: 10px;
   position: relative;
@@ -115,5 +117,29 @@ export default {
   margin: auto auto;
   margin-bottom: 50px;
 }
+.contact-form .md-form label,
+.contact-form .md-form textarea ~ label.active {
+  color: #ECEFF1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 
+}
+
+.contact-form .form-control {
+  color: #ECEFF1;
+  font-weight: normal;
+}
+
+  .contact-form .submit {
+    cursor: pointer;
+  }
+</style>
+<style scoped>
+  .md-form {
+    margin-top: 0.7rem;
+    margin-bottom: 0.7rem;
+  }
+.copyright {
+  font-size: 0.7rem;
+}
 </style>

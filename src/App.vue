@@ -24,6 +24,16 @@ export default {
 };
 </script>
 <style>
+  @font-face {
+    font-family: 'Noto Serif Disp ExtCond';
+    src: url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot');
+    src: url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot?#iefix') format('embedded-opentype'),
+    url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.woff2') format('woff2'),
+    url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.woff') format('woff'),
+    url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.svg#NotoSerifDisplay-ExtraCondensedLight') format('svg');
+    font-weight: 300;
+    font-style: normal;
+  }
 .section-download {
   .btn + .btn {
     margin-left: 5px;
@@ -33,6 +43,15 @@ export default {
 @media all and (min-width: 991px) {
   .btn-container {
     display: flex;
+  }
+}
+
+.h1 { font-size: 3rem; font-weight: normal; }
+
+@media (min-width: 992px) {
+  .h1-responsive {
+    font-size: 300%;
+    font-weight: normal!important;
   }
 }
 

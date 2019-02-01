@@ -1,37 +1,68 @@
 <template>
 <div>
+  <mdb-container fluid class="border-top border-dark">
   <mdb-container>
-    <mdb-row class="py-5 mx-auto border-top border-dark" id="AboutSection">
-      <div class="col-md-8 offset-md-2">
+    <mdb-row class="py-5 mx-auto" id="AboutSection">
+      <div class="col-md-8 mx-auto">
         <h1 class="mb-0 pt-md-5 pt-5">{{title1}}</h1>
         <hr class="hr-light my-4">
         <p class="mb-4">{{description1}}</p>
       </div>
     </mdb-row>
-    <mdb-row class="py-5 mx-auto border-top border-dark">
-      <div class="col-md-8 offset-md-2">
+  </mdb-container>
+  </mdb-container>
+  <mdb-container fluid class="border-top border-dark">
+    <mdb-container>
+    <mdb-row class="py-5">
+      <div class="col-md-8 mx-auto">
         <h1 class="mb-0 pt-md-5 pt-5">{{title2}}</h1>
         <hr class="hr-light my-4">
         <p class="mb-4">{{description2}}</p>
       </div>
     </mdb-row>
+    </mdb-container>
+  </mdb-container>
+  <mdb-container fluid class="border-top border-dark">
+    <mdb-container>
     <audience-section/>
+    </mdb-container>
+  </mdb-container>
+  <mdb-container fluid class="border-top border-dark">
+    <mdb-container>
     <features-section/>
+    </mdb-container>
+  </mdb-container>
     <!--
       <mdb-row class="py-5">
         <mission-section/>
       </mdb-row>
     -->
+  <mdb-container fluid class="border-top border-dark">
+    <mdb-container>
     <mdb-row class="py-5">
       <team-section/>
     </mdb-row>
+    </mdb-container>
+  </mdb-container>
+  <mdb-container fluid class="border-top border-dark">
+    <mdb-container>
+      <auction-section/>
+    </mdb-container>
+  </mdb-container>
+  <mdb-container fluid class="border-top border-dark">
+    <mdb-container>
     <mdb-row class="py-5">
       <donate-section/>
     </mdb-row>
   </mdb-container>
-  <div class="container-fluid px-0 mx-0">
-    <contact-section/>
-  </div>
+  </mdb-container>
+  <mdb-container fluid class="bg-main">
+    <mdb-container>
+      <div class="container-fluid px-0 mx-0">
+        <contact-section/>
+      </div>
+    </mdb-container>
+  </mdb-container>
 </div>
 </template>
 
@@ -43,9 +74,11 @@ import TeamSection from "./components/splash/TeamSection";
 import DonateSection from "./components/splash/DonateSection";
 import AudienceSection from "./components/splash/AudienceSection";
 import FeaturesSection from "./components/splash/FeaturesSection";
+import AuctionSection from './components/splash/AuctionSection';
 
 export default {
   components: {
+    AuctionSection,
     mdbContainer,
     mdbRow,
     ContactSection,
@@ -86,4 +119,9 @@ export default {
     font-weight: 300;
     font-style: normal;
   }
+
+  .bg-main {
+    background-color: #5400E8;
+  }
 </style>
+

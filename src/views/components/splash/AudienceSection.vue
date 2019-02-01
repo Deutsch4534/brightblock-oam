@@ -1,47 +1,47 @@
 <template>
-<mdb-row id="AudienceSection" class="py-5 mx-auto border-top border-dark" border-top border-dark>
-  <div class="col-md-8 offset-md-2">
-    <h1 class="mb-0 pt-md-5 pt-5">{{title}}</h1>
+<mdb-row id="AudienceSection" class="py-5 col-md-10 mx-auto d-flex" border-top border-dark>
+  <div class="col-12">
+    <h2 class="h1 pt-md-5 pt-5">{{title}}</h2>
     <hr class="hr-light my-4">
   </div>
-  <div class="col-md-3 offset-md-2">
+  <div class="col-md-4 d-flex">
     <!-- Card -->
-    <div class="card">
+    <div class="card mb-2">
       <!-- Card content -->
       <div class="card-body">
         <h4 class="card-title"><a>{{cardTitle1}}</a></h4>
         <p class="card-text">{{cardDescription1}}</p>
       </div>
-      <div class="card-body text-right">
-        <mdb-icon far icon="user" />
+      <div class="card-body pt-0 d-flex align-items-end justify-content-end">
+        <mdb-icon far icon="address-book" />
       </div>
     </div>
     <!-- Card -->
   </div>
-  <div class="col-md-3">
+  <div class="col-md-4 d-flex">
     <!-- Card -->
-    <div class="card">
+    <div class="card mb-2">
       <!-- Card content -->
       <div class="card-body">
         <h4 class="card-title"><a>{{cardTitle2}}</a></h4>
         <p class="card-text">{{cardDescription2}}</p>
       </div>
-      <div class="card-body text-right">
-        <mdb-icon far icon="users" />
+      <div class="card-body pt-0 d-flex align-items-end justify-content-end">
+        <mdb-icon far icon="bookmark" />
       </div>
     </div>
     <!-- Card -->
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-4 d-flex">
     <!-- Card -->
-    <div class="card">
+    <div class="card mb-2">
       <!-- Card content -->
       <div class="card-body">
         <h4 class="card-title"><a>{{cardTitle3}}</a></h4>
         <p class="card-text">{{cardDescription3}}</p>
       </div>
-      <div class="card-body text-right">
+      <div class="card-body pt-0 d-flex align-items-end justify-content-end">
         <mdb-icon icon="university" />
       </div>
     </div>
@@ -73,7 +73,7 @@ export default {
       cardDescription1: "Upload your artworks to your own storage register provenance and list them on our the open marketplace. All transactions are done in bitcoin and directly atributed to your wallet. Once the artwork is sold it moves its physical location from artist storage to collector storage.",
       cardTitle2: "COLLECTORS",
       cardDescription2: "Collect works of art from up and coming artists. Each art purchase makes you the owner of the artwork with registered provenance on the blockchain, as well you are the sole owner of digital artwork as well. If you destroy the file, the original is lost forever.",
-      cardTitle3: "GALLERIES",
+      cardTitle3: "INSTITUTIONS",
       cardDescription3: "Be part of our art movement by providing grants or starting competitions on our platform, use transit8 tools to engage with the community and create something exceptional together.",
     };
   }
@@ -83,5 +83,15 @@ export default {
 <style scoped>
 .card {
   border: 2pt solid black;
+}
+h4.card-title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+.card-body i {
+  font-size: 1.5rem;
+}
+.card .card-body .card-text {
+  color: black;
 }
 </style>
