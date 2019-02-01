@@ -1,30 +1,63 @@
 <template>
 <!-- Main navigation 424f95 -->
 <header>
-<mdb-navbar :color="'stylish'" position="top" dark href="#" transparent scrolling>
+<!-- Navbar -->
+<mdb-navbar :color="'stylish'" position="top" dark href="#" transparent scrolling hamburger animated animation="4" id="main-navigation">
   <!-- mdbNavbar brand -->
   <mdb-navbar-brand>
+    <form class="md-form search-form white-text">
+      <a type="button" @click="doSearch">
+        <mdb-icon class="mb-0 mr-2" icon="search" />
+      </a>
+      <input label="Search" type="text" class="text-white active-white active-white-2 mt-0 mb-0" v-model="query"
+             placeholder="Search TRANSIT8" aria-label="Search"/>
+    </form>
     <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
   </mdb-navbar-brand>
+  <mdb-navbar-nav right>
+    <li v-if="!loggedIn" class="nav-item ripple-parent"><router-link to="/login" class="nav-link navbar-link login-link mr-2"><mdb-icon icon="fingerprint" /> Login</router-link></li>
+    <account-links v-if="loggedIn"/>
+  </mdb-navbar-nav>
   <mdb-navbar-toggler>
     <mdb-navbar-nav mx-auto>
-      <li class="nav-item ripple-parent" @click="scrollToElement('TeamSection', $event)"><router-link to="/" name="sectionUrl('TeamSectionSection')" class="nav-link navbar-link" >Team</router-link></li>
-      <li class="nav-item ripple-parent" @click="scrollToElement('ContactSection', $event)"><router-link to="/" name="sectionUrl('ContactSection')" class="nav-link navbar-link">Contact</router-link></li>
-      <li class="nav-item ripple-parent"><router-link to="/home" class="nav-link navbar-link">Gallery</router-link></li>
-      <li class="nav-item ripple-parent"><router-link to="/artists" class="nav-link navbar-link">Artists</router-link/></li>
-      <li class="nav-item ripple-parent"><router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link/></li>
+      <li class="nav-item ripple-parent">
+        <router-link to="/home" class="nav-link navbar-link">Gallery</router-link>
+      </li>
+      <li class="nav-item ripple-parent">
+        <router-link to="/artists" class="nav-link navbar-link">Artists</router-link>
+      </li>
+      <li class="nav-item ripple-parent">
+        <router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link>
+      </li>
       <auction-links v-if="loggedIn"/>
-    </mdb-navbar-nav>
-    <mdb-navbar-nav right>
-      <form class="form-inline">
-        <mdb-input label="Search" type="text" class="active-white active-white-2 mt-0 mb-3" v-model="query"/>
-        <mdb-btn outline="white" size="sm" class="my-0" type="submit" @click="doSearch">Search</mdb-btn>
-      </form>
-      <li v-if="!loggedIn" class="nav-item ripple-parent"><router-link to="/login" class="nav-link navbar-link"><mdb-icon icon="fingerprint" /> login</router-link></li>
-      <account-links v-if="loggedIn"/>
+      <div class="mb-4"></div>
+      <li class="nav-item ripple-parent" @click="scrollToElement('AboutSection', $event); closeMenu()">
+        <router-link to="/" name="sectionUrl('AboutSection')" class="nav-link navbar-link">About</router-link>
+      </li>
+      <li class="nav-item ripple-parent" @click="scrollToElement('TeamSection', $event); closeMenu()">
+        <router-link to="/" name="sectionUrl('TeamSectionSection')" class="nav-link navbar-link">Team</router-link>
+      </li>
+      <li class="nav-item ripple-parent" @click="scrollToElement('ContactSection', $event); closeMenu()">
+        <router-link to="/" name="sectionUrl('ContactSection')" class="nav-link navbar-link">Contact</router-link>
+      </li>
+      <div class="mb-4"></div>
+      <li v-if="!loggedIn" class="nav-item ripple-parent">
+        <router-link to="/login" class="nav-link navbar-link">
+          Login
+        </router-link>
+      </li>
+      <li v-if="loggedIn" class="nav-item ripple-parent">
+        <a href="#"
+          @click.prevent="logout"
+          class="nav-link navbar-link">
+          Logout</a
+        >
+      </li>
     </mdb-navbar-nav>
   </mdb-navbar-toggler>
 </mdb-navbar>
+  <!--/.Navbar-->
+
   <!-- Full Page Intro https://mdbootstrap.com/img/Photos/Others/img%20%2848%29.jpg -->
   <div class="view jarallax" :style="headerStyle">
     <!-- Mask & flexbox options-->
@@ -35,8 +68,8 @@
         <div class="row">
           <!--Grid column-->
           <div class="col-md-12 mb-4 white-text text-left">
-            <h5 class="text-uppercase mb-4 white-text wow fadeInDown" data-wow-delay="0.4s"><strong v-html="tagline"></strong></h5>
-            <router-link :to="getAuctionLink"><mdb-btn outline="white">Learn More</mdb-btn></router-link>
+            <h1 class="tagline mb-4 text-center fadeInDown" data-wow-delay="0.4s" v-html="tagline"></h1>
+            <!--<router-link :to="getAuctionLink"><mdb-btn outline="white">Learn More</mdb-btn></router-link>-->
           </div>
           <!--Grid column-->
         </div>
@@ -47,11 +80,21 @@
     <!-- Mask & flexbox options-->
   </div>
   <!-- Full Page Intro -->
+  <mdb-container>
+    <mdb-row class="py-2 col-md-8 d-flex align-items-center header-title">
+      <mdb-col>
+        <p class="mb-0">
+          Transit8 complements a complete process from art creation to its sale, as well as being an artist-centric, and fully decentralised platform. <router-link :to="getAuctionLink">Read more</router-link>
+        </p>
+      </mdb-col>
+    </mdb-row>
+  </mdb-container>
 </header>
 <!-- Main navigation -->
 </template>
 
 <script>
+
 let resizeTimeout;
 function resizeThrottler(actualResizeHandler) {
   // ignore resize events as long as an actualResizeHandler execution is in the queue
@@ -69,6 +112,7 @@ import { mdbContainer, mdbIcon, mdbRow, mdbCol, mdbNavbar, mdbNavbarToggler, mdb
 import AccountLinks from "@/layout/AccountLinks";
 import AuctionLinks from "@/layout/AuctionLinks";
 import artworkSearchService from "@/services/artworkSearchService";
+import myAccountService from '../services/myAccountService';
 
 export default {
   name: 'Navbar',
@@ -105,7 +149,13 @@ export default {
     mdbNavbarBrand
   },
   created() {
+    console.log('created');
     this.getContent();
+  },
+  updated() {
+    console.log('updated');
+    let navbar = document.getElementById("main-navigation");
+    navbar.classList.remove("navbar-expand-lg");
   },
   computed: {
     headerStyle() {
@@ -140,6 +190,7 @@ export default {
 
         let bodyClick = document.getElementById("bodyClick");
         bodyClick.addEventListener("click", this.toggleNavbarMobile);
+        console.log(elem);
       } else {
         bodyClick.remove();
       }
@@ -158,6 +209,7 @@ export default {
       });
     },
     doSearch() {
+      console.log('search');
       let qString = this.query;
       if (!this.query || this.query.length === 0) {
         qString = "*";
@@ -169,6 +221,11 @@ export default {
       this.NavbarStore.showNavbar = !this.NavbarStore.showNavbar;
       this.toggledClass = !this.toggledClass;
       this.bodyClick();
+    },
+    closeMenu(){
+      let toggler = document.querySelector('.navbar-toggler');
+      console.log(toggler);
+      toggler.click();
     },
     handleScroll() {
       let scrollValue =
@@ -183,6 +240,14 @@ export default {
           this.extraNavClasses = "";
           navbarColor.classList.add("md-transparent");
         }
+      }
+    },
+    showHamburgerMenu() {
+      let navbar = document.getElementById("main-navigation");
+      if(navbar.classList.contains('navbar-expand-lg')){
+        console.log(navbar.classList);
+        navbar.classList.remove("navbar-expand-lg");
+        console.log(navbar.classList);
       }
     },
     scrollListener() {
@@ -218,23 +283,86 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.navbar .md-form {
-  margin: 0;
+  h1.tagline {
+    font-family: 'Noto Serif Disp ExtCond';
+    font-size: 72px;
+    color: #ECEFF1;
+  }
+.header-title {
+  min-height: 100px;
+  font-size: 18px;
 }
+
+.header-title a {
+  color: initial;
+  text-decoration: underline;
+}
+.navbar {
+  border-bottom: 1px solid white;
+  box-shadow: none;
+  min-height: 50px;
+}
+.scrolling-navbar { padding: 4px 28px!important; }
+
 .top-nav-collapse {
   background-color: #333 !important;
 }
-@media (max-width: 990px){
-  .navbar {
-    background-color: #333 !important;
-  }
+
+nav >>> .navbar-toggler {
+  z-index: 4;
 }
+
+.navbar-collapse {
+  position: absolute;
+  background-color: #5400E8;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 0;
+  padding: 30px 35px;
+}
+
+.navbar-collapse .nav-item { max-width: 90vw; }
+
+.show-navbar {
+  min-height: 100vh;
+  z-index: 3;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.navbar .md-form {
+  margin: 0;
+}
+i.fa-search {
+  transform: rotate(90deg);
+  font-size: 24px;
+}
+.search-form input, .login-link { font-size: 20px; font-weight: 300; letter-spacing: 0.5px;}
+.search-form input { border-bottom: none; }
+.search-form input:focus { box-shadow: none!important; border-bottom: none!important; }
+
+.search-form input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: white;
+  }
+.search-form input::-moz-placeholder { /* Firefox 19+ */
+    color: white;
+  }
+.search-form input:-ms-input-placeholder { /* IE 10+ */
+    color: white;
+  }
+.search-form input:-moz-placeholder { /* Firefox 18- */
+    color: white;
+  }
+.search-form button.transparent { border: none; background: transparent; color: white; }
+
 .view {
   background-image: url('https://mdbootstrap.com/img/Photos/Others/architecture.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
-  height: calc(120vh - 60px);
+  height: calc(100vh - 160px);
 }
 .view2 {
   background-repeat: no-repeat;

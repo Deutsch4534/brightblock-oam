@@ -1,5 +1,5 @@
 <template>
-<mdb-container id="DonateSection">
+<mdb-container id="DonateSection" class="border-top border-dark">
   <section class="text-center my-5 mx-5 px-5">
     <h2 class="h1-responsive font-weight-bold my-5">{{title}}</h2>
     <p class="lead grey-text w-responsive mx-auto mb-5">{{description}}</p>

@@ -1,14 +1,14 @@
 <template>
 <div>
   <mdb-container>
-    <mdb-row class="py-5 mx-auto">
+    <mdb-row class="py-5 mx-auto border-top border-dark" id="AboutSection">
       <div class="col-md-8 offset-md-2">
         <h1 class="mb-0 pt-md-5 pt-5">{{title1}}</h1>
         <hr class="hr-light my-4">
         <p class="mb-4">{{description1}}</p>
       </div>
     </mdb-row>
-    <mdb-row class="py-5 mx-auto">
+    <mdb-row class="py-5 mx-auto border-top border-dark">
       <div class="col-md-8 offset-md-2">
         <h1 class="mb-0 pt-md-5 pt-5">{{title2}}</h1>
         <hr class="hr-light my-4">
@@ -76,4 +76,14 @@ export default {
 };
 </script>
 <style>
+  @font-face {
+    font-family: 'Noto Serif Disp ExtCond';
+    src: url('../assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot');
+    src: url('../assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot?#iefix') format('embedded-opentype'),
+    url('../assets/fonts/NotoSerifDisplay-ExtraCondensedLight.woff2') format('woff2'),
+    url('../assets/fonts/NotoSerifDisplay-ExtraCondensedLight.woff') format('woff'),
+    url('../assets/fonts/NotoSerifDisplay-ExtraCondensedLight.svg#NotoSerifDisplay-ExtraCondensedLight') format('svg');
+    font-weight: 300;
+    font-style: normal;
+  }
 </style>

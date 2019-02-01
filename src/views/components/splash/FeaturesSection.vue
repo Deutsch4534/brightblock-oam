@@ -1,5 +1,5 @@
 <template>
-<mdb-row id="AudienceSection" class="py-5 mx-auto">
+<mdb-row id="AudienceSection" class="py-5 mx-auto border-top border-dark">
   <div class="col-md-8 offset-md-2">
     <h1 class="mb-0 pt-md-5 pt-5">{{title}}</h1>
     <hr class="hr-light my-4">

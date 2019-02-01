@@ -1,34 +1,34 @@
 <template>
   <mdb-dropdown tag="li" class="nav-item">
-    <mdb-dropdown-toggle tag="a" class="dropright" navLink color="" slot="toggle" waves-fixed>My Portfolio</mdb-dropdown-toggle>
-    <mdb-dropdown-menu class="dropdown-menu-left">
-      <mdb-dropdown-item v-if="loggedIn">
+    <mdb-dropdown-toggle tag="a" class="dropright" color="" navLink slot="toggle" waves-fixed>My Portfolio</mdb-dropdown-toggle>
+    <mdb-dropdown-menu class="dropdown-menu-left position-static">
+      <li v-if="loggedIn">
         <router-link
           class="dropdown-item"
           to="/my-artworks"
           >My Art Work</router-link
         >
-      </mdb-dropdown-item>
-      <mdb-dropdown-item v-if="loggedIn">
+      </li>
+      <li v-if="loggedIn">
         <router-link
           class="dropdown-item"
           to="/my-artwork/upload"
           >Upload Artwork</router-link>
-      </mdb-dropdown-item>
-      <mdb-dropdown-item v-if="loggedIn">
+      </li>
+      <li v-if="loggedIn">
         <router-link
           class="dropdown-item"
           to="/my-auctions"
           >My Auctions</router-link
         >
-      </mdb-dropdown-item>
-      <mdb-dropdown-item v-if="loggedIn">
+      </li>
+      <li v-if="loggedIn">
         <router-link
           class="dropdown-item"
           to="/my-auctions/upload"
           >New Auction</router-link
         >
-      </mdb-dropdown-item>
+      </li>
     </mdb-dropdown-menu>
   </mdb-dropdown>
 </template>
@@ -90,3 +90,23 @@ export default {
   methods: {}
 };
 </script>
+
+<style scoped>
+ .dropdown-menu {
+    position: static!important;
+    background: transparent;
+    border:none;
+  }
+  .dropdown .dropdown-menu .dropdown-item {
+    color: white;
+    font-size: 2rem;
+    padding: 0.7rem 0.7rem 0.7rem 1.5rem;
+  }
+ .dropdown .dropdown-menu .dropdown-item:hover,
+ .dropdown .dropdown-menu .dropdown-item:focus,
+ .dropdown .dropdown-menu .dropdown-item:active {
+   background-color: inherit;
+   box-shadow: none;
+   color: rgba(255, 255, 255, 0.75)!important;
+ }
+</style>
