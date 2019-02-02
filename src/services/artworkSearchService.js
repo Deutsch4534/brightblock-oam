@@ -130,7 +130,7 @@ const artworkSearchService = {
       .catch(function() {
         failure({
           ERR_CODE: 101,
-          message: "Error fetching blockstack root file!"
+          message: "Error fetching user artwork: uname=" + data.username + " title=" + data.title
         });
       });
   },
@@ -167,15 +167,15 @@ const artworkSearchService = {
           } else {
             failure({
               ERR_CODE: 101,
-              message: "Error no record for artwork id: " + artworkId
+              message: "Error no record for artwork id: " + artworkId + " username: " + username
             });
           }
         }
       })
-      .catch(function() {
+      .catch(function(e) {
         failure({
           ERR_CODE: 101,
-          message: "Error fetching blockstack root file!"
+          message: "Error no record for artwork id: " + artworkId + " username: " + username + " e=" + e
         });
       });
   },

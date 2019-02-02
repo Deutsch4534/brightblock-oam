@@ -20,26 +20,26 @@
             <mdb-row>
               <mdb-col md="6">
                 <div class="md-form mb-0">
-                  <mdb-input type="text" id="contact-name" label="Your name" />
+                  <mdb-input type="text" id="contact-name" label="Your name" v-model="name" />
                 </div>
               </mdb-col>
               <mdb-col md="6">
                 <div class="md-form mb-0">
-                  <mdb-input type="text" id="contact-email" label="Your email" />
+                  <mdb-input type="text" id="contact-email" label="Your email" v-model="email" />
                 </div>
               </mdb-col>
             </mdb-row>
             <mdb-row>
               <mdb-col md="12">
                 <div class="md-form mb-0">
-                  <mdb-input type="text" id="contact-subject" label="Subject" />
+                  <mdb-input type="text" id="contact-subject" label="Subject" v-model="subject" />
                 </div>
               </mdb-col>
             </mdb-row>
             <mdb-row>
               <mdb-col md="12">
                 <div class="md-form mb-0">
-                  <mdb-textarea id="contact-message" label="Your message" />
+                  <mdb-textarea id="contact-message" label="Your message" v-model="message" />
                 </div>
               </mdb-col>
             </mdb-row>
@@ -55,6 +55,7 @@
 
 <script>
 import { mdbContainer, mdbRow, mdbCol, mdbBtn, mdbIcon, mdbInput, mdbTextarea, mdbCard, mdbCardBody } from 'mdbvue';
+import axios from "axios";
 
 export default {
   name: 'ContactSection',
@@ -74,7 +75,7 @@ export default {
     return {
       title: "",
       name: "",
-      form: "",
+      subject: "",
       email: "",
       message: "",
       description: "",
@@ -95,8 +96,32 @@ export default {
       });
     },
     submit() {
-      console.log("Code to send message needed here.. " + this.message);
-      // send the message
+      let data = {
+        text: this.message,
+        subject: this.subject,
+        originatorEmail: this.email,
+        originatorName: this.name,
+      };
+      let callInfo = {
+        method: "post",
+        url: this.$store.state.constants.ethGatewayUrl + "/api/sendEmail",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+      return new Promise((resolve, reject) => {
+        axios
+          .post(callInfo.url, data)
+          .then(response => {
+            if (response.failed) {
+              reject(new Error(response.message));
+            }
+            resolve(response.data.details);
+          })
+          .catch(e => {
+            reject(new Error(e.message));
+          });
+      });
     }
   },
   computed: {

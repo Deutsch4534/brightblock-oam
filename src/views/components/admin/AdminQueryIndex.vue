@@ -64,9 +64,11 @@
     <div class="col-md-12 ">
       <p><small>Found: {{ namesResults.length }}  </small></p>
       <div v-for="(result, index) in namesResults" :key="index" style="padding: 10px; margin-bottom: 30px; border-radius: 10px; border: 1pt solid #ccc">
-        <div class="row"><div class="col-md-4">name:</div> <div class="col-md-8">{{ result.name }}</div></div>
-        <div class="row"><div class="col-md-4">description:</div> <div class="col-md-8">{{ result.description }}</div></div>
-        <div class="row"><div class="col-md-4">apps:</div> <div class="col-md-8">{{ result.apps }}</div></div>
+        <div class="row">
+          <div class="col-md-2">{{ result.name }}</div>
+          <div class="col-md-2">{{ result.description }}</div>
+          <div class="col-md-8">{{ result.apps }}</div>
+        </div>
         <!--
         <div class="row"><div class="col-md-4">zonefile_hash:</div> <div class="col-md-8">{{ result.zonefile_hash }}</div></div>
         <div class="row"><div class="col-md-4">last_txid:</div> <div class="col-md-8">{{ result.last_txid }}</div></div>
@@ -80,13 +82,13 @@
     <div class="col-md-12 ">
       <p><small>Found: {{ dappsResults.length }}  </small></p>
       <div v-for="(result, index) in dappsResults" :key="index" style="padding: 10px; margin-bottom: 30px; border-radius: 10px; border: 1pt solid #ccc">
-        <div class="row"><div class="col-md-12"><img :src="result.image" alt="dsvdsvsv" width="50px"/></div></div>
-        <div class="row"><div class="col-md-4">id:</div> <div class="col-md-8">{{ result.id }}</div></div>
-        <div class="row"><div class="col-md-4">domain:</div> <div class="col-md-8">{{ result.domain }}</div></div>
-        <div class="row"><div class="col-md-4">title:</div> <div class="col-md-8">{{ result.title }}</div></div>
-        <div class="row"><div class="col-md-4">description:</div> <div class="col-md-8">{{ result.description }}</div></div>
-        <div class="row"><div class="col-md-4">owner:</div> <div class="col-md-8">{{ result.owner }}</div></div>
-        <div class="row"><div class="col-md-4">keywords:</div> <div class="col-md-8">{{ result.keywords }}</div></div>
+        <div class="row">
+          <div class="col-md-3"><img :src="result.image" alt="dsvdsvsv" width="50px"/></div>
+          <div class="col-md-2">{{ result.id }}</div>
+          <div class="col-md-2">{{ result.domain }}</div>
+          <div class="col-md-3">{{ result.title }}</div>
+          <div class="col-md-2">{{ result.owner }}</div>
+        </div>
       </div>
     </div>
   </div>
