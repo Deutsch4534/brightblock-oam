@@ -5,9 +5,9 @@ export const CONSTANTS = {
   blockchain: "Ethereum",
   environment: (dev) ? "development" : "production",
   shapeShiftUrl: "https://cors.shapeshift.io",
-  ethGatewayUrl: (dev) ? "https://api.brightblock.org" : "https://api.brightblock.org",
+  ethGatewayUrl: (dev) ? "http://localhost:8191" : "https://api.brightblock.org",
   btcGatewayUrl: (dev) ? "https://api.brightblock.org" : "https://api.brightblock.org",
-  searchUrl: (dev) ? "https://search.brightblock.org" : "https://search.brightblock.org",
+  searchUrl: (dev) ? "http://localhost:8193" : "https://search.brightblock.org",
   networkExpected: (dev) ? "Ganache" : "Ropsten (3)",
   gaiaHubUrl: "https://gaia.brightblock.org",
 
