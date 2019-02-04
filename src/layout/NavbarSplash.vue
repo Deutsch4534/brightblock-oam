@@ -15,7 +15,9 @@
     <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
   </mdb-navbar-brand>
   <mdb-navbar-nav right>
-    <li v-if="!loggedIn" class="nav-item ripple-parent"><router-link to="/login" class="nav-link navbar-link login-link mr-2"><mdb-icon icon="fingerprint" /> Login</router-link></li>
+    <li v-if="!loggedIn" class="nav-item ripple-parent">
+      <router-link to="/login" class="nav-link navbar-link login-link mr-2"><mdb-icon icon="fingerprint" /> Login</router-link>
+    </li>
     <account-links v-if="loggedIn"/>
   </mdb-navbar-nav>
   <mdb-navbar-toggler>
@@ -149,7 +151,6 @@ export default {
     mdbNavbarBrand
   },
   created() {
-    console.log('created');
     this.getContent();
   },
   updated() {
@@ -223,7 +224,6 @@ export default {
     },
     closeMenu(){
       let toggler = document.querySelector('.navbar-toggler');
-      console.log(toggler);
       toggler.click();
     },
     handleScroll() {
