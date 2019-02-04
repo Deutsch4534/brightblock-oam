@@ -36,16 +36,6 @@
         </li>
         <auction-links v-if="loggedIn"/>
         <div class="mb-4"></div>
-        <!--<li class="nav-item ripple-parent" @click="scrollToElement('AboutSection', $event); closeMenu()">-->
-          <!--<router-link to="/" name="sectionUrl('AboutSection')" class="nav-link navbar-link">About</router-link>-->
-        <!--</li>-->
-        <!--<li class="nav-item ripple-parent" @click="scrollToElement('TeamSection', $event); closeMenu()">-->
-          <!--<router-link to="/" name="sectionUrl('TeamSectionSection')" class="nav-link navbar-link">Team</router-link>-->
-        <!--</li>-->
-        <!--<li class="nav-item ripple-parent" @click="scrollToElement('ContactSection', $event); closeMenu()">-->
-          <!--<router-link to="/" name="sectionUrl('ContactSection')" class="nav-link navbar-link">Contact</router-link>-->
-        <!--</li>-->
-        <!--<div class="mb-4"></div>-->
         <li v-if="!loggedIn" class="nav-item ripple-parent">
           <router-link to="/login" class="nav-link navbar-link">
             Login
@@ -126,7 +116,7 @@ export default {
   updated() {
     let navbar = document.getElementById("main-navigation");
     navbar.classList.remove("navbar-expand-lg");
-  },
+    },
   computed: {
     headerStyle() {
       return {
@@ -184,9 +174,8 @@ export default {
       this.toggledClass = !this.toggledClass;
       this.bodyClick();
     },
-    closeMenu(){
+    closeMenu() {
       let toggler = document.querySelector('.navbar-toggler');
-      console.log(toggler);
       toggler.click();
     },
     handleScroll() {
@@ -228,9 +217,17 @@ export default {
   },
   mounted() {
     document.addEventListener("scroll", this.scrollListener);
+
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.scrollListener);
+  },
+  watch: {
+    '$route' () {
+      if(window.innerWidth >= 992 ){
+        this.closeMenu();
+      }
+    }
   }
 };
 </script>

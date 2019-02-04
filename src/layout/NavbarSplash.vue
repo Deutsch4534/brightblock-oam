@@ -1,8 +1,8 @@
 <template>
 <!-- Main navigation 424f95 -->
 <header>
-<!-- Navbar -->
-<mdb-navbar :color="'stylish'" position="top" dark href="#" transparent scrolling hamburger animated animation="4" id="main-navigation">
+  <!-- Navbar -->
+  <mdb-navbar :color="'stylish'" position="top" dark href="#" transparent scrolling hamburger animated animation="4" id="main-navigation">
   <!-- mdbNavbar brand -->
   <mdb-navbar-brand>
     <form class="md-form search-form white-text">
@@ -83,8 +83,8 @@
   </div>
   <!-- Full Page Intro -->
   <mdb-container>
-    <mdb-row class="py-2 col-md-8 d-flex align-items-center header-title">
-      <mdb-col>
+    <mdb-row class="py-2 d-flex align-items-center header-title">
+      <mdb-col md="9">
         <p class="mb-0">
           Transit8 complements a complete process from art creation to its sale, as well as being an artist-centric, and fully decentralised platform. <router-link :to="getAuctionLink">Read more</router-link>
         </p>
@@ -190,7 +190,6 @@ export default {
 
         let bodyClick = document.getElementById("bodyClick");
         bodyClick.addEventListener("click", this.toggleNavbarMobile);
-        console.log(elem);
       } else {
         bodyClick.remove();
       }
@@ -209,7 +208,6 @@ export default {
       });
     },
     doSearch() {
-      console.log('search');
       let qString = this.query;
       if (!this.query || this.query.length === 0) {
         qString = "*";
@@ -268,6 +266,13 @@ export default {
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.scrollListener);
+  },
+  watch: {
+    '$route' () {
+      if(window.innerWidth >= 992 ) {
+        this.closeMenu();
+      }
+    }
   }
 };
 </script>
@@ -276,7 +281,7 @@ export default {
 <style scoped>
   h1.tagline {
     font-family: 'Noto Serif Disp ExtCond';
-    font-size: 4rem;
+    font-size: 500%;
     color: #ECEFF1;
   }
 .header-title {
@@ -355,6 +360,7 @@ i.fa-search {
   background-position: center center;
   height: calc(100vh - 160px);
 }
+
 .view2 {
   background-repeat: no-repeat;
   background-size: cover;
