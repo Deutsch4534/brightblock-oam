@@ -53,15 +53,21 @@ export default {
 };
 </script>
 <style scoped>
-  .page-footer { min-height: 56px; }
-  .footer-copyright, .footer-copyright a {
+  footer.page-footer { min-height: 56px; }
+  footer.page-footer .footer-copyright,
+  footer.page-footer .footer-copyright a {
     color: #ECEFF1;  font-weight: 300;
     letter-spacing: 0.5px;
   }
+
   .page-footer .donate-link a { font-size: 20px;  color: #ECEFF1; }
+  .fa-heart {
+    font-size: 20px;
+    color: #ECEFF1;
+  }
   .funny {
   font-family: 'Noto Serif Disp ExtCond';
-  font-size: 18px;
+  font-size: 20px;
   letter-spacing: 0.5px;
 }
 </style>

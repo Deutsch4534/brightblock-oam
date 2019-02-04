@@ -239,6 +239,7 @@ export default {
     box-shadow: none;
     min-height: 50px;
     background-color: #333;
+    flex-wrap: nowrap;
   }
   .scrolling-navbar { padding: 4px 28px!important; }
 
@@ -297,4 +298,25 @@ export default {
 
 .jarallax2 {
 }
+
+  @media (max-width: 576px) {
+    .navbar-brand {
+      max-width: 45vw;
+    }
+    .search-form input, .login-link { font-size: 14px; }
+    nav >>> .navbar-toggler {
+      padding: 0 0 0.25rem 0.5rem;
+      font-size: 0.8rem;
+    }
+    .login-link { display: flex!important; }
+
+    .navbar-nav .nav-item >>> a.user-menu img {
+      width: 24px!important;
+      height: 24px!important;
+      border-radius: 12px!important;
+    }
+    .show-navbar {
+      font-size: 1.5rem;
+    }
+  }
 </style>

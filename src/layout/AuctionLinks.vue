@@ -109,4 +109,11 @@ export default {
    box-shadow: none;
    color: rgba(255, 255, 255, 0.75)!important;
  }
+
+  @media (max-width: 576px) {
+    .dropdown .dropdown-menu .dropdown-item {
+      font-size: 1.2rem;
+      padding: 0.5rem 0.5rem 0.5rem 1rem;
+    }
+  }
 </style>

@@ -1,9 +1,9 @@
 <template>
 <mdb-container id="DonateSection">
-  <section class="my-5 p-5 border border-dark">
-    <h2 class="h1-responsive font-weight-bold mt-0 mb-5">{{title}}</h2>
+  <section class="my-5 p-5 border border-dark col-lg-10 mx-auto">
+    <h2 class="large-title mt-0 mb-5">{{title}}</h2>
     <mdb-row>
-      <mdb-col md="6">
+      <mdb-col sm="6">
         <p class="w-responsive">{{description}}</p>
         <span class="serif subtitle">{{btcAddress}}</span>
         <div class="md-xsmall-size-100">
@@ -11,7 +11,7 @@
           <p class="mb-0">Currently: {{balance}}</p>
         </div>
       </mdb-col>
-      <mdb-col md="6">
+      <mdb-col sm="6">
         <form class="contact-form text-right">
           <canvas id="qrcode" width="500px"></canvas>
         </form>

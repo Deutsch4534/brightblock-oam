@@ -1,15 +1,15 @@
 <template>
-<mdb-row id="AudienceSection" class="py-5 col-md-10 mx-auto d-flex" border-top border-dark>
-  <div class="col-12">
-    <h2 class="h1 pt-md-5 pt-5">{{title}}</h2>
+<mdb-row id="AudienceSection" class="py-5 col-lg-10 mx-auto d-flex" border-top border-dark>
+  <mdb-col col="12">
+    <h2 class="large-title pt-md-5 pt-5">{{title}}</h2>
     <hr class="hr-light my-4">
-  </div>
-  <div class="col-md-4 d-flex">
+  </mdb-col>
+  <mdb-col lg="4" class="d-flex">
     <!-- Card -->
     <div class="card mb-2">
       <!-- Card content -->
       <div class="card-body">
-        <h4 class="card-title"><a>{{cardTitle1}}</a></h4>
+        <h4 class="h3-responsive card-title"><a>{{cardTitle1}}</a></h4>
         <p class="card-text">{{cardDescription1}}</p>
       </div>
       <div class="card-body pt-0 d-flex align-items-end justify-content-end">
@@ -17,13 +17,14 @@
       </div>
     </div>
     <!-- Card -->
-  </div>
-  <div class="col-md-4 d-flex">
+  </mdb-col>
+
+  <mdb-col lg="4" class="d-flex">
     <!-- Card -->
     <div class="card mb-2">
       <!-- Card content -->
       <div class="card-body">
-        <h4 class="card-title"><a>{{cardTitle2}}</a></h4>
+        <h4 class="h3-responsive card-title"><a>{{cardTitle2}}</a></h4>
         <p class="card-text">{{cardDescription2}}</p>
       </div>
       <div class="card-body pt-0 d-flex align-items-end justify-content-end">
@@ -31,14 +32,14 @@
       </div>
     </div>
     <!-- Card -->
-  </div>
+  </mdb-col>
 
-  <div class="col-md-4 d-flex">
+  <mdb-col lg="4" class="d-flex">
     <!-- Card -->
     <div class="card mb-2">
       <!-- Card content -->
       <div class="card-body">
-        <h4 class="card-title"><a>{{cardTitle3}}</a></h4>
+        <h4 class="h3-responsive card-title"><a>{{cardTitle3}}</a></h4>
         <p class="card-text">{{cardDescription3}}</p>
       </div>
       <div class="card-body pt-0 d-flex align-items-end justify-content-end">
@@ -46,7 +47,7 @@
       </div>
     </div>
     <!-- Card -->
-  </div>
+  </mdb-col>
 </mdb-row>
 </template>
 
@@ -85,7 +86,6 @@ export default {
   border: 2pt solid black;
 }
 h4.card-title {
-  font-size: 2rem;
   margin-bottom: 2rem;
 }
 .card-body i {

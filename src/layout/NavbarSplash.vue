@@ -281,7 +281,6 @@ export default {
 <style scoped>
   h1.tagline {
     font-family: 'Noto Serif Disp ExtCond';
-    font-size: 4rem;
     color: #ECEFF1;
   }
 .header-title {
@@ -297,6 +296,7 @@ export default {
   border-bottom: 1px solid white;
   box-shadow: none;
   min-height: 50px;
+  flex-wrap: nowrap;
 }
 .scrolling-navbar { padding: 4px 28px!important; }
 
@@ -380,4 +380,27 @@ i.fa-search {
 h6 {
   line-height: 1.7;
 }
+
+  @media (max-width: 576px) {
+    .navbar-brand {
+      max-width: 45vw;
+    }
+    .search-form input, .login-link { font-size: 14px; }
+    nav >>> .navbar-toggler {
+      padding: 0 0 0.25rem 0.5rem;
+      font-size: 0.8rem;
+    }
+    .login-link { display: flex!important; }
+
+    .navbar-nav .nav-item >>> a.user-menu img {
+      width: 24px!important;
+      height: 24px!important;
+      border-radius: 12px!important;
+    }
+    .show-navbar {
+      font-size: 1.5rem;
+    }
+  }
+
+
 </style>

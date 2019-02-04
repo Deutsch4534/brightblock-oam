@@ -1,15 +1,15 @@
 <template>
-<mdb-row id="FeaturesSection" class="py-5 col-md-10 mx-auto d-flex">
+<mdb-row id="FeaturesSection" class="py-5 col-lg-10 mx-auto d-flex">
   <div class="col-md-12">
     <mdb-row>
-      <mdb-col col="10">
-        <h2 class="h1 pt-md-5 pt-5">{{title}}</h2>
+      <mdb-col md="10">
+        <h2 class="large-title pt-md-5 pt-5">{{title}}</h2>
         <hr class="hr-light my-4">
       </mdb-col>
     </mdb-row>
   </div>
   <div class="d-flex row">
-    <div class="col-12 col-md-3 d-flex">
+    <div class="col-12 col-sm-6 col-md-3 d-flex">
       <!-- Card -->
       <div class="card">
         <!-- Card content -->
@@ -25,7 +25,7 @@
       </div>
       <!-- Card -->
     </div>
-    <div class="col-12 col-md-3 d-flex">
+    <div class="col-12 col-sm-6 col-md-3 d-flex">
       <!-- Card -->
       <div class="card">
         <!-- Card content -->
@@ -41,7 +41,7 @@
       </div>
       <!-- Card -->
     </div>
-    <div class="col-12 col-md-3 d-flex">
+    <div class="col-12 col-sm-6 col-md-3 d-flex">
       <!-- Card -->
       <div class="card">
         <!-- Card content -->
@@ -56,7 +56,7 @@
       </div>
       <!-- Card -->
     </div>
-    <div class="col-12 col-md-3 d-flex">
+    <div class="col-12 col-sm-6 col-md-3 d-flex">
       <!-- Card -->
       <div class="card">
         <!-- Card content -->

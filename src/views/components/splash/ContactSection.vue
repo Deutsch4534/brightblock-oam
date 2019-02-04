@@ -1,57 +1,61 @@
 <template>
 <mdb-container fluid id="ContactSection" class="py-5 text-white">
     <section class="mt-5 mb-0 px-0">
-      <h2 class="h1-responsive my-5">{{title}}</h2>
-      <p v-html="featureMessage"></p>
       <mdb-row>
-        <mdb-col md="6" class="md-0 px-0">
-          <div class="col-md-12">
-            <router-link to="/" class="navbar-brand"><img :src="logo" height="100px" alt="t8 logo"></router-link>
-          </div>
-          <div class="col-md-12">
-            <h5 class="my-4">Contact Info</h5>
-            <p>Brighton, BN1 1AL UK</p>
-            <p>Phone: +49 6579 3 456</p>
-            <p>Email: contact@transit8.com</p>
-          </div>
-        </mdb-col>
-        <mdb-col md="6" class="text-white">
-          <form class="text-white contact-form">
-            <mdb-row>
-              <mdb-col md="12">
-                <div class="mb-0">
-                  <mdb-input type="text" id="contact-name" label="Your name" />
-                </div>
-              </mdb-col>
-              <mdb-col md="12">
-                <div class="mb-0">
-                  <mdb-input type="text" id="contact-email" label="Your email" />
-                </div>
-              </mdb-col>
-            </mdb-row>
-            <mdb-row>
-              <mdb-col md="12">
-                <div class="mb-0">
-                  <mdb-input type="text" id="contact-subject" label="Subject" />
-                </div>
-              </mdb-col>
-            </mdb-row>
-            <mdb-row>
-              <mdb-col md="12">
-                <div class="mb-0">
-                  <mdb-textarea id="contact-message" label="Your message" />
-                </div>
-              </mdb-col>
-            </mdb-row>
-            <div class="text-md-left mt-5 submit">
-              <span type="button" class="h2" @click="submit">SUBMIT</span>
+        <mdb-col class="col-lg-10 mx-auto">
+        <h2 class="large-title my-5">{{title}}</h2>
+        <p v-html="featureMessage"></p>
+        <mdb-row>
+          <mdb-col md="6" class="md-0 px-0">
+            <div class="col-md-12">
+              <router-link to="/" class="navbar-brand"><img :src="logo" height="100px" alt="t8 logo"></router-link>
             </div>
-          </form>
-        </mdb-col>
-      </mdb-row>
-      <mdb-row>
-        <mdb-col col="12 mt-5">
-         <span class="copyright">© 2018 TRANSIT8. ALL RIGHTS RESERVED.</span>
+            <div class="col-md-12">
+              <h5 class="my-4">Contact Info</h5>
+              <p>Brighton, BN1 1AL UK</p>
+              <p>Phone: +49 6579 3 456</p>
+              <p>Email: contact@transit8.com</p>
+            </div>
+          </mdb-col>
+          <mdb-col md="6" class="text-white">
+            <form class="text-white contact-form">
+              <mdb-row>
+                <mdb-col md="12">
+                  <div class="mb-0">
+                    <mdb-input type="text" id="contact-name" label="Your name" />
+                  </div>
+                </mdb-col>
+                <mdb-col md="12">
+                  <div class="mb-0">
+                    <mdb-input type="text" id="contact-email" label="Your email" />
+                  </div>
+                </mdb-col>
+              </mdb-row>
+              <mdb-row>
+                <mdb-col md="12">
+                  <div class="mb-0">
+                    <mdb-input type="text" id="contact-subject" label="Subject" />
+                  </div>
+                </mdb-col>
+              </mdb-row>
+              <mdb-row>
+                <mdb-col md="12">
+                  <div class="mb-0">
+                    <mdb-textarea id="contact-message" label="Your message" />
+                  </div>
+                </mdb-col>
+              </mdb-row>
+              <div class="text-md-left mt-5 submit">
+                <span type="button" class="h1-responsive" @click="submit">SUBMIT</span>
+              </div>
+            </form>
+          </mdb-col>
+        </mdb-row>
+        <mdb-row>
+          <mdb-col col="12 mt-5">
+           <span class="copyright">© 2018 TRANSIT8. ALL RIGHTS RESERVED.</span>
+          </mdb-col>
+        </mdb-row>
         </mdb-col>
       </mdb-row>
     </section>

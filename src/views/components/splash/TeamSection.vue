@@ -1,14 +1,14 @@
 <template>
   <mdb-container id="TeamSection" border-top border-dark>
-    <section class="mx-5px-5 text-center">
-      <mdb-row class="col-md-10 mx-auto d-flex">
-        <div class="col-12">
-          <h2 class="h1-responsive text-left font-weight-bold my-5">{{title}}</h2>
+    <section class="text-center">
+      <mdb-row class="col-lg-10 mx-auto d-flex">
+        <mdb-col col="12">
+          <h2 class="large-title text-left my-5">{{title}}</h2>
           <p class="grey-text w-responsive mx-auto mb-5">{{description}}</p>
-        </div>
-        <mdb-col class="col-md-4 mx-auto px-4 mb-lg-0 mb-5 pb-5" v-for="(profile, index) in profiles" :key="index">
-          <router-link :to="profileUrl(profile)">
-            <mdb-avatar tag="img" :src="profile.data.avatar.url" height="120px" alt="Thumbnail Image" class="z-depth-1 rounded-circle"/>
+        </mdb-col>
+        <mdb-col sm="6" lg="4" class="mx-auto px-4 mb-lg-0 mb-5 pb-5" v-for="(profile, index) in profiles" :key="index">
+          <router-link :to="profileUrl(profile)" class="avatar-img">
+            <mdb-avatar tag="img" :src="profile.data.avatar.url" height="120px" alt="Thumbnail Image" class="z-depth-1 img-fluid"/>
           </router-link>
           <h5 class="font-weight-bold mt-4 mb-3">{{profile.data.name[0].text}}</h5>
           <p class="text-uppercase">{{profile.data.jobtitle[0].text}}</p>
@@ -89,20 +89,13 @@ export default {
 </script>
 
 <style scoped>
-.rounded-circle {
-  /*border-top-left-radius: 25%!important;*/
-  /*border-top-right-radius: 50%!important;*/
-  /*border-bottom-right-radius: 25%!important;*/
-  /*border-bottom-left-radius: 50%!important;*/
-}
 
-  a.profile-image {
-    /*display: block;*/
-    /*border-radius: 50%;*/
-    /*height: 150px;*/
-    /*width: 100%;*/
-    /*background-size: cover;*/
-    /*background-position: center;*/
-    /*background-repeat: no-repeat;*/
+  a.avatar-img {
+    border-radius: 50%;
+    overflow: hidden;
+    max-height: 150px;
+    display: flex;
+    align-items: center;
   }
+
 </style>
