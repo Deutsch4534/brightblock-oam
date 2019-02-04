@@ -5,7 +5,8 @@
       <h5><small>Admin Actions</small></h5>
       <ul class="list-unstyled">
         <li><a href="#/admin/settings">Settings</a></li>
-        <li><a href="#/admin/registrations">Ethereum Blockchain</a></li>
+        <li><a href="#/admin/bitcoin">Bitcoin</a></li>
+        <li><a href="#/admin/registrations">Ethereum</a></li>
         <li><a href="#/admin/build-index">Build Index</a></li>
         <li><a href="#/admin/query-index">Query Index</a></li>
       </ul>

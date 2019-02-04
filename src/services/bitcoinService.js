@@ -24,6 +24,14 @@ const bitcoinService = {
       .catch(function(e) {
         failure(e);
       });
+  },
+  register: function(data, success, failure) {
+    // let callee = store.state.constants.btcGatewayUrl + "/bitcoin/register";
+    return new Promise(resolve => {
+      xhrService.makePostCall("/bitcoin/register", data).then(function(result) {
+        resolve(result);
+      });
+    });
   }
 };
 export default bitcoinService;

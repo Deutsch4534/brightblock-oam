@@ -33,6 +33,20 @@
     <div class="col-md-10"><mdb-btn class="primary" @click="toggleDebugMode">{{debugModeLabel}}</mdb-btn></div>
   </div>
 
+  <h3>Feature Settings</h3>
+  <div class="row">
+    <div class="col-md-2">Bitcoin:</div>
+    <div class="col-md-10"><mdb-btn class="primary" @click="toggleBtcFeature">{{btcModeLabel}}</mdb-btn></div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">Ethereum:</div>
+    <div class="col-md-10"><mdb-btn class="primary" @click="toggleEthFeature">{{ethModeLabel}}</mdb-btn></div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">Auctions:</div>
+    <div class="col-md-10"><mdb-btn class="primary" @click="toggleAuctionsFeature">{{auctionsModeLabel}}</mdb-btn></div>
+  </div>
+
   <h3>Gaia Test Settings</h3>
   <div class="row">
     <div class="col-sm-12">Only works on localhost and mike.personal.id as the oauth token.</div>
@@ -132,7 +146,16 @@ export default {
   },
   methods: {
     toggleDebugMode() {
-      this.$store.commit("debugMode");
+      this.$store.commit("toggleDebugMode");
+    },
+    toggleAuctionsFeature() {
+      this.$store.commit("toggleFeatureAuctions");
+    },
+    toggleEthFeature() {
+      this.$store.commit("toggleFeatureEthereum");
+    },
+    toggleBtcFeature() {
+      this.$store.commit("toggleFeatureBitcoin");
     },
     listFilesUrl(file) {
       return this.gaiaHubUrl + "/" + this.address + "/" + file;
@@ -242,6 +265,30 @@ export default {
     debugModeLabel() {
       let debugMode = this.$store.getters["isDebugMode"];
       if (debugMode) {
+        return "on";
+      } else {
+        return "off";
+      }
+    },
+    auctionsModeLabel() {
+      let fa = this.$store.state.constants.featureAuctions;
+      if (fa) {
+        return "on";
+      } else {
+        return "off";
+      }
+    },
+    ethModeLabel() {
+      let fa = this.$store.state.constants.featureEthereum;
+      if (fa) {
+        return "on";
+      } else {
+        return "off";
+      }
+    },
+    btcModeLabel() {
+      let fa = this.$store.state.constants.featureBitcoin;
+      if (fa) {
         return "on";
       } else {
         return "off";

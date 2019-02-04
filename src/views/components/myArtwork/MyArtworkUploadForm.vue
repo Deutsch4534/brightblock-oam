@@ -57,6 +57,15 @@
       </div>
     </div>
   </div>
+  <div class="form-group">
+    <div class="text-danger" v-if="dateError">
+      The creation date must be before now!
+    </div>
+    <datetime type="date" v-model="created" input-id="created">
+      <label for="created" slot="before">Created &nbsp;&nbsp;&nbsp;&nbsp;</label>
+      <input id="created" class="form-control">
+    </datetime>
+  </div>
 
   <div class="row ">
     <div class="col-md-2 custom-control custom-radio mb-0">
@@ -136,6 +145,7 @@
 <script>
 import { mdbCol, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
 import MyArtworkManageImage from "./MyArtworkManageImage";
+import moment from "moment";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -161,13 +171,16 @@ export default {
       sending: false,
       showAlert: false,
       alertMessage: null,
+      dateError: false,
       bgImage: require("@/assets/img/upload-icon-3.png"),
+      created: null,
       artwork: {
         itemType: "digiart",
         keywords: "Photography,Illustration.3D,2D,Film & Video,Mix-media",
         artist: "unknown",
         owner: "unknown",
         editions: 1,
+        created: null,
         images: [],
         supportingDocuments: [],
         artwork: []
@@ -178,6 +191,9 @@ export default {
     this.artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
       this.artworkId
     );
+    if (this.artwork) {
+      this.created = moment(this.artwork.created).format();
+    }
   },
   computed: {
     headerStyle() {
@@ -233,6 +249,14 @@ export default {
       }
       if (this.artwork.editions < 1 || this.artwork.editions > 10) {
         this.errors.push("Editions between 1 and 10.");
+      }
+      if (this.created) {
+        this.artwork.created = moment(this.created).valueOf();
+      }
+      this.dateError = false;
+      if (moment(this.created).isAfter(moment({}))) {
+        this.dateError = true;
+        this.errors.push("Created date is after now?");
       }
       if (
         this.artwork.itemType !== "physart" &&

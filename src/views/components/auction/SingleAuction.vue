@@ -37,8 +37,6 @@ export default {
       }
     },
     atype: null,
-    bgImage: require("@/assets/img/missing/auction4.jpg"),
-    future: false
   },
   methods: {
     convertDate(date) {
@@ -52,10 +50,10 @@ export default {
       }`;
     },
     logo() {
-      if (this.auction.logo) {
+      if (this.auction.logo && this.auction.logo.dataUrl) {
         return this.auction.logo.dataUrl;
       }
-      return require('@/assets/img/missing/auction4.jpg');
+      return require("@/assets/img/missing/auction4.jpg");
     },
     manageUrl() {
       return `/my-auctions/manage/${this.auction.auctionId}`;

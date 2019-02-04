@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <mdb-row v-if="auctionsSize > 0">
+  <mdb-row v-if="auctionsSize > 0 && featureAuctions">
     <div class="col-md-12"><h5>Featured Auctions</h5></div>
     <single-auction v-for="(auction, index) of onlineAuctions" :key="index" :auction="auction"/>
   </mdb-row>
@@ -60,6 +60,9 @@ export default {
     },
     auctionsSize() {
       return this.$store.getters["onlineAuctionsStore/onlineAuctions"].length;
+    },
+    featureAuctions() {
+      return this.$store.state.constants.featureAuctions;
     },
     onlineAuctions() {
       return this.$store.getters["onlineAuctionsStore/onlineAuctions"];

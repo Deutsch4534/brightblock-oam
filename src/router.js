@@ -3,6 +3,7 @@ import Router from "vue-router";
 
 import Admin from "./views/Admin.vue";
 import AdminSettings from "./views/components/admin/AdminSettings";
+import AdminBitcoin from "./views/components/admin/AdminBitcoin";
 import AdminRegistrations from "./views/components/admin/AdminRegistrations";
 import AdminBuildIndex from "./views/components/admin/AdminBuildIndex";
 import AdminQueryIndex from "./views/components/admin/AdminQueryIndex";
@@ -166,6 +167,16 @@ const router = new Router({
       meta: { requiresAuth: true }
     },
     {
+      path: "/my-artwork/register/:artworkId",
+      name: "registerArtwork",
+      components: {
+        default: RegisterArtwork,
+        header: Navbar,
+        footer: Footer
+      },
+      meta: { requiresAuth: true }
+    },
+    {
       path: "/my-artworks",
       name: "my-artworks",
       components: {
@@ -175,11 +186,6 @@ const router = new Router({
       },
       meta: { requiresAuth: true },
       children: [
-        {
-          path: "/my-artwork/register/:artworkId",
-          name: "registerArtwork",
-          component: RegisterArtwork
-        },
         {
           path: "/my-artwork/register-for-sale/:artworkId/:amount/:currency",
           name: "registerForSale",
@@ -272,6 +278,11 @@ const router = new Router({
           path: "/admin/settings",
           name: "adminSettings",
           component: AdminSettings
+        },
+        {
+          path: "/admin/bitcoin",
+          name: "adminBitcoin",
+          component: AdminBitcoin
         },
         {
           path: "/admin/registrations",

@@ -1,13 +1,14 @@
 <template>
 <mdb-container class="mt-1">
   <div class="row">
+    <!-- Supported elements
     <div class="md-col-4 mr-5">
       <h2 class="mb-5">Refine search</h2>
       <filters @update="updateFilters($event)"/>
     </div>
-    <div class="md-col-8">
-      <!-- Supported elements -->
-      <h2 class="mb-5">{{numberArtworks}} found..</h2>
+    -->
+    <div class="md-col-8 col-md-offset-2">
+      <h2 class="">{{numberArtworks}} found..</h2>
       <hr class="my-5">
       <ul class="list-unstyled">
         <single-result v-for="(artwork, index) of searchResults" :key="index" :artwork="artwork"/>

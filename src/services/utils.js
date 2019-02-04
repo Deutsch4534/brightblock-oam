@@ -137,6 +137,7 @@ const utils = {
       id: artwork.id,
       images: artwork.images,
       artwork: artwork.artwork,
+      created: artwork.created,
       supportingDocuments: artwork.supportingDocuments,
       bcitem: artwork.bcitem
     };
@@ -156,6 +157,7 @@ const utils = {
       artwork: provData.artwork,
       images: provData.images,
       supportingDocuments: provData.supportingDocuments,
+      created: provData.created,
       bcitem: provData.bcitem
     };
     if (

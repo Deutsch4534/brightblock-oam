@@ -19,8 +19,8 @@
       <p>by
         <a>
           <strong>{{artistProfile.name}}</strong>
-        </a>, 11/08/2018</p>
-        <router-link :to="registerUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="canRegister">Register</mdb-btn></router-link>
+        </a>, {{created}}</p>
+        <router-link :to="registerUrl" class="text-white" v-if="canRegister"><mdb-btn color="white" size="md" class="waves-light ">Register</mdb-btn></router-link>
         <router-link :to="registerForSaleUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="canSell">Buy</mdb-btn></router-link>
         <router-link :to="registerForAuctionUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="canAuction">Auction</mdb-btn></router-link>
         <a @click="deleteArtwork(artwork.id)" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="debugMode">Delete</mdb-btn></a>
@@ -34,6 +34,7 @@
 <script>
 import SellingOptions from "./SellingOptions";
 import { mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardBody, mdbMask, mdbIcon, mdbView, mdbBtn } from 'mdbvue';
+import moment from "moment";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -76,6 +77,12 @@ export default {
     editable() {
       return this.$store.getters["myArtworksStore/editable"](this.artwork.id);
     },
+    created() {
+      if (this.artwork.created) {
+        return moment(this.artwork.created).format("YYYY-MM-DD");
+      }
+      return moment(this.artwork.id).format("DD/MMM/YYYY");
+    },
     debugMode() {
       return this.$store.state.constants.debugMode;
     },
@@ -88,9 +95,10 @@ export default {
       return cs && auctions && auctions.length > 0;
     },
     canRegister() {
-      return this.$store.getters["myArtworksStore/canRegister"](
+      let canRegister = this.$store.getters["myArtworksStore/canRegister"](
         this.artwork.id
       );
+      return canRegister && !this.sold;
     },
     artistProfile() {
       let profile = this.$store.getters["userProfilesStore/getProfile"](

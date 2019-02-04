@@ -4,7 +4,7 @@
   <p><router-link to="/my-artwork/upload">Upload Artwork</router-link> to get started...</p>
 </div>
 <div class="container" v-else>
-  <router-view/>
+<!--  <router-view/> -->
   <div class="title my-5">
     <h2>Artworks <span>({{numberArtworksUnsold}})</span></h2>
   </div>

@@ -10,7 +10,7 @@
     <mdb-navbar-nav mx-auto>
       <li class="nav-item ripple-parent"><router-link to="/home" class="nav-link navbar-link">Gallery</router-link></li>
       <li class="nav-item ripple-parent"><router-link to="/artists" class="nav-link navbar-link">Artists</router-link/></li>
-      <li class="nav-item ripple-parent"><router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link/></li>
+      <li class="nav-item ripple-parent" v-if="featureAuctions"><router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link/></li>
       <auction-links v-if="loggedIn"/>
     </mdb-navbar-nav>
     <mdb-navbar-nav right>
@@ -92,6 +92,9 @@ export default {
         "background-size": "cover",
         "background-position": "center center"
       };
+    },
+    featureAuctions() {
+      return this.$store.state.constants.featureAuctions;
     },
     loggedIn() {
       let myProfile = this.$store.getters["myAccountStore/getMyProfile"];

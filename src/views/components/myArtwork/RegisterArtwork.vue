@@ -1,41 +1,62 @@
 <template>
-<mdb-modal size="lg" @close="closeModal">
-    <mdb-modal-header>
-        <mdb-modal-title>Register Artwork</mdb-modal-title>
-    </mdb-modal-header>
-    <mdb-modal-body>
-      {{message}}
-    </mdb-modal-body>
-    <mdb-modal-body>
-      <img :src="artwork.image" :alt="artwork.title" class="img-fluid">
-      <h4>{{artwork.title}}</h4>
-      <p>{{myArtist.name}}</p>
-      <p>Registering the artwork on the blockchain creates a Certificate of Authentication that helps show the provenance of the
-      artwork and makes possible our unique ability to pay residuals to artists and galleries on secondary sales, <a href="#">read more..</a></p>
-    </mdb-modal-body>
-    <mdb-modal-footer v-if="!message">
-        <mdb-btn v-if="bitcoin" color="primary" size="sm" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn>
-        <mdb-btn v-else color="primary" size="sm" :disabled="registered" @click="registerArtworkEthereum()">Register Ethereum ({{networkName}})</mdb-btn>
-    </mdb-modal-footer>
-</mdb-modal>
+<mdb-container>
+  <mdb-row>
+    <mdb-col sm="10" class="mx-auto">
+    <h1>Artwork Registration</h1>
+    <hr/>
+    </mdb-col>
+    <mdb-col sm="10" class="mx-auto">
+              <mdb-card>
+                <mdb-view hover>
+                  <img class="img-fluid" width="100%" :src="artwork.image" :alt="artwork.title"></img>
+                  <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+                </mdb-view>
+                <mdb-card-body>
+                  <mdb-card-title>{{artwork.title}}</mdb-card-title>
+                  <mdb-card-title class="text-right"><small>{{myArtist.name}}</small></mdb-card-title>
+                  <hr/>
+                  <mdb-card-text>Registering the artwork on the blockchain creates a Certificate of Authenticity (COA) that helps show the provenance of the
+                  artwork and makes possible our unique ability to pay residuals to artists and galleries on secondary sales, <a href="#">read more..</a>
+                  </mdb-card-text>
+                </mdb-card-body>
+                <mdb-card-body v-if="featureBitcoin">
+                  <mdb-card-title>Bitcoin Blockchain <span v-if="bitcoinState">(Chain={{bitcoinState.chain}})</span></mdb-card-title>
+                  <mdb-card-text>Register artwork on the Bitcoin blockchain here.</mdb-card-text>
+                  <a class="black-text d-flex justify-content-end"><mdb-btn color="primary" size="sm" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
+                </mdb-card-body>
+                <mdb-card-body v-if="featureEthereum">
+                  <mdb-card-title>Ethereum Blockchain <span v-if="bitcoinState">(Network={{networkName}})</span></mdb-card-title>
+                  <mdb-card-text>Register on ethereum if you use meta mask or another ethereum wallet.</mdb-card-text>
+                  <a class="black-text d-flex justify-content-end"><mdb-btn v-if="featureEthereum" color="primary" size="sm" :disabled="registered" @click="registerArtworkEthereum()">Register Ethereum ({{networkName}})</mdb-btn></a>
+                </mdb-card-body>
+              </mdb-card>
+    </mdb-col>
+  </mdb-row>
+</mdb-container>
 </template>
 
 <script>
 import utils from "@/services/utils";
 import notify from "@/services/notify";
 import ethereumService from "@/services/ethereumService";
+import bitcoinService from "@/services/bitcoinService";
 // import OpenTimestamps from "javascript-opentimestamps";
-import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbBtn } from 'mdbvue';
+import { mdbCol, mdbView, mdbMask, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "RegisterArtwork",
   components: {
-    mdbModal,
-    mdbModalHeader,
-    mdbModalTitle,
-    mdbModalBody,
-    mdbModalFooter,
+    mdbContainer,
+    mdbCol,
+    mdbMask,
+    mdbView,
+    mdbRow,
+    mdbCard,
+    mdbCardImage,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardText,
     mdbBtn
   },
   data() {
@@ -50,21 +71,38 @@ export default {
     if (this.$route.query.from && this.$route.query.from === "auctions") {
       this.from = "/my-auctions/manage/" + this.$route.query.auctionId;
     }
+    this.$store.dispatch("bitcoinStore/fetchBalance");
+    this.$store.dispatch("bitcoinStore/fetchClientState");
   },
   computed: {
     fiatRates() {
       return this.$store.getters["conversionStore/getFiatRates"];
     },
     networkName() {
-      return this.$store.state.ethStore.clientState.metaMaskNetwork.networkName;
+      try {
+        return this.$store.state.ethStore.clientState.metaMaskNetwork.networkName;
+      } catch (err) {
+        return "unknown network";
+      }
     },
-    bitcoin() {
-      return this.$store.state.constants.blockchain === "bitcoin";
+    featureBitcoin() {
+      return this.$store.state.constants.featureBitcoin;
+    },
+    featureEthereum() {
+      return this.$store.state.constants.featureEthereum;
+    },
+    bitcoinState() {
+      let state = this.$store.getters["bitcoinStore/getClientState"];
+      return state;
     },
     artwork() {
-      return this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+      let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
         this.artworkId
       );
+      if (!a.image) {
+        a.image = require("@/assets/img/logo/T_8_Symbolmark_white.png");
+      }
+      return a;
     },
     myArtist() {
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
@@ -107,6 +145,10 @@ export default {
         timestamp: utils.buildArtworkHash(artwork.artwork[0].dataUrl),
         uploader: artwork.owner
       };
+      bitcoinService.register(regData,
+        function(result) {
+        }, function(error) {
+        });
       /**
       const file = Buffer.from(JSON.stringify(regData), "hex");
       const detached = OpenTimestamps.DetachedTimestampFile.fromBytes(

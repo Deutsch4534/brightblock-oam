@@ -16,8 +16,6 @@ import Datetime from "vue-datetime";
 // You need a specific loader for CSS files
 import "vue-datetime/dist/vue-datetime.css";
 
-// require('dotenv').config();
-
 Vue.config.productionTip = false;
 
 Vue.use(Vuex);

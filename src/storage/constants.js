@@ -2,7 +2,6 @@ const dev = location.origin.indexOf("localhost") > -1;
 export const CONSTANTS = {
   apiKey: "46171452",
   nodeEnv: (dev) ? "development" : "production",
-  blockchain: "Ethereum",
   environment: (dev) ? "development" : "production",
   shapeShiftUrl: "https://cors.shapeshift.io",
   ethGatewayUrl: (dev) ? "http://localhost:8191" : "https://api.brightblock.org",
@@ -11,6 +10,9 @@ export const CONSTANTS = {
   networkExpected: (dev) ? "Ganache" : "Ropsten (3)",
   gaiaHubUrl: "https://gaia.brightblock.org",
 
+  featureEthereum: true,
+  featureBitcoin: false,
+  featureAuctions: true,
   debugMode: false,
   domain: location.origin,
   artworkRootFileName: "records_v01.json",
