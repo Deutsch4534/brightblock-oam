@@ -281,7 +281,7 @@ export default {
 <style scoped>
   h1.tagline {
     font-family: 'Noto Serif Disp ExtCond';
-    font-size: 500%;
+    font-size: 4rem;
     color: #ECEFF1;
   }
 .header-title {
