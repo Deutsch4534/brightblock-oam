@@ -16,8 +16,7 @@
         <div class="card-body text-center">
           <h4 class="card-title">
             <a>
-            <mdb-icon icon="exchange"/>
-            <!--<mdb-icon icon="arrows-alt-h"/>-->
+            <mdb-icon icon="exchange-alt"/>
           </a>
           </h4>
           <p class="card-text">{{cardDescription1}}</p>
@@ -32,8 +31,7 @@
         <div class="card-body text-center">
           <h4 class="card-title">
             <a>
-              <mdb-icon icon="building" />
-              <!--<mdb-icon icon="boxes" />-->
+              <mdb-icon icon="boxes" />
             </a>
           </h4>
           <p class="card-text">{{cardDescription2}}</p>
@@ -63,8 +61,7 @@
         <div class="card-body text-center">
           <h4 class="card-title">
             <a>
-              <mdb-icon icon="cubes" />
-              <!--<mdb-icon icon="campground" />-->
+              <mdb-icon icon="campground" />
             </a>
           </h4>
           <p class="card-text">{{cardDescription4}}</p>

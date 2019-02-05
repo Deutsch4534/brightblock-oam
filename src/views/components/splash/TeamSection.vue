@@ -8,7 +8,7 @@
         </mdb-col>
         <mdb-col sm="6" lg="4" class="mx-auto px-4 mb-lg-0 mb-5 pb-5" v-for="(profile, index) in profiles" :key="index">
           <router-link :to="profileUrl(profile)" class="avatar-img">
-            <mdb-avatar tag="img" :src="profile.data.avatar.url" height="120px" alt="Thumbnail Image" class="z-depth-1 img-fluid"/>
+            <mdb-avatar tag="img" :src="profile.data.avatar.url" alt="Thumbnail Image" class="z-depth-1 img-fluid"/>
           </router-link>
           <h5 class="font-weight-bold mt-4 mb-3">{{profile.data.name[0].text}}</h5>
           <p class="text-uppercase">{{profile.data.jobtitle[0].text}}</p>
@@ -97,5 +97,7 @@ export default {
     display: flex;
     align-items: center;
   }
+
+  a.avatar-img img { width: 100%; }
 
 </style>

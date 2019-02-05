@@ -50,6 +50,10 @@ export default {
   border-radius: 0;
 }
 
+.text-light {
+  color: #ECEFF1!important;
+}
+
 .border-shadow::after {
   content: '';
   position: absolute;

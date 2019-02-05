@@ -17,8 +17,8 @@
               <p>Email: contact@transit8.com</p>
             </div>
           </mdb-col>
-          <mdb-col md="6" class="text-white">
-            <form class="text-white contact-form">
+          <mdb-col md="6">
+            <form class="contact-form">
               <mdb-row>
                 <mdb-col md="12">
                   <div class="mb-0">
@@ -123,7 +123,7 @@ export default {
 }
 .contact-form .md-form label,
 .contact-form .md-form textarea ~ label.active {
-  color: inherit;
+  color: inherit!important;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 

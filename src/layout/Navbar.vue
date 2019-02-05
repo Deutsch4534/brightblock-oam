@@ -2,7 +2,7 @@
 <!-- Main navigation 424f95 -->
 <header>
   <!-- Navbar -->
-  <mdb-navbar :color="'stylish'" position="top" dark href="#" transparent scrolling hamburger animated animation="4" id="main-navigation">
+  <mdb-navbar :color="'stylish'" position="top" dark href="#" transparent scrolling hamburger animated animation="3" id="main-navigation">
     <!-- mdbNavbar brand -->
     <mdb-navbar-brand>
       <form class="md-form search-form white-text">

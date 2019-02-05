@@ -45,7 +45,7 @@
     </mdb-row>
   </mdb-container>
   <mdb-container fluid class="bg-main">
-    <mdb-container class="text-white">
+    <mdb-container class="text-light">
       <contact-section/>
     </mdb-container>
   </mdb-container>

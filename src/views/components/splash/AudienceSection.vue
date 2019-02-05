@@ -13,7 +13,7 @@
         <p class="card-text">{{cardDescription1}}</p>
       </div>
       <div class="card-body pt-0 d-flex align-items-end justify-content-end">
-        <mdb-icon far icon="address-book-o" />
+        <mdb-icon far icon="address-book" />
       </div>
     </div>
     <!-- Card -->
@@ -28,7 +28,7 @@
         <p class="card-text">{{cardDescription2}}</p>
       </div>
       <div class="card-body pt-0 d-flex align-items-end justify-content-end">
-        <mdb-icon far icon="bookmark-o" />
+        <mdb-icon far icon="bookmark" />
       </div>
     </div>
     <!-- Card -->
