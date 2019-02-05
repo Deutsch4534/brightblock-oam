@@ -25,7 +25,7 @@ import Artwork from "./views/Artwork";
 import Search from "./views/Search";
 
 import MyArtworks from "./views/MyArtworks";
-import RegisterArtwork from "./views/components/myArtwork/RegisterArtwork";
+import Registration from "./views/components/myArtwork/Registration";
 import RegisterForSale from "./views/components/myArtwork/RegisterForSale";
 import RegisterForAuction from "./views/components/myArtwork/RegisterForAuction";
 import MyArtworkUpload from "./views/MyArtworkUpload";
@@ -168,9 +168,9 @@ const router = new Router({
     },
     {
       path: "/my-artwork/register/:artworkId",
-      name: "registerArtwork",
+      name: "registration",
       components: {
-        default: RegisterArtwork,
+        default: Registration,
         header: Navbar,
         footer: Footer
       },

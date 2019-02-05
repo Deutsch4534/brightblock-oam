@@ -45,7 +45,7 @@ import { mdbCol, mdbView, mdbMask, mdbRow, mdbContainer, mdbCard, mdbCardImage, 
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: "RegisterArtwork",
+  name: "Registration",
   components: {
     mdbContainer,
     mdbCol,

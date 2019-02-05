@@ -50,7 +50,8 @@ const auctionSearchService = {
           }
         })
         .catch(function() {
-          reject(new Error({ error: "AUCTIONS_1", message: "Error get users online auction: username=" + username }));
+          resolve({});
+          // reject(new Error({ error: "AUCTIONS_1", message: "Error get users online auction: username=" + username }));
         });
     });
   }
