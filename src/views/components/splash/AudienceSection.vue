@@ -6,14 +6,14 @@
   </mdb-col>
   <mdb-col lg="4" class="d-flex">
     <!-- Card -->
-    <div class="card mb-2">
+    <div class="card mb-3 border-shadow">
       <!-- Card content -->
       <div class="card-body">
         <h4 class="h3-responsive card-title"><a>{{cardTitle1}}</a></h4>
         <p class="card-text">{{cardDescription1}}</p>
       </div>
       <div class="card-body pt-0 d-flex align-items-end justify-content-end">
-        <mdb-icon far icon="address-book" />
+        <mdb-icon far icon="address-book-o" />
       </div>
     </div>
     <!-- Card -->
@@ -21,14 +21,14 @@
 
   <mdb-col lg="4" class="d-flex">
     <!-- Card -->
-    <div class="card mb-2">
+    <div class="card mb-3 border-shadow">
       <!-- Card content -->
       <div class="card-body">
         <h4 class="h3-responsive card-title"><a>{{cardTitle2}}</a></h4>
         <p class="card-text">{{cardDescription2}}</p>
       </div>
       <div class="card-body pt-0 d-flex align-items-end justify-content-end">
-        <mdb-icon far icon="bookmark" />
+        <mdb-icon far icon="bookmark-o" />
       </div>
     </div>
     <!-- Card -->
@@ -36,7 +36,7 @@
 
   <mdb-col lg="4" class="d-flex">
     <!-- Card -->
-    <div class="card mb-2">
+    <div class="card mb-3 border-shadow">
       <!-- Card content -->
       <div class="card-body">
         <h4 class="h3-responsive card-title"><a>{{cardTitle3}}</a></h4>
@@ -83,13 +83,16 @@ export default {
 
 <style scoped>
 .card {
-  border: 2pt solid black;
+  border: 3pt solid black;
+  box-shadow: none;
+  border-radius: 0;
 }
+
 h4.card-title {
   margin-bottom: 2rem;
 }
 .card-body i {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 }
 .card .card-body .card-text {
   color: black;

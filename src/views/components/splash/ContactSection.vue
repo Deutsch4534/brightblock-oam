@@ -1,5 +1,5 @@
 <template>
-<mdb-container fluid id="ContactSection" class="py-5 text-white">
+<mdb-container id="ContactSection" class="py-5">
     <section class="mt-5 mb-0 px-0">
       <mdb-row>
         <mdb-col class="col-lg-10 mx-auto">
@@ -123,14 +123,14 @@ export default {
 }
 .contact-form .md-form label,
 .contact-form .md-form textarea ~ label.active {
-  color: #ECEFF1;
+  color: inherit;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 
 }
 
 .contact-form .form-control {
-  color: #ECEFF1;
+  color: inherit;
   font-weight: normal;
 }
 

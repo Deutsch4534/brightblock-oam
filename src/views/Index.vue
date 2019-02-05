@@ -45,10 +45,8 @@
     </mdb-row>
   </mdb-container>
   <mdb-container fluid class="bg-main">
-    <mdb-container>
-      <div class="container-fluid px-0 mx-0">
-        <contact-section/>
-      </div>
+    <mdb-container class="text-white">
+      <contact-section/>
     </mdb-container>
   </mdb-container>
 </div>
@@ -113,53 +111,7 @@ export default {
     background-color: #5400E8;
   }
 
-   /* Extra small devices (portrait phones, less than 576px) */
-  @media (max-width: 575px) { }
 
-  /*  Small devices (landscape phones, 576px and up) */
-  @media (min-width: 576px) {
-    h1.tagline {
-      font-size: 300%;
-    }
-    .large-title {
-      font-size: 200%;
-    }
-  }
-
-  /* Medium devices (tablets, 768px and up) */
-  @media (min-width: 768px) {
-    h1.tagline {
-      font-size: 350%;
-    }
-    .large-title {
-      font-size: 250%;
-    }
-  }
-
-  /* Large devices (desktops, 992px and up) */
-  @media (min-width: 992px) {
-    h1.tagline {
-      font-size: 500%;
-    }
-
-    .h1-responsive {
-      font-size: 250%;
-    }
-
-    .large-title {
-      font-size: 300%;
-    }
-  }
-
-  /* Extra large devices (large desktops, 1200px and up) */
-  @media (min-width: 1200px) {
-    .h1-responsive {
-      font-size: 300%;
-    }
-    .large-title {
-      font-size: 400%;
-    }
-  }
 
 </style>
 

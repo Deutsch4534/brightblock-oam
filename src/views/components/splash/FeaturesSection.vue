@@ -2,7 +2,7 @@
 <mdb-row id="FeaturesSection" class="py-5 col-lg-10 mx-auto d-flex">
   <div class="col-md-12">
     <mdb-row>
-      <mdb-col md="10">
+      <mdb-col lg="10">
         <h2 class="large-title pt-md-5 pt-5">{{title}}</h2>
         <hr class="hr-light my-4">
       </mdb-col>
@@ -11,12 +11,12 @@
   <div class="d-flex row">
     <div class="col-12 col-sm-6 col-md-3 d-flex">
       <!-- Card -->
-      <div class="card">
+      <div class="card border-shadow">
         <!-- Card content -->
         <div class="card-body text-center">
           <h4 class="card-title">
             <a>
-            <mdb-icon icon="arrows-alt"/>
+            <mdb-icon icon="exchange"/>
             <!--<mdb-icon icon="arrows-alt-h"/>-->
           </a>
           </h4>
@@ -27,12 +27,12 @@
     </div>
     <div class="col-12 col-sm-6 col-md-3 d-flex">
       <!-- Card -->
-      <div class="card">
+      <div class="card border-shadow">
         <!-- Card content -->
         <div class="card-body text-center">
           <h4 class="card-title">
             <a>
-              <mdb-icon icon="angle-double-right" />
+              <mdb-icon icon="building" />
               <!--<mdb-icon icon="boxes" />-->
             </a>
           </h4>
@@ -43,7 +43,7 @@
     </div>
     <div class="col-12 col-sm-6 col-md-3 d-flex">
       <!-- Card -->
-      <div class="card">
+      <div class="card border-shadow">
         <!-- Card content -->
         <div class="card-body text-center">
           <h4 class="card-title">
@@ -58,12 +58,12 @@
     </div>
     <div class="col-12 col-sm-6 col-md-3 d-flex">
       <!-- Card -->
-      <div class="card">
+      <div class="card border-shadow">
         <!-- Card content -->
         <div class="card-body text-center">
           <h4 class="card-title">
             <a>
-              <mdb-icon icon="chevron-right" />
+              <mdb-icon icon="cubes" />
               <!--<mdb-icon icon="campground" />-->
             </a>
           </h4>
@@ -111,7 +111,6 @@ export default {
 <style scoped>
 .card {
   width: 100%;
-  border: 2pt solid black;
   margin-bottom: 2rem;
 }
 </style>
