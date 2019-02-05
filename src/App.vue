@@ -38,6 +38,9 @@ export default {
     font-weight: 300;
     font-style: normal;
   }
+
+  header { min-height: 65px; }
+
 .section-download {
   .btn + .btn {
     margin-left: 5px;
