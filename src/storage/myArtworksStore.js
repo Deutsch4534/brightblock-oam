@@ -61,6 +61,10 @@ const myArtworksStore = {
           owner: "unknown",
           saleData: {},
           editions: 1,
+          edition: 1,
+          medium: null,
+          dimensions: null,
+          yearCreated: null,
           images: [],
           supportingDocuments: [],
           artwork: []

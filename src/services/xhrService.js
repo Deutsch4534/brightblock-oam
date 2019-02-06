@@ -57,7 +57,7 @@ const xhrService = {
           if (response.failed) {
             reject(new Error(response.message));
           }
-          resolve(response.data.details);
+          resolve(response);
         })
         .catch(e => {
           reject(new Error(e.message));

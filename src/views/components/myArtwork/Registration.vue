@@ -6,36 +6,39 @@
     <hr/>
     </mdb-col>
     <mdb-col sm="10" class="mx-auto">
-              <mdb-card>
-                <mdb-view hover>
-                  <img class="img-fluid" width="100%" :src="artwork.image" :alt="artwork.title"></img>
-                  <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
-                </mdb-view>
-                <mdb-card-body>
-                  <mdb-card-title>{{artwork.title}}</mdb-card-title>
-                  <mdb-card-title class="text-right"><small>{{myArtist.name}}</small></mdb-card-title>
-                  <hr/>
-                  <mdb-card-text>Registering the artwork on the blockchain creates a Certificate of Authenticity (COA) that helps show the provenance of the
-                  artwork and makes possible our unique ability to pay residuals to artists and galleries on secondary sales, <a href="#">read more..</a>
-                  </mdb-card-text>
-                </mdb-card-body>
-                <mdb-card-body v-if="featureBitcoin">
-                  <mdb-card-title>Bitcoin Blockchain <span v-if="bitcoinState">(Chain={{bitcoinState.chain}})</span></mdb-card-title>
-                  <mdb-card-text>Register artwork on the Bitcoin blockchain here.</mdb-card-text>
-                  <a class="black-text d-flex justify-content-end"><mdb-btn color="primary" size="sm" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
-                </mdb-card-body>
-                <mdb-card-body v-if="featureEthereum">
-                  <mdb-card-title>Ethereum Blockchain <span v-if="bitcoinState">(Network={{networkName}})</span></mdb-card-title>
-                  <mdb-card-text>Register on ethereum if you use meta mask or another ethereum wallet.</mdb-card-text>
-                  <a class="black-text d-flex justify-content-end"><mdb-btn v-if="featureEthereum" color="primary" size="sm" :disabled="registered" @click="registerArtworkEthereum()">Register Ethereum ({{networkName}})</mdb-btn></a>
-                </mdb-card-body>
-              </mdb-card>
+      <mdb-card>
+        <mdb-view hover>
+          <img class="img-fluid" width="100%" :src="artwork.image" :alt="artwork.title"></img>
+          <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+        </mdb-view>
+        <mdb-card-body>
+          <mdb-card-title>{{artwork.title}}</mdb-card-title>
+          <mdb-card-title class="text-right"><small>{{myArtist.name}}</small></mdb-card-title>
+          <mdb-card-text>Registering the artwork on the blockchain creates a Certificate of Authenticity (COA) that helps show the provenance of the
+          artwork and makes possible our unique ability to pay residuals to artists and galleries on secondary sales, <a href="#">read more..</a>
+          </mdb-card-text>
+          <hr/>
+        </mdb-card-body>
+          <create-coa :artwork="artwork"  @updateCoa="setByEventCoa($event)"/>
+        <mdb-card-body v-if="featureBitcoin">
+          <mdb-card-title>Bitcoin Blockchain <span v-if="bitcoinState">(Chain={{bitcoinState.chain}})</span></mdb-card-title>
+          <mdb-card-text>Register artwork on the Bitcoin blockchain here.</mdb-card-text>
+          <a class="black-text d-flex justify-content-end"><mdb-btn color="primary" size="sm" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
+          <hr/>
+        </mdb-card-body>
+        <mdb-card-body v-if="featureEthereum">
+          <mdb-card-title>Ethereum Blockchain <span v-if="bitcoinState">(Network={{networkName}})</span></mdb-card-title>
+          <mdb-card-text>Register on ethereum if you use meta mask or another ethereum wallet.</mdb-card-text>
+          <a class="black-text d-flex justify-content-end"><mdb-btn v-if="featureEthereum" color="primary" size="sm" :disabled="registered" @click="registerArtworkEthereum()">Register Ethereum ({{networkName}})</mdb-btn></a>
+        </mdb-card-body>
+      </mdb-card>
     </mdb-col>
   </mdb-row>
 </mdb-container>
 </template>
 
 <script>
+import CreateCoa from "./CreateCoa";
 import utils from "@/services/utils";
 import notify from "@/services/notify";
 import ethereumService from "@/services/ethereumService";
@@ -47,6 +50,7 @@ import { mdbCol, mdbView, mdbMask, mdbRow, mdbContainer, mdbCard, mdbCardImage, 
 export default {
   name: "Registration",
   components: {
+    CreateCoa,
     mdbContainer,
     mdbCol,
     mdbMask,
@@ -102,7 +106,7 @@ export default {
       if (!a.image) {
         a.image = require("@/assets/img/logo/T_8_Symbolmark_white.png");
       }
-      return a;
+      return a ? a : {};
     },
     myArtist() {
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
@@ -135,6 +139,13 @@ export default {
   methods: {
     closeModal: function() {
       this.$router.push(this.from);
+    },
+    setByEventCoa (coa) {
+      let artwork = this.$store.getters["myArtworksStore/myArtwork"](
+        this.artworkId
+      );
+      artwork.coa = coa;
+      this.$store.dispatch("myArtworksStore/updateArtwork", artwork);
     },
     registerArtworkBitcoin: function() {
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](

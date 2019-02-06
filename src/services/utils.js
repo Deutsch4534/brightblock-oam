@@ -104,7 +104,11 @@ const utils = {
         ? record.indexData.owner
         : record.indexData.uploader,
       saleData: record.indexData.saleData,
-      editions: record.indexData.editions ? record.indexData.editions : 1
+      medium: record.indexData.medium,
+      dimensions: record.indexData.dimensions,
+      yearCreated: record.indexData.yearCreated,
+      editions: record.indexData.editions ? record.indexData.editions : 1,
+      edition: record.indexData.edition ? record.indexData.edition : 1
     });
   },
 
@@ -124,7 +128,11 @@ const utils = {
       uploader: artwork.uploader,
       owner: artwork.owner,
       artist: artwork.artist,
-      editions: artwork.editions ? artwork.editions : 1
+      medium: artwork.medium,
+      dimensions: artwork.dimensions,
+      yearCreated: artwork.yearCreated,
+      editions: artwork.editions ? artwork.editions : 1,
+      edition: artwork.edition ? artwork.edition : 1
     };
 
     if (artwork.saleData) {
@@ -137,6 +145,7 @@ const utils = {
       id: artwork.id,
       images: artwork.images,
       artwork: artwork.artwork,
+      coa: artwork.coa,
       created: artwork.created,
       supportingDocuments: artwork.supportingDocuments,
       bcitem: artwork.bcitem
@@ -155,6 +164,7 @@ const utils = {
   getArtworkData: function(provData) {
     let artworkData = {
       artwork: provData.artwork,
+      coa: provData.coa,
       images: provData.images,
       supportingDocuments: provData.supportingDocuments,
       created: provData.created,

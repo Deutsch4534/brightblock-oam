@@ -20,7 +20,7 @@
         <a>
           <strong>{{artistProfile.name}}</strong>
         </a>, {{created}}</p>
-        <router-link :to="registerUrl" class="text-white" v-if="canRegister"><mdb-btn color="white" size="md" class="waves-light ">Register</mdb-btn></router-link>
+        <router-link :to="registerUrl" class="text-white" v-if="canRegister"><mdb-btn color="white" size="md" class="waves-light ">Provenance</mdb-btn></router-link>
         <router-link :to="registerForSaleUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="canSell">Buy</mdb-btn></router-link>
         <router-link :to="registerForAuctionUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="canAuction">Auction</mdb-btn></router-link>
         <a @click="deleteArtwork(artwork.id)" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="debugMode">Delete</mdb-btn></a>

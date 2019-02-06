@@ -106,7 +106,7 @@
       <div class="col-md-4">
         <h4>Set Auction Logo</h4>
         <p class="muted"><small>Size limit: 500Kb</small></p>
-        <media-upload :logo="auction.logo" @updateMedia="setLogo($event)"/>
+        <media-upload :logo="auction.logo" @updateMedia="setByEventLogo($event)"/>
         <p class="muted" v-if="auction.logo && auction.logo.dataUrl"><small>{{auction.logo.name}}</small></p>
       </div>
     </div>
@@ -217,7 +217,7 @@ export default {
           });
       }
     },
-    setLogo (mediaObjects) {
+    setByEventLogo (mediaObjects) {
       this.auction.logo = mediaObjects[0];
     },
     checkForm(event) {

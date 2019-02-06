@@ -33,17 +33,47 @@
     </div>
   </div>
   <div class="form-row">
-    <div class="col-md-12 mb-3">
-      <label for="validationCustom04">Editions</label>
-      <input class="form-control" id="validationCustom04" type="number" placeholder="Editions" v-model="artwork.editions" required>
+    <div class="col-md-2 mb-3">
+      <label for="validationCustom040">Edition</label>
+      <input class="form-control" id="validationCustom040" type="number" placeholder="Edition" v-model="artwork.edition" required>
       <div class="invalid-feedback">
         Please enter number of editions!
+      </div>
+    </div>
+    <div class="col-md-2 mb-3">
+      <label for="validationCustom041">Of editions</label>
+      <input class="form-control" id="validationCustom041" type="number" placeholder="Total editions" v-model="artwork.editions" required>
+      <div class="invalid-feedback">
+        Please enter total number of editions!
+      </div>
+    </div>
+  </div>
+  <div class="form-row mb-3">
+    <div class="col-md-4">
+      <label for="validationCustom06-1">Medium / Materials</label>
+      <input type="text" class="form-control" id="validationCustom06-1" placeholder="Medium / Materials" v-model="artwork.medium" required>
+      <div class="invalid-feedback">
+        Please enter the Medium / Materials!
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="validationCustom05-1">Dimensions</label>
+      <input type="text" class="form-control" id="validationCustom05-1" placeholder="Dimensions" v-model="artwork.dimensions" required>
+      <div class="invalid-feedback">
+        Please enter the Dimensions!
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="validationCustom05-1">Year Created</label>
+      <input type="text" class="form-control" id="validationCustom05-1" placeholder="yearCreated" v-model="artwork.yearCreated" required>
+      <div class="invalid-feedback">
+        Please enter the year created!
       </div>
     </div>
   </div>
   <div class="form-row">
     <div class="col-md-6 mb-3">
-      <label for="validationCustom05">Owner</label>
+      <label for="validationCustom05">Current owner</label>
       <input type="text" class="form-control" id="validationCustom05" placeholder="Owner" v-model="artwork.owner" required>
       <div class="invalid-feedback">
         Please enter the owner!
@@ -180,6 +210,7 @@ export default {
         artist: "unknown",
         owner: "unknown",
         editions: 1,
+        edition: 1,
         created: null,
         images: [],
         supportingDocuments: [],
@@ -249,6 +280,15 @@ export default {
       }
       if (this.artwork.editions < 1 || this.artwork.editions > 10) {
         this.errors.push("Editions between 1 and 10.");
+      }
+      if (!this.artwork.yearCreated) {
+        this.errors.push("Year created needed.");
+      }
+      if (!this.artwork.dimensions) {
+        this.errors.push("dimensions needed.");
+      }
+      if (!this.artwork.medium) {
+        this.errors.push("medium needed.");
       }
       if (this.created) {
         this.artwork.created = moment(this.created).valueOf();
