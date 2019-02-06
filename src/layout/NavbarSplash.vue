@@ -2,7 +2,7 @@
 <!-- Main navigation 424f95 -->
 <header>
   <!-- Navbar -->
-  <mdb-navbar :color="'stylish'" position="top" dark href="#" transparent scrolling hamburger animated animation="3" id="main-navigation">
+  <mdb-navbar :color="'stylish'" position="top" dark href="#" expand="lx" transparent scrolling hamburger animated animation="3" id="main-navigation">
   <!-- mdbNavbar brand -->
   <mdb-navbar-brand>
     <form class="md-form search-form white-text">
@@ -33,13 +33,13 @@
       </li>
       <auction-links v-if="loggedIn"/>
       <div class="mb-4"></div>
-      <li class="nav-item ripple-parent" @click="scrollToElement('AboutSection', $event); closeMenu()">
+      <li class="nav-item ripple-parent" @click="scrollToElement('AboutSection', $event);">
         <router-link to="/" name="sectionUrl('AboutSection')" class="nav-link navbar-link">About</router-link>
       </li>
-      <li class="nav-item ripple-parent" @click="scrollToElement('TeamSection', $event); closeMenu()">
+      <li class="nav-item ripple-parent" @click="scrollToElement('TeamSection', $event);">
         <router-link to="/" name="sectionUrl('TeamSectionSection')" class="nav-link navbar-link">Team</router-link>
       </li>
-      <li class="nav-item ripple-parent" @click="scrollToElement('ContactSection', $event); closeMenu()">
+      <li class="nav-item ripple-parent" @click="scrollToElement('ContactSection', $event);">
         <router-link to="/" name="sectionUrl('ContactSection')" class="nav-link navbar-link">Contact</router-link>
       </li>
       <div class="mb-4"></div>
@@ -153,10 +153,6 @@ export default {
   created() {
     this.getContent();
   },
-  updated() {
-    let navbar = document.getElementById("main-navigation");
-    navbar.classList.remove("navbar-expand-lg");
-  },
   computed: {
     headerStyle() {
       return {
@@ -220,10 +216,6 @@ export default {
       this.toggledClass = !this.toggledClass;
       this.bodyClick();
     },
-    closeMenu(){
-      let toggler = document.querySelector('.navbar-toggler');
-      toggler.click();
-    },
     handleScroll() {
       let scrollValue =
         document.body.scrollTop || document.documentElement.scrollTop;
@@ -263,16 +255,17 @@ export default {
   },
   mounted() {
     document.addEventListener("scroll", this.scrollListener);
+    let navMenuItems = document.querySelectorAll(".navbar-collapse li a.nav-link.navbar-link");
+    navMenuItems.forEach((item) => {
+      item.addEventListener('click', this.toggleMenu)
+    });
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.scrollListener);
-  },
-  watch: {
-    '$route' () {
-      if(window.innerWidth >= 992 ) {
-        this.closeMenu();
-      }
-    }
+    let navMenuItems = document.querySelectorAll('.navbar-collapse li a.nav-link.navbar-link');
+    navMenuItems.forEach((item) => {
+      item.removeEventListener('click', this.toggleMenu);
+    });
   }
 };
 </script>
@@ -295,7 +288,7 @@ export default {
 .navbar {
   border-bottom: 1px solid white;
   box-shadow: none;
-  min-height: 50px;
+  min-height: 54px;
   flex-wrap: nowrap;
 }
 .scrolling-navbar { padding: 4px 28px!important; }

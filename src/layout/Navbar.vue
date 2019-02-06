@@ -2,7 +2,7 @@
 <!-- Main navigation 424f95 -->
 <header>
   <!-- Navbar -->
-  <mdb-navbar :color="'stylish'" position="top" dark href="#" transparent scrolling hamburger animated animation="3" id="main-navigation">
+  <mdb-navbar :color="'stylish'" position="top" dark href="#" expand="lx" transparent scrolling hamburger animated animation="3" id="main-navigation">
     <!-- mdbNavbar brand -->
     <mdb-navbar-brand>
       <form class="md-form search-form white-text">
@@ -113,10 +113,6 @@ export default {
   created() {
     this.getContent();
   },
-  updated() {
-    let navbar = document.getElementById("main-navigation");
-    navbar.classList.remove("navbar-expand-lg");
-    },
   computed: {
     headerStyle() {
       return {
@@ -174,10 +170,6 @@ export default {
       this.toggledClass = !this.toggledClass;
       this.bodyClick();
     },
-    closeMenu() {
-      let toggler = document.querySelector('.navbar-toggler');
-      toggler.click();
-    },
     handleScroll() {
       let scrollValue =
         document.body.scrollTop || document.documentElement.scrollTop;
@@ -217,17 +209,17 @@ export default {
   },
   mounted() {
     document.addEventListener("scroll", this.scrollListener);
-
+    let navMenuItems = document.querySelectorAll(".navbar-collapse li a.nav-link.navbar-link");
+    navMenuItems.forEach((item) => {
+        item.addEventListener('click', this.toggleMenu);
+    });
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.scrollListener);
-  },
-  watch: {
-    '$route' () {
-      if(window.innerWidth >= 992 ){
-        this.closeMenu();
-      }
-    }
+    let navMenuItems = document.querySelectorAll('.navbar-collapse li a.nav-link.navbar-link');
+    navMenuItems.forEach((item) => {
+      item.removeEventListener('click', this.toggleMenu);
+    });
   }
 };
 </script>

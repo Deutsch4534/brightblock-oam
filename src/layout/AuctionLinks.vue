@@ -2,27 +2,27 @@
   <mdb-dropdown tag="li" class="nav-item">
     <mdb-dropdown-toggle tag="a" class="dropright" color="" navLink slot="toggle" waves-fixed>My Portfolio</mdb-dropdown-toggle>
     <mdb-dropdown-menu class="dropdown-menu-left position-static">
-      <li v-if="loggedIn">
+      <li v-if="loggedIn" v-on:click="toggleMenu">
         <router-link
           class="dropdown-item"
           to="/my-artworks"
           >My Art Work</router-link
         >
       </li>
-      <li v-if="loggedIn">
+      <li v-if="loggedIn" v-on:click="toggleMenu">
         <router-link
           class="dropdown-item"
           to="/my-artwork/upload"
           >Upload Artwork</router-link>
       </li>
-      <li v-if="loggedIn">
+      <li v-if="loggedIn" v-on:click="toggleMenu">
         <router-link
           class="dropdown-item"
           to="/my-auctions"
           >My Auctions</router-link
         >
       </li>
-      <li v-if="loggedIn">
+      <li v-if="loggedIn" v-on:click="toggleMenu">
         <router-link
           class="dropdown-item"
           to="/my-auctions/upload"
