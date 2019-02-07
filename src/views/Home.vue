@@ -1,17 +1,25 @@
 <template>
-<div class="container">
-  <mdb-row v-if="auctionsSize > 0">
-    <div class="col-md-12"><h5>Featured Auctions</h5></div>
-    <single-auction v-for="(auction, index) of onlineAuctions" :key="index" :auction="auction"/>
-  </mdb-row>
-  <hr/>
-  <h5>Featured Artworks</h5>
-  <last-artworks :artworks="artworks" class=""/>
-</div>
+  <mdb-container fluid class="bg-light flex-1">
+    <mdb-container class="py-5">
+      <mdb-row v-if="auctionsSize > 0">
+        <div class="col-12">
+          <h2 class="h2-responsive mb-5">Featured Auctions</h2>
+        </div>
+          <single-auction v-for="(auction, index) of onlineAuctions" :key="index" :auction="auction" class="col-sm-6 col-mb-4 col-lg-3"/>
+      </mdb-row>
+      <mdb-row>
+        <div class="col-12">
+          <h2 class="h2-responsive mb-5">Featured Artworks</h2>
+        </div>
+        <last-artwork v-for="(artwork, index) in artworks" :key="index" :artwork="artwork" class="col-sm-6 col-md-4 col-lg-3"/>
+      </mdb-row>
+    </mdb-container>
+  </mdb-container>
 </template>
 
 <script>
 import LastArtworks from "./components/home/LastArtworks";
+import LastArtwork from "./components/home/LastArtwork";
 import SingleAuction from "./components/auction/SingleAuction";
 import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
 import { mdbContainer, mdbRow } from 'mdbvue';
@@ -27,7 +35,8 @@ export default {
     mdbCardTitle,
     mdbCardText,
     mdbBtn,
-    SingleAuction
+    SingleAuction,
+    LastArtwork
   },
   name: "home",
   bodyClass: "index-page",

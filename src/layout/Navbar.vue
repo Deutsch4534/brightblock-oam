@@ -247,8 +247,8 @@ export default {
     position: absolute;
     background-color: #5400E8;
     top: 0;
-    left: 0;
-    width: 100vw;
+    right: 0;
+    width: 40vw;
     height: 0;
     padding: 30px 35px;
   }
@@ -291,7 +291,14 @@ export default {
 .jarallax2 {
 }
 
+@media (max-width: 990px) {
+  .navbar-collapse {
+    width: 60vw;
+  }
+}
+
   @media (max-width: 576px) {
+    header { min-height:50px; }
     .navbar-brand {
       max-width: 45vw;
     }
@@ -301,6 +308,10 @@ export default {
       font-size: 0.8rem;
     }
     .login-link { display: flex!important; }
+
+    .navbar-collapse {
+      width: 100vw;
+    }
 
     .navbar-nav .nav-item >>> a.user-menu img {
       width: 24px!important;

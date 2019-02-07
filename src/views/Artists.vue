@@ -1,17 +1,21 @@
 <template>
-<mdb-container>
-  <section class="text-center my-5">
-    <h2 class="h1-responsive font-weight-bold my-5">Artists at Transit8</h2>
-    <div class="row">
-      <single-artist v-for="(artist, index) of artists" :key="index" :artist="artist"/>
-    </div>
-  </section>
-</mdb-container>
+  <mdb-container fluid class="bg-light flex-1">
+    <mdb-container class="py-5">
+      <mdb-row>
+        <mdb-col col="12" class="mb-5">
+          <h1 class="h1-responsive">Artists</h1>
+        </mdb-col>
+      </mdb-row>
+      <mdb-row>
+        <single-artist v-for="(artist, index) of artists" :key="index" :artist="artist" class="col-sm-6 col-md-4 col-lg-3 mb-3 d-flex"/>
+      </mdb-row>
+    </mdb-container>
+  </mdb-container>
 </template>
 
 <script>
 import SingleArtist from './components/artists/SingleArtist'
-import { mdbContainer, mdbRow } from 'mdbvue';
+import { mdbContainer, mdbRow, mdbCol } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -19,7 +23,8 @@ export default {
   components: {
     SingleArtist,
     mdbContainer,
-    mdbRow
+    mdbRow,
+    mdbCol
   },
   data () {
     return {
@@ -44,3 +49,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+  >>> .h2-responsive.subtitle {
+    font-size: 1rem!important;
+    margin-bottom: 0.25rem;
+  }
+</style>

@@ -1,21 +1,17 @@
 <template>
-<mdb-container>
-  <section class="text-center my-5">
-    <div class="row">
-      <single-artist :artist="artist"/>
-    </div>
-    <div class="row my-4">
-      <div class="col-sm-12">
-        <h2 class="h4 mb-50">All artworks by {{artist.name}}</h2>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-12" id="artist-all-artworks">
-        <last-artworks :artworks="artworks" class=""/>
-      </div>
-    </div>
-  </section>
-</mdb-container>
+  <mdb-container fluid class="bg-light flex-1">
+    <mdb-container class="py-5">
+      <mdb-row>
+        <single-artist :artist="artist" class="col-sm-12 col-md-4 col-lg-3 mb-3"/>
+        <div class="col-sm-12 col-md-8 col-lg-9">
+          <h2 class="h3-responsive mb-5">All artworks</h2>
+          <div id="artist-all-artworks">
+            <last-artwork v-for="(artwork, index) in artworks" :key="index" :artworks="artworks" :artwork="artwork" class="col-sm-6 col-lg-4"/>
+          </div>
+        </div>
+      </mdb-row>
+    </mdb-container>
+  </mdb-container>
 </template>
 
 <script>
@@ -59,3 +55,6 @@ export default {
   }
 }
 </script>
+<style scoped>
+
+</style>
