@@ -3,16 +3,28 @@
   <mdb-card-title>Certificate of Authenticity</mdb-card-title>
   <h5>{{artwork.title}}</h5>
   <mdb-card-text>
-    <a v-if="!coa" class="black-text d-flex justify-content-end"><mdb-btn color="primary" size="sm" @click="generateCoa()">Generate</mdb-btn></a>
-    <a v-else :href="downloadLink" _target="blank" class="black-text d-flex justify-content-end"><mdb-btn color="primary" size="sm">Download</mdb-btn></a>
+    <p>Your bitcoin address will be embedded in your certificate of authenticity to make it easy
+    to receive future payments.</p>
+    <div class="row text-center">
+      <div class="col-md-12">
+        <canvas id="qrcode" width="150px" v-if="!coa"></canvas>
+      </div>
+      <div class="col-md-12">
+        {{artwork.artistry.btcAddress}}
+      </div>
+    </div>
   </mdb-card-text>
-  <hr/>
+  <div class="rounded-bottom lighten-3 text-right p-3">
+    <a class="black-text"><mdb-btn color="primary" size="md" @click="generateCoa()">Generate COA</mdb-btn></a>
+    <a v-if="downloadLink" :href="downloadLink" _target="blank" class="black-text"><mdb-btn color="primary" size="md">Download PDF</mdb-btn></a>
+  </div>
 </mdb-card-body>
 </template>
 
 <script>
 import xhrService from "@/services/xhrService";
 import { mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
+import QRCode from "qrcode";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -23,47 +35,73 @@ export default {
     mdbCardText,
     mdbBtn
   },
-  props: {
-    artwork: {
-      type: Object,
-      default() {
-        return {
-          bcitem: {}
-        };
-      }
-    }
-  },
   data() {
     return {
       result: null,
+      artworkId: null,
       downloadLink: null,
       coa: null
     };
   },
-  mounted() {},
+  mounted() {
+    this.artworkId = Number(this.$route.params.artworkId);
+    this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
+      let $self = this;
+      let $qrCode = document.getElementById("qrcode");
+      this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId).then((artwork) => {
+        // this.artwork = artwork;
+        if (artwork && artwork.artistry && artwork.artistry.btcAddress) {
+          QRCode.toCanvas(
+            $qrCode,
+            artwork.artistry.btcAddress,
+            { errorCorrectionLevel: "H" },
+            function(error) {
+              if (error) console.error(error);
+              console.log("success!");
+            }
+          );
+        }
+      });
+    });
+  },
   computed: {
+    artwork() {
+      let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+        this.artworkId
+      );
+      if (!a.image) {
+        a.image = require("@/assets/img/logo/T_8_Symbolmark_white.png");
+      }
+      return a ? a : {};
+    }
   },
   methods: {
     generateCoa: function() {
+      let canvas = document.getElementById('qrcode');
+      let qrCodeDataUrl = canvas.toDataURL();
+      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+        this.artworkId
+      );
       let $self = this;
       let siteLogo = require("@/assets/img/logo/T_8_Symbolmark_black.png");
       let data = {
-        artwork: this.artwork,
+        artwork: artwork,
+        qrCodeDataUrl: qrCodeDataUrl,
         siteName: "Transit8",
         siteLogo: siteLogo
       }
       let endPoint = this.$store.state.constants.ethGatewayUrl + "/api/convert/coa";
       xhrService.makePostCall(endPoint, data).then((response) => {
         $self.coa = response.data;
-        $self.downloadLink = $self.getPdfLink();
+        $self.downloadLink = $self.getPdfLink(artwork);
         $self.$emit('updateCoa', response.data)
       });
     },
-    getPdfLink: function() {
-      if (this.artwork) {
-        let title = this.artwork.title;
+    getPdfLink: function(artwork) {
+      if (artwork) {
+        let title = artwork.title;
         title = title.replace(/\s/g, '_');
-        let filename = title + "_" + this.artwork.id + ".pdf";
+        let filename = title + "_" + artwork.id + ".pdf";
         return "http://localhost:8191/api/getpdf/" + filename;
       }
     },

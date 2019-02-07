@@ -265,17 +265,19 @@ const myArtworksStore = {
         myArtworksService.getMyArtwork(
           artworkId,
           function(myArtwork) {
-            let blockchainItem = store.getters["ethStore/getBlockchainItem"](
-              myArtwork.timestamp
-            );
-            myArtwork.blockchainItem = blockchainItem;
-            moneyUtils.convertPrices(myArtwork, blockchainItem);
-            if (myArtwork.owner !== blockchainItem.blockstackId) {
-              myArtwork.owner = blockchainItem.blockstackId;
-              store.dispatch("myArtworksStore/updateArtwork", myArtwork);
-            }
-            commit("addMyArtwork", myArtwork);
-            resolve(myArtwork);
+            store.dispatch("ethStore/fetchBlockchainItem", {timestamp: myArtwork.timestamp})
+              .then(blockchainItem => {
+                if (blockchainItem && blockchainItem.itemIndex > -1) {
+                  myArtwork.blockchainItem = blockchainItem;
+                  moneyUtils.convertPrices(myArtwork, blockchainItem);
+                  if (myArtwork.owner !== blockchainItem.blockstackId) {
+                    myArtwork.owner = blockchainItem.blockstackId;
+                    store.dispatch("myArtworksStore/updateArtwork", myArtwork);
+                  }
+                }
+                commit("addMyArtwork", myArtwork);
+                resolve(myArtwork);
+              });
           },
           function(error) {
             console.log("Error fetching artwork: " + artworkId, error);
@@ -325,10 +327,7 @@ const myArtworksStore = {
           return;
         }
         let intval = setInterval(function() {
-          store
-            .dispatch("ethStore/fetchBlockchainItem", {
-              timestamp: artwork.timestamp
-            })
+          store.dispatch("ethStore/fetchBlockchainItem", {timestamp: artwork.timestamp})
             .then(blockchainItem => {
               if (
                 blockchainItem &&

@@ -19,19 +19,18 @@
           </mdb-card-text>
           <hr/>
         </mdb-card-body>
-          <create-coa :artwork="artwork"  @updateCoa="setByEventCoa($event)"/>
+          <create-coa @updateCoa="setByEventCoa($event)"/>
         <mdb-card-body v-if="featureBitcoin">
-          <mdb-card-title>Bitcoin Blockchain <span v-if="bitcoinState">(Chain={{bitcoinState.chain}})</span></mdb-card-title>
+          <mdb-card-title>Bitcoin Blockchain <span v-if="bitcoinState">({{bitcoinState.chain}} chain)</span></mdb-card-title>
           <mdb-card-text>
-          <canvas id="qrcode" width="150px"></canvas>
           Register artwork on the Bitcoin blockchain here.</mdb-card-text>
-          <a class="black-text d-flex justify-content-end"><mdb-btn color="primary" size="sm" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
+          <a class="black-text d-flex justify-content-end"><mdb-btn color="primary" size="md" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
           <hr/>
         </mdb-card-body>
         <mdb-card-body v-if="featureEthereum">
-          <mdb-card-title>Ethereum Blockchain <span v-if="bitcoinState">(Network={{networkName}})</span></mdb-card-title>
+          <mdb-card-title>Ethereum Blockchain <span v-if="bitcoinState">({{networkName}} network)</span></mdb-card-title>
           <mdb-card-text>Register on ethereum if you use meta mask or another ethereum wallet.</mdb-card-text>
-          <a class="black-text d-flex justify-content-end"><mdb-btn v-if="featureEthereum" color="primary" size="sm" :disabled="registered" @click="registerArtworkEthereum()">Register Ethereum ({{networkName}})</mdb-btn></a>
+          <a class="black-text d-flex justify-content-end"><mdb-btn v-if="featureEthereum" color="primary" size="md" :disabled="registered" @click="registerArtworkEthereum()">Register Ethereum ({{networkName}})</mdb-btn></a>
         </mdb-card-body>
       </mdb-card>
     </mdb-col>
@@ -47,7 +46,6 @@ import ethereumService from "@/services/ethereumService";
 import bitcoinService from "@/services/bitcoinService";
 // import OpenTimestamps from "javascript-opentimestamps";
 import { mdbCol, mdbView, mdbMask, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
-import QRCode from "qrcode";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -79,24 +77,8 @@ export default {
       this.from = "/my-auctions/manage/" + this.$route.query.auctionId;
     }
     let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-
     this.$store.dispatch("bitcoinStore/fetchBalance");
     this.$store.dispatch("bitcoinStore/fetchClientState");
-    let $self = this;
-    let $qrCode = document.getElementById("qrcode");
-    this.$store.dispatch("artworkSearchStore/fetchUserArtwork", {artworkId: this.artworkId, username: myProfile.username}).then((artwork) => {
-      if (artwork && artwork.artistry && artwork.artistry.btcAddress) {
-        QRCode.toCanvas(
-          $qrCode,
-          artwork.artistry.btcAddress,
-          { errorCorrectionLevel: "H" },
-          function(error) {
-            if (error) console.error(error);
-            console.log("success!");
-          }
-        );
-      }
-    });
   },
   computed: {
     fiatRates() {
@@ -118,6 +100,12 @@ export default {
     bitcoinState() {
       let state = this.$store.getters["bitcoinStore/getClientState"];
       return state;
+    },
+    btcAddress() {
+      let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+        this.artworkId
+      );
+      return a.artistry.btcAddress;
     },
     artwork() {
       let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
