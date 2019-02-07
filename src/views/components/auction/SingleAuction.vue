@@ -9,7 +9,7 @@
       </mdb-card-body>
       <div class="card-buttons d-flex align-items-end justify-content-between flex-wrap">
         <router-link v-if="canJoin" :to="onlineAuctionUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0">Register</mdb-btn></router-link>
-        <router-link v-if="isAdministrator" :to="manageUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0">Manage</mdb-btn></router-link><router-link v-if="canJoin" :to="onlineAuctionUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0">Register</mdb-btn></router-link>
+        <router-link v-if="isAdministrator" :to="manageUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0">Manage</mdb-btn></router-link>
       </div>
     </mdb-card>
   </mdb-col>
