@@ -1,8 +1,8 @@
 <template>
 <!-- Main navigation 424f95 -->
 <header>
-<!-- Navbar -->
-<mdb-navbar :color="'stylish'" position="top" dark href="#" transparent scrolling hamburger animated animation="4" id="main-navigation">
+  <!-- Navbar -->
+  <mdb-navbar :color="'stylish'" position="top" dark href="#" expand="lx" transparent scrolling hamburger animated animation="3" id="main-navigation">
   <!-- mdbNavbar brand -->
   <mdb-navbar-brand>
     <form class="md-form search-form white-text">
@@ -15,7 +15,9 @@
     <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
   </mdb-navbar-brand>
   <mdb-navbar-nav right>
-    <li v-if="!loggedIn" class="nav-item ripple-parent"><router-link to="/login" class="nav-link navbar-link login-link mr-2"><mdb-icon icon="fingerprint" /> Login</router-link></li>
+    <li v-if="!loggedIn" class="nav-item ripple-parent">
+      <router-link to="/login" class="nav-link navbar-link login-link mr-2"><mdb-icon icon="fingerprint" /> Login</router-link>
+    </li>
     <account-links v-if="loggedIn"/>
   </mdb-navbar-nav>
   <mdb-navbar-toggler>
@@ -31,13 +33,13 @@
       </li>
       <auction-links v-if="loggedIn"/>
       <div class="mb-4"></div>
-      <li class="nav-item ripple-parent" @click="scrollToElement('AboutSection', $event); closeMenu()">
+      <li class="nav-item ripple-parent" @click="scrollToElement('AboutSection', $event);">
         <router-link to="/" name="sectionUrl('AboutSection')" class="nav-link navbar-link">About</router-link>
       </li>
-      <li class="nav-item ripple-parent" @click="scrollToElement('TeamSection', $event); closeMenu()">
+      <li class="nav-item ripple-parent" @click="scrollToElement('TeamSection', $event);">
         <router-link to="/" name="sectionUrl('TeamSectionSection')" class="nav-link navbar-link">Team</router-link>
       </li>
-      <li class="nav-item ripple-parent" @click="scrollToElement('ContactSection', $event); closeMenu()">
+      <li class="nav-item ripple-parent" @click="scrollToElement('ContactSection', $event);">
         <router-link to="/" name="sectionUrl('ContactSection')" class="nav-link navbar-link">Contact</router-link>
       </li>
       <div class="mb-4"></div>
@@ -81,8 +83,8 @@
   </div>
   <!-- Full Page Intro -->
   <mdb-container>
-    <mdb-row class="py-2 col-md-8 d-flex align-items-center header-title">
-      <mdb-col>
+    <mdb-row class="py-2 d-flex align-items-center header-title">
+      <mdb-col md="9">
         <p class="mb-0">
           Transit8 complements a complete process from art creation to its sale, as well as being an artist-centric, and fully decentralised platform. <router-link :to="getAuctionLink">Read more</router-link>
         </p>
@@ -149,13 +151,7 @@ export default {
     mdbNavbarBrand
   },
   created() {
-    console.log('created');
     this.getContent();
-  },
-  updated() {
-    console.log('updated');
-    let navbar = document.getElementById("main-navigation");
-    navbar.classList.remove("navbar-expand-lg");
   },
   computed: {
     headerStyle() {
@@ -190,7 +186,6 @@ export default {
 
         let bodyClick = document.getElementById("bodyClick");
         bodyClick.addEventListener("click", this.toggleNavbarMobile);
-        console.log(elem);
       } else {
         bodyClick.remove();
       }
@@ -209,7 +204,6 @@ export default {
       });
     },
     doSearch() {
-      console.log('search');
       let qString = this.query;
       if (!this.query || this.query.length === 0) {
         qString = "*";
@@ -221,11 +215,6 @@ export default {
       this.NavbarStore.showNavbar = !this.NavbarStore.showNavbar;
       this.toggledClass = !this.toggledClass;
       this.bodyClick();
-    },
-    closeMenu(){
-      let toggler = document.querySelector('.navbar-toggler');
-      console.log(toggler);
-      toggler.click();
     },
     handleScroll() {
       let scrollValue =
@@ -240,14 +229,6 @@ export default {
           this.extraNavClasses = "";
           navbarColor.classList.add("md-transparent");
         }
-      }
-    },
-    showHamburgerMenu() {
-      let navbar = document.getElementById("main-navigation");
-      if(navbar.classList.contains('navbar-expand-lg')){
-        console.log(navbar.classList);
-        navbar.classList.remove("navbar-expand-lg");
-        console.log(navbar.classList);
       }
     },
     scrollListener() {
@@ -274,9 +255,17 @@ export default {
   },
   mounted() {
     document.addEventListener("scroll", this.scrollListener);
+    let navMenuItems = document.querySelectorAll(".navbar-collapse li a.nav-link.navbar-link");
+    navMenuItems.forEach((item) => {
+      item.addEventListener('click', this.toggleMenu)
+    });
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.scrollListener);
+    let navMenuItems = document.querySelectorAll('.navbar-collapse li a.nav-link.navbar-link');
+    navMenuItems.forEach((item) => {
+      item.removeEventListener('click', this.toggleMenu);
+    });
   }
 };
 </script>
@@ -285,7 +274,6 @@ export default {
 <style scoped>
   h1.tagline {
     font-family: 'Noto Serif Disp ExtCond';
-    font-size: 72px;
     color: #ECEFF1;
   }
 .header-title {
@@ -300,7 +288,8 @@ export default {
 .navbar {
   border-bottom: 1px solid white;
   box-shadow: none;
-  min-height: 50px;
+  min-height: 54px;
+  flex-wrap: nowrap;
 }
 .scrolling-navbar { padding: 4px 28px!important; }
 
@@ -364,6 +353,7 @@ i.fa-search {
   background-position: center center;
   height: calc(100vh - 160px);
 }
+
 .view2 {
   background-repeat: no-repeat;
   background-size: cover;
@@ -383,4 +373,27 @@ i.fa-search {
 h6 {
   line-height: 1.7;
 }
+
+  @media (max-width: 576px) {
+    .navbar-brand {
+      max-width: 45vw;
+    }
+    .search-form input, .login-link { font-size: 14px; }
+    nav >>> .navbar-toggler {
+      padding: 0 0 0.25rem 0.5rem;
+      font-size: 0.8rem;
+    }
+    .login-link { display: flex!important; }
+
+    .navbar-nav .nav-item >>> a.user-menu img {
+      width: 24px!important;
+      height: 24px!important;
+      border-radius: 12px!important;
+    }
+    .show-navbar {
+      font-size: 1.5rem;
+    }
+  }
+
+
 </style>

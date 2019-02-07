@@ -22,7 +22,9 @@
           <create-coa :artwork="artwork"  @updateCoa="setByEventCoa($event)"/>
         <mdb-card-body v-if="featureBitcoin">
           <mdb-card-title>Bitcoin Blockchain <span v-if="bitcoinState">(Chain={{bitcoinState.chain}})</span></mdb-card-title>
-          <mdb-card-text>Register artwork on the Bitcoin blockchain here.</mdb-card-text>
+          <mdb-card-text>
+          <canvas id="qrcode" width="150px"></canvas>
+          Register artwork on the Bitcoin blockchain here.</mdb-card-text>
           <a class="black-text d-flex justify-content-end"><mdb-btn color="primary" size="sm" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
           <hr/>
         </mdb-card-body>
@@ -45,6 +47,7 @@ import ethereumService from "@/services/ethereumService";
 import bitcoinService from "@/services/bitcoinService";
 // import OpenTimestamps from "javascript-opentimestamps";
 import { mdbCol, mdbView, mdbMask, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
+import QRCode from "qrcode";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -75,8 +78,25 @@ export default {
     if (this.$route.query.from && this.$route.query.from === "auctions") {
       this.from = "/my-auctions/manage/" + this.$route.query.auctionId;
     }
+    let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+
     this.$store.dispatch("bitcoinStore/fetchBalance");
     this.$store.dispatch("bitcoinStore/fetchClientState");
+    let $self = this;
+    let $qrCode = document.getElementById("qrcode");
+    this.$store.dispatch("artworkSearchStore/fetchUserArtwork", {artworkId: this.artworkId, username: myProfile.username}).then((artwork) => {
+      if (artwork && artwork.artistry && artwork.artistry.btcAddress) {
+        QRCode.toCanvas(
+          $qrCode,
+          artwork.artistry.btcAddress,
+          { errorCorrectionLevel: "H" },
+          function(error) {
+            if (error) console.error(error);
+            console.log("success!");
+          }
+        );
+      }
+    });
   },
   computed: {
     fiatRates() {
@@ -151,15 +171,19 @@ export default {
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
         this.artworkId
       );
-      let regData = {
-        title: artwork.title,
-        timestamp: utils.buildArtworkHash(artwork.artwork[0].dataUrl),
-        uploader: artwork.owner
-      };
-      bitcoinService.register(regData,
-        function(result) {
-        }, function(error) {
-        });
+      try {
+        let regData = {
+          title: artwork.title,
+          timestamp: utils.buildBitcoinHash(artwork),
+          owner: artwork.owner
+        };
+        bitcoinService.register(regData,
+          function(result) {
+          }, function(error) {
+          });
+      } catch (err) {
+        console.log(err);
+      }
       /**
       const file = Buffer.from(JSON.stringify(regData), "hex");
       const detached = OpenTimestamps.DetachedTimestampFile.fromBytes(

@@ -1,28 +1,57 @@
 <template>
 <!-- Main navigation 424f95 -->
 <header>
-<mdb-navbar :color="'stylish'" position="top" dark href="#" scrolling>
-  <!-- mdbNavbar brand -->
-  <mdb-navbar-brand>
-    <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
-  </mdb-navbar-brand>
-  <mdb-navbar-toggler>
-    <mdb-navbar-nav mx-auto>
-      <li class="nav-item ripple-parent"><router-link to="/home" class="nav-link navbar-link">Gallery</router-link></li>
-      <li class="nav-item ripple-parent"><router-link to="/artists" class="nav-link navbar-link">Artists</router-link/></li>
-      <li class="nav-item ripple-parent" v-if="featureAuctions"><router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link/></li>
-      <auction-links v-if="loggedIn"/>
-    </mdb-navbar-nav>
-    <mdb-navbar-nav right>
-      <form class="form-inline">
-        <mdb-input label="Search" type="text" class="active-pink active-pink-2 mt-0 mb-3" v-model="query"/>
-        <mdb-btn outline="white" size="sm" class="my-0" type="submit" @click="doSearch">Search</mdb-btn>
+  <!-- Navbar -->
+  <mdb-navbar :color="'stylish'" position="top" dark href="#" expand="lx" transparent scrolling hamburger animated animation="3" id="main-navigation">
+    <!-- mdbNavbar brand -->
+    <mdb-navbar-brand>
+      <form class="md-form search-form white-text">
+        <a type="button" @click="doSearch">
+          <mdb-icon class="mb-0 mr-2" icon="search" />
+        </a>
+        <input label="Search" type="text" class="text-white active-white active-white-2 mt-0 mb-0" v-model="query"
+               placeholder="Search TRANSIT8" aria-label="Search"/>
       </form>
-      <li v-if="!loggedIn" class="nav-item ripple-parent" @click="scrollToElement(link4 + 'Section', $event)"><router-link to="/login" class="nav-link navbar-link"><mdb-icon icon="fingerprint" /> login</router-link></li>
+      <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
+    </mdb-navbar-brand>
+    <mdb-navbar-nav right>
+      <li v-if="!loggedIn" class="nav-item ripple-parent">
+        <router-link to="/login" class="nav-link navbar-link login-link mr-2">
+        <mdb-icon icon="fingerprint" />
+        Login
+        </router-link>
+      </li>
       <account-links v-if="loggedIn"/>
     </mdb-navbar-nav>
-  </mdb-navbar-toggler>
-</mdb-navbar>
+    <mdb-navbar-toggler>
+      <mdb-navbar-nav mx-auto>
+        <li class="nav-item ripple-parent">
+          <router-link to="/home" class="nav-link navbar-link">Gallery</router-link>
+        </li>
+        <li class="nav-item ripple-parent">
+          <router-link to="/artists" class="nav-link navbar-link">Artists</router-link>
+        </li>
+        <li class="nav-item ripple-parent">
+          <router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link>
+        </li>
+        <auction-links v-if="loggedIn"/>
+        <div class="mb-4"></div>
+        <li v-if="!loggedIn" class="nav-item ripple-parent">
+          <router-link to="/login" class="nav-link navbar-link">
+            Login
+          </router-link>
+        </li>
+        <li v-if="loggedIn" class="nav-item ripple-parent">
+          <a href="#"
+             @click.prevent="logout"
+             class="nav-link navbar-link">
+            Logout</a
+          >
+        </li>
+      </mdb-navbar-nav>
+    </mdb-navbar-toggler>
+  </mdb-navbar>
+  <!--/.Navbar-->
 </header>
 <!-- Main navigation -->
 </template>
@@ -45,6 +74,7 @@ import { mdbContainer, mdbIcon, mdbRow, mdbCol, mdbNavbar, mdbNavbarToggler, mdb
 import AccountLinks from "@/layout/AccountLinks";
 import AuctionLinks from "@/layout/AuctionLinks";
 import artworkSearchService from "@/services/artworkSearchService";
+import myAccountService from '../services/myAccountService';
 
 export default {
   name: 'Navbar',
@@ -182,29 +212,106 @@ export default {
   },
   mounted() {
     document.addEventListener("scroll", this.scrollListener);
+    let navMenuItems = document.querySelectorAll(".navbar-collapse li a.nav-link.navbar-link");
+    navMenuItems.forEach((item) => {
+        item.addEventListener('click', this.toggleMenu);
+    });
   },
   beforeDestroy() {
     document.removeEventListener("scroll", this.scrollListener);
+    let navMenuItems = document.querySelectorAll('.navbar-collapse li a.nav-link.navbar-link');
+    navMenuItems.forEach((item) => {
+      item.removeEventListener('click', this.toggleMenu);
+    });
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-header {
-  min-height: 80px;
-}
-.navbar .md-form {
-  margin: 0;
-}
-.top-nav-collapse {
-  background-color: #333 !important;
-}
-@media (max-width: 990px){
   .navbar {
+    border-bottom: 1px solid white;
+    box-shadow: none;
+    min-height: 50px;
+    background-color: #333;
+    flex-wrap: nowrap;
+  }
+  .scrolling-navbar { padding: 4px 28px!important; }
+
+  .top-nav-collapse {
     background-color: #333 !important;
   }
-}
+
+  nav >>> .navbar-toggler {
+    z-index: 4;
+  }
+
+  .navbar-collapse {
+    position: absolute;
+    background-color: #5400E8;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 0;
+    padding: 30px 35px;
+  }
+
+  .navbar-collapse .nav-item { max-width: 90vw; }
+
+  .show-navbar {
+    min-height: 100vh;
+    z-index: 3;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .navbar .md-form {
+    margin: 0;
+  }
+  i.fa-search {
+    transform: rotate(90deg);
+    font-size: 24px;
+  }
+  .search-form input, .login-link { font-size: 20px; font-weight: 300; letter-spacing: 0.5px;}
+  .search-form input { border-bottom: none; }
+  .search-form input:focus { box-shadow: none!important; border-bottom: none!important; }
+
+  .search-form input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: white;
+  }
+  .search-form input::-moz-placeholder { /* Firefox 19+ */
+    color: white;
+  }
+  .search-form input:-ms-input-placeholder { /* IE 10+ */
+    color: white;
+  }
+  .search-form input:-moz-placeholder { /* Firefox 18- */
+    color: white;
+  }
+  .search-form button.transparent { border: none; background: transparent; color: white; }
+
 .jarallax2 {
 }
+
+  @media (max-width: 576px) {
+    .navbar-brand {
+      max-width: 45vw;
+    }
+    .search-form input, .login-link { font-size: 14px; }
+    nav >>> .navbar-toggler {
+      padding: 0 0 0.25rem 0.5rem;
+      font-size: 0.8rem;
+    }
+    .login-link { display: flex!important; }
+
+    .navbar-nav .nav-item >>> a.user-menu img {
+      width: 24px!important;
+      height: 24px!important;
+      border-radius: 12px!important;
+    }
+    .show-navbar {
+      font-size: 1.5rem;
+    }
+  }
 </style>

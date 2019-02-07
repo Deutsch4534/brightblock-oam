@@ -37,6 +37,12 @@ Vue.mixin({
     return {
       NavbarStore
     };
+  },
+  methods: {
+    toggleMenu(){
+      let toggler = document.querySelector('.navbar-toggler');
+      toggler.click();
+    }
   }
 });
 store.commit("constants", CONSTANTS);

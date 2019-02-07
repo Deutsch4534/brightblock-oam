@@ -1,54 +1,74 @@
 <template>
-<mdb-row id="AudienceSection" class="py-5 mx-auto border-top border-dark">
-  <div class="col-md-8 offset-md-2">
-    <h1 class="mb-0 pt-md-5 pt-5">{{title}}</h1>
-    <hr class="hr-light my-4">
+<mdb-row id="FeaturesSection" class="py-5 col-lg-10 mx-auto d-flex">
+  <div class="col-md-12">
+    <mdb-row>
+      <mdb-col lg="10">
+        <h2 class="large-title pt-md-5 pt-5">{{title}}</h2>
+        <hr class="hr-light my-4">
+      </mdb-col>
+    </mdb-row>
   </div>
-  <div class="col-md-3">
-    <!-- Card -->
-    <div class="card">
-      <!-- Card content -->
-      <div class="card-body">
-        <h4 class="card-title text-center"><a><mdb-icon icon="angle-double-right" /></a></h4>
-        <p class="card-text">{{cardDescription1}}</p>
+  <div class="d-flex row">
+    <div class="col-12 col-sm-6 col-md-3 d-flex">
+      <!-- Card -->
+      <div class="card border-shadow">
+        <!-- Card content -->
+        <div class="card-body text-center">
+          <h4 class="card-title">
+            <a>
+            <mdb-icon icon="exchange-alt"/>
+          </a>
+          </h4>
+          <p class="card-text">{{cardDescription1}}</p>
+        </div>
       </div>
+      <!-- Card -->
     </div>
-    <!-- Card -->
-  </div>
-  <div class="col-md-3">
-    <!-- Card -->
-    <div class="card">
-      <!-- Card content -->
-      <div class="card-body">
-        <h4 class="card-title text-center"><a><mdb-icon fab icon="bullseye" /></a></h4>
-        <p class="card-text">{{cardDescription2}}</p>
+    <div class="col-12 col-sm-6 col-md-3 d-flex">
+      <!-- Card -->
+      <div class="card border-shadow">
+        <!-- Card content -->
+        <div class="card-body text-center">
+          <h4 class="card-title">
+            <a>
+              <mdb-icon icon="boxes" />
+            </a>
+          </h4>
+          <p class="card-text">{{cardDescription2}}</p>
+        </div>
       </div>
+      <!-- Card -->
     </div>
-    <!-- Card -->
-  </div>
-
-  <div class="col-md-3">
-    <!-- Card -->
-    <div class="card">
-      <!-- Card content -->
-      <div class="card-body">
-        <h4 class="card-title text-center"><a><mdb-icon icon="bullseye" /></a></h4>
-        <p class="card-text">{{cardDescription3}}</p>
+    <div class="col-12 col-sm-6 col-md-3 d-flex">
+      <!-- Card -->
+      <div class="card border-shadow">
+        <!-- Card content -->
+        <div class="card-body text-center">
+          <h4 class="card-title">
+            <a>
+              <mdb-icon icon="bullseye" />
+            </a>
+          </h4>
+          <p class="card-text">{{cardDescription3}}</p>
+        </div>
       </div>
+      <!-- Card -->
     </div>
-    <!-- Card -->
-  </div>
-
-  <div class="col-md-3">
-    <!-- Card -->
-    <div class="card">
-      <!-- Card content -->
-      <div class="card-body">
-        <h4 class="card-title text-center"><a><mdb-icon far icon="angle-double-left" /></a></h4>
-        <p class="card-text">{{cardDescription4}}</p>
+    <div class="col-12 col-sm-6 col-md-3 d-flex">
+      <!-- Card -->
+      <div class="card border-shadow">
+        <!-- Card content -->
+        <div class="card-body text-center">
+          <h4 class="card-title">
+            <a>
+              <mdb-icon icon="campground" />
+            </a>
+          </h4>
+          <p class="card-text">{{cardDescription4}}</p>
+        </div>
       </div>
+      <!-- Card -->
     </div>
-    <!-- Card -->
   </div>
 </mdb-row>
 </template>
@@ -87,6 +107,7 @@ export default {
 
 <style scoped>
 .card {
-  border: 2pt solid black;
+  width: 100%;
+  margin-bottom: 2rem;
 }
 </style>

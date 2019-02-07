@@ -53,6 +53,11 @@ const utils = {
     }
   },
 
+  buildBitcoinHash(artwork) {
+    let hashBase = artwork.artist + ":" + artwork.image;
+    return SHA256(hashBase).toString();
+  },
+
   buildGaiaUrl(gaiaUrl, artworkId) {
     let gaiaFileName = store.state.constants.gaiaFileName;
     // let url = null
@@ -91,8 +96,6 @@ const utils = {
     return _.merge(artworkData, {
       id: record.indexData.id,
       title: record.indexData.title,
-      gaiaUrl: record.provData.gaiaUrl,
-      bcitem: record.provData.bcitem,
       description: record.indexData.description,
       keywords: record.indexData.keywords,
       itemType: record.indexData.itemType,
@@ -108,7 +111,9 @@ const utils = {
       dimensions: record.indexData.dimensions,
       yearCreated: record.indexData.yearCreated,
       editions: record.indexData.editions ? record.indexData.editions : 1,
-      edition: record.indexData.edition ? record.indexData.edition : 1
+      edition: record.indexData.edition ? record.indexData.edition : 1,
+      gaiaUrl: record.provData.gaiaUrl,
+      bcitem: record.provData.bcitem
     });
   },
 
@@ -148,7 +153,8 @@ const utils = {
       coa: artwork.coa,
       created: artwork.created,
       supportingDocuments: artwork.supportingDocuments,
-      bcitem: artwork.bcitem
+      bcitem: artwork.bcitem,
+      artistry: (artwork.artistry) ? artwork.artistry : {}
     };
     if (artwork.artwork && artwork.artwork.length > 0) {
       provData.derivedTimestamp = utils.buildArtworkHash(
@@ -168,7 +174,8 @@ const utils = {
       images: provData.images,
       supportingDocuments: provData.supportingDocuments,
       created: provData.created,
-      bcitem: provData.bcitem
+      bcitem: provData.bcitem,
+      artistry: (provData.artistry) ? provData.artistry : {}
     };
     if (
       provData.artwork &&

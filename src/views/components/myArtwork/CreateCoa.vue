@@ -52,7 +52,8 @@ export default {
         siteName: "Transit8",
         siteLogo: siteLogo
       }
-      xhrService.makePostCall("/api/convert/coa", data).then((response) => {
+      let endPoint = this.$store.state.constants.ethGatewayUrl + "/api/convert/coa";
+      xhrService.makePostCall(endPoint, data).then((response) => {
         $self.coa = response.data;
         $self.downloadLink = $self.getPdfLink();
         $self.$emit('updateCoa', response.data)

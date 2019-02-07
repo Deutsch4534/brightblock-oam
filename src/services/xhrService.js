@@ -42,10 +42,10 @@ const xhrService = {
         });
     });
   },
-  makePostCall: function(command, data) {
+  makePostCall: function(endPoint, data) {
     let callInfo = {
       method: "post",
-      url: store.state.constants.ethGatewayUrl + command,
+      url: endPoint,
       headers: {
         "Content-Type": "application/json"
       }

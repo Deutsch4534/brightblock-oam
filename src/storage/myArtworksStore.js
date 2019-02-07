@@ -60,6 +60,7 @@ const myArtworksStore = {
           artist: "unknown",
           owner: "unknown",
           saleData: {},
+          artistry: {},
           editions: 1,
           edition: 1,
           medium: null,

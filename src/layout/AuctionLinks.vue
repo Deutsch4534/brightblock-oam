@@ -2,27 +2,27 @@
   <mdb-dropdown tag="li" class="nav-item">
     <mdb-dropdown-toggle tag="a" class="dropright" color="" navLink slot="toggle" waves-fixed>My Portfolio</mdb-dropdown-toggle>
     <mdb-dropdown-menu class="dropdown-menu-left position-static">
-      <li v-if="loggedIn">
+      <li v-if="loggedIn" v-on:click="toggleMenu">
         <router-link
           class="dropdown-item"
           to="/my-artworks"
           >My Art Work</router-link
         >
       </li>
-      <li v-if="loggedIn">
+      <li v-if="loggedIn" v-on:click="toggleMenu">
         <router-link
           class="dropdown-item"
           to="/my-artwork/upload"
           >Upload Artwork</router-link>
       </li>
-      <li v-if="loggedIn && featureAuctions">
+      <li v-if="loggedIn && featureAuctions" v-on:click="toggleMenu">
         <router-link
           class="dropdown-item"
           to="/my-auctions"
           >My Auctions</router-link
         >
       </li>
-      <li v-if="loggedIn && featureAuctions">
+      <li v-if="loggedIn && featureAuctions" v-on:click="toggleMenu">
         <router-link
           class="dropdown-item"
           to="/my-auctions/upload"
@@ -112,4 +112,11 @@ export default {
    box-shadow: none;
    color: rgba(255, 255, 255, 0.75)!important;
  }
+
+  @media (max-width: 576px) {
+    .dropdown .dropdown-menu .dropdown-item {
+      font-size: 1.2rem;
+      padding: 0.5rem 0.5rem 0.5rem 1rem;
+    }
+  }
 </style>

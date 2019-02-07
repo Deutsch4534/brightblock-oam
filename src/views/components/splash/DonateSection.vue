@@ -1,22 +1,19 @@
 <template>
-<mdb-container id="DonateSection" class="border-top border-dark">
-  <section class="text-center my-5 mx-5 px-5">
-    <h2 class="h1-responsive font-weight-bold my-5">{{title}}</h2>
-    <p class="lead grey-text w-responsive mx-auto mb-5">{{description}}</p>
+<mdb-container id="DonateSection">
+  <section class="my-5 p-5 border border-dark col-lg-10 mx-auto">
+    <h2 class="large-title mt-0 mb-5">{{title}}</h2>
     <mdb-row>
-      <mdb-col md="8 mx-auto">
-        <form class="contact-form">
-            <div class="row text-center">
-              <div class="col-md-12  md-xsmall-size-100">
-                <canvas id="qrcode" width="500px"></canvas>
-              </div>
-              <div class="col-md-12  md-xsmall-size-100">
-                <span>{{btcAddress}}</span>
-              </div>
-              <div class="col-md-12  md-xsmall-size-100">
-                <span>Target on {{chain}} chain: {{target}}, Currently: {{balance}}</span>
-              </div>
-            </div>
+      <mdb-col sm="6">
+        <p class="w-responsive">{{description}}</p>
+        <span class="serif subtitle">{{btcAddress}}</span>
+        <div class="md-xsmall-size-100">
+          <p class="mb-0">Target on {{chain}} chain: {{target}}</p>
+          <p class="mb-0">Currently: {{balance}}</p>
+        </div>
+      </mdb-col>
+      <mdb-col sm="6">
+        <form class="contact-form text-right">
+          <canvas id="qrcode" width="500px"></canvas>
         </form>
       </mdb-col>
     </mdb-row>
@@ -86,3 +83,12 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .serif {
+    font-family: 'Noto Serif Disp ExtCond';
+  }
+  .subtitle {
+    text-decoration: underline;
+    font-size: 2rem;
+  }
+</style>

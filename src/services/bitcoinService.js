@@ -26,9 +26,9 @@ const bitcoinService = {
       });
   },
   register: function(data, success, failure) {
-    // let callee = store.state.constants.btcGatewayUrl + "/bitcoin/register";
+    let endPoint = store.state.constants.btcGatewayUrl + "/bitcoin/register";
     return new Promise(resolve => {
-      xhrService.makePostCall("/bitcoin/register", data).then(function(response) {
+      xhrService.makePostCall(endPoint, data).then(function(response) {
         resolve(response.data.details);
       });
     });
