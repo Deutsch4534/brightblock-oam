@@ -3,8 +3,8 @@
     <mdb-card class="bg-transparent mb-5 w-100">
       <mdb-card-image :src="logo" alt="Auction Logo" class="img-square"></mdb-card-image>
       <mdb-card-body class="px-0 pb-2 mb-0">
-        <mdb-card-title class="subtitle">{{auction.title}} Title</mdb-card-title>
-        <mdb-card-text>{{auction.description}} description</mdb-card-text>
+        <mdb-card-title class="subtitle">{{auction.title}}</mdb-card-title>
+        <mdb-card-text>{{auction.description}}</mdb-card-text>
         <!--<mdb-card-text class="text-dark">{{countdown}}</mdb-card-text>-->
       </mdb-card-body>
       <div class="card-buttons d-flex align-items-end justify-content-between flex-wrap">

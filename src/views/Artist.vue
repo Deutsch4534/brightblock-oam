@@ -2,7 +2,7 @@
   <mdb-container fluid class="bg-light flex-1">
     <mdb-container class="py-5">
       <mdb-row>
-        <single-artist :artist="artist" class="col-sm-12 col-md-4 col-lg-3 mb-3"/>
+        <single-artist :artist="artist" class="col-sm-12 col-md-4 col-lg-3 mb-3 artist-page"/>
         <div class="col-sm-12 col-md-8 col-lg-9">
           <h2 class="h3-responsive mb-5">All artworks</h2>
           <div id="artist-all-artworks">

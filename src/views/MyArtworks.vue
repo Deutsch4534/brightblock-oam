@@ -1,30 +1,39 @@
 <template>
-<div class="container" v-if="noartworks">
-  <p>No artworks found in you're portfolio!</p>
-  <p><router-link to="/my-artwork/upload">Upload Artwork</router-link> to get started...</p>
-</div>
-<div class="container" v-else>
-  <router-view/>
-  <div class="title my-5">
-    <h2>Artworks <span>({{numberArtworksUnsold}})</span></h2>
-  </div>
-  <my-artworks-list :artworks="unsold" :sold="false" :show-load-button="false" :chunks="6"/>
-  <div class="title my-5">
-    <h2>Sold Artworks <span>({{numberArtworksSold}})</span></h2>
-  </div>
-  <my-artworks-list :artworks="sold" :sold="true" :show-load-button="false" :chunks="6"/>
-</div>
+  <mdb-container fluid class="bg-light flex-1">
+    <mdb-container class="py-5">
+      <mdb-row v-if="noartworks">
+        <div class="col-12 mb-5">
+          <p class="h2-responsive mb-5">No artworks found in your portfolio!</p>
+          <p><router-link to="/my-artwork/upload" class="btn btn-white btn-sm btn-rounded ripple-parent">Upload Artwork</router-link> to get started...</p>
+        </div>
+      </mdb-row>
+      <mdb-row v-else>
+        <router-view/>
+        <div class="col-12 mb-5">
+          <h2 class="h2-responsive mb-5">Artworks <span>({{numberArtworksUnsold}})</span></h2>
+        </div>
+        <my-artworks-list :artworks="unsold" :sold="false" :show-load-button="true" :chunks="6"/>
+        <div class="col-12 mb-5">
+          <h2 class="h2-responsive mb-5">Sold Artworks <span>({{numberArtworksSold}})</span></h2>
+        </div>
+        <my-artworks-list :artworks="sold" :sold="true" :show-load-button="false" :chunks="6"/>
+      </mdb-row>
+    </mdb-container>
+  </mdb-container>
 </template>
 
 <script>
 import MyArtworksList from "./components/myArtwork/MyArtworksList";
+import { mdbContainer, mdbRow } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyArtworks",
   bodyClass: "index-page",
   components: {
-    MyArtworksList
+    MyArtworksList,
+    mdbContainer,
+    mdbRow
   },
   data() {
     return {};

@@ -12,7 +12,7 @@
 
       <mdb-row v-if="myAuctionsPastCount > 0">
         <div class="col-md-12">
-          <h2 class="h2-responsive mb-5">Archives</h2>
+          <h2 class="h2-responsive mb-5">Past Auctions</h2>
         </div>
         <single-auction v-for="(auction, index) of myAuctionsPast" :key="index" :auction="auction" :atype="'archive'"/>
       </mdb-row>

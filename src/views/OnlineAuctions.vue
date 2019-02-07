@@ -11,7 +11,7 @@
       </mdb-row>
       <mdb-row v-if="auctionsArchiveSize > 0">
         <mdb-col col="12" class="mb-5">
-          <h1 class="h1-responsive">Archives</h1>
+          <h1 class="h1-responsive">Past Auctions</h1>
         </mdb-col>
       </mdb-row>
       <mdb-row>

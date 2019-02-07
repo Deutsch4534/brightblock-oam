@@ -4,7 +4,7 @@
         <mdb-card-image :src="artist.avatarUrl" :alt="artist.name" class="img-square"></mdb-card-image>
       </router-link>
       <mdb-card-body class="px-0">
-        <mdb-card-title class="h2-responsive subtitle">{{artist.name}}</mdb-card-title>
+        <mdb-card-title class="subtitle">{{artist.name}}</mdb-card-title>
         <mdb-card-text>{{artist.description}}</mdb-card-text>
       </mdb-card-body>
     </mdb-card>

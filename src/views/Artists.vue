@@ -49,9 +49,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-  >>> .h2-responsive.subtitle {
-    font-size: 1rem!important;
-    margin-bottom: 0.25rem;
-  }
-</style>

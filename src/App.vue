@@ -100,6 +100,14 @@ header { min-height: 65px; }
   bottom: -10px;
   z-index: -1;
 }
+.subtitle {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.artist-page .subtitle {
+  font-size: larger;
+}
 
 @media all and (min-width: 991px) {
   .btn-container {
