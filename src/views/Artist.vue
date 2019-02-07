@@ -6,7 +6,7 @@
         <div class="col-sm-12 col-md-8 col-lg-9">
           <h2 class="h3-responsive mb-5">All artworks</h2>
           <div id="artist-all-artworks">
-            <last-artwork v-for="(artwork, index) in artworks" :key="index" :artworks="artworks" :artwork="artwork" class="col-sm-6 col-lg-4"/>
+            <last-artworks :artworks="artworks"/>
           </div>
         </div>
       </mdb-row>
