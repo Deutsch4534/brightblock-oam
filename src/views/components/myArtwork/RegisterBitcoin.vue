@@ -1,41 +1,32 @@
 <template>
-<mdb-container>
-  <mdb-row>
-    <mdb-col sm="10" class="mx-auto">
-    <h1>Artwork Registration</h1>
-    <hr/>
-    </mdb-col>
-    <mdb-col sm="10" class="mx-auto">
-      <mdb-card>
-        <mdb-view hover>
-          <img class="img-fluid" width="100%" :src="artwork.image" :alt="artwork.title"></img>
-          <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
-        </mdb-view>
-        <mdb-card-body>
-          <mdb-card-title>{{artwork.title}}</mdb-card-title>
-          <mdb-card-title class="text-right"><small>{{myArtist.name}}</small></mdb-card-title>
-          <mdb-card-text>Registering the artwork on the blockchain creates a Certificate of Authenticity (COA) that helps show the provenance of the
-          artwork and makes possible our unique ability to pay residuals to artists and galleries on secondary sales, <a href="#">read more..</a>
-          </mdb-card-text>
-          <hr/>
-        </mdb-card-body>
-        <create-coa v-if="artwork.btcData.bitcoinTx"/>
-        <register-bitcoin v-if="featureBitcoin && !artwork.btcData.bitcoinTx"/>
-        <mdb-card-body v-if="featureEthereum">
-          <mdb-card-title>Ethereum Blockchain ({{networkName}} network)</mdb-card-title>
-          <mdb-card-text>
-          Register on ethereum if you use meta mask or another ethereum wallet.</mdb-card-text>
-          <a class="black-text d-flex justify-content-end"><mdb-btn v-if="featureEthereum" color="primary" size="md" :disabled="registered" @click="registerArtworkEthereum()">Register Ethereum ({{networkName}})</mdb-btn></a>
-        </mdb-card-body>
-      </mdb-card>
-    </mdb-col>
-  </mdb-row>
-</mdb-container>
+<mdb-card-body v-if="featureBitcoin">
+  <mdb-card-title>
+  <mdb-popover trigger="click" :options="{placement: 'top'}">
+    <div class="popover">
+      <div class="popover-header">
+        Bitcoin Blockchain
+      </div>
+      <div class="popover-body">
+        We display your bitcoin address with your artwork and in your certificate of authenticity
+        to maximise your income from your artwork.
+      </div>
+    </div>
+    <a @click.prevent="" slot="reference">
+      Bitcoin Address
+    </a>
+  </mdb-popover>
+   <span v-if="bitcoinState">({{bitcoinState.chain}} chain)</span></mdb-card-title>
+  <mdb-card-text>
+  <p>RawTx (artwork) {{artwork.btcData.bitcoinTx}}</p>
+  <p>RawTx: {{bitcoinTx}}</p>
+  Register artwork on the Bitcoin blockchain here.</mdb-card-text>
+  <a class="black-text d-flex justify-content-end"><mdb-btn color="primary" size="md" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
+  <hr/>
+</mdb-card-body>
 </template>
 
 <script>
 import CreateCoa from "./CreateCoa";
-import RegisterBitcoin from "./RegisterBitcoin";
 import utils from "@/services/utils";
 import notify from "@/services/notify";
 import ethereumService from "@/services/ethereumService";
@@ -48,7 +39,6 @@ export default {
   name: "Registration",
   components: {
     CreateCoa,
-    RegisterBitcoin,
     mdbPopover,
     mdbContainer,
     mdbCol,
@@ -72,12 +62,15 @@ export default {
   },
   mounted() {
     this.artworkId = Number(this.$route.params.artworkId);
-    if (this.$route.query.from && this.$route.query.from === "auctions") {
-      this.from = "/my-auctions/manage/" + this.$route.query.auctionId;
-    }
-    let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-    this.$store.dispatch("bitcoinStore/fetchBalance");
-    this.$store.dispatch("bitcoinStore/fetchClientState");
+    let $self = this;
+    this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
+      this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId).then((artwork) => {
+        if (artwork) {
+          if (artwork && artwork.artistry && artwork.artistry.btcAddress) {
+          }
+        }
+      });
+    });
   },
   computed: {
     fiatRates() {
@@ -95,6 +88,16 @@ export default {
     },
     featureEthereum() {
       return this.$store.state.constants.featureEthereum;
+    },
+    bitcoinState() {
+      let state = this.$store.getters["bitcoinStore/getClientState"];
+      return state;
+    },
+    btcAddress() {
+      let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+        this.artworkId
+      );
+      return a.artistry.btcAddress;
     },
     artwork() {
       let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
@@ -121,9 +124,25 @@ export default {
         this.artworkId
       );
       return bcstatus.itemId > -1;
+    },
+    canRegister() {
+      try {
+        let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+          this.artworkId
+        );
+        return artwork.artwork.length > 0;
+      } catch (e) {
+        return false;
+      }
     }
   },
   methods: {
+    closeModal: function() {
+      this.$router.push(this.from);
+    },
+    setByEventCoa (coa) {
+      // moved to child - we just update the store so no need for parent to know.
+    },
     registerArtworkBitcoin: function() {
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
         this.artworkId
@@ -137,10 +156,10 @@ export default {
         let $self = this;
         bitcoinService.registerTx(regData,
           function(result) {
-            $self.bitcoinTx = result.rawTx;
-            artwork.btcData.bitcoinTx = result.rawTx;
+            $self.bitcoinTx = result.sentTx;
+            artwork.btcData.bitcoinTx = result.sentTx;
             $self.$store.dispatch("myArtworksStore/updateArtwork", artwork);
-            $self.bitcoinTx = JSON.parse(result.decodedTransaction);
+            $self.decodedTransaction = JSON.parse(result.decodedTransaction);
           }, function(error) {
             console.log(error);
           });
@@ -199,7 +218,7 @@ export default {
               $self.$store
                 .dispatch("myArtworksStore/syncBlockchainState", artwork)
                 .then(() => {});
-              $self.$router.push(this.from);
+              $self.closeModal();
             });
         },
         function(error) {

@@ -59,6 +59,7 @@ const myArtworksStore = {
           keywords: "Photography,Illustration.3D,2D,Film & Video,Mix-media",
           artist: "unknown",
           owner: "unknown",
+          btcData: {},
           saleData: {},
           artistry: {},
           editions: 1,

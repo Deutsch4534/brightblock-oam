@@ -25,12 +25,14 @@ const bitcoinService = {
         failure(e);
       });
   },
-  register: function(data, success, failure) {
+  registerTx: function(data, success, failure) {
+    //success({
+    //  rawTx: "bananas",
+    //  decodedTransaction: "oranges"
+    //});
     let endPoint = store.state.constants.btcGatewayUrl + "/bitcoin/register";
-    return new Promise(resolve => {
-      xhrService.makePostCall(endPoint, data).then(function(response) {
-        resolve(response.data.details);
-      });
+    xhrService.makePostCall(endPoint, data).then(function(response) {
+      success(response.data.details);
     });
   }
 };

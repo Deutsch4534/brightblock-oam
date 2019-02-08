@@ -98,6 +98,7 @@ const utils = {
       title: record.indexData.title,
       description: record.indexData.description,
       keywords: record.indexData.keywords,
+      btcData: (record.indexData.btcData) ? record.indexData.btcData : {},
       itemType: record.indexData.itemType,
       uploader: record.indexData.uploader,
       artist: record.indexData.artist
@@ -130,8 +131,9 @@ const utils = {
       description: artwork.description,
       itemType: artwork.itemType,
       keywords: artwork.keywords,
-      uploader: artwork.uploader,
+      btcData: (artwork.btcData) ? artwork.btcData : {},
       owner: artwork.owner,
+      uploader: artwork.uploader,
       artist: artwork.artist,
       medium: artwork.medium,
       dimensions: artwork.dimensions,
