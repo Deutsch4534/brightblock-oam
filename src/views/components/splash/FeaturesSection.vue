@@ -107,6 +107,7 @@ export default {
 
 <style scoped>
 .card {
+  border: 3pt solid black!important;
   width: 100%;
   margin-bottom: 2rem;
 }

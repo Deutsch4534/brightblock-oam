@@ -1,19 +1,23 @@
 <template>
-<div class="container">
+  <mdb-container fluid class="bg-light flex-1">
+    <mdb-container class="py-5">
+      <router-view/>
+      
+      <mdb-row v-if="myAuctionsFutureCount > 0">
+        <div class="col-md-12">
+          <h1 class="h2-responsive mb-5">My Auctions <span>({{myAuctionsFutureCount}})</span></h1>
+        </div>
+        <single-auction v-for="(auction, index) of myAuctionsFuture" :key="index" :auction="auction" :atype="'webcast'"/>
+      </mdb-row>
 
-  <router-view/>
-
-  <mdb-row v-if="myAuctionsFutureCount > 0">
-    <div class="col-md-12"><h2>My Auctions <span>({{myAuctionsFutureCount}})</span></h2></div>
-    <single-auction v-for="(auction, index) of myAuctionsFuture" :key="index" :auction="auction" :atype="'webcast'"/>
-  </mdb-row>
-
-  <mdb-row v-if="myAuctionsPastCount > 0">
-    <div class="col-md-12"><h2>Archives</h2></div>
-    <single-auction v-for="(auction, index) of myAuctionsPast" :key="index" :auction="auction" :atype="'archive'"/>
-  </mdb-row>
-
-</div>
+      <mdb-row v-if="myAuctionsPastCount > 0">
+        <div class="col-md-12">
+          <h2 class="h2-responsive mb-5">Past Auctions</h2>
+        </div>
+        <single-auction v-for="(auction, index) of myAuctionsPast" :key="index" :auction="auction" :atype="'archive'"/>
+      </mdb-row>
+    </mdb-container>
+  </mdb-container>
 </template>
 
 <script>

@@ -276,6 +276,7 @@ export default {
     font-family: 'Noto Serif Disp ExtCond';
     color: #ECEFF1;
   }
+
 .header-title {
   min-height: 100px;
   font-size: 18px;
@@ -305,8 +306,8 @@ nav >>> .navbar-toggler {
   position: absolute;
   background-color: #5400E8;
   top: 0;
-  left: 0;
-  width: 100vw;
+  right: 0;
+  width: 40vw;
   height: 0;
   padding: 30px 35px;
 }
@@ -346,6 +347,7 @@ i.fa-search {
   }
 .search-form button.transparent { border: none; background: transparent; color: white; }
 
+header { min-height:100vh; }
 .view {
   background-image: url('https://mdbootstrap.com/img/Photos/Others/architecture.jpg');
   background-repeat: no-repeat;
@@ -374,6 +376,12 @@ h6 {
   line-height: 1.7;
 }
 
+  @media (max-width: 990px) {
+    /*.navbar-collapse {*/
+      /*width: 60vw;*/
+    /*}*/
+  }
+
   @media (max-width: 576px) {
     .navbar-brand {
       max-width: 45vw;
@@ -385,6 +393,9 @@ h6 {
     }
     .login-link { display: flex!important; }
 
+    .navbar-collapse {
+      width: 100vw;
+    }
     .navbar-nav .nav-item >>> a.user-menu img {
       width: 24px!important;
       height: 24px!important;

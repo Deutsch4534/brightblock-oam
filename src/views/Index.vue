@@ -110,8 +110,10 @@ export default {
   .bg-main {
     background-color: #5400E8;
   }
-
-
-
+</style>
+<style scoped>
+  .card {
+    border: 3pt solid black!important;
+  }
 </style>
 

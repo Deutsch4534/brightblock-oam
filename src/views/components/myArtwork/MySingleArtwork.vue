@@ -1,5 +1,5 @@
 <template>
-<mdb-container>
+<!--<mdb-container>
   <mdb-row class="mb-4">
     <mdb-col lg="5">
       <mdb-view class="rounded z-depth-2 mb-lg-0 mb-4" hover>
@@ -28,12 +28,31 @@
         <router-link :to="buyNowUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light ">Open</mdb-btn></router-link>
     </mdb-col>
   </mdb-row>
-</mdb-container>
+</mdb-container>-->
+  <mdb-card class="bg-transparent mb-5">
+    <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
+    <mdb-card-body class="px-0 pb-2 mb-0">
+      <mdb-card-title class="subtitle">{{artwork.title}}</mdb-card-title>
+      <mdb-card-text>{{artwork.description}}
+      <selling-options :artwork="artwork" v-if="!sold"/>
+      <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
+        <p>by {{artistProfile.name}}, 11/08/2018</p>
+      </mdb-card-text>
+    </mdb-card-body>
+    <div class="card-buttons d-flex align-items-end justify-content-between flex-wrap">
+      <router-link :to="registerUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="canRegister">Register</mdb-btn></router-link>
+      <router-link :to="registerForSaleUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="canSell">Buy</mdb-btn></router-link>
+      <router-link :to="registerForAuctionUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="canAuction">Auction</mdb-btn></router-link>
+      <a @click="deleteArtwork(artwork.id)" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="debugMode">Delete</mdb-btn></a>
+      <router-link :to="editUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="editable">Edit</mdb-btn></router-link>
+      <router-link :to="buyNowUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Open</mdb-btn></router-link>
+    </div>
+  </mdb-card>
 </template>
 
 <script>
 import SellingOptions from "./SellingOptions";
-import { mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardBody, mdbMask, mdbIcon, mdbView, mdbBtn } from 'mdbvue';
+import { mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbMask, mdbIcon, mdbView, mdbBtn } from 'mdbvue';
 import moment from "moment";
 
 // noinspection JSUnusedGlobalSymbols
@@ -46,6 +65,9 @@ export default {
     mdbCol,
     mdbCard,
     mdbCardBody,
+    mdbCardTitle,
+    mdbCardText,
+    mdbCardImage,
     mdbMask,
     mdbIcon,
     mdbView,

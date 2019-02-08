@@ -1,6 +1,6 @@
 <template>
 <div class="row">
-  <last-artwork v-for="(artwork, index) in artworks" :key="index" :artwork="artwork"/>
+  <last-artwork v-for="(artwork, index) in artworks" :key="index" :artwork="artwork" class="col-sm-6 col-lg-4"/>
 </div>
 </template>
 
@@ -27,3 +27,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+  >>> .h2-responsive.subtitle {
+    font-size: 1rem!important;
+    margin-bottom: 0.25rem;
+  }
+</style>

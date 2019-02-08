@@ -1,21 +1,30 @@
 <template>
-<div class="col-md-4">
-  <figure class="figure mr-4">
-    <router-link :to="artworkUrl">
-      <img :src="artwork.image" alt="artwork.title" class="figure-img img-fluid z-depth-1" style="width: 400px">
+  <mdb-card class="bg-transparent mb-4 w-100">
+    <router-link class="grid-item" :to="artworkUrl">
+      <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
     </router-link>
-    <figcaption class="figure-caption text-right">
-      {{artwork.title}} (By: {{artwork.artist}})
-      <span v-if="debugMode">{{artwork.bcitem.itemIndex}}, Owner: {{artwork.owner}}</span>
-    </figcaption>
-  </figure>
-</div>
+    <mdb-card-body class="px-0">
+      <mdb-card-title class="h2-responsive subtitle">{{artwork.title}}<br /><span class="small">by: {{artwork.artist}}</span></mdb-card-title>
+      <mdb-card-text v-if="debugMode">{{artwork.bcitem.itemIndex}}, Owner: {{artwork.owner}}</mdb-card-text>
+      <mdb-card-text>{{artwork.description}}</mdb-card-text>
+    </mdb-card-body>
+  </mdb-card>
 </template>
 
 <script>
+
+import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText } from 'mdbvue';
+
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "LastArtwork",
+  components: {
+    mdbCard,
+    mdbCardImage,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardText
+  },
   props: {
     artwork: {
       type: Object,
@@ -54,3 +63,13 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  .subtitle,
+  .card-body p {
+    color: #000!important;
+  }
+</style>

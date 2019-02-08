@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <div id="app" class="h-100 d-flex flex-1 flex-column">
     <router-view name="header"/>
-    <router-view class="main raised"/>
+    <router-view class="main"/>
     <router-view name="footer"/>
   </div>
 </template>
@@ -24,33 +24,68 @@ export default {
 };
 </script>
 <style>
-  @font-face {
-    font-family: 'Noto Serif Disp ExtCond';
-    src: url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot');
-    src: url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot?#iefix') format('embedded-opentype'),
-    url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.woff2') format('woff2'),
-    url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.woff') format('woff'),
-    url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.svg#NotoSerifDisplay-ExtraCondensedLight') format('svg');
-    font-weight: 300;
-    font-style: normal;
-  }
-
-  header { min-height: 65px; }
-
-.section-download {
-  .btn + .btn {
-    margin-left: 5px;
-  }
+@font-face {
+  font-family: 'Noto Serif Disp ExtCond';
+  src: url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot');
+  src: url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot?#iefix') format('embedded-opentype'),
+  url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.woff2') format('woff2'),
+  url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.woff') format('woff'),
+  url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.svg#NotoSerifDisplay-ExtraCondensedLight') format('svg');
+  font-weight: 300;
+  font-style: normal;
 }
 
+body {
+  height: 100vh;
+}
+
+header { min-height: 65px; }
+
+.main {
+  padding-bottom: 56px;
+}
+.section-download .btn + .btn {
+    margin-left: 5px;
+}
+
+.btn,
+.btn:hover,
+.btn:focus,
+.btn:active {
+  box-shadow: none!important;
+}
+
+.btn.btn-white {
+  border:1px solid rgba(0,0,0,0.12);
+}
+
+.btn.btn-white:hover,
+.btn.btn-white:focus,
+.btn.btn-white:active,
+.btn-white:not([disabled]):not(.disabled):active {
+  color: #6200EE!important;
+  background-color: rgba(63,0,223,0.12)!important;
+  border:1px solid #6200EE;
+}
+
+.btn.btn-sm { font-size: 0.8rem; padding: 0.45rem 1.4rem; }
+.btn.btn-sm.btn-rounded { border-radius: 6em; }
+
 .card {
-  border: 3pt solid black!important;
   box-shadow: none;
   border-radius: 0;
 }
 
 .text-light {
   color: #ECEFF1!important;
+}
+
+.text-dark {
+  color: #000000!important;
+}
+
+.bg-light {
+  background-color: #EFF1F2!important;
 }
 
 .border-shadow::after {
@@ -64,6 +99,14 @@ export default {
   right: -10px;
   bottom: -10px;
   z-index: -1;
+}
+.subtitle {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.artist-page .subtitle {
+  font-size: larger;
 }
 
 @media all and (min-width: 991px) {
@@ -86,6 +129,25 @@ export default {
   position: relative;
   top: 35px;
   margin-bottom: 150px;
+}
+
+/* Square img */
+
+.img-square {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+.img-square::after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.img-square img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
   /* Extra small devices (portrait phones, less than 576px) */

@@ -1,5 +1,5 @@
 <template>
-<div class="col-sm-5">
+<div>
   <div v-if="sellingBuyNow">
     <h6>Available to buy..</h6>
     {{sellingCurrencySymbol}} {{sellingAmount}} {{sellingCurrency}} / {{valueInEther}} Eth / {{valueInBitcoin}} Btc<br>
