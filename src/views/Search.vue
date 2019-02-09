@@ -1,5 +1,5 @@
 <template>
-<mdb-container class="mt-1">
+<mdb-container class="mt-5">
   <div class="row">
     <!-- Supported elements
     <div class="md-col-4 mr-5">

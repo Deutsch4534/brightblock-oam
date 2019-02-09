@@ -8,15 +8,19 @@
         </div>
       </mdb-row>
       <mdb-row v-else>
-        <router-view/>
+      <router-view/>
         <div class="col-12 mb-5">
           <h2 class="h2-responsive mb-5">Artworks <span>({{numberArtworksUnsold}})</span></h2>
         </div>
-        <my-artworks-list :artworks="unsold" :sold="false" :show-load-button="true" :chunks="6"/>
+        <div class="col-12">
+          <my-artworks-list :artworks="unsold" :sold="false" :show-load-button="false" :chunks="6"/>
+        </div>
         <div class="col-12 mb-5">
           <h2 class="h2-responsive mb-5">Sold Artworks <span>({{numberArtworksSold}})</span></h2>
         </div>
-        <my-artworks-list :artworks="sold" :sold="true" :show-load-button="false" :chunks="6"/>
+        <div class="col-12">
+          <my-artworks-list :artworks="sold" :sold="true" :show-load-button="false" :chunks="6"/>
+        </div>
       </mdb-row>
     </mdb-container>
   </mdb-container>
@@ -24,7 +28,15 @@
 
 <script>
 import MyArtworksList from "./components/myArtwork/MyArtworksList";
-import { mdbContainer, mdbRow } from 'mdbvue';
+import { mdbContainer, mdbRow,  mdbCard,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardText,
+    mdbCardImage,
+    mdbMask,
+    mdbIcon,
+    mdbView,
+    mdbBtn } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -33,7 +45,16 @@ export default {
   components: {
     MyArtworksList,
     mdbContainer,
-    mdbRow
+    mdbRow,
+     mdbCard,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardText,
+    mdbCardImage,
+    mdbMask,
+    mdbIcon,
+    mdbView,
+    mdbBtn
   },
   data() {
     return {};

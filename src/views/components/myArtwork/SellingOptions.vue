@@ -1,11 +1,11 @@
 <template>
 <div>
   <div v-if="sellingBuyNow">
-    <h6>Available to buy..</h6>
+    <p class="font-weight-bold muted">Available to buy..</p>
     {{sellingCurrencySymbol}} {{sellingAmount}} {{sellingCurrency}} / {{valueInEther}} Eth / {{valueInBitcoin}} Btc<br>
   </div>
   <div v-else-if="sellingAuction">
-    <h6>Selling in Auction</h6>
+    <p class="font-weight-bold muted">Selling in Auction</p>
     <div v-if="debugMode">
       Reserve: {{sellingCurrencySymbol}} {{artwork.saleData.reserve}}
       <br> {{sellingCurrency}} / {{valueReserveInEther}} Eth / {{valueReserveInBitcoin}} Btc
@@ -15,7 +15,7 @@
     </div>
   </div>
   <div v-else>
-    <h6>Not Selling</h6>
+    <p class="font-weight-bold muted">Not Selling</p>
   </div>
 </div>
 </template>
@@ -101,3 +101,10 @@ export default {
   }
 };
 </script>
+<style scoped>
+a {
+  color: inherit;
+  text-decoration: underline;
+}
+</style>
+

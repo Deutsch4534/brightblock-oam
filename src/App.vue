@@ -39,8 +39,10 @@ body {
   height: 100vh;
 }
 
-header { min-height: 65px; }
+header { min-height:50px; }
 
+p { color: black; }
+.card .card-body .card-text { color: black; }
 .main {
   padding-bottom: 56px;
 }
@@ -87,6 +89,12 @@ header { min-height: 65px; }
 .bg-light {
   background-color: #EFF1F2!important;
 }
+
+.bg-dark {
+  background-color: #000000!important;
+}
+
+.bg-white { background-color: white; }
 
 .border-shadow::after {
   content: '';
@@ -151,7 +159,7 @@ header { min-height: 65px; }
 }
 
   /* Extra small devices (portrait phones, less than 576px) */
-  @media (max-width: 575px) { }
+  @media (max-width: 575px) {}
 
   /*  Small devices (landscape phones, 576px and up) */
   @media (min-width: 576px) {

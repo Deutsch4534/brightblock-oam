@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="container mt-5">
   <div class="row">
     <div class="col-md-2">
       <h5><small>Admin Actions</small></h5>

@@ -7,7 +7,7 @@
         </mdb-col>
       </mdb-row>
       <mdb-row>
-        <single-artist v-for="(artist, index) of artists" :key="index" :artist="artist" class="col-sm-6 col-md-4 col-lg-3 mb-3 d-flex"/>
+        <single-artist v-for="(artist, index) of artists" :key="index" :artist="artist" class="single-artist col-sm-6 col-md-4 col-lg-3 mb-3 d-flex"/>
       </mdb-row>
     </mdb-container>
   </mdb-container>
@@ -49,3 +49,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+.single-artist >>> .h2-responsive.artist-name {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+</style>

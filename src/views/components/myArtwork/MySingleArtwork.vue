@@ -1,51 +1,33 @@
 <template>
-<!--<mdb-container>
-  <mdb-row class="mb-4">
-    <mdb-col lg="5">
-      <mdb-view class="rounded z-depth-2 mb-lg-0 mb-4" hover>
-        <img class="img-fluid" :src="artwork.image" :alt="artwork.title" />
-        <a>
-          <mdb-mask overlay="white-slight" waves/>
-        </a>
-      </mdb-view>
-    </mdb-col>
-    <mdb-col lg="7">
-      <h3 class="font-weight-bold mb-3 p-0">
-        <strong>{{artwork.title}}</strong>
-      </h3>
-      <p>{{artwork.description}}</p>
-      <selling-options :artwork="artwork" v-if="!sold"/>
-      <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
-      <p>by
-        <a>
-          <strong>{{artistProfile.name}}</strong>
-        </a>, {{created}}</p>
-        <router-link :to="registerUrl" class="text-white" v-if="canRegister"><mdb-btn color="white" size="md" class="waves-light ">Provenance</mdb-btn></router-link>
-        <router-link :to="registerForSaleUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="canSell">Buy</mdb-btn></router-link>
-        <router-link :to="registerForAuctionUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="canAuction">Auction</mdb-btn></router-link>
-        <a @click="deleteArtwork(artwork.id)" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="debugMode">Delete</mdb-btn></a>
-        <router-link :to="editUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light " v-if="editable">Edit</mdb-btn></router-link>
-        <router-link :to="buyNowUrl" class="text-white"><mdb-btn color="white" size="md" class="waves-light ">Open</mdb-btn></router-link>
-    </mdb-col>
-  </mdb-row>
-</mdb-container>-->
   <mdb-card class="bg-transparent mb-5">
     <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
     <mdb-card-body class="px-0 pb-2 mb-0">
       <mdb-card-title class="subtitle">{{artwork.title}}</mdb-card-title>
-      <mdb-card-text>{{artwork.description}}
+      <mdb-card-text><p>{{artwork.description}}</p>
       <selling-options :artwork="artwork" v-if="!sold"/>
       <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
         <p>by {{artistProfile.name}}, 11/08/2018</p>
       </mdb-card-text>
     </mdb-card-body>
-    <div class="card-buttons d-flex align-items-end justify-content-between flex-wrap">
-      <router-link :to="registerUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="canRegister">Register</mdb-btn></router-link>
-      <router-link :to="registerForSaleUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="canSell">Buy</mdb-btn></router-link>
-      <router-link :to="registerForAuctionUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="canAuction">Auction</mdb-btn></router-link>
-      <a @click="deleteArtwork(artwork.id)" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="debugMode">Delete</mdb-btn></a>
-      <router-link :to="editUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="editable">Edit</mdb-btn></router-link>
-      <router-link :to="buyNowUrl" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Open</mdb-btn></router-link>
+    <div class="card-buttons d-flex align-items-end justify-content-start flex-nowrap">
+      <router-link :to="registerUrl" class="inline-block">
+        <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="canRegister">Register</mdb-btn>
+      </router-link>
+      <router-link :to="registerForSaleUrl" class="inline-block">
+        <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="canSell">Buy</mdb-btn>
+      </router-link>
+      <router-link :to="registerForAuctionUrl" class="inline-block">
+        <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="canAuction">Auction</mdb-btn>
+      </router-link>
+      <a @click="deleteArtwork(artwork.id)" class="inline-block">
+        <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="debugMode">Delete</mdb-btn>
+      </a>
+      <router-link :to="editUrl" class="inline-block">
+        <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="editable">Edit</mdb-btn>
+      </router-link>
+      <router-link :to="buyNowUrl" class="inline-block">
+        <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Open</mdb-btn>
+      </router-link>
     </div>
   </mdb-card>
 </template>
@@ -168,4 +150,8 @@ export default {
 };
 </script>
 <style scoped>
+  .subtitle,
+  .card-body p {
+    color: #000!important;
+  }
 </style>

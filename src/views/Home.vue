@@ -81,11 +81,11 @@ export default {
 };
 </script>
 <style>
-.section-download {
+/* .section-download {
   .btn + .btn {
     margin-left: 5px;
   }
-}
+} */
 
 @media all and (min-width: 991px) {
   .btn-container {
