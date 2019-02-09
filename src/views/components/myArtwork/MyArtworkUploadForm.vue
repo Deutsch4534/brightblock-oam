@@ -5,47 +5,20 @@
   <hr class="my-5">
   <form class="needs-validation" novalidate @submit.prevent="checkForm">
 
-  <div class="row">
-    <div class="col-md-12">
-      <h4>Select Type of Artwork</h4>
-    </div>
-  </div>
-  <div class="row ml-5 mb-5">
+  <div class="row ml-1 mb-5">
     <div class="col-md-2 custom-control custom-radio mb-0">
       <input type="radio" class="custom-control-input" id="customControlValidation2" name="artwork.itemType" v-model="artwork.itemType" value="digiart" required>
-      <label class="custom-control-label" for="customControlValidation2">Digital</label>
+      <label class="custom-control-label" for="customControlValidation2">Digital Artwork</label>
     </div>
-    <div class="col-md-2 custom-control custom-radio mb-0">
+    <div class="col-md-6 custom-control custom-radio mb-0">
       <input type="radio" class="custom-control-input" id="customControlValidation3" name="artwork.itemType" v-model="artwork.itemType" value="physart" required>
-      <label class="custom-control-label" for="customControlValidation3">Physical</label>
+      <label class="custom-control-label" for="customControlValidation3">Physical Artwork</label>
     </div>
   </div>
 
-  <div v-if="showFields">
-
-    <div class="form-row mb-5" v-if="featureBitcoin">
-      <div class="col-md-12 mb-3">
-        <mdb-popover trigger="click" :options="{placement: 'top'}">
-          <div class="popover">
-            <div class="popover-header">
-              Bitcoin Address
-            </div>
-            <div class="popover-body">
-              We display your bitcoin address with your artwork and in your certificate of authenticity
-              to maximise your income from your artwork.
-            </div>
-          </div>
-          <a @click.prevent="" slot="reference">
-            Bitcoin Address
-          </a>
-        </mdb-popover>
-        <label for="validationCustom01-1"><mdb-icon icon="question" /></label>
-        <input type="text" class="form-control" id="validationCustom01-1" placeholder="Your bitcoin address" v-model="artwork.artistry.btcAddress" required>
-        <div class="invalid-feedback">
-          Please enter your bitcoin address - used for people to make payments to you!
-        </div>
-      </div>
-    </div>
+  <!-- item type -->
+<div class="row">
+<div class="col-md-8">
 
 
     <div class="form-row mb-5">
@@ -107,8 +80,8 @@
         </div>
       </div>
       <div class="col-md-4">
-        <label for="validationCustom05-1">Year Created</label>
-        <input type="text" class="form-control" id="validationCustom05-1" placeholder="Year created" v-model="artwork.yearCreated" required>
+        <label for="validationCustom05-2">Year Created</label>
+        <input type="text" class="form-control" id="validationCustom05-2" placeholder="Year created" v-model="artwork.yearCreated" required>
         <div class="invalid-feedback">
           Please enter the year created!
         </div>
@@ -130,7 +103,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group mb-5">
+    <div class="form-group mb-2">
       <div class="text-danger" v-if="dateError">
         The creation date must be before now!
       </div>
@@ -139,64 +112,143 @@
         <input id="created" class="form-control">
       </datetime>
     </div>
+  </div>
 
+  <!-- image drop -->
+  <div class="col-md-4">
     <mdb-row>
-      <mdb-col md="4" v-if="artwork.itemType === 'digiart' || artwork.itemType === 'photoart'">
+      <mdb-col md="12">
         <mdb-card>
           <mdb-card-body>
-            <mdb-card-title>Digital Artwork</mdb-card-title>
+            <mdb-card-title>
+              <mdb-popover trigger="click" :options="{placement: 'top'}">
+                <div class="popover">
+                  <div class="popover-header">
+                    Main Artwork Image
+                  </div>
+                  <div class="popover-body">
+                    Your original digital image or a high res image of your artwork.
+                  </div>
+                  <div class="popover-body">
+                    A single hi-res image up to 2M.
+                  </div>
+                </div>
+                <a @click.prevent="" slot="reference">
+                  Main Artwork Image <mdb-icon far icon="question-circle" />
+                </a>
+              </mdb-popover>
+            </mdb-card-title>
             <mdb-card-text>
               <div class="text-danger" v-if="showAttachArt">
-                Attach you artwork by dragging on to the box below.
+                Main artwork image is required.
               </div>
-              <div class="load-artwork">
+              <div class="load-artwork" v-if="artwork.artwork.length === 0">
                 <div class="drop_area" @drop.prevent="loadArtwork" @dragover.prevent>
-                  Drop artwork file here!
+                  <mdb-icon icon="file-import" size="3x"/>
                 </div>
               </div>
             </mdb-card-text>
-            <mdb-btn color="primary" v-on:click="deleteArtwork" v-if="artwork.artwork.length > 0">Restart Artwork</mdb-btn>
+            <div class="row">
+              <my-artwork-manage-image v-for="(file, index) in artwork.artwork" :key="index" :file="file" :size="12"/>
+            </div>
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <a class="remove-link text-danger text-sm" v-on:click.prevent="deleteArtwork" v-if="artwork.artwork.length > 0"><mdb-icon icon="minus" /></a>
+              </div>
+            </div>
           </mdb-card-body>
         </mdb-card>
-        <my-artwork-manage-image v-for="(file, index) in artwork.artwork" :key="index" :file="file"/>
       </mdb-col>
-      <mdb-col md="4" v-if="artwork.itemType === 'physart'">
+      <mdb-col md="12">
         <mdb-card>
           <mdb-card-body>
-            <mdb-card-title>Supporting Documents</mdb-card-title>
+            <mdb-card-title>
+              <mdb-popover trigger="click" :options="{placement: 'top'}">
+                <div class="popover">
+                  <div class="popover-header">
+                    Provenance Files
+                  </div>
+                  <div class="popover-body">
+                    Upload files which support the provenance claim for this artwork.
+                  </div>
+                  <div class="popover-body">
+                    E.g. bills of sale, reciepts, images of signatures, short video clips of the artists at work etc.
+                  </div>
+                  <div class="popover-body">
+                    Up to 5 images / documents.
+                  </div>
+                </div>
+                <a @click.prevent="" slot="reference">
+                  Provenance Files <mdb-icon far icon="question-circle" />
+                </a>
+              </mdb-popover>
+            </mdb-card-title>
             <mdb-card-text>
               <div class="text-danger" v-if="showAttachDocs">
-                Attach you artwork by dragging on to the box below.
+                Attach provenance files.
               </div>
               <div class="load-artwork">
                 <div class="drop_area" @drop.prevent="loadSupportingFiles" @dragover.prevent>
-                  Drop your supporting documents here!
+                  <mdb-icon icon="file-import" size="3x"/>
                 </div>
               </div>
             </mdb-card-text>
-            <mdb-btn color="primary" @click="deleteDocuments" v-if="artwork.supportingDocuments.length > 0">Restart Documents</mdb-btn>
+            <div class="row">
+              <my-artwork-manage-image v-for="(file, index) in artwork.supportingDocuments" :key="index" :file="file" :size="4"/>
+            </div>
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <a class="remove-link text-danger text-sm" v-on:click.prevent="deleteDocuments" v-if="artwork.supportingDocuments.length > 0"><mdb-icon icon="minus" /></a>
+              </div>
+            </div>
           </mdb-card-body>
         </mdb-card>
-        <my-artwork-manage-image v-for="(file, index) in artwork.supportingDocuments" :key="index" :file="file"/>
       </mdb-col>
-      <mdb-col md="4">
+      <mdb-col md="12">
         <mdb-card>
           <mdb-card-body>
-            <mdb-card-title>Other Images</mdb-card-title>
+            <mdb-card-title>
+            <mdb-popover trigger="click" :options="{placement: 'top'}">
+              <div class="popover">
+                <div class="popover-header">
+                  Gallery Images
+                </div>
+                <div class="popover-body">
+                  Images for potential buyers to see your artwork from different angles.
+                </div>
+                <div class="popover-body">
+                  Up to 5 (100kb or less) images.
+                </div>
+              </div>
+              <a @click.prevent="" slot="reference">
+                Gallery Images <mdb-icon far icon="question-circle" />
+              </a>
+            </mdb-popover>
+            </mdb-card-title>
             <mdb-card-text>
                 <div class="load-artwork">
                   <div class="drop_area" @drop.prevent="loadImageFiles" @dragover.prevent>
-                    Drop your images of your art here!
+                    <mdb-icon icon="file-import" size="3x"/>
                   </div>
                 </div>
             </mdb-card-text>
-            <mdb-btn color="primary" @click="deleteImages" v-if="artwork.images.length > 0">Restart Images</mdb-btn>
+            <div class="row">
+              <my-artwork-manage-image v-for="(file, index) in artwork.images" :key="index" :file="file"  :size="4"/>
+            </div>
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <a class="remove-link text-danger text-sm" v-on:click.prevent="deleteImages" v-if="artwork.images.length > 0"><mdb-icon icon="minus" /></a>
+              </div>
+            </div>
           </mdb-card-body>
         </mdb-card>
-        <my-artwork-manage-image v-for="(file, index) in artwork.images" :key="index" :file="file"/>
       </mdb-col>
     </mdb-row>
+    </div>
+    <!-- image drop -->
     <mdb-btn type="submit">Submit</mdb-btn>
+  <!-- item type -->
+
   </div>
   </form>
 </mdb-container>
@@ -266,12 +318,6 @@ export default {
         "background-size": "cover",
         "background-position": "center center"
       };
-    },
-    featureBitcoin() {
-      return this.$store.state.constants.featureBitcoin;
-    },
-    showFields() {
-      return this.artwork.itemType != null;
     }
   },
   methods: {

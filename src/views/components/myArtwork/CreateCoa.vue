@@ -3,14 +3,35 @@
   <mdb-card-title>Certificate of Authenticity</mdb-card-title>
   <h5>{{artwork.title}}</h5>
   <mdb-card-text>
-    <p>Your bitcoin address will be embedded in your certificate of authenticity to make it easy
+    <p>Your artwork has been <a :href="blockchainInfoUrl()" target="_blank">registered</a> with the Bitcoin blockchain.</p>
+  </mdb-card-text>
+  <mdb-card-text>
+    <p>Your
+    <mdb-popover trigger="click" :options="{placement: 'top'}">
+      <div class="popover">
+        <div class="popover-header">
+          bitcoin address
+        </div>
+        <div class="popover-body">
+          Enter your bitcoin address for people to make payments and donations. We will embed the qrcode of your
+          address in the Certificate of Authenticity for your artwork.
+        </div>
+      </div>
+      <a @click.prevent="" slot="reference">
+        bitcoin address <mdb-icon far icon="question-circle" />
+      </a>
+    </mdb-popover>
+     will be embedded in your certificate of authenticity to make it easy
     to receive future payments.</p>
     <div class="row text-center">
-      <div class="col-md-12">
+      <div class="col-md-12" v-if="artwork.artistry.btcAddress">
         <canvas id="qrcode" width="150px"></canvas>
       </div>
-      <div class="col-md-12">
-        {{artwork.artistry.btcAddress}}
+      <div class="col-md-12" v-if="artwork.artistry.btcAddress">
+        {{artwork.artistry.btcAddress}} <a @click.prevent="changeBtcAddress = !changeBtcAddress"><mdb-icon icon="pen" /></a>
+      </div>
+      <div class="col-md-12" v-if="changeBtcAddress">
+        <input type="text" width="50%" class="form-control" id="validationCustom01-1" placeholder="Your bitcoin address" v-on:keyup.13="saveBitcoinAddress" v-model="bitcoinAddress">
       </div>
     </div>
   </mdb-card-text>
@@ -24,7 +45,7 @@
 
 <script>
 import xhrService from "@/services/xhrService";
-import { mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
+import { mdbPopover, mdbIcon, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
 import QRCode from "qrcode";
 
 // noinspection JSUnusedGlobalSymbols
@@ -32,6 +53,8 @@ export default {
   name: "Registration",
   components: {
     mdbCardBody,
+    mdbPopover,
+    mdbIcon,
     mdbCardTitle,
     mdbCardText,
     mdbBtn
@@ -41,6 +64,8 @@ export default {
       result: null,
       artworkId: null,
       downloadLink: null,
+      bitcoinAddress: null,
+      changeBtcAddress: false
     };
   },
   mounted() {
@@ -51,6 +76,7 @@ export default {
       this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId).then((artwork) => {
         if (artwork) {
           if (artwork && artwork.artistry && artwork.artistry.btcAddress) {
+            this.bitcoinAddress = artwork.artistry.btcAddress;
             QRCode.toCanvas(
               $qrCode,
               artwork.artistry.btcAddress,
@@ -74,7 +100,10 @@ export default {
         a.image = require("@/assets/img/logo/T_8_Symbolmark_white.png");
       }
       return a ? a : {};
-    }
+    },
+    featureBitcoin() {
+      return this.$store.state.constants.featureBitcoin;
+    },
   },
   methods: {
     setByEventCoa (coa) {
@@ -84,9 +113,29 @@ export default {
       artwork.coa = coa;
       this.$store.dispatch("myArtworksStore/updateArtwork", artwork);
     },
+    blockchainInfoUrl() {
+      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+        this.artworkId
+      );
+      return `https://www.blockchain.com/btc/tx/${artwork.btcData.bitcoinTx}`;
+    },
+    saveBitcoinAddress: function() {
+      if (this.bitcoinAddress) {
+        let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+          this.artworkId
+        );
+        artwork.artistry.btcAddress = this.bitcoinAddress;
+        this.$store.dispatch("myArtworksStore/updateArtwork", artwork);
+      }
+    },
     generateCoa: function() {
-      let canvas = document.getElementById('qrcode');
-      let qrCodeDataUrl = canvas.toDataURL();
+      let canvas, qrCodeDataUrl;
+      try {
+        canvas = document.getElementById('qrcode');
+        qrCodeDataUrl = canvas.toDataURL();
+      } catch (err) {
+        // no canvas - ie bitcoin address.
+      }
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
         this.artworkId
       );

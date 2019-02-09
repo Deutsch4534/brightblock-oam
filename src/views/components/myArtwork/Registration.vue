@@ -1,12 +1,36 @@
 <template>
 <mdb-container>
-  <mdb-row>
+  <mdb-row class="mt-5">
     <mdb-col sm="10" class="mx-auto">
     <h1>Artwork Registration</h1>
     <hr/>
     </mdb-col>
     <mdb-col sm="10" class="mx-auto">
       <mdb-card>
+        <mdb-card-body style="display: none">
+          <mdb-card-text>
+            <div class="row">
+              <div class="col-md-12 text-center" style="font-size: 1.5em; color: indigo;">
+                <span style="line-height: 5em; text-align: top">Register</span>
+                <i class="fas fa-arrow-right fa-1x indigo-text pr-3" aria-hidden="true"></i>
+                Certify
+                <i class="fas fa-arrow-right fa-1x indigo-text pr-3" aria-hidden="true"></i>
+                Sell
+              </div>
+            </div>
+          </mdb-card-text>
+        </mdb-card-body>
+
+        <create-coa v-if="artwork.btcData.bitcoinTx"/>
+
+        <register-bitcoin v-if="featureBitcoin && !artwork.btcData.bitcoinTx"/>
+
+        <mdb-card-body v-if="featureEthereum">
+          <mdb-card-title>Ethereum Blockchain ({{networkName}} network)</mdb-card-title>
+          <mdb-card-text>
+          Register on ethereum if you use meta mask or another ethereum wallet.</mdb-card-text>
+          <a class="black-text d-flex justify-content-end"><mdb-btn v-if="featureEthereum" color="primary" size="md" :disabled="registered" @click="registerArtworkEthereum()">Register Ethereum ({{networkName}})</mdb-btn></a>
+        </mdb-card-body>
         <mdb-view hover>
           <img class="img-fluid" width="100%" :src="artwork.image" :alt="artwork.title"></img>
           <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
@@ -14,18 +38,7 @@
         <mdb-card-body>
           <mdb-card-title>{{artwork.title}}</mdb-card-title>
           <mdb-card-title class="text-right"><small>{{myArtist.name}}</small></mdb-card-title>
-          <mdb-card-text>Registering the artwork on the blockchain creates a Certificate of Authenticity (COA) that helps show the provenance of the
-          artwork and makes possible our unique ability to pay residuals to artists and galleries on secondary sales, <a href="#">read more..</a>
-          </mdb-card-text>
           <hr/>
-        </mdb-card-body>
-        <create-coa v-if="artwork.btcData.bitcoinTx"/>
-        <register-bitcoin v-if="featureBitcoin && !artwork.btcData.bitcoinTx"/>
-        <mdb-card-body v-if="featureEthereum">
-          <mdb-card-title>Ethereum Blockchain ({{networkName}} network)</mdb-card-title>
-          <mdb-card-text>
-          Register on ethereum if you use meta mask or another ethereum wallet.</mdb-card-text>
-          <a class="black-text d-flex justify-content-end"><mdb-btn v-if="featureEthereum" color="primary" size="md" :disabled="registered" @click="registerArtworkEthereum()">Register Ethereum ({{networkName}})</mdb-btn></a>
         </mdb-card-body>
       </mdb-card>
     </mdb-col>
@@ -124,42 +137,6 @@ export default {
     }
   },
   methods: {
-    registerArtworkBitcoin: function() {
-      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-        this.artworkId
-      );
-      try {
-        let regData = {
-          title: artwork.title,
-          timestamp: utils.buildBitcoinHash(artwork),
-          owner: artwork.owner
-        };
-        let $self = this;
-        bitcoinService.registerTx(regData,
-          function(result) {
-            $self.bitcoinTx = result.rawTx;
-            artwork.btcData.bitcoinTx = result.rawTx;
-            $self.$store.dispatch("myArtworksStore/updateArtwork", artwork);
-            $self.bitcoinTx = JSON.parse(result.decodedTransaction);
-          }, function(error) {
-            console.log(error);
-          });
-      } catch (err) {
-        console.log(err);
-      }
-      /**
-      const file = Buffer.from(JSON.stringify(regData), "hex");
-      const detached = OpenTimestamps.DetachedTimestampFile.fromBytes(
-        new OpenTimestamps.Ops.OpSHA256(),
-        file
-      );
-      OpenTimestamps.stamp(detached).then(() => {
-        // const fileOts = detached.serializeToBytes()
-        const infoResult = OpenTimestamps.info(detached);
-        console.log(infoResult);
-      });
-      **/
-    },
     registerArtworkEthereum: function() {
       this.message =
         "Registering your artwork - please allow a few minutes for the transaction to complete...";

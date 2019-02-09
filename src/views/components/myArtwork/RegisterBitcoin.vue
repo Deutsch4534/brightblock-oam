@@ -1,25 +1,31 @@
 <template>
 <mdb-card-body v-if="featureBitcoin">
   <mdb-card-title>
-  <mdb-popover trigger="click" :options="{placement: 'top'}">
-    <div class="popover">
-      <div class="popover-header">
-        Bitcoin Blockchain
+    <mdb-popover trigger="click" :options="{placement: 'top'}">
+      <div class="popover">
+        <div class="popover-header">
+          Bitcoin Blockchain
+        </div>
+        <div class="popover-body">
+          We display your bitcoin address with your artwork and in your certificate of authenticity
+          to maximise your income from your artwork.
+        </div>
       </div>
-      <div class="popover-body">
-        We display your bitcoin address with your artwork and in your certificate of authenticity
-        to maximise your income from your artwork.
-      </div>
-    </div>
-    <a @click.prevent="" slot="reference">
-      Bitcoin Address
-    </a>
-  </mdb-popover>
-   <span v-if="bitcoinState">({{bitcoinState.chain}} chain)</span></mdb-card-title>
+      <a @click.prevent="" slot="reference">
+        Bitcoin Registration <span v-if="bitcoinState">({{bitcoinState.chain}} chain)</span>
+      </a>
+    </mdb-popover>
+  </mdb-card-title>
   <mdb-card-text>
-  <p>RawTx (artwork) {{artwork.btcData.bitcoinTx}}</p>
-  <p>RawTx: {{bitcoinTx}}</p>
-  Register artwork on the Bitcoin blockchain here.</mdb-card-text>
+    We will create a piece of data that is unique to you and this piece of artwork
+    and store it the bitcoin blockchain where it can be used to prove your
+    ownership. You'll then be able to generate a Certificate of Ownership.
+    <br/><br/>
+    <a @click.prevent="showTimestamp = !showTimestamp">Show this data!</a>
+  </mdb-card-text>
+  <mdb-card-text v-if="showTimestamp">
+    {{timestamp}}
+  </mdb-card-text>
   <a class="black-text d-flex justify-content-end"><mdb-btn color="primary" size="md" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
   <hr/>
 </mdb-card-body>
@@ -57,7 +63,8 @@ export default {
       message: null,
       artworkId: null,
       from: "/my-artworks",
-      bitcoinTx: null
+      bitcoinTx: null,
+      showTimestamp: null
     };
   },
   mounted() {
@@ -76,6 +83,9 @@ export default {
     fiatRates() {
       return this.$store.getters["conversionStore/getFiatRates"];
     },
+    showSlogan() {
+      return this.$store.state.constants.debugMode;
+    },
     networkName() {
       try {
         return this.$store.state.ethStore.clientState.metaMaskNetwork.networkName;
@@ -83,11 +93,14 @@ export default {
         return "unknown network";
       }
     },
+    timestamp() {
+      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
+        this.artworkId
+      );
+      return utils.buildBitcoinHash(artwork);
+    },
     featureBitcoin() {
       return this.$store.state.constants.featureBitcoin;
-    },
-    featureEthereum() {
-      return this.$store.state.constants.featureEthereum;
     },
     bitcoinState() {
       let state = this.$store.getters["bitcoinStore/getClientState"];
@@ -179,60 +192,6 @@ export default {
       });
       **/
     },
-    registerArtworkEthereum: function() {
-      this.message =
-        "Registering your artwork - please allow a few minutes for the transaction to complete...";
-      let artwork = this.$store.getters["myArtworksStore/myArtwork"](
-        this.artworkId
-      );
-      if (!artwork || !artwork.id) {
-        return;
-      }
-      let uploader = this.$store.getters["myAccountStore/getMyProfile"]
-        .username;
-      let regData = {
-        title: artwork.title,
-        timestamp: utils.buildArtworkHash(artwork.artwork[0].dataUrl),
-        uploader: uploader
-      };
-      let $self = this;
-      ethereumService.registerOnChain(
-        regData,
-        function(result) {
-          notify.info({
-            title: "Register Artwork.",
-            text: "Transaction sent to the blockchain..."
-          });
-          artwork.bcitem = {
-            registerTxId: result.txId,
-            status: "pending-register"
-          };
-          $self.$store.commit("myArtworksStore/addMyArtwork", artwork);
-          $self.$store
-            .dispatch("myArtworksStore/updateArtwork", artwork)
-            .then(artwork => {
-              notify.info({
-                title: "Register Artwork.",
-                text: "User storage has been updated..."
-              });
-              $self.$store
-                .dispatch("myArtworksStore/syncBlockchainState", artwork)
-                .then(() => {});
-              $self.closeModal();
-            });
-        },
-        function(error) {
-          console.log(error);
-          $self.message =
-            "Please check you are logged into your Meta Mask account and on the correct network.";
-          notify.error({
-            title: "Register Artwork.",
-            text:
-              "Error registering your item - please check meta mask is running and unlocked. <br>"
-          });
-        }
-      );
-    }
   }
 };
 </script>
