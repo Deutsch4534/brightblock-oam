@@ -45,8 +45,8 @@
     </mdb-row>
   </mdb-container>
   <mdb-container fluid class="bg-main">
-    <mdb-container class="text-light">
-      <contact-section/>
+    <mdb-container class="text-light contact-section">
+      <contact-section class="text-light"/>
     </mdb-container>
   </mdb-container>
 </div>
@@ -115,5 +115,8 @@ export default {
   .card {
     border: 3pt solid black!important;
   }
+
+.contact-section >>> p { color: #EFF1F2; }
+
 </style>
 

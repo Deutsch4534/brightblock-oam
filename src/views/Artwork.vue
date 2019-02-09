@@ -2,7 +2,7 @@
 <div class="container">
 <mdb-card dark>
   <mdb-view hover>
-    <img class="inplay-image img-fluid" width="100%" :src="artwork.image" :alt="artwork.title"></img>
+    <img class="inplay-image img-fluid" width="100%" :src="artwork.image" :alt="artwork.title">
     <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
   </mdb-view>
   <mdb-card-body color="elegant" class="white-text">

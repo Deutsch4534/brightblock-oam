@@ -2,14 +2,14 @@
 <!-- Main navigation 424f95 -->
 <header>
   <!-- Navbar -->
-  <mdb-navbar :color="'stylish'" position="top" dark href="#" expand="lx" transparent scrolling hamburger animated animation="3" id="main-navigation">
+  <mdb-navbar position="top" href="#" expand="lx" transparent scrolling hamburger animated animation="3" id="main-navigation">
     <!-- mdbNavbar brand -->
     <mdb-navbar-brand>
-      <form class="md-form search-form white-text">
+      <form class="md-form search-form">
         <a type="button" @click="doSearch">
           <mdb-icon class="mb-0 mr-2" icon="search" />
         </a>
-        <input label="Search" type="text" class="text-white active-white active-white-2 mt-0 mb-0" v-model="query"
+        <input label="Search" type="text" class="mt-0 mb-0" v-model="query"
                placeholder="Search TRANSIT8" aria-label="Search"/>
       </form>
       <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
@@ -17,7 +17,6 @@
     <mdb-navbar-nav right>
       <li v-if="!loggedIn" class="nav-item ripple-parent">
         <router-link to="/login" class="nav-link navbar-link login-link mr-2">
-        <mdb-icon icon="fingerprint" />
         Login
         </router-link>
       </li>
@@ -26,7 +25,7 @@
     <mdb-navbar-toggler>
       <mdb-navbar-nav mx-auto>
         <li class="nav-item ripple-parent">
-          <router-link to="/home" class="nav-link navbar-link">Gallery</router-link>
+          <router-link to="/gallery" class="nav-link navbar-link">Gallery</router-link>
         </li>
         <li class="nav-item ripple-parent">
           <router-link to="/artists" class="nav-link navbar-link">Artists</router-link>
@@ -227,16 +226,16 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .navbar {
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid lightgray;
     box-shadow: none;
     min-height: 50px;
-    background-color: #333;
+    background-color: white;
     flex-wrap: nowrap;
   }
   .scrolling-navbar { padding: 4px 28px!important; }
 
   .top-nav-collapse {
-    background-color: #333 !important;
+    background-color: white !important;
   }
 
   nav >>> .navbar-toggler {
@@ -253,7 +252,9 @@ export default {
     padding: 30px 35px;
   }
 
-  .navbar-collapse .nav-item { max-width: 90vw; }
+  .navbar-collapse .nav-item { max-width: 90vw;}
+  .navbar-collapse .nav-item,
+  .navbar-collapse .nav-item .nav-link {  color: white!important; }
 
   .show-navbar {
     min-height: 100vh;
@@ -263,10 +264,17 @@ export default {
     line-height: 1;
   }
 
+>>> .animated-icon3 span { background: black!important; }
+>>> .animated-icon3.open span { background: white!important; }
+
+nav >>> .navbar-brand {
+    max-width: 45vw;
+}
   .navbar .md-form {
     margin: 0;
   }
   i.fa-search {
+    color: black;
     transform: rotate(90deg);
     font-size: 24px;
   }
@@ -275,21 +283,22 @@ export default {
   .search-form input:focus { box-shadow: none!important; border-bottom: none!important; }
 
   .search-form input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-    color: white;
+    color: black;
   }
   .search-form input::-moz-placeholder { /* Firefox 19+ */
-    color: white;
+    color: black;
   }
   .search-form input:-ms-input-placeholder { /* IE 10+ */
-    color: white;
+    color: black;
   }
   .search-form input:-moz-placeholder { /* Firefox 18- */
-    color: white;
+    color: black;
   }
-  .search-form button.transparent { border: none; background: transparent; color: white; }
+  .search-form button.transparent { border: none; background: transparent; color: black; }
 
 .jarallax2 {
 }
+.navbar a { color: inherit; }
 
 @media (max-width: 990px) {
   .navbar-collapse {
@@ -299,10 +308,8 @@ export default {
 
   @media (max-width: 576px) {
     header { min-height:50px; }
-    .navbar-brand {
-      max-width: 45vw;
-    }
-    .search-form input, .login-link { font-size: 14px; }
+
+   .search-form input, .login-link { font-size: 14px; }
     nav >>> .navbar-toggler {
       padding: 0 0 0.25rem 0.5rem;
       font-size: 0.8rem;

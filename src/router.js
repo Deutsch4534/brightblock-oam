@@ -10,6 +10,7 @@ import AdminQueryIndex from "./views/components/admin/AdminQueryIndex";
 import Home from "./views/Home.vue";
 import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
+import Gallery from "./views/Gallery.vue";
 import Artist from "./views/Artist.vue";
 import Artists from "./views/Artists.vue";
 import Login from "./views/Login.vue";
@@ -61,6 +62,15 @@ const router = new Router({
       path: "/home",
       name: "home",
       components: { default: Home, header: Navbar, footer: Footer },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/gallery",
+      name: "gallery",
+      components: { default: Gallery, header: Navbar, footer: Footer },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }

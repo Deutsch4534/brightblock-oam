@@ -1,7 +1,8 @@
 <template>
   <mdb-dropdown tag="li" class="nav-item">
-    <mdb-dropdown-toggle tag="a" class="user-menu dropleft pr-1" navLink color="stylish" slot="toggle" waves-fixed
-                         v-html="avatar"></mdb-dropdown-toggle>
+    <mdb-dropdown-toggle tag="a" class="user-menu dropleft pr-1" navLink color="stylish" slot="toggle" waves-fixed>
+      <mdb-icon icon="user-circle" />
+    </mdb-dropdown-toggle>
     <mdb-dropdown-menu class="dropdown-menu-right">
       <mdb-dropdown-item>
         <a class="dropdown-item"><mdb-icon fab icon="500px" /> {{ username }}</a>
@@ -108,4 +109,6 @@ export default {
     box-shadow: none;
     color: initial!important;
   }
+
+  .fa-user-circle { font-size: 1.7rem; }
 </style>

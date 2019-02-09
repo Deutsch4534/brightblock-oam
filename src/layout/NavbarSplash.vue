@@ -2,28 +2,28 @@
 <!-- Main navigation 424f95 -->
 <header>
   <!-- Navbar -->
-  <mdb-navbar :color="'stylish'" position="top" dark href="#" expand="lx" transparent scrolling hamburger animated animation="3" id="main-navigation">
+  <mdb-navbar position="top" class="bg-white text-dark" href="#" expand="lx" scrolling hamburger animated animation="3" id="main-navigation">
   <!-- mdbNavbar brand -->
   <mdb-navbar-brand>
     <form class="md-form search-form white-text">
       <a type="button" @click="doSearch">
         <mdb-icon class="mb-0 mr-2" icon="search" />
       </a>
-      <input label="Search" type="text" class="text-white active-white active-white-2 mt-0 mb-0" v-model="query"
+      <input label="Search" type="text" class="mt-0 mb-0" v-model="query"
              placeholder="Search TRANSIT8" aria-label="Search"/>
     </form>
     <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
   </mdb-navbar-brand>
   <mdb-navbar-nav right>
     <li v-if="!loggedIn" class="nav-item ripple-parent">
-      <router-link to="/login" class="nav-link navbar-link login-link mr-2"><mdb-icon icon="fingerprint" /> Login</router-link>
+      <router-link to="/login" class="nav-link navbar-link login-link mr-2">Login</router-link>
     </li>
     <account-links v-if="loggedIn"/>
   </mdb-navbar-nav>
   <mdb-navbar-toggler>
     <mdb-navbar-nav mx-auto>
       <li class="nav-item ripple-parent">
-        <router-link to="/home" class="nav-link navbar-link">Gallery</router-link>
+        <router-link to="/gallery" class="nav-link navbar-link">Gallery</router-link>
       </li>
       <li class="nav-item ripple-parent">
         <router-link to="/artists" class="nav-link navbar-link">Artists</router-link>
@@ -69,7 +69,7 @@
         <!--Grid row-->
         <div class="row">
           <!--Grid column-->
-          <div class="col-md-12 mb-4 white-text text-left">
+          <div class="col-md-12 mb-4 mt-5 white-text text-left">
             <h1 class="tagline mb-4 text-center fadeInDown" data-wow-delay="0.4s" v-html="tagline"></h1>
             <!--<router-link :to="getAuctionLink"><mdb-btn outline="white">Learn More</mdb-btn></router-link>-->
           </div>
@@ -287,16 +287,26 @@ export default {
   text-decoration: underline;
 }
 .navbar {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid lightgray;
   box-shadow: none;
   min-height: 54px;
   flex-wrap: nowrap;
+  background: white;
+  color: black;
 }
+
+nav >>> .navbar-brand {
+    max-width: 45vw;
+}
+
 .scrolling-navbar { padding: 4px 28px!important; }
 
 .top-nav-collapse {
-  background-color: #333 !important;
+  background-color: white !important;
+  color: black;
 }
+
+.navbar a { color: inherit; }
 
 nav >>> .navbar-toggler {
   z-index: 4;
@@ -313,6 +323,11 @@ nav >>> .navbar-toggler {
 }
 
 .navbar-collapse .nav-item { max-width: 90vw; }
+  .navbar-collapse .nav-item,
+  .navbar-collapse .nav-item .nav-link {  color: white!important; }
+
+>>> .animated-icon3 span { background: black!important; }
+>>> .animated-icon3.open span { background: white!important; }
 
 .show-navbar {
   min-height: 100vh;
@@ -328,24 +343,25 @@ nav >>> .navbar-toggler {
 i.fa-search {
   transform: rotate(90deg);
   font-size: 24px;
+  color: black;
 }
 .search-form input, .login-link { font-size: 20px; font-weight: 300; letter-spacing: 0.5px;}
 .search-form input { border-bottom: none; }
 .search-form input:focus { box-shadow: none!important; border-bottom: none!important; }
 
 .search-form input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-    color: white;
+    color: black;
   }
 .search-form input::-moz-placeholder { /* Firefox 19+ */
-    color: white;
+    color: black;
   }
 .search-form input:-ms-input-placeholder { /* IE 10+ */
-    color: white;
+    color: black;
   }
 .search-form input:-moz-placeholder { /* Firefox 18- */
-    color: white;
+    color: black;
   }
-.search-form button.transparent { border: none; background: transparent; color: white; }
+.search-form button.transparent { border: none; background: transparent; color: black; }
 
 header { min-height:100vh; }
 .view {
@@ -377,16 +393,23 @@ h6 {
 }
 
   @media (max-width: 990px) {
-    /*.navbar-collapse {*/
-      /*width: 60vw;*/
-    /*}*/
+    .navbar-collapse {
+      width: 60vw;
+    }
   }
 
   @media (max-width: 576px) {
-    .navbar-brand {
-      max-width: 45vw;
-    }
+
+    header { min-height: auto; }
+
     .search-form input, .login-link { font-size: 14px; }
+
+    .view {
+      height: calc(100vh - 210px);
+    }
+
+    .jarallax { min-height: 320px; }
+
     nav >>> .navbar-toggler {
       padding: 0 0 0.25rem 0.5rem;
       font-size: 0.8rem;
