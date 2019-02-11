@@ -83,7 +83,11 @@ p { color: inherit; }
 .btn.btn-white:hover,
 .btn.btn-white:focus,
 .btn.btn-white:active,
-.btn-white:not([disabled]):not(.disabled):active {
+.btn-white:not([disabled]):not(.disabled):active,
+.btn.btn-main:hover,
+.btn.btn-main:focus,
+.btn.btn-main:active,
+.btn-main:not([disabled]):not(.disabled):active{
   color: #6200EE!important;
   background-color: rgba(63,0,223,0.12)!important;
   border:1px solid #6200EE;
@@ -92,6 +96,11 @@ p { color: inherit; }
 .btn.btn-sm { font-size: 0.8rem; padding: 0.45rem 1.4rem; }
 .btn.btn-sm.btn-rounded { border-radius: 6em; }
 
+
+.btn.btn-main {
+  background-color: #6200EE!important;
+  border: 1px solid #6200EE;
+}
 .card {
   box-shadow: none;
   border-radius: 0;

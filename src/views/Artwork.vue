@@ -16,7 +16,7 @@
           <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, 19/08/2016</p>
           <p class="mb-0">{{artwork.description}}</p>
           <p>{{aboutArtwork.keywords}}</p>
-          <mdb-row class="pt-5">
+          <mdb-row class="pt-3">
             <mdb-col col="12">
               <p class="h5-responsive serif-italic" v-if="isRegistered && isPriceSet">Artwork is registered on blockchain.</p>
               <buy-artwork-form v-if="isRegistered && isPriceSet" :purchaseState="purchaseState" :artwork="artwork" @buy="buyArtwork()"/>
