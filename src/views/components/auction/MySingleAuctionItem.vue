@@ -12,7 +12,7 @@
     </h3>
     <p class="dark-grey-text">{{artwork.description}}</p>
     <p>by
-      <a class="font-weight-bold">{{artwork.artist}}</a>, 19/04/2018</p>
+      <a class="font-weight-bold">{{artwork.artist}}</a>, {{created}}</p>
     <br/>
     <a v-if="!item.inplay" href @click.prevent="activateBidding"><mdb-btn color="white" size="md">Activate Bidding</mdb-btn></a>
     <a v-else href @click.prevent="deactivateBidding"><mdb-btn color="white" size="md">Deactivate Bidding</mdb-btn></a>
@@ -36,6 +36,7 @@
 
 <script>
 import { mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardBody, mdbMask, mdbIcon, mdbView, mdbBtn } from 'mdbvue';
+import moment from "moment";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -99,6 +100,12 @@ export default {
       );
       let bcitem = artwork.bcitem;
       return bcitem && bcitem.itemIndex > -1;
+    },
+    created() {
+      if (this.artwork.created) {
+        return moment(this.artwork.created).format("YYYY-MM-DD");
+      }
+      return moment(this.artwork.id).format("DD/MMM/YYYY");
     },
     artwork() {
       let itemId = this.item.itemId;

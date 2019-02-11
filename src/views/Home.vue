@@ -1,7 +1,7 @@
 <template>
   <mdb-container fluid class="bg-light flex-1">
     <mdb-container class="py-5">
-      <mdb-row v-if="auctionsSize > 0">
+      <mdb-row v-if="auctionsSize > 0 && featureAuctions">
         <div class="col-12">
           <h2 class="h2-responsive mb-5">Featured Auctions</h2>
         </div>
@@ -69,6 +69,9 @@ export default {
     },
     auctionsSize() {
       return this.$store.getters["onlineAuctionsStore/onlineAuctions"].length;
+    },
+    featureAuctions() {
+      return this.$store.state.constants.featureAuctions;
     },
     onlineAuctions() {
       return this.$store.getters["onlineAuctionsStore/onlineAuctions"];

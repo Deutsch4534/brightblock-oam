@@ -10,7 +10,7 @@
       <mdb-dropdown-item>
         <router-link
           class="dropdown-item"
-          to="/admin/registrations"
+          to="/admin/settings"
           v-if="showAdmin"
           >Admin</router-link
         >

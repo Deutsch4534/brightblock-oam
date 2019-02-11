@@ -15,14 +15,14 @@
           to="/my-artwork/upload"
           >Upload Artwork</router-link>
       </li>
-      <li v-if="loggedIn" v-on:click="toggleMenu">
+      <li v-if="loggedIn && featureAuctions" v-on:click="toggleMenu">
         <router-link
           class="dropdown-item"
           to="/my-auctions"
           >My Auctions</router-link
         >
       </li>
-      <li v-if="loggedIn" v-on:click="toggleMenu">
+      <li v-if="loggedIn && featureAuctions" v-on:click="toggleMenu">
         <router-link
           class="dropdown-item"
           to="/my-auctions/upload"
@@ -62,6 +62,9 @@ export default {
   computed: {
     showAdmin() {
       return this.$store.state.myAccountStore.myProfile.showAdmin;
+    },
+    featureAuctions() {
+      return this.$store.state.constants.featureAuctions;
     },
     username() {
       return this.$store.state.myAccountStore.myProfile.name;

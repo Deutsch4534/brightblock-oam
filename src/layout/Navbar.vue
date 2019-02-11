@@ -122,6 +122,9 @@ export default {
         "background-position": "center center"
       };
     },
+    featureAuctions() {
+      return this.$store.state.constants.featureAuctions;
+    },
     loggedIn() {
       let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
       return myProfile.loggedIn;

@@ -13,11 +13,11 @@
         <input type="radio" class="custom-control-input" id="customControlValidation1" name="auction.auctionType" v-model="auction.auctionType" value="timed" required>
         <label class="custom-control-label" for="customControlValidation1">Timed Auction</label>
       </div>
-      <!--
       <div class="col-md-2 custom-control custom-radio mb-0">
         <input type="radio" class="custom-control-input" id="customControlValidation3" name="auction.auctionType" v-model="auction.auctionType" value="sealed" required>
         <label class="custom-control-label" for="customControlValidation3">Sealed Bid Auction</label>
       </div>
+      <!--
       <div class="col-md-2 custom-control custom-radio mb-3">
         <input type="radio" class="custom-control-input" id="customControlValidation0" name="auction.auctionType" v-model="auction.auctionType" value="penny" required>
         <label class="custom-control-label" for="customControlValidation0">Penny Auction</label>
@@ -41,9 +41,9 @@
         <div class="form-row" v-if="auction.auctionType === 'sealed'">
           <div class="col-md-12 mb-3">
             <label for="sealedAddress">Destination Bitcoin Address</label>
-            <input type="text" class="form-control" id="sealedAddress" placeholder="Title" v-model="auction.sealedAddress">
+            <input type="text" class="form-control" id="sealedAddress" placeholder="Bitcoin address" v-model="auction.sealedAddress" required>
             <div class="invalid-feedback">
-              Please enter sealed address!
+              Please enter bitcoin address!
             </div>
           </div>
         </div>
@@ -92,7 +92,7 @@
           </datetime>
         </div>
 
-        <div class="form-group" v-if="auction.auctionType === 'timed'">
+        <div class="form-group" v-if="auction.auctionType !== 'webcast'">
           <datetime type="datetime" v-model="endDate" input-id="endDate">
             <label for="endDate" slot="before">Bidding Ends&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
             <input id="endDate" class="form-control">
@@ -106,8 +106,8 @@
       <div class="col-md-4">
         <h4>Set Auction Logo</h4>
         <p class="muted"><small>Size limit: 500Kb</small></p>
-        <media-upload :logo="auction.logo" :sizeLimit="'500'" :quantityLimit="'1'" @updateMedia="setLogo($event)"/>
-        <p class="muted"><small>{{auction.logo.name}}</small></p>
+        <media-upload :logo="auction.logo" @updateMedia="setByEventLogo($event)"/>
+        <p class="muted" v-if="auction.logo && auction.logo.dataUrl"><small>{{auction.logo.name}}</small></p>
       </div>
     </div>
   </form>
@@ -159,6 +159,9 @@ export default {
     );
     if (auction) {
       this.auction = auction;
+      if (!auction.logo) {
+        auction.logo = {};
+      }
       this.startDate = moment(auction.startDate).format();
       this.endDate = moment(auction.endDate).format();
     } else {
@@ -214,7 +217,7 @@ export default {
           });
       }
     },
-    setLogo (mediaObjects) {
+    setByEventLogo (mediaObjects) {
       this.auction.logo = mediaObjects[0];
     },
     checkForm(event) {

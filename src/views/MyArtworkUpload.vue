@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <my-artwork-upload-form :formTitle="'Upload Artwork'"/>
+  <my-artwork-upload-form :formTitle="'Upload Artwork'" :mode="'upload'"/>
 </div>
 </template>
 

@@ -9,7 +9,7 @@
         <p>by {{artistProfile.name}}, 11/08/2018</p>
       </mdb-card-text>
     </mdb-card-body>
-    <div class="card-buttons d-flex align-items-end justify-content-start flex-wrap">
+    <div class="card-buttons d-flex align-items-end justify-content-start flex-nowrap">
       <router-link :to="registerUrl" class="inline-block">
         <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="canRegister">Register</mdb-btn>
       </router-link>
@@ -35,6 +35,7 @@
 <script>
 import SellingOptions from "./SellingOptions";
 import { mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbMask, mdbIcon, mdbView, mdbBtn } from 'mdbvue';
+import moment from "moment";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -80,6 +81,12 @@ export default {
     editable() {
       return this.$store.getters["myArtworksStore/editable"](this.artwork.id);
     },
+    created() {
+      if (this.artwork.created) {
+        return moment(this.artwork.created).format("YYYY-MM-DD");
+      }
+      return moment(this.artwork.id).format("DD/MMM/YYYY");
+    },
     debugMode() {
       return this.$store.state.constants.debugMode;
     },
@@ -92,9 +99,10 @@ export default {
       return cs && auctions && auctions.length > 0;
     },
     canRegister() {
-      return this.$store.getters["myArtworksStore/canRegister"](
+      let canRegister = this.$store.getters["myArtworksStore/canRegister"](
         this.artwork.id
       );
+      return canRegister && !this.sold;
     },
     artistProfile() {
       let profile = this.$store.getters["userProfilesStore/getProfile"](

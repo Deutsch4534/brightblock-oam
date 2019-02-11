@@ -3,6 +3,7 @@ import Router from "vue-router";
 
 import Admin from "./views/Admin.vue";
 import AdminSettings from "./views/components/admin/AdminSettings";
+import AdminBitcoin from "./views/components/admin/AdminBitcoin";
 import AdminRegistrations from "./views/components/admin/AdminRegistrations";
 import AdminBuildIndex from "./views/components/admin/AdminBuildIndex";
 import AdminQueryIndex from "./views/components/admin/AdminQueryIndex";
@@ -25,7 +26,7 @@ import Artwork from "./views/Artwork";
 import Search from "./views/Search";
 
 import MyArtworks from "./views/MyArtworks";
-import RegisterArtwork from "./views/components/myArtwork/RegisterArtwork";
+import Registration from "./views/components/myArtwork/Registration";
 import RegisterForSale from "./views/components/myArtwork/RegisterForSale";
 import RegisterForAuction from "./views/components/myArtwork/RegisterForAuction";
 import MyArtworkUpload from "./views/MyArtworkUpload";
@@ -176,6 +177,16 @@ const router = new Router({
       meta: { requiresAuth: true }
     },
     {
+      path: "/my-artwork/register/:artworkId",
+      name: "registration",
+      components: {
+        default: Registration,
+        header: Navbar,
+        footer: Footer
+      },
+      meta: { requiresAuth: true }
+    },
+    {
       path: "/my-artworks",
       name: "my-artworks",
       components: {
@@ -185,11 +196,6 @@ const router = new Router({
       },
       meta: { requiresAuth: true },
       children: [
-        {
-          path: "/my-artwork/register/:artworkId",
-          name: "registerArtwork",
-          component: RegisterArtwork
-        },
         {
           path: "/my-artwork/register-for-sale/:artworkId/:amount/:currency",
           name: "registerForSale",
@@ -282,6 +288,11 @@ const router = new Router({
           path: "/admin/settings",
           name: "adminSettings",
           component: AdminSettings
+        },
+        {
+          path: "/admin/bitcoin",
+          name: "adminBitcoin",
+          component: AdminBitcoin
         },
         {
           path: "/admin/registrations",

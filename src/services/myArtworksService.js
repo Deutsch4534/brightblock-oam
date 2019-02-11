@@ -58,7 +58,7 @@ const myArtworksService = {
       .catch(function() {
         failure({
           ERR_CODE: 101,
-          message: "Error fetching blockstack root file!"
+          message: "Error getting my artworks: artworkRootFileName=" + artworkRootFileName
         });
       });
   },
@@ -99,7 +99,7 @@ const myArtworksService = {
       .catch(function() {
         failure({
           ERR_CODE: 101,
-          message: "Error fetching blockstack root file!"
+          message: "Error getting my artwork: artworkRootFileName=" + artworkRootFileName + " artworkId=" + artworkId
         });
       });
   },

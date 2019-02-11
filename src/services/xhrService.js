@@ -42,10 +42,10 @@ const xhrService = {
         });
     });
   },
-  makePostCall: function(command, data) {
+  makePostCall: function(endPoint, data) {
     let callInfo = {
       method: "post",
-      url: store.state.constants.ethGatewayUrl + command,
+      url: endPoint,
       headers: {
         "Content-Type": "application/json"
       }
@@ -57,7 +57,7 @@ const xhrService = {
           if (response.failed) {
             reject(new Error(response.message));
           }
-          resolve(response.data.details);
+          resolve(response);
         })
         .catch(e => {
           reject(new Error(e.message));

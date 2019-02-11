@@ -64,6 +64,7 @@
 
 <script>
 import { mdbContainer, mdbRow, mdbCol, mdbBtn, mdbIcon, mdbInput, mdbTextarea, mdbCard, mdbCardBody } from 'mdbvue';
+import axios from "axios";
 
 export default {
   name: 'ContactSection',
@@ -83,7 +84,7 @@ export default {
     return {
       title: "",
       name: "",
-      form: "",
+      subject: "",
       email: "",
       message: "",
       description: "",
@@ -104,8 +105,32 @@ export default {
       });
     },
     submit() {
-      console.log("Code to send message needed here.. " + this.message);
-      // send the message
+      let data = {
+        text: this.message,
+        subject: this.subject,
+        originatorEmail: this.email,
+        originatorName: this.name,
+      };
+      let callInfo = {
+        method: "post",
+        url: this.$store.state.constants.ethGatewayUrl + "/api/sendEmail",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+      return new Promise((resolve, reject) => {
+        axios
+          .post(callInfo.url, data)
+          .then(response => {
+            if (response.failed) {
+              reject(new Error(response.message));
+            }
+            resolve(response.data.details);
+          })
+          .catch(e => {
+            reject(new Error(e.message));
+          });
+      });
     }
   },
   computed: {

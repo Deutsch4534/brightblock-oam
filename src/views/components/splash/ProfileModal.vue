@@ -80,14 +80,12 @@
 <script>
 import _ from "lodash";
 import { Tabs } from "@/components";
-import Leafs from "../Leafs";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "ProfileModal",
   components: {
     Tabs,
-    Leafs
   },
   bodyClass: "profile-page",
   props: {

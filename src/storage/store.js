@@ -46,8 +46,17 @@ const store = new Vuex.Store({
     constants(state) {
       state.constants = CONSTANTS;
     },
-    debugMode(state) {
+    toggleDebugMode(state) {
       state.constants.debugMode = !state.constants.debugMode;
+    },
+    toggleFeatureAuctions(state) {
+      state.constants.featureAuctions = !state.constants.featureAuctions;
+    },
+    toggleFeatureEthereum(state) {
+      state.constants.featureEthereum = !state.constants.featureEthereum;
+    },
+    toggleFeatureBitcoin(state) {
+      state.constants.featureBitcoin = !state.constants.featureBitcoin;
     }
   },
   actions: {

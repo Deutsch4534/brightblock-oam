@@ -2,29 +2,40 @@
 <div class="container" v-if="finished">
   <div class="row">
     <div class="col-md-12 ">
-      <h1>{{auction.title}}</h1>
-      <p>{{auction.description}}</p>
-      <p class="text-warning">The auction has finished - thanks for your interest.</p>
+    <mdb-media tag="div">
+      <img v-if="auction.logo" class="img-fluid d-flex mr-3" style="width: 30%;" :src="auction.logo.dataUrl" alt="auction.logo.name" />
+      <mdb-media-body>
+        <h5 class="mt-0 mb-2 font-weight-bold">{{auction.title}}</h5>
+        <p>{{auction.description}}</p>
+        <p class="text-warning">The auction has finished - thanks for your interest.</p>
+      </mdb-media-body>
+    </mdb-media>
     </div>
   </div>
 </div>
 <div class="container" v-else-if="artworksSize === 0">
   <div class="row">
     <div class="col-md-12 ">
-      <h1>{{auction.title}}</h1>
-      <p>{{auction.description}}</p>
-      <p class="text-warning">The catalogue for this auction is empty - please check back soon.</p>
+      <mdb-media tag="div">
+        <img v-if="auction.logo" class="img-fluid d-flex mr-3" style="width: 30%;" :src="auction.logo.dataUrl" alt="auction.logo.name" />
+        <mdb-media-body>
+          <h5 class="mt-0 mb-2 font-weight-bold">{{auction.title}}</h5>
+          <p>{{auction.description}}</p>
+          <p class="text-warning">The catalogue is being prepared - check back soon.</p>
+        </mdb-media-body>
+      </mdb-media>
     </div>
   </div>
 </div>
 <div class="container" v-else>
-  <div class="row">
-    <div class="col-md-12 ">
-      <h1>{{auction.title}} <span>({{artworksSize}} items)</span></h1>
+  <mdb-media tag="div">
+    <img v-if="auction.logo" class="img-fluid d-flex mr-3" style="width: 30%;" :src="auction.logo.dataUrl" alt="auction.logo.name" />
+    <mdb-media-body>
+      <h5 class="mt-0 mb-2 font-weight-bold">{{auction.title}}</h5>
       <p>{{auction.description}}</p>
-      <p>{{countdown}}</p>
-    </div>
-  </div>
+      <p class="text-warning">The auction has finished - thanks for your interest.</p>
+    </mdb-media-body>
+  </mdb-media>
   <hr class="my-5">
   <div class="row">
     <div class="col-md-6">
@@ -64,6 +75,7 @@ import VideoStream from "./components/rtc/VideoStream";
 import WatchersStream from "./components/rtc/WatchersStream";
 import utils from "@/services/utils";
 import peerToPeerService from "@/services/peerToPeerService";
+import { mdbMedia, mdbMediaBody, mdbMediaImage } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -74,7 +86,10 @@ export default {
     SingleAuctionItem,
     HammerItem,
     VideoStream,
-    MessageStream
+    MessageStream,
+    mdbMedia,
+    mdbMediaBody,
+    mdbMediaImage
   },
   data() {
     return {
