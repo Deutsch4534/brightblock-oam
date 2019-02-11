@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- TODO: Connect currency buttons to conditionally display price next to button -->
     <div>
       <mdb-btn size="sm" color="white" rounded>EUR</mdb-btn>
       <mdb-btn size="sm" color="white" rounded>BTC</mdb-btn>
