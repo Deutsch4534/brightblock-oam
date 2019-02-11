@@ -1,12 +1,20 @@
 <template>
-<div class="row">
-  <div class="col-md-12">
-    <span class="white-text d-flex justify-content-start" v-html="fiatMessage"></span>
-    <span class="white-text d-flex justify-content-start" v-html="ethMessage"></span>
-    <span class="white-text d-flex justify-content-start" v-html="btcMessage"></span>
-    <a class="white-text d-flex justify-content-end"><mdb-btn :disabled="!purchaseState.canBuy" v-bind:class="{ 'white': purchaseState.canBuy, 'grey': !purchaseState.canBuy }"  @click="buyArtwork()">buy</mdb-btn></a>
+  <div>
+    <div>
+      <mdb-btn size="sm" color="white" rounded>EUR</mdb-btn>
+      <mdb-btn size="sm" color="white" rounded>BTC</mdb-btn>
+      <mdb-btn size="sm" color="white" rounded>ETH</mdb-btn>
+    </div>
+    <div class="d-flex align-items-center justify-content-start pt-5">
+      <p v-html="fiatMessage" class="inline-block mb-0"></p>
+      <p v-html="ethMessage" class="inline-block mb-0"></p>
+      <p v-html="btcMessage" class="inline-block mb-0"></p>
+        <mdb-btn :disabled="!purchaseState.canBuy"
+                 v-bind:class="{ 'white': purchaseState.canBuy, 'grey': !purchaseState.canBuy }" color="white"
+                 size="lg" @click="buyArtwork()" class="ml-4">purchase
+        </mdb-btn>
+    </div>
   </div>
-</div>
 </template>
 
 <script>

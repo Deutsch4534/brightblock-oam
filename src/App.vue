@@ -35,13 +35,32 @@ export default {
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Noto Serif Disp';
+  src: url('assets/fonts/NotoSerifDisplay-Italic.eot');
+  src: url('assets/fonts/NotoSerifDisplay-Italic.eot?#iefix') format('embedded-opentype'),
+  url('assets/fonts/NotoSerifDisplay-Italic.woff2') format('woff2'),
+  url('assets/fonts/NotoSerifDisplay-Italic.woff') format('woff'),
+  url('assets/fonts/NotoSerifDisplay-Italic.svg#NotoSerifDisplay-Italic') format('svg');
+  font-weight: 300;
+  font-style: italic;
+}
+
 body {
   height: 100vh;
 }
 
 header { min-height:50px; }
 
-p { color: black; }
+p { color: inherit; }
+
+.serif {
+  font-family: 'Noto Serif Disp ExtCond', serif;
+}
+
+.serif-italic {
+  font-family: 'Noto Serif Disp' ;
+}
 .card .card-body .card-text { color: black; }
 .main {
   padding-bottom: 56px;

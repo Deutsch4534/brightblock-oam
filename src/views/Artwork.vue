@@ -1,23 +1,37 @@
 <template>
-<div class="container">
-<mdb-card dark>
-  <mdb-view hover>
-    <img class="inplay-image img-fluid" width="100%" :src="artwork.image" :alt="artwork.title">
-    <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
-  </mdb-view>
-  <mdb-card-body color="elegant" class="white-text">
-    <mdb-card-title>{{artwork.title}}</mdb-card-title>
-    <hr class="hr-light"/>
-    <p class="font-weight-normal">{{artwork.description}}</p>
-    <p class="font-weight-normal">by <a><strong>{{artist.name}}</strong></a>, 19/08/2016</p>
-    <p class="keywords">Keywords ︱ {{aboutArtwork.keywords}}</p>
+  <mdb-container fluid class="bg-light flex-1 py-5">
+    <mdb-container>
+      <!--<mdb-card dark>-->
+      <mdb-row>
+        <mdb-col col="12" lg="10">
+          <mdb-row class="py-5">
+        <mdb-col col="12" md="6">
+          <mdb-view hover>
+            <img class="inplay-image img-fluid mb-4" width="100%" :src="artwork.image" :alt="artwork.title">
+            <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+          </mdb-view>
+        </mdb-col>
+        <mdb-col col="12" md="6" class="pl-md-5">
+          <h1 class="h5-responsive">{{artwork.title}}</h1>
+          <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, 19/08/2016</p>
+          <p class="mb-0">{{artwork.description}}</p>
+          <p>{{aboutArtwork.keywords}}</p>
+          <mdb-row class="pt-5">
+            <mdb-col col="12">
+              <p class="h5-responsive serif-italic" v-if="isRegistered && isPriceSet">Artwork is registered on blockchain.</p>
+              <buy-artwork-form v-if="isRegistered && isPriceSet" :purchaseState="purchaseState" :artwork="artwork" @buy="buyArtwork()"/>
+              <p v-else-if="!isRegistered" class="h5-responsive serif-italic">Artwork not registered on blockchain.</p>
+              <p v-else-if="!isPriceSet" class="h5-responsive serif-italic">Artwork is registered on chain but is not currently for sale.</p>
+            </mdb-col>
+          </mdb-row>
 
-    <buy-artwork-form v-if="isRegistered && isPriceSet" :purchaseState="purchaseState" :artwork="artwork" @buy="buyArtwork()"/>
-    <p v-else-if="!isRegistered">Artwork not registered on blockchain.</p>
-    <p v-else-if="!isPriceSet">Artwork is registered on chain but is not currently for sale.</p>
-  </mdb-card-body>
-  </mdb-card>
-</div>
+
+        </mdb-col>
+      </mdb-row>
+        </mdb-col>
+      </mdb-row>
+    </mdb-container>
+  </mdb-container>
 </template>
 
 <script>
