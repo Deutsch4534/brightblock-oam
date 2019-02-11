@@ -8,13 +8,13 @@
         <mdb-row>
           <mdb-col md="6" class="md-0 px-0">
             <div class="col-md-12">
-              <router-link to="/" class="navbar-brand"><img :src="logo" height="100px" alt="t8 logo"></router-link>
+              <router-link to="/" class="navbar-brand"><img :src="logo" height="100px" alt="radicle logo"></router-link>
             </div>
             <div class="col-md-12">
               <h5 class="my-4">Contact Info</h5>
               <p>Brighton, BN1 1AL UK</p>
               <p>Phone: +49 6579 3 456</p>
-              <p>Email: contact@transit8.com</p>
+              <p>Email: contact@radicle.art</p>
             </div>
           </mdb-col>
           <mdb-col md="6">
@@ -53,7 +53,7 @@
         </mdb-row>
         <mdb-row>
           <mdb-col col="12 mt-5">
-           <span class="copyright">© 2018 TRANSIT8. ALL RIGHTS RESERVED.</span>
+           <span class="copyright">© 2018 RADICLE. ALL RIGHTS RESERVED.</span>
           </mdb-col>
         </mdb-row>
         </mdb-col>
@@ -90,7 +90,7 @@ export default {
       description: "",
       fields: [],
       buttonText: null,
-      logo: require("@/assets/img/logo/T_8_Symbolmark_white.png")
+      logo: require("@/assets/img/logo/logo-black-256x256.png")
     };
   },
   created() {

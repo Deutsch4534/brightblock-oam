@@ -114,7 +114,7 @@ export default {
         this.artworkId
       );
       if (!a.image) {
-        a.image = require("@/assets/img/logo/T_8_Symbolmark_white.png");
+        a.image = require("@/assets/img/logo/logo-black-256x256.png");
       }
       return a ? a : {};
     },

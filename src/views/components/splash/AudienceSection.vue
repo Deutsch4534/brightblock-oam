@@ -75,7 +75,7 @@ export default {
       cardTitle2: "COLLECTORS",
       cardDescription2: "Collect works of art from up and coming artists. Each art purchase makes you the owner of the artwork with registered provenance on the blockchain, as well you are the sole owner of digital artwork as well. If you destroy the file, the original is lost forever.",
       cardTitle3: "INSTITUTIONS",
-      cardDescription3: "Be part of our art movement by providing grants or starting competitions on our platform, use transit8 tools to engage with the community and create something exceptional together.",
+      cardDescription3: "Be part of our art movement by providing grants or starting competitions on our platform, use radicle tools to engage with the community and create something exceptional together.",
     };
   }
 };

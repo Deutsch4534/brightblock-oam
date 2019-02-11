@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       enabled: false,
-      featureMessage: "Get in touch about running auctions on T8"
+      featureMessage: "Get in touch about running auctions on radicle"
     };
   },
   created() {

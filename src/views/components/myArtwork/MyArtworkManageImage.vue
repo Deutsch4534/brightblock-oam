@@ -32,7 +32,7 @@ export default {
   },
   data() {
     return {
-      missing: require("@/assets/img/logo/T_8_Symbolmark_black.png")
+      missing: require("@/assets/img/logo/logo-black-256x256.png")
     };
   },
   mounted() {},

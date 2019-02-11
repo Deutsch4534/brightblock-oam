@@ -38,7 +38,7 @@ export default {
   props: {
     image: {
       type: String,
-      default: require("@/assets/img/vue-mk-header.jpg")
+      default: require("@/assets/img/city.jpg")
     },
     signup: {
       type: String,
@@ -91,4 +91,3 @@ export default {
     color: white!important;
 }
 </style>
-

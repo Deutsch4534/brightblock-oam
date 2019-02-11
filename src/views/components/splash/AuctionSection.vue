@@ -34,8 +34,8 @@
     },
     data() {
       return {
-        title: "First Auction on Transit8",
-        description: "Brightblock and Transit8 are starting things off with auction fo 50 digital copyes of Black Swan, from author",
+        title: "First Auction on Radicle",
+        description: "Brightblock and Radicle are starting things off with auction fo 50 digital copyes of Black Swan, from author",
       };
     }
   };

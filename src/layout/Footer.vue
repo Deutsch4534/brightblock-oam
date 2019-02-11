@@ -5,7 +5,7 @@
   <mdb-container fluid>
     <mdb-row class="d-flex flex-row align-items-center" >
       <mdb-col class="col-md-5 col-xs-4 footer-copyright text-left">
-        <router-link to="/" class="navbar-brand"><img :src="logo" height="40px" alt="t8 logo"></router-link>
+        <router-link to="/" class="navbar-brand"><img :src="logo" height="40px" alt="radicle logo"></router-link>
       </mdb-col>
       <mdb-col class="col-md-5 col-xs-5 footer-copyright funny text-right d-none d-md-block">
         Independent Art Market
@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       year: new Date().getFullYear(),
-      logo: require("@/assets/img/logo/T_8_Symbolmark_white.png")
+      logo: require("@/assets/img/logo/logo_white.png")
     };
   },
   methods: {

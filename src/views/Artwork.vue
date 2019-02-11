@@ -58,7 +58,7 @@ export default {
     return {
       artwork: {
         type: Object,
-        image: require("@/assets/img/logo/T_8_Symbolmark_black.png"),
+        image: require("@/assets/img/logo/logo-black-256x256.png"),
         default() {
           return {
             bcitem: {},
