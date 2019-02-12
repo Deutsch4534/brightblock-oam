@@ -35,13 +35,32 @@ export default {
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Noto Serif Disp';
+  src: url('assets/fonts/NotoSerifDisplay-Italic.eot');
+  src: url('assets/fonts/NotoSerifDisplay-Italic.eot?#iefix') format('embedded-opentype'),
+  url('assets/fonts/NotoSerifDisplay-Italic.woff2') format('woff2'),
+  url('assets/fonts/NotoSerifDisplay-Italic.woff') format('woff'),
+  url('assets/fonts/NotoSerifDisplay-Italic.svg#NotoSerifDisplay-Italic') format('svg');
+  font-weight: 300;
+  font-style: italic;
+}
+
 body {
   height: 100vh;
 }
 
 header { min-height:50px; }
 
-p { color: black; }
+p { color: inherit; }
+
+.serif {
+  font-family: 'Noto Serif Disp ExtCond', serif;
+}
+
+.serif-italic {
+  font-family: 'Noto Serif Disp' ;
+}
 .card .card-body .card-text { color: black; }
 .main {
   padding-bottom: 56px;
@@ -64,7 +83,11 @@ p { color: black; }
 .btn.btn-white:hover,
 .btn.btn-white:focus,
 .btn.btn-white:active,
-.btn-white:not([disabled]):not(.disabled):active {
+.btn-white:not([disabled]):not(.disabled):active,
+.btn.btn-main:hover,
+.btn.btn-main:focus,
+.btn.btn-main:active,
+.btn-main:not([disabled]):not(.disabled):active{
   color: #6200EE!important;
   background-color: rgba(63,0,223,0.12)!important;
   border:1px solid #6200EE;
@@ -73,6 +96,11 @@ p { color: black; }
 .btn.btn-sm { font-size: 0.8rem; padding: 0.45rem 1.4rem; }
 .btn.btn-sm.btn-rounded { border-radius: 6em; }
 
+
+.btn.btn-main {
+  background-color: #6200EE!important;
+  border: 1px solid #6200EE;
+}
 .card {
   box-shadow: none;
   border-radius: 0;

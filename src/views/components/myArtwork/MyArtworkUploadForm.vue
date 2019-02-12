@@ -1,257 +1,263 @@
 <template>
-<mdb-container class="mt-5">
-  <!-- Supported elements -->
-  <h2 class="my-5">{{formTitle}}</h2>
-  <hr class="my-5">
-  <form class="needs-validation" novalidate @submit.prevent="checkForm">
+  <mdb-container class="py-5">
+    <!-- Supported elements -->
+    <h1 class="h1-responsive">{{formTitle}}</h1>
+    <form class="needs-validation py-5" novalidate @submit.prevent="checkForm" id="artworkForm">
 
-  <div class="row ml-1 mb-5">
-    <div class="col-md-2 custom-control custom-radio mb-0">
-      <input type="radio" class="custom-control-input" id="customControlValidation2" name="artwork.itemType" v-model="artwork.itemType" value="digiart" required>
-      <label class="custom-control-label" for="customControlValidation2">Digital Artwork</label>
+    <div class="row ml-1 mb-4">
+      <div class="col-12 col-md-5">
+        <div class="row">
+          <div class="col-6 custom-control custom-radio mb-0">
+            <input type="radio" class="custom-control-input" id="customControlValidation2" name="artwork.itemType" v-model="artwork.itemType" value="digiart" required>
+            <label class="custom-control-label" for="customControlValidation2">Digital Artwork</label>
+          </div>
+          <div class="col-6 custom-control custom-radio mb-0">
+            <input type="radio" class="custom-control-input" id="customControlValidation3" name="artwork.itemType" v-model="artwork.itemType" value="physart" required>
+            <label class="custom-control-label" for="customControlValidation3">Physical Artwork</label>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="col-md-6 custom-control custom-radio mb-0">
-      <input type="radio" class="custom-control-input" id="customControlValidation3" name="artwork.itemType" v-model="artwork.itemType" value="physart" required>
-      <label class="custom-control-label" for="customControlValidation3">Physical Artwork</label>
-    </div>
-  </div>
 
   <!-- item type -->
-<div class="row">
-<div class="col-md-8">
+  <div class="row justify-content-between">
 
-
-    <div class="form-row mb-5">
-      <div class="col-md-12">
-        <label for="validationCustom01">Title of Artwork</label>
-        <input type="text" class="form-control" id="validationCustom01" placeholder="Title" v-model="artwork.title" required>
+  <div class="col-md-5 mb-4">
+    <div class="form-row">
+      <input type="text" class="form-control" id="validationCustom00" placeholder="Bitcoin Address" v-model="btcAddress" required>
+      <div class="invalid-feedback">
+        Please enter a Bitcoin address!
+      </div>
+    </div>
+    <div class="form-row">
+        <!--<label for="validationCustom01">Artwork Title</label>-->
+        <input type="text" class="form-control" id="validationCustom01" placeholder="Artwork Title" v-model="artwork.title" required>
         <div class="invalid-feedback">
           Please enter a title!
         </div>
-      </div>
     </div>
-    <div class="form-row mb-5">
-      <div class="col-md-12">
-        <label for="validationCustom02">Description of Artwork</label>
-        <textarea type="text" class="form-control" id="validationCustom02" placeholder="Description" v-model="artwork.description" required></textarea>
+    <div class="form-row">
+        <!--<label for="validationCustom02">Description of Artwork</label>-->
+        <textarea type="text" class="form-control" id="validationCustom02" placeholder="Description of the Artwork" v-model="artwork.description" required></textarea>
         <div class="invalid-feedback">
           Please enter a description!
         </div>
-      </div>
     </div>
-    <div class="form-row mb-5">
-      <div class="col-md-12">
-        <label for="validationCustom03">Keywords or tags</label>
-        <textarea type="text" class="form-control" id="validationCustom03" placeholder="Description" v-model="artwork.keywords" required></textarea>
+    <div class="form-row">
+        <!--<label for="validationCustom03">Keywords or tags</label>-->
+        <textarea type="text" class="form-control" id="validationCustom03" placeholder="Keywords" v-model="artwork.keywords" required></textarea>
         <div class="invalid-feedback">
           Please enter some keywords!
         </div>
-      </div>
     </div>
-    <div class="form-row mb-5">
-      <div class="col-md-2">
-        <label for="validationCustom040">Edition</label>
-        <input class="form-control" id="validationCustom040" type="number" placeholder="Edition" v-model="artwork.edition" required>
-        <div class="invalid-feedback">
+    <div class="form-row">
+      <div class="col-6 form-row">
+        <div class="col-4">
+          <label for="validationCustom040" class="col-form-label">Edition</label>
+        </div>
+        <div class="col-8">
+          <input class="form-control" id="validationCustom040" type="number" v-model="artwork.edition" required>
+          <div class="invalid-feedback">
           Please enter number of editions!
         </div>
+        </div>
       </div>
-      <div class="col-md-2">
-        <label for="validationCustom041">Of editions</label>
-        <input class="form-control" id="validationCustom041" type="number" placeholder="Total editions" v-model="artwork.editions" required>
+      <div class="col-6 form-row">
+        <div class="col-4 col-form-label text-center">
+          <label for="validationCustom041">of</label>
+        </div>
+       <div class="col-8">
+        <input class="form-control" id="validationCustom041" type="number" v-model="artwork.editions" required>
         <div class="invalid-feedback">
           Please enter total number of editions!
         </div>
+        </div>
       </div>
     </div>
-    <div class="form-row mb-5">
-      <div class="col-md-4">
-        <label for="validationCustom06-1">Medium / Materials</label>
+    <div class="form-row">
+      <div class="col-4">
         <input type="text" class="form-control" id="validationCustom06-1" placeholder="Medium / materials" v-model="artwork.medium" required>
         <div class="invalid-feedback">
           Please enter the Medium / Materials!
         </div>
       </div>
-      <div class="col-md-4">
-        <label for="validationCustom05-1">Dimensions</label>
+      <div class="col-4">
         <input type="text" class="form-control" id="validationCustom05-1" placeholder="Dimensions" v-model="artwork.dimensions" required>
         <div class="invalid-feedback">
           Please enter the Dimensions!
         </div>
       </div>
-      <div class="col-md-4">
-        <label for="validationCustom05-2">Year Created</label>
+      <div class="col-4">
         <input type="text" class="form-control" id="validationCustom05-2" placeholder="Year created" v-model="artwork.yearCreated" required>
         <div class="invalid-feedback">
           Please enter the year created!
         </div>
       </div>
     </div>
-    <div class="form-row mb-5">
-      <div class="col-md-6">
-        <label for="validationCustom05">Current owner</label>
+    <div class="form-row">
+      <div class="col-6">
         <input type="text" class="form-control" id="validationCustom05" placeholder="Owner" v-model="artwork.owner" required>
         <div class="invalid-feedback">
           Please enter the owner!
         </div>
       </div>
-      <div class="col-md-6">
-        <label for="validationCustom06">Artist</label>
+      <div class="col-6">
         <input type="text" class="form-control" id="validationCustom06" placeholder="Artist" v-model="artwork.artist" required>
         <div class="invalid-feedback">
           Please enter the artist!
         </div>
       </div>
     </div>
-    <div class="form-group mb-2">
+    <div class="form-row mb-2">
       <div class="text-danger" v-if="dateError">
         The creation date must be before now!
       </div>
-      <datetime type="date" v-model="created" input-id="created">
-        <label for="created" slot="before">Created &nbsp;&nbsp;&nbsp;&nbsp;</label>
-        <input id="created" class="form-control">
+      <label for="created" slot="before" class="col-4 col-form-label">Created</label>
+      <datetime type="date" v-model="created" input-id="created" class="col-8" input-class="form-control bg-transparent">
+        <input id="created">
       </datetime>
     </div>
   </div>
 
   <!-- image drop -->
-  <div class="col-md-4">
+  <div class="col-md-6">
+    <h2 class="h3-responsive mb-5">
+      Set Artwork Images
+    </h2>
     <mdb-row>
-      <mdb-col md="12">
-        <mdb-card>
-          <mdb-card-body>
-            <mdb-card-title>
-              <mdb-popover trigger="click" :options="{placement: 'top'}">
-                <div class="popover">
-                  <div class="popover-header">
-                    Main Artwork Image
-                  </div>
-                  <div class="popover-body">
-                    Your original digital image or a high res image of your artwork.
-                  </div>
-                  <div class="popover-body">
-                    A single hi-res image up to 2M.
-                  </div>
-                </div>
-                <a @click.prevent="" slot="reference">
-                  Main Artwork Image <mdb-icon far icon="question-circle" />
-                </a>
-              </mdb-popover>
-            </mdb-card-title>
-            <mdb-card-text>
-              <div class="text-danger" v-if="showAttachArt">
-                Main artwork image is required.
-              </div>
-              <div class="load-artwork" v-if="artwork.artwork.length === 0">
-                <div class="drop_area" @drop.prevent="loadArtwork" @dragover.prevent>
-                  <mdb-icon icon="file-import" size="3x"/>
-                </div>
-              </div>
-            </mdb-card-text>
-            <div class="row">
-              <my-artwork-manage-image v-for="(file, index) in artwork.artwork" :key="index" :file="file" :size="12"/>
+      <!-- droppable area 1 -->
+      <mdb-col md="6" class="mb-4">
+        <mdb-popover trigger="click" :options="{placement: 'top'}">
+          <div class="popover">
+            <div class="popover-header">
+              The Cover
             </div>
-            <div class="row">
-              <div class="col-md-12 text-right">
-                <a class="remove-link text-danger text-sm" v-on:click.prevent="deleteArtwork" v-if="artwork.artwork.length > 0"><mdb-icon icon="minus" /></a>
-              </div>
+            <div class="popover-body">
+              Your original digital image or a high res image of your artwork.
             </div>
-          </mdb-card-body>
-        </mdb-card>
+            <div class="popover-body">
+              A single hi-res image up to 2M.
+            </div>
+          </div>
+          <a @click.prevent="" slot="reference">
+            The Cover <mdb-icon far icon="question-circle" />
+          </a>
+        </mdb-popover>
+        <div class="mt-2">
+          <div class="text-danger" v-if="showAttachArt">
+            Main artwork image is required.
+          </div>
+          <div class="load-artwork" v-if="artwork.artwork.length === 0">
+            <div class="drop-area" @drop.prevent="loadArtwork" @dragover.prevent>
+              <p class="drop-label">Drop image here</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <my-artwork-manage-image v-for="(file, index) in artwork.artwork" :key="index" :file="file" :size="12"/>
+        </div>
+        <div class="row">
+          <div class="col-12 text-right">
+            <a class="remove-link text-danger text-sm" v-on:click.prevent="deleteArtwork" v-if="artwork.artwork.length > 0"><mdb-icon icon="minus" /></a>
+          </div>
+        </div>
+        <p class="grey-text mt-2">Size limit: 500Kb</p>
       </mdb-col>
-      <mdb-col md="12">
-        <mdb-card>
-          <mdb-card-body>
-            <mdb-card-title>
-              <mdb-popover trigger="click" :options="{placement: 'top'}">
-                <div class="popover">
-                  <div class="popover-header">
-                    Provenance Files
-                  </div>
-                  <div class="popover-body">
-                    Upload files which support the provenance claim for this artwork.
-                  </div>
-                  <div class="popover-body">
-                    E.g. bills of sale, reciepts, images of signatures, short video clips of the artists at work etc.
-                  </div>
-                  <div class="popover-body">
-                    Up to 5 images / documents.
-                  </div>
-                </div>
-                <a @click.prevent="" slot="reference">
-                  Provenance Files <mdb-icon far icon="question-circle" />
-                </a>
-              </mdb-popover>
-            </mdb-card-title>
-            <mdb-card-text>
-              <div class="text-danger" v-if="showAttachDocs">
-                Attach provenance files.
-              </div>
-              <div class="load-artwork">
-                <div class="drop_area" @drop.prevent="loadSupportingFiles" @dragover.prevent>
-                  <mdb-icon icon="file-import" size="3x"/>
-                </div>
-              </div>
-            </mdb-card-text>
-            <div class="row">
-              <my-artwork-manage-image v-for="(file, index) in artwork.supportingDocuments" :key="index" :file="file" :size="4"/>
-            </div>
-            <div class="row">
-              <div class="col-md-12 text-right">
-                <a class="remove-link text-danger text-sm" v-on:click.prevent="deleteDocuments" v-if="artwork.supportingDocuments.length > 0"><mdb-icon icon="minus" /></a>
-              </div>
-            </div>
-          </mdb-card-body>
-        </mdb-card>
-      </mdb-col>
-      <mdb-col md="12">
-        <mdb-card>
-          <mdb-card-body>
-            <mdb-card-title>
-            <mdb-popover trigger="click" :options="{placement: 'top'}">
-              <div class="popover">
-                <div class="popover-header">
-                  Gallery Images
-                </div>
-                <div class="popover-body">
-                  Images for potential buyers to see your artwork from different angles.
-                </div>
-                <div class="popover-body">
-                  Up to 5 (100kb or less) images.
-                </div>
-              </div>
-              <a @click.prevent="" slot="reference">
-                Gallery Images <mdb-icon far icon="question-circle" />
-              </a>
-            </mdb-popover>
-            </mdb-card-title>
-            <mdb-card-text>
-                <div class="load-artwork">
-                  <div class="drop_area" @drop.prevent="loadImageFiles" @dragover.prevent>
-                    <mdb-icon icon="file-import" size="3x"/>
-                  </div>
-                </div>
-            </mdb-card-text>
-            <div class="row">
-              <my-artwork-manage-image v-for="(file, index) in artwork.images" :key="index" :file="file"  :size="4"/>
-            </div>
-            <div class="row">
-              <div class="col-md-12 text-right">
-                <a class="remove-link text-danger text-sm" v-on:click.prevent="deleteImages" v-if="artwork.images.length > 0"><mdb-icon icon="minus" /></a>
-              </div>
-            </div>
-          </mdb-card-body>
-        </mdb-card>
-      </mdb-col>
-    </mdb-row>
-    </div>
-    <!-- image drop -->
-    <mdb-btn type="submit">Submit</mdb-btn>
-  <!-- item type -->
+      <!--/droppable area 1 -->
 
+      <!-- droppable area 2 -->
+      <mdb-col md="6" class="mb-4">
+        <mdb-popover trigger="click" :options="{placement: 'top'}">
+          <div class="popover">
+            <div class="popover-header">
+              Provenance Files
+            </div>
+            <div class="popover-body">
+              Upload files which support the provenance claim for this artwork.
+            </div>
+            <div class="popover-body">
+              E.g. bills of sale, reciepts, images of signatures, short video clips of the artists at work etc.
+            </div>
+            <div class="popover-body">
+              Up to 5 images / documents.
+            </div>
+          </div>
+          <a @click.prevent="" slot="reference">
+            Provenance Files <mdb-icon far icon="question-circle" />
+          </a>
+        </mdb-popover>
+          <div class="mt-2">
+            <div class="text-danger" v-if="showAttachDocs">
+              Attach provenance files.
+            </div>
+            <div class="load-artwork">
+              <div class="drop-area" @drop.prevent="loadSupportingFiles" @dragover.prevent>
+                <p class="drop-label">Drop image here</p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <my-artwork-manage-image v-for="(file, index) in artwork.supportingDocuments" :key="index" :file="file" :size="4"/>
+          </div>
+          <div class="row">
+            <div class="col-md-12 text-right">
+              <a class="remove-link text-danger text-sm" v-on:click.prevent="deleteDocuments" v-if="artwork.supportingDocuments.length > 0"><mdb-icon icon="minus" /></a>
+            </div>
+          </div>
+        <p class="grey-text mt-2">Size limit: 500Kb</p>
+      </mdb-col>
+      <!-- /droppable area 2 -->
+
+      <!-- droppable area 3 -->
+      <mdb-col md="6" class="mb-4">
+        <mdb-popover trigger="click" :options="{placement: 'top'}">
+          <div class="popover">
+            <div class="popover-header">
+              Artwork Images            </div>
+            <div class="popover-body">
+              Images for potential buyers to see your artwork from different angles.
+            </div>
+            <div class="popover-body">
+              Up to 5 (100kb or less) images.
+            </div>
+          </div>
+          <a @click.prevent="" slot="reference">
+            Artwork Images <mdb-icon far icon="question-circle" />
+          </a>
+        </mdb-popover>
+        <div class="mt-2">
+            <div class="load-artwork">
+              <div class="drop-area" @drop.prevent="loadImageFiles" @dragover.prevent>
+                <p class="drop-label">Drop image here</p>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+          <my-artwork-manage-image v-for="(file, index) in artwork.images" :key="index" :file="file"  :size="4"/>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-right">
+            <a class="remove-link text-danger text-sm" v-on:click.prevent="deleteImages" v-if="artwork.images.length > 0"><mdb-icon icon="minus" /></a>
+          </div>
+        </div>
+        <p class="grey-text mt-2">Size limit: 500Kb</p>
+      </mdb-col>
+      <!-- /droppable area 3 -->
+
+    </mdb-row>
   </div>
-  </form>
-</mdb-container>
+  <!-- / image drop -->
+
+  <div class="col-md-5">
+    <mdb-btn size="lg" type="submit" class="btn-main btn-block">Submit Artwork</mdb-btn>
+  </div>
+
+
+  <!-- item type -->
+    </div>
+    </form>
+  </mdb-container>
 </template>
 
 <script>
@@ -450,14 +456,55 @@ export default {
 };
 </script>
 <style>
-.load-artwork {
-  height: 90px;
-  background-image: require("@/assets/img/upload-icon-3.png");
-  text-align: center;
-  padding: 20px;
-  font-size: 1.2em;
-  margin: 5px;
-  border: 2pt solid #333;
-  border-radius: 10px;
+
+</style>
+<style scoped>
+ #artworkForm .form-control,
+ #artworkForm >>> .form-control,
+ #artworkForm input,
+ #artworkForm textarea,
+ #artworkForm label {
+   background-color: transparent;
+   color: rgba(0, 0, 0, 0.6);
+   font-weight: 300;
+   font-size: 0.85rem;
+  }
+
+#artworkForm input::-webkit-input-placeholder,
+#artworkForm input::-moz-placeholder,
+#artworkForm input:-ms-input-placeholder,
+#artworkForm input:-moz-placeholder {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 300;
+  font-size: 0.85rem;
+ }
+
+ #artworkForm .form-row {
+   margin-bottom: 1rem;
+ }
+
+ /* Drag and drop boxes */
+
+ .load-artwork {
+   display: flex;
+   height: 150px;
+   text-align: center;
+   padding: 20px;
+   font-size: 1em;
+   background-color: white;
+   border-radius: 10px;
+ }
+.drop-area {
+ width: 100%;
+ border: 1px dashed rgba(0, 0, 0, 0.24);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.drop-label {
+  color: rgba(0, 0, 0, 0.2);
+  font-size: 0.9rem;
+  margin-bottom: 0;
 }
 </style>
