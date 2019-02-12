@@ -1,4 +1,4 @@
-# [Transit8](https://www.transit8.com)
+# [Radicle](https://radicle.art)
 
 - [Purpose](#purpose)
 

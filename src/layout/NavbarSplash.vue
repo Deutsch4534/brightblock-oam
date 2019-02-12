@@ -10,7 +10,7 @@
         <mdb-icon class="mb-0 mr-2" icon="search" />
       </a>
       <input label="Search" type="text" class="mt-0 mb-0" v-model="query"
-             placeholder="Search TRANSIT8" aria-label="Search"/>
+             placeholder="Search" aria-label="Search"/>
     </form>
     <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
   </mdb-navbar-brand>
@@ -86,7 +86,7 @@
     <mdb-row class="py-2 d-flex align-items-center header-title">
       <mdb-col md="9">
         <p class="mb-0">
-          Transit8 complements a complete process from art creation to its sale, as well as being an artist-centric, and fully decentralised platform. <router-link :to="getAuctionLink">Read more</router-link>
+          A fully decentralised platform for buying selling and auctioning art. <router-link :to="getAuctionLink">Read more</router-link>
         </p>
       </mdb-col>
     </mdb-row>
@@ -130,7 +130,7 @@ export default {
       taglink1: '',
       taglink2: '',
       bgImage: null,
-      logo: require("@/assets/img/logo/T_8_Symbolmark_white.png")
+      logo: require("@/assets/img/logo/logo-black-256x256.png")
     };
   },
   components: {

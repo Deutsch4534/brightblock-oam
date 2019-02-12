@@ -11,7 +11,6 @@ import linkResolver from "./prismic/linkResolver";
 
 import { CONSTANTS } from "@/storage/constants";
 // import notify from "@/services/notify";
-import ethereumService from "@/services/ethereumService";
 import Datetime from "vue-datetime";
 // You need a specific loader for CSS files
 import "vue-datetime/dist/vue-datetime.css";
@@ -52,19 +51,10 @@ store.dispatch("myAuctionsStore/fetchMyAuctions");
 store.dispatch("onlineAuctionsStore/fetchOnlineAuctions");
 store.dispatch("conversionStore/fetchConversionData").then(() => {
   store.dispatch("myAccountStore/fetchMyAccount");
-  store.dispatch("ethStore/fetchClientState").then(clientState => {
-    ethereumService.connectToBlockChain(clientState);
-    store.dispatch("ethStore/fetchBlockchainItems").then(blockchainItems => {
-      store.dispatch(
-        "artworkSearchStore/fetchRegisteredArtworks",
-        blockchainItems
-      );
-      store.dispatch("ethStore/receiveBlockchainEvents").then(() => {
-        if (store.getters.isDebugMode) {
-          // notify.info({ title: "Blockchain Events.", text: message });
-        }
-      });
-    });
+  store.dispatch("ethStore/receiveBlockchainEvents").then(() => {
+    if (store.getters.isDebugMode) {
+      // notify.info({ title: "Blockchain Events.", text: message });
+    }
   });
 });
 

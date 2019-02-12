@@ -43,7 +43,7 @@ export default {
   props: {
     image: {
       type: String,
-      default: require("@/assets/img/vue-mk-header.jpg")
+      default: require("@/assets/img/city.jpg")
     },
     signup: {
       type: String,
@@ -61,6 +61,17 @@ export default {
     this.$store.dispatch("onlineAuctionsStore/fetchOnlineAuctions").then(() => {
       // loading online auctions
     });
+    if (this.$store.state.constants.featureBitcoin) {
+      this.$store.dispatch("artworkSearchStore/fetchSearchResults", {term: "title", query: "*"});
+    } else {
+      this.$store.dispatch("ethStore/fetchClientState").then(clientState => {
+        ethereumService.connectToBlockChain(clientState);
+        this.$store.dispatch("ethStore/fetchBlockchainItems").then(blockchainItems => {
+          store.dispatch("artworkSearchStore/fetchRegisteredArtworks", blockchainItems);
+        });
+      });
+    }
+
   },
   methods: {},
   computed: {

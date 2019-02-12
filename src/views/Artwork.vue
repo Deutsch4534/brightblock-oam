@@ -18,14 +18,10 @@
           <p>{{aboutArtwork.keywords}}</p>
           <mdb-row class="pt-3">
             <mdb-col col="12">
-              <p class="h5-responsive serif-italic" v-if="isRegistered && isPriceSet">Artwork is registered on blockchain.</p>
+              <p class="h5-responsive serif-italic">{{registerMessage}}</p>
               <buy-artwork-form v-if="isRegistered && isPriceSet" :purchaseState="purchaseState" :artwork="artwork" @buy="buyArtwork()"/>
-              <p v-else-if="!isRegistered" class="h5-responsive serif-italic">Artwork not registered on blockchain.</p>
-              <p v-else-if="!isPriceSet" class="h5-responsive serif-italic">Artwork is registered on chain but is not currently for sale.</p>
             </mdb-col>
           </mdb-row>
-
-
         </mdb-col>
       </mdb-row>
         </mdb-col>
@@ -72,7 +68,7 @@ export default {
     return {
       artwork: {
         type: Object,
-        image: require("@/assets/img/logo/T_8_Symbolmark_black.png"),
+        image: require("@/assets/img/logo/logo-black-256x256.png"),
         default() {
           return {
             bcitem: {},
@@ -147,10 +143,37 @@ export default {
       };
       return purchaseState;
     },
+    registerMessage() {
+      let artwork = this.artwork;
+      let message;
+      try {
+        let registeredE = artwork.bcitem && artwork.bcitem.itemIndex && artwork.bcitem.itemIndex > 0;
+        let registeredB = artwork.btcData && artwork.btcData.bitcoinTx;
+        let registered = registeredB || registeredE;
+
+        let priceE = artwork.bcitem && artwork.bcitem.price > 0 && artwork.bcitem.price > 0;
+        let priceB = artwork.btcData && artwork.saleData.amount > 0;
+        let price = priceB || priceE;
+        if (!registered) {
+          message = "Artwork not registered on blockchain."
+        } else {
+          if (price) {
+            message = "Artwork not registered on blockchain."
+          } else {
+            message =" Artwork is registered on chain but is not currently for sale."
+          }
+        }
+      } catch (e) {
+          message = "Unregistered.";
+      }
+      return message;
+    },
     isRegistered() {
       let artwork = this.artwork;
       try {
-        return artwork.bcitem && artwork.bcitem.itemIndex && artwork.bcitem.itemIndex > 0;
+        let registeredE = artwork.bcitem && artwork.bcitem.itemIndex && artwork.bcitem.itemIndex > 0;
+        let registeredB = artwork.btcData && artwork.btcData.bitcoinTx;
+        let registered = registeredB || registeredE;
       } catch (e) {
         return false;
       }

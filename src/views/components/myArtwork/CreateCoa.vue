@@ -97,7 +97,7 @@ export default {
         this.artworkId
       );
       if (!a.image) {
-        a.image = require("@/assets/img/logo/T_8_Symbolmark_white.png");
+        a.image = require("@/assets/img/logo/logo-black-256x256.png");
       }
       return a ? a : {};
     },
@@ -114,9 +114,14 @@ export default {
       this.$store.dispatch("myArtworksStore/updateArtwork", artwork);
     },
     blockchainInfoUrl() {
+
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
         this.artworkId
       );
+      let state = this.$store.getters["bitcoinStore/getClientState"];
+      if (state.chain === "test") {
+        return `https://testnet.blockexplorer.com/tx/${artwork.btcData.bitcoinTx}`;
+      }
       return `https://www.blockchain.com/btc/tx/${artwork.btcData.bitcoinTx}`;
     },
     saveBitcoinAddress: function() {
@@ -140,11 +145,11 @@ export default {
         this.artworkId
       );
       let $self = this;
-      let siteLogo = require("@/assets/img/logo/T_8_Symbolmark_black.png");
+      let siteLogo = require("@/assets/img/logo/logo-black-256x256.png");
       let data = {
         artwork: artwork,
         qrCodeDataUrl: qrCodeDataUrl,
-        siteName: "Transit8",
+        siteName: "Radicle Art",
         siteLogo: siteLogo
       }
       let endPoint = this.$store.state.constants.ethGatewayUrl + "/api/convert/coa";
