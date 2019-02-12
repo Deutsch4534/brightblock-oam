@@ -21,6 +21,12 @@ const artworkSearchStore = {
     getSearchResults: state => {
       return state.searchResults;
     },
+    getBitcoinResults: state => {
+      let registered = state.searchResults.filter(
+        artwork => artwork.bcitem && artwork.btcData.bitcoinTx
+      );
+      return registered;
+    },
     getRegisteredArtworks: state => {
       let registered = state.artworks.filter(
         artwork => artwork.bcitem && artwork.bcitem.itemIndex > -1
@@ -48,7 +54,13 @@ const artworkSearchStore = {
       return state.artists;
     },
     homePageArtworks: (state, getters) => {
-      let registered = getters.getRegisteredArtworks;
+      let fb = store.state.constants.featureBitcoin;
+      let registered;
+      if (fb) {
+        registered = getters.getArtworks;
+      } else {
+        registered = getters.getRegisteredArtworks;
+      }
       return registered.slice(0, 6);
     },
     getArtworksPageArtworks: (state, getters) => {

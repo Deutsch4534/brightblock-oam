@@ -15,7 +15,7 @@
 
 <script>
 import GalleryArtwork from "./components/gallery/GalleryArtwork";
-// import SingleAuction from "./components/auction/SingleAuction";
+import artworkSearchService from "../services/artworkSearchService";
 import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
 import { mdbContainer, mdbRow } from 'mdbvue';
 
@@ -52,15 +52,30 @@ export default {
       password: null
     };
   },
-//   created() {
-//     this.$store.dispatch("onlineAuctionsStore/fetchOnlineAuctions").then(() => {
-//       // loading online auctions
-//     });
-//   },
+   created() {
+     // this.$store.dispatch("onlineAuctionsStore/fetchOnlineAuctions").then(() => {
+       // loading online auctions
+     // });
+     if (this.$store.state.constants.featureBitcoin) {
+       // this.$store.dispatch("artworkSearchStore/fetchSearchResults", {term: "title", query: "*"});
+       artworkSearchService.newQuery("*");
+     } else {
+       this.$store.dispatch("ethStore/fetchClientState").then(clientState => {
+         ethereumService.connectToBlockChain(clientState);
+         this.$store.dispatch("ethStore/fetchBlockchainItems").then(blockchainItems => {
+           store.dispatch("artworkSearchStore/fetchRegisteredArtworks", blockchainItems);
+         });
+       });
+     }
+   },
   methods: {},
   computed: {
     artworks() {
-      return this.$store.getters["artworkSearchStore/homePageArtworks"];
+      if (this.$store.state.constants.featureBitcoin) {
+        return this.$store.getters["artworkSearchStore/getBitcoinResults"];
+      } else {
+        return this.$store.getters["artworkSearchStore/homePageArtworks"];
+      }
     },
     // auctionsSize() {
     //   return this.$store.getters["onlineAuctionsStore/onlineAuctions"].length;
