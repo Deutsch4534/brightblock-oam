@@ -82,7 +82,7 @@
     <!-- Mask & flexbox options-->
   </div>
   <!-- Full Page Intro -->
-  <mdb-container>
+  <mdb-container fluid>
     <mdb-row class="py-2 d-flex align-items-center header-title">
       <mdb-col md="9">
         <p class="mb-0">

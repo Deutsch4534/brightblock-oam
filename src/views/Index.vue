@@ -2,8 +2,8 @@
 <div>
   <div class="border-top border-dark"></div>
   <mdb-container>
-    <mdb-row class="py-5 col-lg-10 mx-auto" id="AboutSection">
-      <mdb-col lg="10">
+    <mdb-row class="py-5" id="AboutSection">
+      <mdb-col col="12" md="10" lg="8">
         <h2 class="h1-responsive mb-0 pt-md-5 pt-5">{{title1}}</h2>
         <hr class="hr-light my-4">
         <p class="mb-4" v-html="description1"></p>
@@ -12,8 +12,8 @@
   </mdb-container>
   <div class="border-top border-dark"></div>
     <mdb-container>
-      <mdb-row class="py-5 col-lg-10 mx-auto">
-        <mdb-col md="10">
+      <mdb-row class="py-5">
+        <mdb-col col="12" md="10" lg="8">
           <h2 class="h1-responsive mb-0 pt-md-5 pt-5">{{title2}}</h2>
           <hr class="hr-light my-4">
           <p class="mb-4" v-html="description2"></p>
@@ -39,10 +39,12 @@
       <auction-section/>
     </mdb-container>
   <div class="border-top border-dark"></div>
+  <mdb-container fluid class="bg-dark text-white">
     <mdb-container>
     <mdb-row class="py-5">
       <donate-section/>
     </mdb-row>
+    </mdb-container>
   </mdb-container>
   <mdb-container fluid class="bg-main">
     <mdb-container class="text-light contact-section">

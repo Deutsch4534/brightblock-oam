@@ -1,8 +1,8 @@
 <template>
 <mdb-container id="ContactSection" class="py-5">
-    <section class="mt-5 mb-0 px-0">
+    <section class="mb-0 px-0">
       <mdb-row>
-        <mdb-col class="col-lg-10 mx-auto">
+        <mdb-col col="12" lg="10">
         <h2 class="large-title my-5">{{title}}</h2>
         <p v-html="featureMessage"></p>
         <mdb-row>

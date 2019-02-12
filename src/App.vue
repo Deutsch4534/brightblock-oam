@@ -229,6 +229,8 @@ p { color: inherit; }
   position: absolute;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
   /* Extra small devices (portrait phones, less than 576px) */

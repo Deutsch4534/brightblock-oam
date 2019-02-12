@@ -1,53 +1,23 @@
 <template>
-<mdb-row id="AudienceSection" class="py-5 col-lg-10 mx-auto d-flex" border-top border-dark>
+<mdb-row id="AudienceSection" class="py-5 d-flex" border-top border-dark>
   <mdb-col col="12">
-    <h2 class="large-title pt-md-5 pt-5">{{title}}</h2>
-    <hr class="hr-light my-4">
+    <h2 class="large-title pt-md-5 py-5">{{title}}</h2>
   </mdb-col>
-  <mdb-col lg="4" class="d-flex">
-    <!-- Card -->
-    <div class="card mb-3 border-shadow">
-      <!-- Card content -->
-      <div class="card-body">
-        <h4 class="h3-responsive card-title"><a>{{cardTitle1}}</a></h4>
-        <p class="card-text">{{cardDescription1}}</p>
-      </div>
-      <div class="card-body pt-0 d-flex align-items-end justify-content-end">
-        <mdb-icon far icon="address-book" />
-      </div>
+  <mdb-col md="12" lg="10" class="audience-list pb-5">
+    <div class="list-item">
+      <h3 class="h2-responsive"><a><mdb-icon far icon="address-book" class="mr-4" />{{cardTitle1}}</a></h3>
+      <p class="card-text">{{cardDescription1}}</p>
     </div>
-    <!-- Card -->
+    <div class="list-item">
+      <h3 class="h2-responsive"><a><mdb-icon far icon="bookmark" class="mr-4"/> {{cardTitle2}}</a></h3>
+      <p class="card-text">{{cardDescription2}}</p>
+    </div>
+    <div class="list-item">
+      <h3 class="h2-responsive"><a><mdb-icon icon="university" class="mr-4" /> {{cardTitle3}}</a></h3>
+      <p class="card-text">{{cardDescription3}}</p>
+    </div>
   </mdb-col>
 
-  <mdb-col lg="4" class="d-flex">
-    <!-- Card -->
-    <div class="card mb-3 border-shadow">
-      <!-- Card content -->
-      <div class="card-body">
-        <h4 class="h3-responsive card-title"><a>{{cardTitle2}}</a></h4>
-        <p class="card-text">{{cardDescription2}}</p>
-      </div>
-      <div class="card-body pt-0 d-flex align-items-end justify-content-end">
-        <mdb-icon far icon="bookmark" />
-      </div>
-    </div>
-    <!-- Card -->
-  </mdb-col>
-
-  <mdb-col lg="4" class="d-flex">
-    <!-- Card -->
-    <div class="card mb-3 border-shadow">
-      <!-- Card content -->
-      <div class="card-body">
-        <h4 class="h3-responsive card-title"><a>{{cardTitle3}}</a></h4>
-        <p class="card-text">{{cardDescription3}}</p>
-      </div>
-      <div class="card-body pt-0 d-flex align-items-end justify-content-end">
-        <mdb-icon icon="university" />
-      </div>
-    </div>
-    <!-- Card -->
-  </mdb-col>
 </mdb-row>
 </template>
 
@@ -70,31 +40,30 @@ export default {
   data() {
     return {
       title: "WHO IS IT FOR?",
-      cardTitle1: "ARTISTS",
+      cardTitle1: "Artists",
       cardDescription1: "Upload your artworks to your own storage register provenance and list them on our the open marketplace. All transactions are done in bitcoin and directly atributed to your wallet. Once the artwork is sold it moves its physical location from artist storage to collector storage.",
-      cardTitle2: "COLLECTORS",
+      cardTitle2: "Collectors",
       cardDescription2: "Collect works of art from up and coming artists. Each art purchase makes you the owner of the artwork with registered provenance on the blockchain, as well you are the sole owner of digital artwork as well. If you destroy the file, the original is lost forever.",
-      cardTitle3: "INSTITUTIONS",
-      cardDescription3: "Be part of our art movement by providing grants or starting competitions on our platform, use radicle tools to engage with the community and create something exceptional together.",
+      cardTitle3: "Institutions",
+      cardDescription3: "Be part of our art movement by providing grants or starting competitions on our platform, use transit8 tools to engage with the community and create something exceptional together.",
     };
   }
 };
 </script>
 
 <style scoped>
-.card {
-  border: 3pt solid black;
-  box-shadow: none;
-  border-radius: 0;
+
+.audience-list .list-item {
+  padding: 1.5rem 0;
+  border-top: 3px solid black;
 }
 
-h4.card-title {
+.audience-list .list-item:last-child {
+  border-bottom: 3px solid black;
+}
+
+.audience-list .list-item h3 {
   margin-bottom: 2rem;
 }
-.card-body i {
-  font-size: 1.8rem;
-}
-.card .card-body .card-text {
-  color: black;
-}
+
 </style>
