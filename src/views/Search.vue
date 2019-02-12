@@ -1,20 +1,17 @@
 <template>
-<mdb-container class="mt-5">
-  <div class="row">
-    <!-- Supported elements
-    <div class="md-col-4 mr-5">
-      <h2 class="mb-5">Refine search</h2>
-      <filters @update="updateFilters($event)"/>
+<mdb-container fluid class="bg-dark flex-1">
+  <mdb-container class="py-5">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="h1-responsive mb-5 text-white">Search results for "{{ queryString }}" ({{numberArtworks}})</h1>
+        <!--<h2 class="h2-responsive mb-3 text-white">Refine search</h2>
+        <filters @update="updateFilters($event)" class="text-white mb-5"/>-->
+      </div>
     </div>
-    -->
-    <div class="md-col-8 col-md-offset-2">
-      <h2 class="">{{numberArtworks}} found..</h2>
-      <hr class="my-5">
-      <ul class="list-unstyled">
-        <single-result v-for="(artwork, index) of searchResults" :key="index" :artwork="artwork"/>
-      </ul>
-    </div>
-  </div>
+      <div class="row">
+        <single-result v-for="(artwork, index) of searchResults" :key="index" :artwork="artwork" class="col-sm-6 col-md-4 col-lg-3"/>
+      </div>
+  </mdb-container>
 </mdb-container>
 </template>
 

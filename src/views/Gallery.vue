@@ -3,11 +3,11 @@
     <mdb-container class="py-5">
       <mdb-row>
         <div class="col-12">
-          <h1 class="h2-responsive mb-5 text-white">Gallery</h1>
+          <h1 class="h1-responsive mb-5 text-white">Gallery</h1>
         </div>
       </mdb-row>
         <mdb-row class="gallery-grid" data-masonry='{ "itemSelector": ".gallery-item"}'>
-            <gallery-artwork v-for="(artwork, index) in artworks" :key="index" :artwork="artwork" class="gallery-item col-sm-6 col-md-4 col-lg-3"/>
+          <gallery-artwork v-for="(artwork, index) in artworks" :key="index" :artwork="artwork" class="gallery-item col-sm-6 col-md-4 col-lg-3"/>
       </mdb-row>
     </mdb-container>
   </mdb-container>

@@ -1,29 +1,34 @@
 <template>
-<mdb-media tag="li" class="my-4">
-  <router-link class="text-white" :to="buyNowUrl"><img class="d-flex mr-3" width="250px" :src="artwork.image" :alt="artwork.title" /></router-link>
-  <mdb-media-body>
-    <h5 class="mt-0 mb-1 font-weight-bold">{{artwork.title}}</h5>
-    <p>{{artwork.description}}</p>
-    <p>By: {{artwork.artist}}</p>
-    <p v-if="debugMode">Of: {{artwork.owner}}</p>
-    <p><selling-options-for-search :artwork="artwork"/></p>
-  </mdb-media-body>
-</mdb-media>
+  <mdb-card class="bg-transparent mb-4 w-100">
+    <router-link class="grid-item" :to="buyNowUrl">
+      <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
+    </router-link>
+    <mdb-card-body class="px-0">
+      <router-link :to="buyNowUrl">
+        <mdb-card-title class="h2-responsive subtitle">{{artwork.title}}</mdb-card-title>
+      </router-link>
+      <mdb-card-text>{{artwork.description}}<br /><span class="small">by: {{artwork.artist}}</span></mdb-card-text>
+      <mdb-card-text v-if="debugMode">of: {{artwork.owner}}</mdb-card-text>
+      <mdb-card-text><selling-options-for-search :artwork="artwork"/></mdb-card-text>
+
+    </mdb-card-body>
+  </mdb-card>
 </template>
 
 <script>
 import SellingOptionsForSearch from "./SellingOptionsForSearch";
-import { mdbMedia, mdbMediaImage, mdbMediaBody, mdbBtn } from 'mdbvue';
+import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "SingleResult",
   components: {
     SellingOptionsForSearch,
-    mdbMedia,
-    mdbMediaImage,
-    mdbMediaBody,
-    mdbBtn
+    mdbCard,
+    mdbCardImage,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardText
   },
   props: {
     artwork: {
@@ -48,4 +53,13 @@ export default {
 };
 </script>
 <style scoped>
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  .subtitle,
+  .card-body p {
+    color: white!important;
+  }
 </style>
+

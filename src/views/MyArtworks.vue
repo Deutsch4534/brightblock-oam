@@ -3,20 +3,20 @@
     <mdb-container class="py-5">
       <mdb-row v-if="noartworks">
         <div class="col-12 mb-5">
-          <p class="h2-responsive mb-5">No artworks found in your portfolio!</p>
+          <p class="h1-responsive mb-5">No artworks found in your portfolio!</p>
           <p><router-link to="/my-artwork/upload" class="btn btn-white btn-sm btn-rounded ripple-parent">Upload Artwork</router-link> to get started...</p>
         </div>
       </mdb-row>
       <mdb-row v-else>
       <router-view/>
         <div class="col-12 mb-5">
-          <h2 class="h2-responsive mb-5">Artworks <span>({{numberArtworksUnsold}})</span></h2>
+          <h1 class="h1-responsive mb-5">Artworks <span>({{numberArtworksUnsold}})</span></h1>
         </div>
         <div class="col-12">
           <my-artworks-list :artworks="unsold" :sold="false" :show-load-button="false" :chunks="6"/>
         </div>
         <div class="col-12 mb-5">
-          <h2 class="h2-responsive mb-5">Sold Artworks <span>({{numberArtworksSold}})</span></h2>
+          <h2 class="h1-responsive mb-5">Sold Artworks <span>({{numberArtworksSold}})</span></h2>
         </div>
         <div class="col-12">
           <my-artworks-list :artworks="sold" :sold="true" :show-load-button="false" :chunks="6"/>

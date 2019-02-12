@@ -5,14 +5,14 @@
       
       <mdb-row v-if="myAuctionsFutureCount > 0">
         <div class="col-md-12">
-          <h1 class="h2-responsive mb-5">My Auctions <span>({{myAuctionsFutureCount}})</span></h1>
+          <h1 class="h1-responsive mb-5">My Auctions <span>({{myAuctionsFutureCount}})</span></h1>
         </div>
         <single-auction v-for="(auction, index) of myAuctionsFuture" :key="index" :auction="auction" :atype="'webcast'"/>
       </mdb-row>
 
       <mdb-row v-if="myAuctionsPastCount > 0">
         <div class="col-md-12">
-          <h2 class="h2-responsive mb-5">Past Auctions</h2>
+          <h2 class="h1-responsive mb-5">Past Auctions</h2>
         </div>
         <single-auction v-for="(auction, index) of myAuctionsPast" :key="index" :auction="auction" :atype="'archive'"/>
       </mdb-row>
