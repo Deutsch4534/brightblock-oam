@@ -24,6 +24,9 @@ export default {
 };
 </script>
 <style>
+
+/* Fonts, colors and global styles  */
+
 @font-face {
   font-family: 'Noto Serif Disp ExtCond';
   src: url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot');
@@ -61,50 +64,6 @@ p { color: inherit; }
 .serif-italic {
   font-family: 'Noto Serif Disp' ;
 }
-.card .card-body .card-text { color: black; }
-.main {
-  padding-bottom: 56px;
-}
-.section-download .btn + .btn {
-    margin-left: 5px;
-}
-
-.btn,
-.btn:hover,
-.btn:focus,
-.btn:active {
-  box-shadow: none!important;
-}
-
-.btn.btn-white {
-  border:1px solid rgba(0,0,0,0.12);
-}
-
-.btn.btn-white:hover,
-.btn.btn-white:focus,
-.btn.btn-white:active,
-.btn-white:not([disabled]):not(.disabled):active,
-.btn.btn-main:hover,
-.btn.btn-main:focus,
-.btn.btn-main:active,
-.btn-main:not([disabled]):not(.disabled):active{
-  color: #6200EE!important;
-  background-color: rgba(63,0,223,0.12)!important;
-  border:1px solid #6200EE;
-}
-
-.btn.btn-sm { font-size: 0.8rem; padding: 0.45rem 1.4rem; }
-.btn.btn-sm.btn-rounded { border-radius: 6em; }
-
-
-.btn.btn-main {
-  background-color: #6200EE!important;
-  border: 1px solid #6200EE;
-}
-.card {
-  box-shadow: none;
-  border-radius: 0;
-}
 
 .text-light {
   color: #ECEFF1!important;
@@ -136,6 +95,81 @@ p { color: inherit; }
   bottom: -10px;
   z-index: -1;
 }
+
+.main {
+  padding-bottom: 56px;
+}
+
+/* Buttons styling */
+
+.btn,
+.btn:hover,
+.btn:focus,
+.btn:active {
+  box-shadow: none!important;
+}
+
+.btn.btn-white {
+  border:1px solid rgba(0,0,0,0.12);
+}
+
+.btn.btn-white:hover,
+.btn.btn-white:focus,
+.btn.btn-white:active,
+.btn.btn-white.active,
+.btn-white:not([disabled]):not(.disabled):active,
+.btn-white:not([disabled]):not(.disabled).active,
+.btn.btn-main:hover,
+.btn.btn-main:focus,
+.btn.btn-main:active,
+.btn-main:not([disabled]):not(.disabled):active{
+  color: #6200EE!important;
+  background-color: rgba(63,0,223,0.12)!important;
+  border:1px solid #6200EE;
+}
+
+.btn.btn-sm { font-size: 0.8rem; padding: 0.45rem 1.4rem; }
+.btn.btn-sm.btn-rounded { border-radius: 6em; }
+
+
+.btn.btn-main {
+  background-color: #6200EE!important;
+  border: 1px solid #6200EE;
+}
+
+/* Custom radio buttons / checkboxes styling */
+.custom-control-input:checked~.custom-control-label::before {
+  border-color: #6200EE;
+  background-color: #6200EE;
+}
+
+/* Drag and drop boxes */
+
+.load-artwork {
+  display: flex;
+  height: 150px;
+  text-align: center;
+  padding: 20px;
+  font-size: 1em;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+.drop-area {
+  width: 100%;
+  border: 1px dashed rgba(0, 0, 0, 0.24);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.drop-label {
+  color: rgba(0, 0, 0, 0.2);
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+
 .subtitle {
   font-size: 1rem;
   margin-bottom: 0.25rem;
@@ -144,6 +178,17 @@ p { color: inherit; }
 .artist-page .subtitle {
   font-size: larger;
 }
+
+.section-download .btn + .btn {
+  margin-left: 5px;
+}
+
+.card {
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.card .card-body .card-text { color: black; }
 
 @media all and (min-width: 991px) {
   .btn-container {

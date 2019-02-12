@@ -1,27 +1,29 @@
 <template>
 <div>
-<mdb-card>
-  <mdb-card-body>
-    <h5>Upload Media</h5>
-    <mdb-card-text>
-      <div class="text-danger">{{errorMessage}}</div>
-        <div class="load-artwork" v-if="checkQuantity">
-          <div class="drop_area" @drop.prevent="loadMediaObjects" @dragover.prevent>
-            Drop your media file here!
-          </div>
-        </div>
-    </mdb-card-text>
-    <a color="white" @click.prevent="clearMediaObjects" v-if="mediaObjects.length > 0"><mdb-btn class="white">Clear</mdb-btn></a>
-  </mdb-card-body>
-</mdb-card>
-<mdb-card v-for="(file, index) in mediaObjects" :key="index" :file="file">
-  <mdb-card-image :src="file.dataUrl" alt="Card image cap"></mdb-card-image>
-  <mdb-card-body>
-    <mdb-card-title>{{ file.name }}</mdb-card-title>
-    <mdb-card-text>({{ file.size }}) type: {{ file.type }}</mdb-card-text>
-    <mdb-card-text>Last Changed: {{ file.lastModifiedDate }}</mdb-card-text>
-  </mdb-card-body>
-</mdb-card>
+
+  <!-- Error message -->
+  <div class="text-danger">{{errorMessage}}</div>
+
+  <!-- Drop area -->
+  <div class="load-artwork" v-if="checkQuantity">
+    <div class="drop-area" @drop.prevent="loadMediaObjects" @dragover.prevent>
+      <p class="drop-label">Drop image here</p>
+    </div>
+  </div>
+
+  <!-- Dropped file preview and info -->
+  <div v-for="(file, index) in mediaObjects" :key="index" :file="file">
+    <img :src="file.dataUrl" alt="Card image cap" class="img-fluid mb-2">
+    <p class="mb-0 small">{{ file.name }}</p>
+    <p class="mb-0 small">size: {{ file.size }}, type: {{ file.type }}</p>
+    <p class="mb-0 small">Last Changed:<br />{{ file.lastModifiedDate }}</p>
+  </div>
+
+  <!-- Remove action -->
+  <a class="mt-3 d-inline-block" @click.prevent="clearMediaObjects" v-if="mediaObjects.length > 0">
+    <mdb-btn color="white" size="md" class="mx-0">Clear</mdb-btn>
+  </a>
+
 </div>
 </template>
 
@@ -104,15 +106,3 @@ export default {
   }
 };
 </script>
-<style>
-.load-artwork {
-  height: 90px;
-  background-image: require("@/assets/img/upload-icon-3.png");
-  text-align: center;
-  padding: 20px;
-  font-size: 1.2em;
-  margin: 5px;
-  border: 2pt solid #333;
-  border-radius: 10px;
-}
-</style>

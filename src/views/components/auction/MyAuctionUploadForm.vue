@@ -1,123 +1,144 @@
 <template>
-<mdb-container class="mt-5">
+<mdb-container class="py-5">
   <!-- Supported elements -->
-  <h2 class="my-5">{{formTitle}}</h2>
-  <hr class="my-5">
-  <form class="needs-validation" novalidate @submit.prevent="checkForm">
+  <h1 class="h1-responsive">{{formTitle}}</h1>
+  <form class="needs-validation py-5 form-transparent" novalidate @submit.prevent="checkForm" id="auctionForm">
+
+    <!-- Input fields section -->
+    <div class="row justify-content-between">
+      <!-- Left column -->
+      <div class="col-md-5 mb-4">
+
+        <!-- Errors row -->
+        <div class="row mb-3" :key="errors.length">
+          <mdb-alert color="danger" v-if="errors.length" :key="errors.length" class="w-100">
+            <h4 class="alert-heading h6">Please correct the following error(s):</h4>
+            <hr>
+            <ul class="list-unstyled small mb-0">
+              <li :key="index" v-bind:error="error">{{ error }}</li>
+              <li v-for="(error, index) in errors" :key="index" v-bind:error="error">{{ error }}</li>
+            </ul>
+          </mdb-alert>
+        </div>
+
+        <!-- Radio buttons row -->
+        <div class="row mb-3">
+          <div class="col-4 custom-control custom-radio mb-0">
+            <input type="radio" class="custom-control-input" id="customControlValidation2" name="auction.auctionType"
+                   v-model="auction.auctionType" value="webcast" required>
+            <label class="custom-control-label" for="customControlValidation2">Webcast</label>
+          </div>
+          <div class="col-4 custom-control custom-radio mb-0">
+            <input type="radio" class="custom-control-input" id="customControlValidation1" name="auction.auctionType"
+                   v-model="auction.auctionType" value="timed" required>
+            <label class="custom-control-label" for="customControlValidation1">Timed</label>
+          </div>
+          <div class="col-4 custom-control custom-radio mb-0">
+            <input type="radio" class="custom-control-input" id="customControlValidation3" name="auction.auctionType"
+                   v-model="auction.auctionType" value="sealed" required>
+            <label class="custom-control-label" for="customControlValidation3">Sealed Bid</label>
+          </div>
+        </div>
+
+        <div class="row mb-3" v-if="auction.auctionType === 'sealed'">
+          <input type="text" class="form-control" id="sealedAddress" placeholder="Bitcoin address" v-model="auction.sealedAddress" required>
+          <div class="invalid-feedback">
+            Please enter bitcoin address!
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <input type="text" class="form-control" id="title" placeholder="Title of the auction" v-model="auction.title" required>
+          <div class="invalid-feedback">
+            Please enter a title!
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <textarea type="text" class="form-control" id="description" placeholder="Description of your auction" v-model="auction.description" required></textarea>
+          <div class="invalid-feedback">
+            Please enter a description!
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <textarea type="text" class="form-control" id="keywords" placeholder="Keywords" v-model="auction.keywords" required></textarea>
+          <!--<p class="muted small mt-1">Enter keywords / tags separated by commas</p>-->
+          <div class="invalid-feedback">
+            Enter keywords / tags separated by commas
+          </div>
+        </div>
+
+        <!-- Public / private buttons row -->
+          <mdb-btn-group class="row my-3 d-flex">
+            <div class="col-6">
+              <mdb-btn type="button" color="white" size="sm" class="btn-rounded btn-block" id="custom-public"
+                       value="public" v-model="auction.privacy" @click.native="toggleActiveState1" :active="active1" required>
+                Public
+              </mdb-btn>
+            </div>
+            <div class="col-6">
+              <mdb-btn type="button" color="white" size="sm" class="btn-rounded btn-block" id="custom-private"
+                       value="private" v-model="auction.privacy" @click.native="toggleActiveState2" :active="active2" required>
+                Private
+              </mdb-btn>
+            </div>
+          </mdb-btn-group>
+      </div>
+
+      <!-- Right column -->
+      <div class="col-md-6">
+
+        <!-- Auction dates -->
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="startDate" slot="before">Bidding starts at</label>
+              <datetime type="datetime" v-model="startDate" input-id="startDate" input-class="form-control bg-transparent">
+                <input id="startDate">
+              </datetime>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group" v-if="auction.auctionType !== 'webcast'">
+              <label for="endDate" slot="before">Bidding ends at</label>
+              <datetime type="datetime" v-model="endDate" input-id="endDate" input-class="form-control bg-transparent">
+                <input id="endDate">
+              </datetime>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drag and drop  -->
+        <div class="row">
+          <div class="col-12">
+            <h2 class="h3-responsive my-4">Set Auction Cover Image</h2>
+          </div>
+          <div class="col-12 col-md-6">
+            <media-upload :logo="auction.logo" @updateMedia="setByEventLogo($event)"/>
+            <p class="grey-text small mt-2">Size limit: 500Kb</p>
+            <!--<p class="muted mt-2" v-if="auction.logo && auction.logo.dataUrl"><small>{{auction.logo.name}}</small></p>-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /Input fields section -->
+
+    <!-- Submit button row -->
     <div class="row">
-      <div class="col-md-2 custom-control custom-radio mb-0">
-        <input type="radio" class="custom-control-input" id="customControlValidation2" name="auction.auctionType" v-model="auction.auctionType" value="webcast" required>
-        <label class="custom-control-label" for="customControlValidation2">Webcast Auction</label>
-      </div>
-      <div class="col-md-2 custom-control custom-radio mb-0">
-        <input type="radio" class="custom-control-input" id="customControlValidation1" name="auction.auctionType" v-model="auction.auctionType" value="timed" required>
-        <label class="custom-control-label" for="customControlValidation1">Timed Auction</label>
-      </div>
-      <div class="col-md-2 custom-control custom-radio mb-0">
-        <input type="radio" class="custom-control-input" id="customControlValidation3" name="auction.auctionType" v-model="auction.auctionType" value="sealed" required>
-        <label class="custom-control-label" for="customControlValidation3">Sealed Bid Auction</label>
-      </div>
-      <!--
-      <div class="col-md-2 custom-control custom-radio mb-3">
-        <input type="radio" class="custom-control-input" id="customControlValidation0" name="auction.auctionType" v-model="auction.auctionType" value="penny" required>
-        <label class="custom-control-label" for="customControlValidation0">Penny Auction</label>
-      </div>
-      -->
-    </div>
-
-    <div class="row mt-3">
-      <div class="col-md-12">
-        <p v-if="errors.length" :key="errors.length">
-          <b>Please correct the following error(s):</b>
-          <ul>
-            <li v-for="(error, index) in errors" :key="index" v-bind:error="error">{{ error }}</li>
-          </ul>
-        </p>
+      <div class="col-12 col-md-5 mt-4">
+        <mdb-btn type="submit" size="lg" class="btn-main btn-block">Submit</mdb-btn>
       </div>
     </div>
-
-    <div class="row">
-      <div class="col-md-8">
-        <div class="form-row" v-if="auction.auctionType === 'sealed'">
-          <div class="col-md-12 mb-3">
-            <label for="sealedAddress">Destination Bitcoin Address</label>
-            <input type="text" class="form-control" id="sealedAddress" placeholder="Bitcoin address" v-model="auction.sealedAddress" required>
-            <div class="invalid-feedback">
-              Please enter bitcoin address!
-            </div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="col-md-12 mb-3">
-            <label for="title">Title</label>
-            <input type="text" class="form-control" id="title" placeholder="Title of the auction" v-model="auction.title" required>
-            <div class="invalid-feedback">
-              Please enter a title!
-            </div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="col-md-12 mb-3">
-            <label for="description">description</label>
-            <textarea type="text" class="form-control" id="description" placeholder="Description of your auction" v-model="auction.description" required></textarea>
-            <div class="invalid-feedback">
-              Please enter a description!
-            </div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="col-md-12 mb-3">
-            <label for="keywords">Keywords or tags</label>
-            <textarea type="text" class="form-control" id="keywords" placeholder="Enter keywords / tags separated by commas" v-model="auction.keywords" required></textarea>
-            <div class="invalid-feedback">
-              Please enter some keywords!
-            </div>
-          </div>
-        </div>
-        <div class="row my-3 ml-5">
-          <div class="col-md-4 custom-control">
-            <input type="radio" class="custom-control-input" id="custom-public" v-model="auction.privacy" value="public">
-            <label class="custom-control-label mr-5" for="custom-public">Public</label>
-          </div>
-          <div class="col-md-4 custom-control">
-            <input type="radio" class="custom-control-input" id="custom-private" v-model="auction.privacy" value="private">
-            <label class="custom-control-label" for="custom-private">Private</label>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <datetime type="datetime" v-model="startDate" input-id="startDate">
-            <label for="startDate" slot="before">Bidding Starts&nbsp;&nbsp;&nbsp;&nbsp;</label>
-            <input id="startDate" class="form-control">
-          </datetime>
-        </div>
-
-        <div class="form-group" v-if="auction.auctionType !== 'webcast'">
-          <datetime type="datetime" v-model="endDate" input-id="endDate">
-            <label for="endDate" slot="before">Bidding Ends&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-            <input id="endDate" class="form-control">
-          </datetime>
-        </div>
-
-        <mdb-btn type="submit" class="white">Submit</mdb-btn>
-
-      </div>
-
-      <div class="col-md-4">
-        <h4>Set Auction Logo</h4>
-        <p class="muted"><small>Size limit: 500Kb</small></p>
-        <media-upload :logo="auction.logo" @updateMedia="setByEventLogo($event)"/>
-        <p class="muted" v-if="auction.logo && auction.logo.dataUrl"><small>{{auction.logo.name}}</small></p>
-      </div>
-    </div>
+    <div class="w-100"></div>
+    <!-- /Submit button row -->
   </form>
 </mdb-container>
 </template>
 
 <script>
 import moment from "moment";
-import { mdbBtn } from "mdbvue";
-import { mdbContainer, mdbRow, mdbCol } from 'mdbvue';
+import { mdbBtn, mdbBtnGroup, mdbContainer, mdbRow, mdbCol, mdbAlert } from 'mdbvue';
 import { Datetime } from 'vue-datetime'
 import MediaUpload from "../MediaUpload";
 
@@ -128,9 +149,10 @@ export default {
   components: {
     mdbContainer,
     mdbBtn,
-    mdbContainer,
+    mdbBtnGroup,
     mdbRow,
     mdbCol,
+    mdbAlert,
     datetime: Datetime,
     MediaUpload
   },
@@ -138,7 +160,7 @@ export default {
     return {
       isModalActive: false,
       errors: [],
-      formTitle: "Auction Details",
+      formTitle: "Submit Auction",
       startDate: null,
       endDate: null,
       auction: {
@@ -149,8 +171,10 @@ export default {
         privacy: 'public',
         auctionType: "webcast",
         sellingList: [],
-        logo: {}
+        logo: {},
       },
+      active1: false,
+      active2: false,
     }
   },
   mounted() {
@@ -255,9 +279,39 @@ export default {
       } else {
         this.upload();
       }
-    }
+    },
+    toggleActiveState1() {
+      this.active1 = true;
+      this.active2 = false;
+    },
+    toggleActiveState2() {
+      this.active1 = false;
+      this.active2 = true;
+    },
   }
 };
 </script>
 <style>
+</style>
+<style scoped>
+  .form-transparent .form-control,
+  .form-transparent >>> .form-control,
+  .form-transparent input,
+  .form-transparent textarea,
+  .form-transparent label {
+    background-color: transparent;
+    color: black;
+    font-weight: 300;
+    font-size: 0.85rem;
+  }
+
+  .form-transparent input::-webkit-input-placeholder,
+  .form-transparent input::-moz-placeholder,
+  .form-transparent input:-ms-input-placeholder,
+  .form-transparent input:-moz-placeholder {
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 300;
+    font-size: 0.85rem;
+  }
+
 </style>

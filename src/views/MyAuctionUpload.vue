@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="container-fluid bg-light flex-1">
   <my-auction-upload-form v-if="enabled" :mode="'upload'"/>
   <contact-section :featureMessage="featureMessage" v-else class="black-text"/>
 </div>
