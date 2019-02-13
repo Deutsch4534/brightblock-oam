@@ -1,5 +1,5 @@
 <template>
-  <mdb-container class="py-5">
+  <mdb-container class="py-3 py-md-4">
     <!-- Supported elements -->
     <h1 class="h1-responsive">{{formTitle}}</h1>
     <form class="needs-validation py-5 form-transparent" novalidate @submit.prevent="checkForm" id="artworkForm">

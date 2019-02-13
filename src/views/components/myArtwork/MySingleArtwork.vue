@@ -1,6 +1,9 @@
 <template>
   <mdb-card class="bg-transparent mb-5">
-    <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
+    <mdb-view hover>
+      <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
+      <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+    </mdb-view>
     <mdb-card-body class="px-0 pb-2 mb-0">
       <mdb-card-title class="subtitle">{{artwork.title}}</mdb-card-title>
       <mdb-card-text><p>{{artwork.description}}</p>

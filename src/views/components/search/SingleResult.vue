@@ -1,8 +1,11 @@
 <template>
   <mdb-card class="bg-transparent mb-4 w-100">
-    <router-link class="grid-item" :to="buyNowUrl">
-      <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
-    </router-link>
+    <mdb-view hover>
+      <router-link class="grid-item" :to="buyNowUrl">
+        <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
+      </router-link>
+      <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+    </mdb-view>
     <mdb-card-body class="px-0">
       <router-link :to="buyNowUrl">
         <mdb-card-title class="h2-responsive subtitle">{{artwork.title}}</mdb-card-title>
@@ -17,7 +20,7 @@
 
 <script>
 import SellingOptionsForSearch from "./SellingOptionsForSearch";
-import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText } from 'mdbvue';
+import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbView, mdbMask } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -28,7 +31,9 @@ export default {
     mdbCardImage,
     mdbCardBody,
     mdbCardTitle,
-    mdbCardText
+    mdbCardText,
+    mdbView,
+    mdbMask
   },
   props: {
     artwork: {

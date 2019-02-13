@@ -1,7 +1,10 @@
 <template>
   <mdb-col sm="6" md="4" lg="3" class="mb-3 d-flex">
     <mdb-card class="bg-transparent mb-5 w-100">
-      <mdb-card-image :src="logo" alt="Auction Logo" class="img-square"></mdb-card-image>
+      <mdb-view hover>
+        <mdb-card-image :src="logo" alt="Auction Logo" class="img-square"></mdb-card-image>
+        <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+      </mdb-view>
       <mdb-card-body class="px-0 pb-2 mb-0">
         <mdb-card-title class="subtitle">{{auction.title}}</mdb-card-title>
         <mdb-card-text>{{auction.description}}</mdb-card-text>
@@ -18,7 +21,7 @@
 <script>
 import utils from "@/services/utils";
 import moment from "moment";
-import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn, mdbCol } from 'mdbvue';
+import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn, mdbCol, mdbView, mdbMask } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -31,6 +34,8 @@ export default {
     mdbCardText,
     mdbBtn,
     mdbCol,
+    mdbView,
+    mdbMask
   },
   props: {
     auction: {

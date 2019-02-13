@@ -1,8 +1,11 @@
 <template>
     <mdb-card class="bg-transparent mb-5 w-100">
-      <router-link class="grid-item" :to="url">
-        <mdb-card-image :src="artist.avatarUrl" :alt="artist.name" class="img-square"></mdb-card-image>
-      </router-link>
+      <mdb-view hover>
+        <router-link class="grid-item" :to="url">
+          <mdb-card-image :src="artist.avatarUrl" :alt="artist.name" class="img-square"></mdb-card-image>
+        </router-link>
+        <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+      </mdb-view>
       <mdb-card-body class="px-0">
         <mdb-card-title class="artist-name h2-responsive">{{artist.name}}</mdb-card-title>
         <mdb-card-text>{{artist.description}}</mdb-card-text>
@@ -11,7 +14,7 @@
 </template>
 
 <script>
-import { mdbTestimonial, mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardBody, mdbCardUp, mdbAvatar, mdbIcon, mdbCardImage, mdbCardTitle, mdbCardText } from 'mdbvue';
+import { mdbTestimonial, mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardBody, mdbCardUp, mdbAvatar, mdbIcon, mdbCardImage, mdbCardTitle, mdbCardText, mdbView, mdbMask } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -28,7 +31,9 @@ export default {
     mdbCardImage,
     mdbCardTitle,
     mdbCardText,
-    mdbTestimonial
+    mdbTestimonial,
+    mdbView,
+    mdbMask
   },
   props: {
     artist: {

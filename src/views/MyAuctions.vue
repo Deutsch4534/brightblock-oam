@@ -1,13 +1,14 @@
 <template>
-  <mdb-container fluid class="bg-light flex-1">
-    <mdb-container class="py-5">
+  <mdb-container fluid class="bg-light flex-1 py-5">
+    <mdb-container class="py-3 py-md-4">
       <router-view/>
-      
-      <mdb-row v-if="myAuctionsFutureCount > 0">
+      <mdb-row>
         <div class="col-md-12">
           <h1 class="h1-responsive mb-5">My Auctions <span>({{myAuctionsFutureCount}})</span></h1>
         </div>
-        <single-auction v-for="(auction, index) of myAuctionsFuture" :key="index" :auction="auction" :atype="'webcast'"/>
+        <div v-if="myAuctionsFutureCount > 0">
+          <single-auction v-for="(auction, index) of myAuctionsFuture" :key="index" :auction="auction" :atype="'webcast'"/>
+        </div>
       </mdb-row>
 
       <mdb-row v-if="myAuctionsPastCount > 0">
