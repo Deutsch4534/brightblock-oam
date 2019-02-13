@@ -1,18 +1,17 @@
 <template>
-<mdb-container id="DonateSection">
-  <section class="py-5">
-    <mdb-row>
+  <section id="DonateSection" class="py-5">
+    <mdb-row class="py-3 py-md-5 text-light">
       <mdb-col lg="10">
         <mdb-row>
           <mdb-col col="12">
             <h2 class="large-title mt-0">{{title}}</h2>
           </mdb-col>
-           <mdb-col sm="6" md="8">
+          <mdb-col sm="6" md="8">
             <p class="h4-responsive mb-5">{{description}}</p>
             <p class="h3-responsive text-uppercase my-4">{{btcAddress}}:</p>
             <div>
-              <p class="h5-responsive mb-0"><em>Target on {{chain}} chain: {{target}}</em></p>
-              <p class="h5-responsive mb-0"><em>Currently: {{balance}}</em></p>
+              <p class="h5-responsive mb-0"><em><strong>Target on {{chain}} chain:</strong> {{target}}</em></p>
+              <p class="h5-responsive"><em><strong>Currently:</strong> {{balance}}</em></p>
             </div>
           </mdb-col>
           <mdb-col sm="6" md="4" class="d-flex">
@@ -24,7 +23,6 @@
       </mdb-col>
     </mdb-row>
   </section>
-</mdb-container>
 </template>
 
 <script>
@@ -90,15 +88,8 @@ export default {
 };
 </script>
 <style scoped>
-  .serif {
-    font-family: 'Noto Serif Disp ExtCond';
-  }
-  .subtitle {
-    text-decoration: underline;
-    font-size: 2rem;
-  }
-
-  #qrcode {
+  form > canvas#qrcode {
+    height: 100%!important; width: 100%!important;
     border: 2px solid white;
   }
 </style>

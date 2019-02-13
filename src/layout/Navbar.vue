@@ -259,6 +259,13 @@ export default {
   .navbar-collapse .nav-item,
   .navbar-collapse .nav-item .nav-link {  color: white!important; }
 
+  .navbar-collapse .nav-item .nav-link:hover,
+  .navbar-collapse .nav-item .nav-link:focus,
+  .navbar-collapse .nav-item .nav-link:active,
+  .navbar-collapse .nav-item .nav-link.router-link-active {
+    color: rgba(255, 255, 255, 0.75)!important;
+  }
+
   .show-navbar {
     min-height: 100vh;
     z-index: 3;

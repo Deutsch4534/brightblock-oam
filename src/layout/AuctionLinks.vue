@@ -101,13 +101,14 @@ export default {
     border:none;
   }
   .dropdown .dropdown-menu .dropdown-item {
-    color: white;
+    color: white!important;
     font-size: 2rem;
     padding: 0.7rem 0.7rem 0.7rem 1.5rem;
   }
  .dropdown .dropdown-menu .dropdown-item:hover,
  .dropdown .dropdown-menu .dropdown-item:focus,
- .dropdown .dropdown-menu .dropdown-item:active {
+ .dropdown .dropdown-menu .dropdown-item:active,
+ .dropdown .dropdown-menu .dropdown-item.router-link-active {
    background-color: inherit;
    box-shadow: none;
    color: rgba(255, 255, 255, 0.75)!important;
