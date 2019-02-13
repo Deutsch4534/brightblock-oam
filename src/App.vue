@@ -55,7 +55,7 @@ body {
 
 header { min-height:50px; }
 
-p { color: inherit; }
+p { color: inherit; margin-bottom: 1.5rem; }
 
 .serif {
   font-family: 'Noto Serif Disp ExtCond', serif;
