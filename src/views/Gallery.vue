@@ -6,9 +6,9 @@
           <h1 class="h1-responsive mb-5 text-white">Gallery</h1>
         </div>
       </mdb-row>
-        <mdb-row class="gallery-grid" data-masonry='{ "itemSelector": ".gallery-item"}'>
-          <gallery-artwork v-for="(artwork, index) in artworks" :key="index" :artwork="artwork" class="gallery-item col-sm-6 col-md-4 col-lg-3"/>
-      </mdb-row>
+        <mdb-row v-masonry item-selector=".gallery-item" transition-duration="0.3s" stagger="0.03s"  horizontal-order="true">
+          <gallery-artwork v-masonry-tile v-for="(artwork, index) in artworks" :key="index" :artwork="artwork" class="gallery-item col-sm-6 col-md-4 col-lg-3"/>
+         </mdb-row>
     </mdb-container>
   </mdb-container>
 </template>
@@ -76,23 +76,12 @@ export default {
       } else {
         return this.$store.getters["artworkSearchStore/homePageArtworks"];
       }
-    },
-    // auctionsSize() {
-    //   return this.$store.getters["onlineAuctionsStore/onlineAuctions"].length;
-    // },
-    // onlineAuctions() {
-    //   return this.$store.getters["onlineAuctionsStore/onlineAuctions"];
-    // }
+    }
   },
   mounted() {}
 };
 </script>
 <style>
-/* .section-download {
-  .btn + .btn {
-    margin-left: 5px;
-  }
-} */
 
 @media all and (min-width: 991px) {
   .btn-container {

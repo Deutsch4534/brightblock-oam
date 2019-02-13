@@ -14,6 +14,7 @@ import { CONSTANTS } from "@/storage/constants";
 import Datetime from "vue-datetime";
 // You need a specific loader for CSS files
 import "vue-datetime/dist/vue-datetime.css";
+import {VueMasonryPlugin} from 'vue-masonry';
 
 Vue.config.productionTip = false;
 
@@ -24,6 +25,7 @@ Vue.use(PrismicVue, {
   endpoint: "https://transit8.prismic.io/api/v2",
   linkResolver
 });
+Vue.use(VueMasonryPlugin);
 
 Vue.config.productionTip = false;
 

@@ -8,9 +8,9 @@
         <filters @update="updateFilters($event)" class="text-white mb-5"/>-->
       </div>
     </div>
-      <div class="row">
-        <single-result v-for="(artwork, index) of searchResults" :key="index" :artwork="artwork" class="col-sm-6 col-md-4 col-lg-3"/>
-      </div>
+      <div class="row" v-masonry item-selector=".result-item" transition-duration="0.3s" stagger="0.03s" horizontal-order="true">
+        <single-result v-masonry-tile v-for="(artwork, index) of searchResults" :key="index" :artwork="artwork" class="result-item col-sm-6 col-md-4 col-lg-3"/>
+       </div>
   </mdb-container>
 </mdb-container>
 </template>
