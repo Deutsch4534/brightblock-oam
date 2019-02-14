@@ -1,11 +1,11 @@
 <template>
     <mdb-card class="bg-transparent mb-5 w-100">
-      <mdb-view hover>
-        <router-link class="grid-item" :to="url">
+      <router-link class="grid-item" :to="url">
+        <mdb-view hover>
           <mdb-card-image :src="artist.avatarUrl" :alt="artist.name" class="img-square"></mdb-card-image>
-        </router-link>
-        <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
-      </mdb-view>
+          <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+        </mdb-view>
+      </router-link>
       <mdb-card-body class="px-0">
         <mdb-card-title class="artist-name h2-responsive">{{artist.name}}</mdb-card-title>
         <mdb-card-text>{{artist.description}}</mdb-card-text>

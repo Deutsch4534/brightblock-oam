@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="container-fluid bg-light flex-1 py-5">
   <my-artwork-upload-form :artworkId="artworkId" :mode="'update'" :formTitle="'Update Artwork'"/>
 </div>
 </template>

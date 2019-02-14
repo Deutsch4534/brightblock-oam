@@ -1,11 +1,11 @@
 <template>
   <mdb-card class="bg-transparent mb-4 w-100">
-    <mdb-view hover>
-      <router-link class="grid-item" :to="buyNowUrl">
-        <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
-      </router-link>
-      <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
-    </mdb-view>
+    <router-link class="grid-item" :to="buyNowUrl">
+      <mdb-view hover>
+      <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
+        <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+      </mdb-view>
+    </router-link>
     <mdb-card-body class="px-0">
       <router-link :to="buyNowUrl">
         <mdb-card-title class="h2-responsive subtitle">{{artwork.title}}</mdb-card-title>

@@ -7,12 +7,12 @@
       </mdb-col>
       <mdb-card class="bg-transparent w-100 col-sm-6 col-md-4 col-lg-3 mb-3 d-flex" v-for="(profile, index) in profiles"
                 :key="index">
-        <mdb-view hover>
           <router-link :to="profileUrl(profile)">
+            <mdb-view hover>
             <mdb-card-image :src="profile.data.avatar.url" alt="Thumbnail Image" class="img-square"></mdb-card-image>
+              <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+            </mdb-view>
           </router-link>
-          <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
-        </mdb-view>
         <mdb-card-body class="px-0">
           <mdb-card-title class="artist-name h4-responsive">
             <router-link :to="profileUrl(profile)">
