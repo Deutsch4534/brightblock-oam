@@ -17,19 +17,12 @@
           </div>
         </div>
       </div>
-
     </div>
 
   <!-- item type -->
   <div class="row justify-content-between">
 
   <div class="col-md-5 mb-4">
-    <div class="form-row">
-      <input type="text" class="form-control" id="validationCustom00" placeholder="Bitcoin Address" v-model="btcAddress" required>
-      <div class="invalid-feedback">
-        Please enter a Bitcoin address!
-      </div>
-    </div>
     <div class="form-row">
         <!--<label for="validationCustom01">Artwork Title</label>-->
         <input type="text" class="form-control" id="validationCustom01" placeholder="Artwork Title" v-model="artwork.title" required>
@@ -293,7 +286,6 @@ export default {
       dateError: false,
       created: null,
       artwork: {
-        artistry: {},
         itemType: null,
         keywords: "Photography,Illustration.3D,2D,Film & Video,Mix-media",
         artist: null,

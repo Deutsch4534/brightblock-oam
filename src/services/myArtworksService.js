@@ -32,26 +32,22 @@ const myArtworksService = {
             "myArtworksStore/blockstackRootFile",
             blockstackRootFile
           );
+          let usersToFetch = [];
           _.forEach(blockstackRootFile.records, function(indexData) {
             if (!indexData.uploader) {
               let userProfile = store.getters["myAccountStore/getMyProfile"];
               indexData.uploader = userProfile.username;
             }
-            store.dispatch(
-              "userProfilesStore/fetchUserProfile",
-              { username: indexData.uploader },
-              { root: true }
-            );
-            store.dispatch(
-              "userProfilesStore/fetchUserProfile",
-              { username: indexData.owner },
-              { root: true }
-            );
+            myArtworksService.addUserOrNot(usersToFetch, indexData.uploader);
+            myArtworksService.addUserOrNot(usersToFetch, indexData.owner);
             myArtworksService.fetchMyProvenanceFile(
               indexData,
               success,
               failure
             );
+          });
+          _.forEach(usersToFetch, function(userId) {
+            store.dispatch("userProfilesStore/fetchUserProfile", { username: userId }, { root: true });
           });
         }
       })
@@ -61,6 +57,15 @@ const myArtworksService = {
           message: "Error getting my artworks: artworkRootFileName=" + artworkRootFileName
         });
       });
+  },
+
+  addUserOrNot: function(usersToFetch, userId) {
+    let uIndex = _.findIndex(usersToFetch, function(o) {
+      return o === userId;
+    });
+    if (uIndex === -1) {
+      usersToFetch.push(userId);
+    }
   },
 
   getMyArtwork: function(artworkId, success, failure) {
@@ -75,24 +80,20 @@ const myArtworksService = {
             "myArtworksStore/blockstackRootFile",
             blockstackRootFile
           );
+          let usersToFetch = [];
           _.forEach(blockstackRootFile.records, function(indexData) {
             if (indexData.id === artworkId) {
-              store.dispatch(
-                "userProfilesStore/fetchUserProfile",
-                { username: indexData.uploader },
-                { root: true }
-              );
-              store.dispatch(
-                "userProfilesStore/fetchUserProfile",
-                { username: indexData.owner },
-                { root: true }
-              );
+              myArtworksService.addUserOrNot(usersToFetch, indexData.uploader);
+              myArtworksService.addUserOrNot(usersToFetch, indexData.owner);
               myArtworksService.fetchMyProvenanceFile(
                 indexData,
                 success,
                 failure
               );
             }
+          });
+          _.forEach(usersToFetch, function(userId) {
+            store.dispatch("userProfilesStore/fetchUserProfile", { username: userId }, { root: true });
           });
         }
       })
@@ -116,6 +117,7 @@ const myArtworksService = {
 
   uploadArtwork: function(artwork, success, failure) {
     artwork.id = moment({}).valueOf();
+    artwork.lastUpdate = artwork.id;
     artwork.bcitem = {
       status: "new",
       itemIndex: -1
@@ -212,6 +214,8 @@ const myArtworksService = {
     let artworkRootFileName = store.state.constants.artworkRootFileName;
     let gaiaFileName = store.state.constants.gaiaFileName;
     let provFile = gaiaFileName + artwork.id + ".json";
+    var now = moment({}).valueOf();
+    artwork.lastUpdate = now;
     if (!artwork.bcitem) {
       // for backwards compat with items created before this object was added.
       artwork.bcitem = {

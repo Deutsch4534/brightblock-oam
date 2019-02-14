@@ -38,7 +38,6 @@ const userProfilesStore = {
       if (matches.length > 0) {
         return matches[0];
       } else {
-        // store.dispatch('userProfilesStore/fetchUserProfile', {username: username}, {root: true})
         return {};
       }
     },
@@ -89,7 +88,7 @@ const userProfilesStore = {
     }
   },
   actions: {
-    fetchUserProfile({ commit, state }, user) {
+    fetchUserProfile({ commit, state, getters }, user) {
       return new Promise(resolve => {
         if (
           !user.username ||
@@ -98,25 +97,30 @@ const userProfilesStore = {
         ) {
           resolve();
         }
-        let index = _.findIndex(state.namesRequestList, function(username) {
-          return username === user.username;
-        });
-        if (index === -1) {
-          commit("addNameToList", user.username);
-          userProfilesService.fetchUserProfile(
-            user.username,
-            function(userProfile) {
-              commit("addUser", userProfile);
-              resolve(userProfile);
-            },
-            function(error) {
-              console.log(
-                "Error fetching user profile for: " + user.username,
-                error
-              );
-              resolve();
-            }
-          );
+        let up = getters.getProfile(user.username);
+        if (up && up.username) {
+          resolve(up);
+        } else {
+          let index = _.findIndex(state.namesRequestList, function(username) {
+            return username === user.username;
+          });
+          if (index === -1) {
+            commit("addNameToList", user.username);
+            userProfilesService.fetchUserProfile(
+              user.username,
+              function(userProfile) {
+                commit("addUser", userProfile);
+                resolve(userProfile);
+              },
+              function(error) {
+                console.log(
+                  "Error fetching user profile for: " + user.username,
+                  error
+                );
+                resolve();
+              }
+            );
+          }
         }
       });
     }

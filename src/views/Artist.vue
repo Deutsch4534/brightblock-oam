@@ -21,6 +21,7 @@ import ArtworksList from './components/artwork/ArtworksList'
 import { mdbContainer, mdbRow } from 'mdbvue';
 import SingleArtist from './components/artists/SingleArtist'
 import LastArtworks from "./components/home/LastArtworks";
+import artworkSearchService from "@/services/artworkSearchService";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -40,15 +41,25 @@ export default {
   },
   created () {
     this.username = this.$route.params.artistId
+    if (this.$store.state.constants.featureBitcoin) {
+      artworkSearchService.newQuery({field: "artist", query: this.username});
+    }
   },
   mounted () {
   },
   computed: {
     artist () {
-      return this.$store.getters['userProfilesStore/getProfile'](this.username)
+      let profile = this.$store.getters['userProfilesStore/getProfile'](this.username);
+      if (!profile) {
+        profile = {};
+      }
+      if (!profile.avatarUrl) {
+        profile.avatarUrl = require("@/assets/img/faces/avatar.jpg");
+      }
+      return profile;
     },
     artworks () {
-      return this.$store.getters['artworkSearchStore/getArtworksByArtist'](this.username)
+      return this.$store.getters['artworkSearchStore/getArtworksByArtist'](this.username);
     },
   },
   methods: {

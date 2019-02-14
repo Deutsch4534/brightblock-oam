@@ -22,26 +22,26 @@
               <mdb-row>
                 <mdb-col md="12">
                   <div class="mb-0">
-                    <mdb-input type="text" id="contact-name" label="Your name" />
+                    <mdb-input type="text" id="contact-name" label="Your name" v-model="name"/>
                   </div>
                 </mdb-col>
                 <mdb-col md="12">
                   <div class="mb-0">
-                    <mdb-input type="text" id="contact-email" label="Your email" />
-                  </div>
-                </mdb-col>
-              </mdb-row>
-              <mdb-row>
-                <mdb-col md="12">
-                  <div class="mb-0">
-                    <mdb-input type="text" id="contact-subject" label="Subject" />
+                    <mdb-input type="text" id="contact-email" label="Your email" v-model="email"/>
                   </div>
                 </mdb-col>
               </mdb-row>
               <mdb-row>
                 <mdb-col md="12">
                   <div class="mb-0">
-                    <mdb-textarea id="contact-message" label="Your message" />
+                    <mdb-input type="text" id="contact-subject" label="Subject" v-model="subject"/>
+                  </div>
+                </mdb-col>
+              </mdb-row>
+              <mdb-row>
+                <mdb-col md="12">
+                  <div class="mb-0">
+                    <mdb-textarea id="contact-message" label="Your message" v-model="message"/>
                   </div>
                 </mdb-col>
               </mdb-row>

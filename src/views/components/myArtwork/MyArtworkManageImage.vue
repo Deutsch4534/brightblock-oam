@@ -39,7 +39,11 @@ export default {
   methods: {},
   computed: {
     ispdf() {
-      return this.file.type.indexOf("pdf") > -1;
+      try {
+        return this.file.type.indexOf("pdf") > -1;
+      } catch (err) {
+        return false;
+      }
     },
     columns() {
       return "col-md-" + this.size;

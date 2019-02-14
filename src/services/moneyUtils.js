@@ -135,7 +135,7 @@ const moneyUtils = {
     }
   },
 
-  buildInitialSaleData() {
+  buildInitialSaleData(bitcoinTx) {
     return {
       soid: 0,
       amount: 0,
@@ -145,6 +145,7 @@ const moneyUtils = {
       initialRateBtc: 0,
       initialRateEth: 0,
       amountInEther: 0,
+      bitcoinTx: bitcoinTx,
       auctionId: null
     };
   },

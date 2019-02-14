@@ -2,7 +2,7 @@
   <mdb-container fluid class="bg-light flex-1">
     <mdb-container class="py-5">
       <router-view/>
-      
+
       <mdb-row v-if="myAuctionsFutureCount > 0">
         <div class="col-md-12">
           <h1 class="h2-responsive mb-5">My Auctions <span>({{myAuctionsFutureCount}})</span></h1>
@@ -32,6 +32,9 @@ export default {
   components: { SingleAuction, mdbContainer, mdbRow },
   data() {
     return {};
+  },
+  created() {
+    this.$store.dispatch("myAuctionsStore/fetchMyAuctions");
   },
   methods: {
     startsIn(date) {

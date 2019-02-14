@@ -11,6 +11,7 @@ import linkResolver from "./prismic/linkResolver";
 
 import { CONSTANTS } from "@/storage/constants";
 // import notify from "@/services/notify";
+// import artworkSearchService from "@/services/artworkSearchService";
 import Datetime from "vue-datetime";
 // You need a specific loader for CSS files
 import "vue-datetime/dist/vue-datetime.css";
@@ -44,13 +45,12 @@ Vue.mixin({
     }
   }
 });
+
 store.commit("constants", CONSTANTS);
+// artworkSearchService.newQuery("*");
 store.dispatch("fetchServerTime");
-store.dispatch("myArtworksStore/fetchMyArtworks");
-store.dispatch("myAuctionsStore/fetchMyAuctions");
-store.dispatch("onlineAuctionsStore/fetchOnlineAuctions");
+store.dispatch("myAccountStore/fetchMyAccount");
 store.dispatch("conversionStore/fetchConversionData").then(() => {
-  store.dispatch("myAccountStore/fetchMyAccount");
   store.dispatch("ethStore/receiveBlockchainEvents").then(() => {
     if (store.getters.isDebugMode) {
       // notify.info({ title: "Blockchain Events.", text: message });

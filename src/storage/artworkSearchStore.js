@@ -13,18 +13,47 @@ const artworkSearchStore = {
   },
   getters: {
     getArtworks: state => {
-      return state.artworks;
+      let registered = state.artworks;
+      registered = registered.sort(function compare(a, b) {
+        if (a.saleData.amount > b.saleData.amount) {
+          return -1;
+        }
+        if (a.saleData.amount < b.saleData.amount) {
+          return 1;
+        }
+        return 0;
+      });
+      return registered;
     },
     getQuery: state => {
       return state.query;
     },
     getSearchResults: state => {
-      return state.searchResults;
+      let registered = state.searchResults;
+      registered = registered.sort(function compare(a, b) {
+        if (a.saleData.amount > b.saleData.amount) {
+          return -1;
+        }
+        if (a.saleData.amount < b.saleData.amount) {
+          return 1;
+        }
+        return 0;
+      });
+      return registered;
     },
     getBitcoinResults: state => {
-      let registered = state.searchResults.filter(
-        artwork => artwork.bcitem && artwork.btcData.bitcoinTx
+      let registered = state.artworks.filter(
+        artwork => artwork.saleData && artwork.saleData.bitcoinTx
       );
+      registered = registered.sort(function compare(a, b) {
+        if (a.saleData.amount > b.saleData.amount) {
+          return -1;
+        }
+        if (a.saleData.amount < b.saleData.amount) {
+          return 1;
+        }
+        return 0;
+      });
       return registered;
     },
     getRegisteredArtworks: state => {
@@ -64,12 +93,12 @@ const artworkSearchStore = {
       return registered.slice(0, 6);
     },
     getArtworksPageArtworks: (state, getters) => {
-      let registered = getters.getRegisteredArtworks;
+      let registered = getters.getArtworks;
       return registered.slice(0, 9);
     },
     getArtworksByArtist: (state, getters) => username => {
       let artworks = [];
-      let registered = getters.getRegisteredArtworks;
+      let registered = getters.getArtworks;
       _.forEach(registered, function(artwork) {
         if (artwork.artist === username) {
           artworks.push(artwork);
@@ -122,21 +151,6 @@ const artworkSearchStore = {
     }
   },
   actions: {
-    fetchSearchResults({ commit }, query) {
-      commit("clearSearchResults");
-      artworkSearchService.findArtworks(
-        query,
-        function(artwork) {
-          if (artwork) {
-            commit("addSearchResult", artwork);
-          }
-        },
-        function(error) {
-          console.log("Error fetching artworks: ", error);
-        }
-      );
-    },
-
     fetchUserArtwork({ commit }, data) {
       return new Promise(resolve => {
         artworkSearchService.userArtwork(
@@ -152,12 +166,14 @@ const artworkSearchStore = {
                 let timestamp = utils.buildArtworkHash(
                   artwork.artwork[0].dataUrl
                 );
-                let blockchainItem = store.getters[
-                  "ethStore/getBlockchainItem"
-                ](timestamp);
-                moneyUtils.convertPrices(artwork, blockchainItem);
-                if (artwork.owner !== artwork.bcitem.blockstackId) {
-                  artwork.owner = artwork.bcitem.blockstackId;
+                if (store.state.constants.featureEthereum) {
+                  let blockchainItem = store.getters[
+                    "ethStore/getBlockchainItem"
+                  ](timestamp);
+                  moneyUtils.convertPrices(artwork, blockchainItem);
+                  if (artwork.bcitem.blockstackId && artwork.owner !== artwork.bcitem.blockstackId) {
+                    artwork.owner = artwork.bcitem.blockstackId;
+                  }
                 }
               }
               commit("addArtwork", artwork);
@@ -187,9 +203,11 @@ const artworkSearchStore = {
           },
           function(artwork) {
             if (artwork) {
-              moneyUtils.convertPrices(artwork, blockchainItem);
-              if (artwork.owner !== artwork.bcitem.blockstackId) {
-                artwork.owner = artwork.bcitem.blockstackId;
+              if (store.state.constants.featureEthereum) {
+                moneyUtils.convertPrices(artwork, blockchainItem);
+                if (artwork.bcitem.blockstackId && artwork.owner !== artwork.bcitem.blockstackId) {
+                  artwork.owner = artwork.bcitem.blockstackId;
+                }
               }
               commit("addArtwork", artwork);
             }

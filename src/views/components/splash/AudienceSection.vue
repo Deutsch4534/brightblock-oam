@@ -71,11 +71,11 @@ export default {
     return {
       title: "WHO IS IT FOR?",
       cardTitle1: "ARTISTS",
-      cardDescription1: "Upload your artworks to your own storage register provenance and list them on our the open marketplace. All transactions are done in bitcoin and directly atributed to your wallet. Once the artwork is sold it moves its physical location from artist storage to collector storage.",
+      cardDescription1: "Upload to your own storage, create certificates of ownership and sell artwork on our marketplace. Provenance is tracked and secured automatically on the blockchain.",
       cardTitle2: "COLLECTORS",
-      cardDescription2: "Collect works of art from up and coming artists. Each art purchase makes you the owner of the artwork with registered provenance on the blockchain, as well you are the sole owner of digital artwork as well. If you destroy the file, the original is lost forever.",
-      cardTitle3: "INSTITUTIONS",
-      cardDescription3: "Be part of our art movement by providing grants or starting competitions on our platform, use radicle tools to engage with the community and create something exceptional together.",
+      cardDescription2: "Collect artworks from up and coming artists. Digital and physical art can be purchased with provenance registered on the blockchain making you the sole owner of the artwork.",
+      cardTitle3: "GALLERIES",
+      cardDescription3: "Be part of our art movement by providing artworks and artists. Earn residuals on secondary sales of artwork and use radicle tools to run competitions and auction events on our platform.",
     };
   }
 };

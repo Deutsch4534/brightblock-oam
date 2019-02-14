@@ -1,4 +1,7 @@
-import { lookupProfile } from "blockstack";
+import {
+  getFile, lookupProfile
+} from "blockstack";
+import store from "@/storage/store";
 
 const userProfilesService = {
   fetchUserProfile: function(username, success, failure) {
@@ -22,7 +25,16 @@ const userProfilesService = {
               userProfile.gaiaUrl = userProfile.apps[key];
             }
           }
-          success(userProfile);
+          const portrayalRootFileName = store.state.constants.portrayalRootFileName;
+          getFile(portrayalRootFileName, { decrypt: false, username: username }).then(function(file) {
+            if (file) {
+              userProfile.portrayal = JSON.parse(file);
+            }
+            success(userProfile);
+          })
+            .catch(function() {
+              success(userProfile);
+            });
         } else {
           failure({ error: 1, message: "Unable to find user: " + username });
         }

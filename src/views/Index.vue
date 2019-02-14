@@ -35,10 +35,12 @@
     </mdb-row>
     </mdb-container>
   <div class="border-top border-dark"></div>
+  <!--
     <mdb-container>
       <auction-section/>
     </mdb-container>
   <div class="border-top border-dark"></div>
+  -->
     <mdb-container>
     <mdb-row class="py-5">
       <donate-section/>
@@ -82,7 +84,7 @@ export default {
       title1: "Empowering the art community with tools to break free and solve current status quo",
       description1: "Artists require the tools to take the heroic quest of art into their own hands. By sidestepping the gatekeepers, artist will participate in creating their own platform and, in consequence, their own destiny.",
       title2: "Art ecosystem for artists and collectors",
-      description2: "Using Radicle contemporary artists showcase and sell their digital artworks to collectors and investors, who in turn can trade art amongst each other.<br/><br/>The digital artworks traded on Radicle can both be created traditionally or digitally, but the essence is that they are always preserved digitally. Radicle uses blockchain technology to secure originality and ownership of digital artworks, as well as to enable real-time auctioning and one enabling originality of digital file.",
+      description2: "Using Radicle contemporary artists showcase and sell their artworks to collectors and investors.<br/><br/>Artworks traded on Radicle can both be created traditionally or digitally. We use blockchain technology to secure originality and ownership of digital artworks, as well as to enable running real-time auction events.",
       title3: "Art ecosystem for artists and collectors",
       description3: "",
       title4: "Art ecosystem for artists and collectors",

@@ -1,14 +1,19 @@
 <template>
-<mdb-modal size="lg" v-if="showModal" @close="closeModal">
-    <mdb-modal-header>
-        <mdb-modal-title>Sell via Auction</mdb-modal-title>
-    </mdb-modal-header>
-    <mdb-modal-body v-if="message">
-      {{message}}
-    </mdb-modal-body>
-    <mdb-modal-body v-else>
-    <h5>{{artwork.title}}</h5>
-    <form @submit.prevent="setPrice">
+<mdb-card-body>
+  <mdb-card-title>
+    <mdb-popover trigger="click" :options="{placement: 'top'}">
+      <div class="popover">
+        <div class="popover-header">Sell in Auction</div>
+        <div class="popover-body">
+          Choose this to be able to add this item to an auction later on.
+        </div>
+      </div>
+      <a @click.prevent="" slot="reference">Sell in Auction <mdb-icon far icon="question-circle" /></a>
+    </mdb-popover>
+  </mdb-card-title>
+  <h5 class="my-4">{{artwork.title}}</h5>
+  <mdb-card-text>
+    <form @submit.prevent="validate">
       <p v-if="artwork.saleData.auctionId"><a class="button" v-on:click="removeFromAuction">remove from auction {{auctionTitle}}</a></p>
       <p>This item can be bought via online bidding - the reserve is the minimum price you will accept.</p>
       <p v-if="errors.length" :key="errors.length">
@@ -17,75 +22,112 @@
           <li v-for="error in errors" :key="error.id">{{ error.message }}</li>
         </ul>
       </p>
-        <div class="col-md-12 mb-3">
-          <label for="validationCustom01">Select Currency</label>
+      <div class="row">
+        <div class="col-6">
+          <mdb-popover trigger="click" :options="{placement: 'top'}">
+            <div class="popover">
+              <div class="popover-header">Currency</div>
+              <div class="popover-body">
+                The artwork will be sold for the amount of bitcoin that is equivalent to the
+                sale value in the Fiat currency you set here.
+              </div>
+            </div>
+            <a @click.prevent="" slot="reference">Select Currency <mdb-icon far icon="question-circle" /></a>
+          </mdb-popover>
           <select class="browser-default custom-select" v-model="currency" id="currency" name="currency">
             <option v-for="(value,key) in fiatRates" :key="key" :value="key">{{ key }}</option>
           </select>
           <div class="invalid-feedback">
             Please select the currency!
           </div>
+          <p class="">
+            {{conversionMessage}}
+          </p>
         </div>
-        <p class="">
-          {{conversionMessage}}
-        </p>
+        <div class="col-md-6">
+          <mdb-popover trigger="click" :options="{placement: 'top'}">
+            <div class="popover">
+              <div class="popover-header">Select Auction</div>
+              <div class="popover-body">
+                Add this item to an auction that you have set up and that have not yet finished.
+              </div>
+            </div>
+            <a @click.prevent="" slot="reference">Select Auction</a>
+          </mdb-popover>
+          <select class="browser-default custom-select" v-model="auctionId" id="auctionId" name="auctionId">
+            <option v-for="(auction,key) in auctions" :key="key" :value="auction.auctionId">{{ auction.title }}</option>
+          </select>
+          <div class="invalid-feedback">
+            Please select the auction!
+          </div>
+        </div>
+      </div>
 
-      <div class="form-row">
-        <div class="col-md-12 mb-3">
-          <label for="validationCustom02">Reserve {{currencySymbol}}</label>
+
+      <div class="row">
+        <div class="col-md-6">
+          <mdb-popover trigger="click" :options="{placement: 'top'}">
+            <div class="popover">
+              <div class="popover-header">Reserve {{currencySymbol}}</div>
+              <div class="popover-body">
+                Your artwork will not sell for less than this amount.
+              </div>
+            </div>
+            <a @click.prevent="" slot="reference">Reserve {{currencySymbol}}</a>
+          </mdb-popover>
           <input type="number" class="form-control" id="validationCustom02" step="50" placeholder="Reserve price" v-model="reserve" required>
+          <p>
+            {{valueInBitcoin(reserve)}} Btc / {{valueInEther(reserve)}} Eth
+          </p>
           <div class="invalid-feedback">
             Please enter the reserve!
           </div>
         </div>
-        <p>
-          {{valueInBitcoin(reserve)}} Btc / {{valueInEther(reserve)}} Eth
-        </p>
-      </div>
-
-      <div class="form-row">
-        <div class="col-md-12 mb-3">
-          <label for="validationCustom03">Increment {{currencySymbol}}</label>
+        <div class="col-md-6">
+          <mdb-popover trigger="click" :options="{placement: 'top'}">
+            <div class="popover">
+              <div class="popover-header">Increment {{currencySymbol}}</div>
+              <div class="popover-body">
+                The amount the value increases by after a bid is placed.
+              </div>
+            </div>
+            <a @click.prevent="" slot="reference">Increment {{currencySymbol}}</a>
+          </mdb-popover>
           <input type="number" class="form-control" id="validationCustom03" step="50" placeholder="increment value" v-model="increment" required>
+          <p>
+            {{valueInBitcoin(increment)}} Btc / {{valueInEther(increment)}} Eth
+          </p>
           <div class="invalid-feedback">
             Please enter the increment!
           </div>
         </div>
-        <p>
-          {{valueInBitcoin(increment)}} Btc / {{valueInEther(increment)}} Eth
-        </p>
       </div>
 
-      <div class="col-md-12 mb-3">
-        <label for="validationCustom04">Select Auction</label>
-        <select class="browser-default custom-select" v-model="auctionId" id="auctionId" name="auctionId">
-          <option v-for="(auction,key) in auctions" :key="key" :value="auction.auctionId">{{ auction.title }}</option>
-        </select>
-        <div class="invalid-feedback">
-          Please select the auction!
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <mdb-btn color="white" @click="closeModal" size="md">Cancel</mdb-btn>
+          <mdb-btn color="white" @click="addToAuction" size="md">Save</mdb-btn>
+          <mdb-btn v-if="artwork.saleData.auctionId" color="white" @click="removeFromAuction" size="md">Remove From Auction</mdb-btn>
         </div>
       </div>
     </form>
-    </mdb-modal-body>
-    <mdb-modal-footer>
-      <mdb-btn color="white" @click="addToAuction" size="md">Save</mdb-btn>
-    </mdb-modal-footer>
-</mdb-modal>
+    </mdb-card-text>
+  </mdb-card-body>
 </template>
 
 <script>
 import moneyUtils from "@/services/moneyUtils";
-import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbBtn } from 'mdbvue';
+import { mdbPopover, mdbIcon, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "RegisterForAuction",
   components: {
-    mdbModal,
-    mdbModalHeader,
-    mdbModalTitle,
-    mdbModalBody,
-    mdbModalFooter,
+    mdbCardBody,
+    mdbPopover,
+    mdbIcon,
+    mdbCardTitle,
+    mdbCardText,
     mdbBtn
   },
   data() {
@@ -162,6 +204,14 @@ export default {
       // this.$router.go(-2);
     },
 
+    gotoSaleInfo: function() {
+      let a = this.$store.getters["myArtworksStore/myArtwork"](this.artwork.id);
+      let id = this.artwork.id;
+      let amount = a.saleData ? a.saleData.amount : 0;
+      let currency = a.saleData ? a.saleData.fiatCurrency : "EUR";
+      return `/my-artwork/register-for-sale/${id}/${amount}/${currency}`;
+    },
+
     valueInEther(amount) {
       return moneyUtils.valueInEther(this.currency, amount);
     },
@@ -213,6 +263,7 @@ export default {
         this.reserve,
         this.increment
       );
+      saleData.bitcoinTx = this.artwork.saleData.bitcoinTx;
       this.validate(saleData);
       if (this.errors.length > 0) {
         return;

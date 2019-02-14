@@ -260,6 +260,9 @@ const myAuctionsStore = {
         let auction = state.myAuctions.filter(
           auction => auction.auctionId === data.auctionId
         )[0];
+        if (!auction) {
+          auction = {};
+        }
         if (!auction.items) {
           auction.items = [];
         }

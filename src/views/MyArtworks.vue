@@ -59,7 +59,9 @@ export default {
   data() {
     return {};
   },
-  mounted() {},
+  created() {
+    this.$store.dispatch("myArtworksStore/fetchMyArtworks");
+  },
   methods: {},
   computed: {
     unsold() {

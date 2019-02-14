@@ -35,7 +35,7 @@
     data() {
       return {
         title: "First Auction on Radicle",
-        description: "Brightblock and Radicle are starting things off with auction fo 50 digital copyes of Black Swan, from author",
+        description: "Brightblock and Radicle are starting things off with an auction for 50 digital copies of Black Swan, from author",
       };
     }
   };

@@ -1,6 +1,6 @@
 <template>
 <div class="row">
-  <my-single-artwork v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" :width="artworkWidth" :sold="sold" class="col-sm-6 col-md-4 col-lg-3"/>
+  <my-single-artwork v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" :width="artworkWidth" :sold="sold" class="col-sm-6 col-md-4 col-lg-4"/>
 </div>
 </template>
 

@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       enabled: false,
-      featureMessage: "Get in touch about running auctions on radicle"
+      featureMessage: 'Get in touch about running <a href="mailto:mijoco@radicle.art">auctions</a>.'
     };
   },
   created() {

@@ -2,9 +2,9 @@
   <div>
     <!-- TODO: Connect currency buttons to conditionally display price next to button -->
     <div>
-      <mdb-btn size="sm" color="white" rounded>EUR</mdb-btn>
-      <mdb-btn size="sm" color="white" rounded>BTC</mdb-btn>
-      <mdb-btn size="sm" color="white" rounded>ETH</mdb-btn>
+      {{fiatMessage}} <mdb-btn size="sm" color="white" rounded>EUR</mdb-btn>
+      {{btcMessage}} <mdb-btn size="sm" color="white" rounded>BTC</mdb-btn>
+      {{ethMessage}} <mdb-btn size="sm" color="white" rounded>ETH</mdb-btn>
     </div>
     <div class="d-flex align-items-center justify-content-start pt-5">
       <p v-html="fiatMessage" class="inline-block mb-0"></p>
@@ -23,7 +23,7 @@ import { mdbIcon, mdbBtn } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: "BuyArtworkForm",
+  name: "BuyArtworkFormEth",
   components: {
     mdbIcon,
     mdbBtn
@@ -47,28 +47,21 @@ export default {
   computed: {
     fiatMessage() {
       try {
-        return (
-          this.artwork.bcitem.fiatCurrencySymbol +
-          " " +
-          this.artwork.bcitem.priceInFiat +
-          " " +
-          this.artwork.bcitem.fiatCurrency +
-          " "
-        );
+        return (this.artwork.bcitem.fiatCurrencySymbol + " " + this.artwork.bcitem.priceInFiat);
       } catch (e) {
         return "";
       }
     },
     ethMessage() {
       try {
-        return this.artwork.bcitem.priceInEth + " ETH";
+        return this.artwork.bcitem.priceInEth;
       } catch (e) {
         return "";
       }
     },
     btcMessage() {
       try {
-        return this.artwork.bcitem.priceInBtc + " BTC";
+        return this.artwork.bcitem.priceInBtc;
       } catch (e) {
         return "";
       }

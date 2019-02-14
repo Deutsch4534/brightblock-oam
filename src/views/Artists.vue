@@ -16,6 +16,7 @@
 <script>
 import SingleArtist from './components/artists/SingleArtist'
 import { mdbContainer, mdbRow, mdbCol } from 'mdbvue';
+import artworkSearchService from "../services/artworkSearchService";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -32,6 +33,9 @@ export default {
   },
 
   mounted () {
+    if (this.$store.state.constants.featureBitcoin) {
+      artworkSearchService.newQuery({field: "title", query: "*"});
+    }
   },
   computed: {
     artists () {

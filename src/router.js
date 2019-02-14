@@ -8,7 +8,6 @@ import AdminRegistrations from "./views/components/admin/AdminRegistrations";
 import AdminBuildIndex from "./views/components/admin/AdminBuildIndex";
 import AdminQueryIndex from "./views/components/admin/AdminQueryIndex";
 
-import Home from "./views/Home.vue";
 import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
 import Gallery from "./views/Gallery.vue";
@@ -16,6 +15,8 @@ import Artist from "./views/Artist.vue";
 import Artists from "./views/Artists.vue";
 import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
+import ProfileUpdate from "./views/ProfileUpdate.vue";
+import ProfileUpload from "./views/ProfileUpload.vue";
 import TeamProfile from "./views/TeamProfile.vue";
 import Navbar from "./layout/Navbar.vue";
 import NavbarSplash from "./layout/NavbarSplash.vue";
@@ -60,15 +61,6 @@ const router = new Router({
       }
     },
     {
-      path: "/home",
-      name: "home",
-      components: { default: Home, header: Navbar, footer: Footer },
-      props: {
-        header: { colorOnScroll: 400 },
-        footer: { backgroundColor: "black" }
-      }
-    },
-    {
       path: "/gallery",
       name: "gallery",
       components: { default: Gallery, header: Navbar, footer: Footer },
@@ -99,7 +91,7 @@ const router = new Router({
       }
     },
     {
-      path: "/profile/user/blockstackId",
+      path: "/profile/user/:blockstackId",
       name: "profile",
       components: {
         default: Profile,
@@ -109,6 +101,24 @@ const router = new Router({
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/profile/update",
+      name: "profileUpdate",
+      components: {
+        default: ProfileUpdate,
+        header: Navbar,
+        footer: Footer
+      }
+    },
+    {
+      path: "/profile/upload",
+      name: "profileUpload",
+      components: {
+        default: ProfileUpload,
+        header: Navbar,
+        footer: Footer
       }
     },
     {

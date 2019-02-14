@@ -10,14 +10,14 @@
       </mdb-card-text>
     </mdb-card-body>
     <div class="card-buttons d-flex align-items-end justify-content-start flex-nowrap">
-      <router-link :to="registerUrl" class="inline-block">
-        <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="canRegister">Register</mdb-btn>
+      <router-link :to="registerUrl" class="inline-block" v-if="canRegister">
+        <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Register</mdb-btn>
+      </router-link>
+      <router-link :to="registerUrl" class="inline-block" v-else>
+        <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">CoA</mdb-btn>
       </router-link>
       <router-link :to="registerForSaleUrl" class="inline-block">
-        <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="canSell">Buy</mdb-btn>
-      </router-link>
-      <router-link :to="registerForAuctionUrl" class="inline-block">
-        <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="canAuction">Auction</mdb-btn>
+        <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="canSell">Sell</mdb-btn>
       </router-link>
       <a @click="deleteArtwork(artwork.id)" class="inline-block">
         <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="debugMode">Delete</mdb-btn>
@@ -93,11 +93,6 @@ export default {
     canSell() {
       return this.$store.getters["myArtworksStore/canSell"](this.artwork.id);
     },
-    canAuction() {
-      let auctions = this.$store.getters["myAuctionsStore/myAuctionsFuture"];
-      let cs = this.$store.getters["myArtworksStore/canSell"](this.artwork.id);
-      return cs && auctions && auctions.length > 0;
-    },
     canRegister() {
       let canRegister = this.$store.getters["myArtworksStore/canRegister"](
         this.artwork.id
@@ -128,23 +123,24 @@ export default {
       return `/my-artwork/register/${this.artwork.id}`;
     },
     registerForSaleUrl() {
-      let a = this.$store.getters["myArtworksStore/myArtwork"](this.artwork.id);
-      let id = this.artwork.id;
-      let amount = a.saleData ? a.saleData.amount : 0;
-      let currency = a.saleData ? a.saleData.fiatCurrency : "EUR";
-      return `/my-artwork/register-for-sale/${id}/${amount}/${currency}`;
-    },
-    registerForAuctionUrl() {
-      let a = this.$store.getters["myArtworksStore/myArtwork"](this.artwork.id);
-      let id = this.artwork.id;
-      let r = a.saleData ? a.saleData.reserve : 0;
-      let i = a.saleData ? a.saleData.increment : 0;
-      let c = a.saleData ? a.saleData.fiatCurrency : "EUR";
-      let aid = -1;
-      if (a.saleData && a.saleData.auctionId) {
-        aid = a.saleData.auctionId;
+      if (this.artwork.saleData.soid <= 1) {
+        let a = this.$store.getters["myArtworksStore/myArtwork"](this.artwork.id);
+        let id = this.artwork.id;
+        let amount = a.saleData ? a.saleData.amount : 0;
+        let currency = a.saleData ? a.saleData.fiatCurrency : "EUR";
+        return `/my-artwork/register-for-sale/${id}/${amount}/${currency}`;
+      } else if (this.artwork.saleData.soid === 2) {
+        let a = this.$store.getters["myArtworksStore/myArtwork"](this.artwork.id);
+        let id = this.artwork.id;
+        let r = a.saleData ? a.saleData.reserve : 0;
+        let i = a.saleData ? a.saleData.increment : 0;
+        let c = a.saleData ? a.saleData.fiatCurrency : "EUR";
+        let aid = -1;
+        if (a.saleData && a.saleData.auctionId) {
+          aid = a.saleData.auctionId;
+        }
+        return `/my-artwork/register-for-auction/${id}/${aid}/${r}/${i}/${c}`;
       }
-      return `/my-artwork/register-for-auction/${id}/${aid}/${r}/${i}/${c}`;
     }
   }
 };
