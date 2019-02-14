@@ -1,48 +1,39 @@
 <template>
 <mdb-container id="ContactSection" class="py-5">
-    <section class="mt-5 mb-0 px-0">
+    <section class="py-3 py-md-5 px-0">
       <mdb-row>
-        <mdb-col class="col-lg-10 mx-auto">
-        <h2 class="large-title my-5">{{title}}</h2>
+        <mdb-col col="12" lg="10">
+        <h2 class="large-title mb-5">{{title}}</h2>
         <p v-html="featureMessage"></p>
         <mdb-row>
           <mdb-col md="6" class="md-0 px-0">
             <div class="col-md-12">
-              <router-link to="/" class="navbar-brand"><img :src="logo" height="100px" alt="radicle logo"></router-link>
+              <router-link to="/" class="navbar-brand"><img :src="logo" width="200px" alt="radicle logo" class="img-fluid"></router-link>
             </div>
             <div class="col-md-12">
-              <h5 class="my-4">Contact Info</h5>
+              <h5 class="my-4"><strong>Contact Info</strong></h5>
               <p>Brighton, BN1 1AL UK</p>
-              <p>Phone: +49 6579 3 456</p>
-              <p>Email: contact@radicle.art</p>
+              <p>Phone: +49 6579 3 456<br />
+              Email: contact@radicle.art</p>
             </div>
           </mdb-col>
           <mdb-col md="6">
             <form class="contact-form">
               <mdb-row>
                 <mdb-col md="12">
-                  <div class="mb-0">
-                    <mdb-input type="text" id="contact-name" label="Your name" v-model="name"/>
+                  <mdb-input type="text" id="contact-name" label="Your name" v-model="name"/>
                   </div>
                 </mdb-col>
                 <mdb-col md="12">
-                  <div class="mb-0">
-                    <mdb-input type="text" id="contact-email" label="Your email" v-model="email"/>
-                  </div>
+                  <mdb-input type="text" id="contact-email" label="Your email" v-model="email"/>
                 </mdb-col>
               </mdb-row>
               <mdb-row>
                 <mdb-col md="12">
-                  <div class="mb-0">
-                    <mdb-input type="text" id="contact-subject" label="Subject" v-model="subject"/>
-                  </div>
+                  <mdb-input type="text" id="contact-subject" label="Subject" v-model="subject"/>
                 </mdb-col>
-              </mdb-row>
-              <mdb-row>
-                <mdb-col md="12">
-                  <div class="mb-0">
-                    <mdb-textarea id="contact-message" label="Your message" v-model="message"/>
-                  </div>
+                <mdb-col col="12">
+                  <mdb-textarea id="contact-message" label="Your message" v-model="message"/>
                 </mdb-col>
               </mdb-row>
               <div class="text-md-left mt-5 submit">

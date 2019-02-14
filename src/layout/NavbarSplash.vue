@@ -3,61 +3,61 @@
 <header>
   <!-- Navbar -->
   <mdb-navbar position="top" class="bg-white text-dark" href="#" expand="lx" scrolling hamburger animated animation="3" id="main-navigation">
-  <!-- mdbNavbar brand -->
-  <mdb-navbar-brand>
-    <form class="md-form search-form white-text">
-      <a type="button" @click="doSearch">
-        <mdb-icon class="mb-0 mr-2" icon="search" />
-      </a>
-      <input label="Search" type="text" class="mt-0 mb-0" v-model="query"
-             placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
-    </form>
-    <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
-  </mdb-navbar-brand>
-  <mdb-navbar-nav right>
-    <li v-if="!loggedIn" class="nav-item ripple-parent">
-      <router-link to="/login" class="nav-link navbar-link login-link mr-2">Login</router-link>
-    </li>
-    <account-links v-if="loggedIn"/>
-  </mdb-navbar-nav>
-  <mdb-navbar-toggler>
-    <mdb-navbar-nav mx-auto>
-      <li class="nav-item ripple-parent">
-        <router-link to="/gallery" class="nav-link navbar-link">Gallery</router-link>
-      </li>
-      <li class="nav-item ripple-parent">
-        <router-link to="/artists" class="nav-link navbar-link">Artists</router-link>
-      </li>
-      <li class="nav-item ripple-parent">
-        <router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link>
-      </li>
-      <auction-links v-if="loggedIn"/>
-      <div class="mb-4"></div>
-      <li class="nav-item ripple-parent" @click="scrollToElement('AboutSection', $event);">
-        <router-link to="/" name="sectionUrl('AboutSection')" class="nav-link navbar-link">About</router-link>
-      </li>
-      <li class="nav-item ripple-parent" @click="scrollToElement('TeamSection', $event);">
-        <router-link to="/" name="sectionUrl('TeamSectionSection')" class="nav-link navbar-link">Team</router-link>
-      </li>
-      <li class="nav-item ripple-parent" @click="scrollToElement('ContactSection', $event);">
-        <router-link to="/" name="sectionUrl('ContactSection')" class="nav-link navbar-link">Contact</router-link>
-      </li>
-      <div class="mb-4"></div>
+    <!-- mdbNavbar brand -->
+    <mdb-navbar-brand>
+      <form class="md-form search-form white-text">
+        <a type="button" @click="doSearch">
+          <mdb-icon class="mb-0 mr-2" icon="search" />
+        </a>
+        <input label="Search" type="text" class="mt-0 mb-0" v-model="query"
+               placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
+      </form>
+      <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
+    </mdb-navbar-brand>
+    <mdb-navbar-nav right>
       <li v-if="!loggedIn" class="nav-item ripple-parent">
-        <router-link to="/login" class="nav-link navbar-link">
-          Login
-        </router-link>
+        <router-link to="/login" class="nav-link navbar-link login-link mr-2">Login</router-link>
       </li>
-      <li v-if="loggedIn" class="nav-item ripple-parent">
-        <a href="#"
-          @click.prevent="logout"
-          class="nav-link navbar-link">
-          Logout</a
-        >
-      </li>
+      <account-links v-if="loggedIn"/>
     </mdb-navbar-nav>
-  </mdb-navbar-toggler>
-</mdb-navbar>
+    <mdb-navbar-toggler>
+      <mdb-navbar-nav mx-auto>
+        <li class="nav-item ripple-parent">
+          <router-link to="/gallery" class="nav-link navbar-link">Gallery</router-link>
+        </li>
+        <li class="nav-item ripple-parent">
+          <router-link to="/artists" class="nav-link navbar-link">Artists</router-link>
+        </li>
+        <li class="nav-item ripple-parent">
+          <router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link>
+        </li>
+        <auction-links v-if="loggedIn"/>
+        <div class="mb-4"></div>
+        <li class="nav-item ripple-parent" @click="scrollToElement('AboutSection', $event);">
+          <router-link to="/" name="sectionUrl('AboutSection')" class="nav-link navbar-link">About</router-link>
+        </li>
+        <li class="nav-item ripple-parent" @click="scrollToElement('TeamSection', $event);">
+          <router-link to="/" name="sectionUrl('TeamSectionSection')" class="nav-link navbar-link">Team</router-link>
+        </li>
+        <li class="nav-item ripple-parent" @click="scrollToElement('ContactSection', $event);">
+          <router-link to="/" name="sectionUrl('ContactSection')" class="nav-link navbar-link">Contact</router-link>
+        </li>
+        <div class="mb-4"></div>
+        <li v-if="!loggedIn" class="nav-item ripple-parent">
+          <router-link to="/login" class="nav-link navbar-link">
+            Login
+          </router-link>
+        </li>
+        <li v-if="loggedIn" class="nav-item ripple-parent">
+          <a href="#"
+             @click.prevent="logout"
+             class="nav-link navbar-link">
+            Logout</a
+          >
+        </li>
+      </mdb-navbar-nav>
+    </mdb-navbar-toggler>
+  </mdb-navbar>
   <!--/.Navbar-->
 
   <!-- Full Page Intro https://mdbootstrap.com/img/Photos/Others/img%20%2848%29.jpg -->
@@ -82,7 +82,7 @@
     <!-- Mask & flexbox options-->
   </div>
   <!-- Full Page Intro -->
-  <mdb-container>
+  <mdb-container fluid>
     <mdb-row class="py-2 d-flex align-items-center header-title">
       <mdb-col md="9">
         <p class="mb-0">
@@ -326,6 +326,12 @@ nav >>> .navbar-toggler {
   .navbar-collapse .nav-item,
   .navbar-collapse .nav-item .nav-link {  color: white!important; }
 
+  .navbar-collapse .nav-item .nav-link:hover,
+  .navbar-collapse .nav-item .nav-link:focus,
+  .navbar-collapse .nav-item .nav-link:active {
+    color: rgba(255, 255, 255, 0.75)!important;
+  }
+
 >>> .animated-icon3 span { background: black!important; }
 >>> .animated-icon3.open span { background: white!important; }
 
@@ -363,7 +369,7 @@ i.fa-search {
   }
 .search-form button.transparent { border: none; background: transparent; color: black; }
 
-header { min-height:100vh; }
+header { min-height:calc(100vh - 48px); }
 .view {
   background-image: url('https://mdbootstrap.com/img/Photos/Others/architecture.jpg');
   background-repeat: no-repeat;
@@ -408,7 +414,7 @@ h6 {
       height: calc(100vh - 210px);
     }
 
-    .jarallax { min-height: 320px; }
+    .jarallax { min-height: 380px; }
 
     nav >>> .navbar-toggler {
       padding: 0 0 0.25rem 0.5rem;

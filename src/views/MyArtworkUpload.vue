@@ -1,5 +1,5 @@
 <template>
-<div class="container-fluid bg-light flex-1">
+<div class="container-fluid bg-light flex-1 py-5">
   <my-artwork-upload-form v-if="enabled" :formTitle="'Upload Artwork'" :mode="'upload'"/>
   <contact-section :featureMessage="featureMessage" v-else class="black-text"/>
 </div>
@@ -25,8 +25,8 @@ export default {
   },
   mounted() {
     let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-    this.enabled = myProfile.bitcoinAddress;
-    if (!myProfile.bitcoinAddress) {
+    this.enabled = myProfile.portrayal.bitcoinAddress;
+    if (!myProfile.portrayal.bitcoinAddress) {
       this.$router.push("/profile/upload?from=upload-artwork");
     }
   },

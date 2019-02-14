@@ -41,6 +41,8 @@ import MyAuctionUpdate from "./views/MyAuctionUpdate";
 import OnlineAuction from "./views/OnlineAuction";
 import OnlineAuctions from "./views/OnlineAuctions";
 
+import About from "./views/About";
+
 import myAccountService from "@/services/myAccountService";
 
 Vue.use(Router);
@@ -310,6 +312,15 @@ const router = new Router({
           component: AdminRegistrations
         }
       ]
+    },
+    {
+      path: '/about',
+      name: "about",
+      components: {
+        default: About,
+        header: Navbar,
+        footer: Footer
+      }
     }
   ],
   scrollBehavior: to => {

@@ -1,20 +1,20 @@
 <template>
+  <div :class="columns" class="mt-3">
+    <img :src="missing" alt="Card image cap" class="img-fluid" v-if="ispdf">
+    <img :src="file.dataUrl" alt="Card image cap" class="img-fluid" v-else>
+    <div v-if="ispdf">
+      <p class="mb-0 small">{{ file.type }}</p>
+      <!--
+      <mdb-card-text>({{ file.size }}) type: {{ file.type }}</mdb-card-text>
+      <mdb-card-text>Last Changed: {{ file.lastModifiedDate }}</mdb-card-text>
+      -->
+    </div>
+</div>
 
-<mdb-card :class="columns">
-  <mdb-card-image :src="missing" alt="Card image cap" v-if="ispdf"></mdb-card-image>
-  <mdb-card-image :src="file.dataUrl" alt="Card image cap" v-else></mdb-card-image>
-  <mdb-card-body v-if="ispdf">
-    <mdb-card-text>{{ file.type }}</mdb-card-text>
-    <!--
-    <mdb-card-text>({{ file.size }}) type: {{ file.type }}</mdb-card-text>
-    <mdb-card-text>Last Changed: {{ file.lastModifiedDate }}</mdb-card-text>
-    -->
-  </mdb-card-body>
-</mdb-card>
 </template>
 
 <script>
-import { mdbCol, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
+import { mdbCol, mdbRow, mdbContainer, mdbBtn } from "mdbvue";
 
 export default {
   props: ["file", "size"],
@@ -23,11 +23,6 @@ export default {
     mdbContainer,
     mdbCol,
     mdbRow,
-    mdbCard,
-    mdbCardImage,
-    mdbCardBody,
-    mdbCardTitle,
-    mdbCardText,
     mdbBtn
   },
   data() {
@@ -46,7 +41,7 @@ export default {
       }
     },
     columns() {
-      return "col-md-" + this.size;
+      return "col-" + this.size;
     }
   },
 };

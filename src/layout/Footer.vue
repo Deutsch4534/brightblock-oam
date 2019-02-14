@@ -1,24 +1,27 @@
 <template>
-
 <!-- Footer -->
-<footer class="page-footer font-small black fixed-bottom" >
-  <mdb-container fluid>
-    <mdb-row class="d-flex flex-row align-items-center" >
-      <mdb-col class="col-md-5 col-xs-4 footer-copyright text-left">
-        <router-link to="/" class="navbar-brand"><img :src="logo" height="40px" alt="radicle logo"></router-link>
-      </mdb-col>
-      <mdb-col class="col-md-5 col-xs-5 footer-copyright funny text-right d-none d-md-block">
-        Independent Art Market
-      </mdb-col>
-      <mdb-col class="col-md-2 col-xs-3 footer-copyright text-right donate-link d-none d-md-block" @click="scrollToElement('DonateSection', $event)">
-        <mdb-icon class="mr-4" icon="heart" />
-        <strong><router-link to="/" name="sectionUrl('DonateSection')">Donate</router-link></strong>
-      </mdb-col>
-    </mdb-row>
-  </mdb-container>
-</footer>
-<!-- Footer -->
+  <footer class="page-footer font-small black fixed-bottom">
+    <mdb-container fluid>
+      <mdb-row class="d-flex flex-row align-items-center">
+        <mdb-col col="2">
+          <router-link to="/" class="navbar-brand"><img :src="logo" height="46px" alt="radicle logo"></router-link>
+        </mdb-col>
+        <mdb-col col="10" class="footer-right text-right">
+          <span class="serif">Independent Art Market</span>
+          <div class="d-inline-block">
+            <mdb-icon class="mx-3" icon="heart"/>
+            <span @click="scrollToElement('DonateSection', $event)" class="font-weight-normal">
+              <router-link to="/" name="sectionUrl('DonateSection')">
+                Donate</router-link>
+            </span>
+          </div>
+        </mdb-col>
+      </mdb-row>
+    </mdb-container>
+  </footer>
+  <!-- Footer -->
 </template>
+
 <script>
 import { mdbContainer, mdbRow, mdbCol, mdbIcon } from 'mdbvue';
 
@@ -53,21 +56,16 @@ export default {
 };
 </script>
 <style scoped>
-  footer.page-footer { min-height: 56px; }
-  footer.page-footer .footer-copyright,
-  footer.page-footer .footer-copyright a {
-    color: #ECEFF1;  font-weight: 300;
+  .page-footer { min-height: 56px; }
+
+  .page-footer {
+    font-size: 20px;
+    color: #ECEFF1;
+    font-weight: 300;
     letter-spacing: 0.5px;
   }
 
-  .page-footer .donate-link a { font-size: 20px;  color: #ECEFF1; }
-  .fa-heart {
-    font-size: 20px;
-    color: #ECEFF1;
+  @media (max-width: 576px) {
+    .page-footer { font-size: 16px;}
   }
-  .funny {
-  font-family: 'Noto Serif Disp ExtCond';
-  font-size: 20px;
-  letter-spacing: 0.5px;
-}
 </style>

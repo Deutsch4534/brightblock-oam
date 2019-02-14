@@ -5,195 +5,280 @@
     <router-view name="footer"/>
   </div>
 </template>
-<script>
 
-export default {
-  components: {},
-  bodyClass: "index-page",
-  data() {
-    return {
-      showLeafs: true
-    };
-  },
-  mounted() {
-    let routeName = this.$route.name;
-    if (routeName === "brightBlock" || routeName === "profile") {
-      this.showLeafs = true;
+<script>
+  export default {
+    components: {},
+    bodyClass: "index-page",
+    data() {
+      return {
+        showLeafs: true
+      };
+    },
+    mounted() {
+      let routeName = this.$route.name;
+      if (routeName === "brightBlock" || routeName === "profile") {
+        this.showLeafs = true;
+      }
     }
-  }
-};
+  };
 </script>
 <style>
-@font-face {
-  font-family: 'Noto Serif Disp ExtCond';
-  src: url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot');
-  src: url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot?#iefix') format('embedded-opentype'),
-  url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.woff2') format('woff2'),
-  url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.woff') format('woff'),
-  url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.svg#NotoSerifDisplay-ExtraCondensedLight') format('svg');
-  font-weight: 300;
-  font-style: normal;
-}
 
-@font-face {
-  font-family: 'Noto Serif Disp';
-  src: url('assets/fonts/NotoSerifDisplay-Italic.eot');
-  src: url('assets/fonts/NotoSerifDisplay-Italic.eot?#iefix') format('embedded-opentype'),
-  url('assets/fonts/NotoSerifDisplay-Italic.woff2') format('woff2'),
-  url('assets/fonts/NotoSerifDisplay-Italic.woff') format('woff'),
-  url('assets/fonts/NotoSerifDisplay-Italic.svg#NotoSerifDisplay-Italic') format('svg');
-  font-weight: 300;
-  font-style: italic;
-}
+  /* Fonts, colors and global styles  */
 
-body {
-  height: 100vh;
-}
+  @font-face {
+    font-family: 'Noto Serif Disp ExtCond';
+    src: url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot');
+    src: url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.eot?#iefix') format('embedded-opentype'),
+    url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.woff2') format('woff2'),
+    url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.woff') format('woff'),
+    url('assets/fonts/NotoSerifDisplay-ExtraCondensedLight.svg#NotoSerifDisplay-ExtraCondensedLight') format('svg');
+    font-weight: 300;
+    font-style: normal;
+  }
 
-header { min-height:50px; }
+  @font-face {
+    font-family: 'Noto Serif Disp';
+    src: url('assets/fonts/NotoSerifDisplay-Italic.eot');
+    src: url('assets/fonts/NotoSerifDisplay-Italic.eot?#iefix') format('embedded-opentype'),
+    url('assets/fonts/NotoSerifDisplay-Italic.woff2') format('woff2'),
+    url('assets/fonts/NotoSerifDisplay-Italic.woff') format('woff'),
+    url('assets/fonts/NotoSerifDisplay-Italic.svg#NotoSerifDisplay-Italic') format('svg');
+    font-weight: 300;
+    font-style: italic;
+  }
 
-p { color: inherit; }
+  body {
+    height: 100vh;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-.serif {
-  font-family: 'Noto Serif Disp ExtCond', serif;
-}
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+  }
 
-.serif-italic {
-  font-family: 'Noto Serif Disp' ;
-}
-.card .card-body .card-text { color: black; }
-.main {
-  padding-bottom: 56px;
-}
-.section-download .btn + .btn {
-    margin-left: 5px;
-}
+  header {
+    min-height: 50px;
+  }
 
-.btn,
-.btn:hover,
-.btn:focus,
-.btn:active {
-  box-shadow: none!important;
-}
+  p {
+    color: inherit;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
 
-.btn.btn-white {
-  border:1px solid rgba(0,0,0,0.12);
-}
+  a {
+    color: inherit !important;
+  }
 
-.btn.btn-white:hover,
-.btn.btn-white:focus,
-.btn.btn-white:active,
-.btn-white:not([disabled]):not(.disabled):active,
-.btn.btn-main:hover,
-.btn.btn-main:focus,
-.btn.btn-main:active,
-.btn-main:not([disabled]):not(.disabled):active{
-  color: #6200EE!important;
-  background-color: rgba(63,0,223,0.12)!important;
-  border:1px solid #6200EE;
-}
+  .serif {
+    font-family: 'Noto Serif Disp ExtCond', serif;
+  }
 
-.btn.btn-sm { font-size: 0.8rem; padding: 0.45rem 1.4rem; }
-.btn.btn-sm.btn-rounded { border-radius: 6em; }
+  .serif-italic {
+    font-family: 'Noto Serif Disp';
+  }
+
+  .text-light {
+    color: #ECEFF1 !important;
+  }
+
+  .text-dark {
+    color: #000000 !important;
+  }
+
+  .bg-light {
+    background-color: #EFF1F2 !important;
+  }
+
+  .bg-dark {
+    background-color: #000000 !important;
+  }
+
+  .bg-white {
+    background-color: white;
+  }
+
+  .bg-main {
+    background-color: #5400E8;
+  }
+
+  .border-shadow::after {
+    content: '';
+    position: absolute;
+    box-sizing: border-box;
+    display: block;
+    border: 4px solid black;
+    left: 3px;
+    top: 3px;
+    right: -10px;
+    bottom: -10px;
+    z-index: -1;
+  }
+
+  .main {
+    padding-bottom: 56px;
+  }
+
+  /* Buttons styling */
+
+  .btn,
+  .btn:hover,
+  .btn:focus,
+  .btn:active {
+    box-shadow: none !important;
+  }
+
+  .btn.btn-white {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .btn.btn-white:hover,
+  .btn.btn-white:focus,
+  .btn.btn-white:active,
+  .btn.btn-white.active,
+  .btn-white:not([disabled]):not(.disabled):active,
+  .btn-white:not([disabled]):not(.disabled).active,
+  .btn.btn-main:hover,
+  .btn.btn-main:focus,
+  .btn.btn-main:active,
+  .btn-main:not([disabled]):not(.disabled):active {
+    color: #6200EE !important;
+    background-color: rgba(63, 0, 223, 0.12) !important;
+    border: 1px solid #6200EE;
+  }
+
+  .btn.btn-sm {
+    font-size: 0.8rem;
+    padding: 0.45rem 1.4rem;
+  }
+
+  .btn.btn-sm.btn-rounded {
+    border-radius: 6em;
+  }
 
 
-.btn.btn-main {
-  background-color: #6200EE!important;
-  border: 1px solid #6200EE;
-}
-.card {
-  box-shadow: none;
-  border-radius: 0;
-}
+  .btn.btn-main {
+    background-color: #6200EE !important;
+    border: 1px solid #6200EE;
+  }
 
-.text-light {
-  color: #ECEFF1!important;
-}
+  /* Custom radio buttons / checkboxes styling */
+  .custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #6200EE;
+    background-color: #6200EE;
+  }
 
-.text-dark {
-  color: #000000!important;
-}
+  /* Drag and drop boxes */
 
-.bg-light {
-  background-color: #EFF1F2!important;
-}
-
-.bg-dark {
-  background-color: #000000!important;
-}
-
-.bg-white { background-color: white; }
-
-.border-shadow::after {
-  content: '';
-  position: absolute;
-  box-sizing: border-box;
-  display: block;
-  border: 4px solid black;
-  left: 3px;
-  top: 3px;
-  right: -10px;
-  bottom: -10px;
-  z-index: -1;
-}
-.subtitle {
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
-}
-
-.artist-page .subtitle {
-  font-size: larger;
-}
-
-@media all and (min-width: 991px) {
-  .btn-container {
+  .load-artwork {
     display: flex;
+    height: 150px;
+    text-align: center;
+    padding: 20px;
+    font-size: 1em;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
   }
-}
 
-.h1 { font-size: 3rem; font-weight: normal; }
-
-@media (min-width: 992px) {
-  .h1-responsive {
-    font-size: 300%;
-    font-weight: normal!important;
+  .drop-area {
+    width: 100%;
+    border: 1px dashed rgba(0, 0, 0, 0.24);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-}
 
-.raised {
-  border-radius: 10px;
-  position: relative;
-  top: 35px;
-  margin-bottom: 150px;
-}
+  .drop-label {
+    color: rgba(0, 0, 0, 0.2);
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
 
-/* Square img */
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
 
-.img-square {
-  position: relative;
-  display: flex;
-  width: 100%;
-}
-.img-square::after {
-  content: "";
-  display: block;
-  padding-bottom: 100%;
-}
+  .artist-page .subtitle {
+    font-size: larger;
+  }
 
-.img-square img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
+  .section-download .btn + .btn {
+    margin-left: 5px;
+  }
+
+  .card {
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .card .card-body .card-text {
+    color: black;
+  }
+
+  @media all and (min-width: 991px) {
+    .btn-container {
+      display: flex;
+    }
+  }
+
+  .h1 {
+    font-size: 3rem;
+    font-weight: normal;
+  }
+
+  @media (min-width: 992px) {
+    .h1-responsive {
+      font-size: 300%;
+      font-weight: normal !important;
+    }
+  }
+
+  .raised {
+    border-radius: 10px;
+    position: relative;
+    top: 35px;
+    margin-bottom: 150px;
+  }
+
+  /* Square img */
+
+  .img-square {
+    position: relative;
+    display: flex;
+    width: 100%;
+  }
+
+  .img-square::after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+  }
+
+  .img-square img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
 
   /* Extra small devices (portrait phones, less than 576px) */
-  @media (max-width: 575px) {}
+  @media (max-width: 575px) {
+  }
 
   /*  Small devices (landscape phones, 576px and up) */
   @media (min-width: 576px) {
     h1.tagline {
       font-size: 300%;
     }
+
     .large-title {
       font-size: 200%;
     }
@@ -204,6 +289,7 @@ p { color: inherit; }
     h1.tagline {
       font-size: 350%;
     }
+
     .large-title {
       font-size: 250%;
     }
@@ -229,6 +315,7 @@ p { color: inherit; }
     .h1-responsive {
       font-size: 300%;
     }
+
     .large-title {
       font-size: 350%;
     }

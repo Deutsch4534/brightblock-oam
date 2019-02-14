@@ -1,19 +1,29 @@
 <template>
-  <mdb-row id="AuctionSection" class="py-5 col-lg-10 mx-auto d-flex" border-top border-dark>
-    <mdb-col md="10" lg="8">
-      <h2 class="large-title pt-md-5 pt-5">{{title}}</h2>
-      <hr class="hr-light my-4">
-      <p>{{description}}</p>
-    </mdb-col>
-
-    <div class="col-md-6">
-      <figure class="figure">
-        <img src="../../../assets/img/bitcoin_swan.jpg" class="figure-img img-fluid z-depth-1"
-             alt="...">
-        <figcaption class="figure-caption">A caption for the above image.</figcaption>
-      </figure>
-    </div>
-  </mdb-row>
+  <section id="AuctionSection" class="py-5">
+    <mdb-row class="py-3 py-md-5 d-flex" border-top border-dark>
+      <mdb-col col="12" lg="8">
+        <h2 class="large-title mb-5">{{title}}</h2>
+        <div class="w-100"></div>
+      </mdb-col>
+      <div class="col-12 border-list">
+        <div class="row list-item mx-15">
+          <mdb-col md="2">
+            <img src="../../../assets/img/bitcoin_swan.jpg" class="img-square"
+                 alt="...">
+          </mdb-col>
+          <mdb-col md="6">
+            <h3 class="h4-responsive text-uppercase my-2"><a>Title</a></h3>
+            <p>{{description}}</p>
+            <p class="font-weight-bold mb-0">Time: 2D 4H 30M 10S</p>
+          </mdb-col>
+          <mdb-col md="4" lg="2" offsetLg="2" class="d-flex align-items-center justify-content-end">
+            <!-- TODO: add router link to auction page -->
+            <a class="btn btn-rounded btn-lg btn-dark mx-0">Register</a>
+          </mdb-col>
+        </div>
+      </div>
+    </mdb-row>
+  </section>
 </template>
 
 <script>
@@ -40,26 +50,3 @@
     }
   };
 </script>
-
-<style scoped>
-  .card {
-    border: 2pt solid black;
-  }
-  h4.card-title {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-  }
-  .card-body i {
-    font-size: 1.5rem;
-  }
-  .card .card-body .card-text {
-    color: black;
-  }
-  .figure-img {
-    box-shadow: none!important;
-  }
-  .figure-caption {
-    color: black;
-    font-size: 0.9rem;
-  }
-</style>

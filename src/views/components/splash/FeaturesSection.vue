@@ -1,76 +1,26 @@
 <template>
-<mdb-row id="FeaturesSection" class="py-5 col-lg-10 mx-auto d-flex">
-  <div class="col-md-12">
-    <mdb-row>
-      <mdb-col lg="10">
-        <h2 class="large-title pt-md-5 pt-5">{{title}}</h2>
-        <hr class="hr-light my-4">
+  <section id="FeaturesSection" class="py-5">
+    <mdb-row class="py-5 d-flex">
+      <mdb-col col="12" lg="8">
+        <h2 class="large-title mb-5">{{title}}</h2>
+      </mdb-col>
+      <div class="w-100"></div>
+      <mdb-col md="12" lg="10" class="border-list">
+        <div class="list-item">
+          <h3 class="h2-responsive"><a><mdb-icon icon="exchange-alt" class="mr-4" />{{cardDescription1}}</a></h3>
+        </div>
+        <div class="list-item">
+          <h3 class="h2-responsive"><a><mdb-icon icon="boxes" class="mr-4" />{{cardDescription2}}</a></h3>
+        </div>
+        <div class="list-item">
+          <h3 class="h2-responsive"><a><mdb-icon icon="bullseye" class="mr-4" />{{cardDescription3}}</a></h3>
+        </div>
+        <div class="list-item">
+          <h3 class="h2-responsive"><a><mdb-icon icon="campground" class="mr-4" />{{cardDescription4}}</a></h3>
+        </div>
       </mdb-col>
     </mdb-row>
-  </div>
-  <div class="d-flex row">
-    <div class="col-12 col-sm-6 col-md-3 d-flex">
-      <!-- Card -->
-      <div class="card border-shadow">
-        <!-- Card content -->
-        <div class="card-body text-center">
-          <h4 class="card-title">
-            <a>
-            <mdb-icon icon="exchange-alt"/>
-          </a>
-          </h4>
-          <p class="card-text">{{cardDescription1}}</p>
-        </div>
-      </div>
-      <!-- Card -->
-    </div>
-    <div class="col-12 col-sm-6 col-md-3 d-flex">
-      <!-- Card -->
-      <div class="card border-shadow">
-        <!-- Card content -->
-        <div class="card-body text-center">
-          <h4 class="card-title">
-            <a>
-              <mdb-icon icon="boxes" />
-            </a>
-          </h4>
-          <p class="card-text">{{cardDescription2}}</p>
-        </div>
-      </div>
-      <!-- Card -->
-    </div>
-    <div class="col-12 col-sm-6 col-md-3 d-flex">
-      <!-- Card -->
-      <div class="card border-shadow">
-        <!-- Card content -->
-        <div class="card-body text-center">
-          <h4 class="card-title">
-            <a>
-              <mdb-icon icon="bullseye" />
-            </a>
-          </h4>
-          <p class="card-text">{{cardDescription3}}</p>
-        </div>
-      </div>
-      <!-- Card -->
-    </div>
-    <div class="col-12 col-sm-6 col-md-3 d-flex">
-      <!-- Card -->
-      <div class="card border-shadow">
-        <!-- Card content -->
-        <div class="card-body text-center">
-          <h4 class="card-title">
-            <a>
-              <mdb-icon icon="campground" />
-            </a>
-          </h4>
-          <p class="card-text">{{cardDescription4}}</p>
-        </div>
-      </div>
-      <!-- Card -->
-    </div>
-  </div>
-</mdb-row>
+  </section>
 </template>
 
 <script>
@@ -106,9 +56,9 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  border: 3pt solid black!important;
-  width: 100%;
-  margin-bottom: 2rem;
+
+ .border-list .list-item h3 {
+  margin-bottom: 0;
 }
+
 </style>

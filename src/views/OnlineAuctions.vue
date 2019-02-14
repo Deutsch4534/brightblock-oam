@@ -1,17 +1,17 @@
 <template>
-  <mdb-container fluid class="bg-light flex-1">
-    <mdb-container class="py-5">
-    <mdb-row v-if="auctionsSize > 0">
-        <mdb-col col="12" class="mb-5">
-          <h1 class="h1-responsive">Auctions</h1>
+  <mdb-container fluid class="bg-light flex-1 py-5">
+    <mdb-container class="py-3 py-md-4">
+    <mdb-row>
+        <mdb-col col="12">
+          <h1 class="h1-responsive mb-5">Auctions</h1>
         </mdb-col>
       </mdb-row>
-      <mdb-row>
+      <mdb-row v-if="auctionsSize > 0">
         <single-auction v-for="(auction, index) of onlineAuctions" :key="index" :auction="auction"/>
       </mdb-row>
       <mdb-row v-if="auctionsArchiveSize > 0">
-        <mdb-col col="12" class="mb-5">
-          <h1 class="h1-responsive">Past Auctions</h1>
+        <mdb-col col="12">
+          <h1 class="h1-responsive mb-5">Past Auctions</h1>
         </mdb-col>
       </mdb-row>
       <mdb-row>

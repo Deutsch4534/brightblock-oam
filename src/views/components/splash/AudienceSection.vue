@@ -1,54 +1,46 @@
 <template>
-<mdb-row id="AudienceSection" class="py-5 col-lg-10 mx-auto d-flex" border-top border-dark>
-  <mdb-col col="12">
-    <h2 class="large-title pt-md-5 pt-5">{{title}}</h2>
-    <hr class="hr-light my-4">
-  </mdb-col>
-  <mdb-col lg="4" class="d-flex">
-    <!-- Card -->
-    <div class="card mb-3 border-shadow">
-      <!-- Card content -->
-      <div class="card-body">
-        <h4 class="h3-responsive card-title"><a>{{cardTitle1}}</a></h4>
-        <p class="card-text">{{cardDescription1}}</p>
-      </div>
-      <div class="card-body pt-0 d-flex align-items-end justify-content-end">
-        <mdb-icon far icon="address-book" />
-      </div>
-    </div>
-    <!-- Card -->
-  </mdb-col>
-
-  <mdb-col lg="4" class="d-flex">
-    <!-- Card -->
-    <div class="card mb-3 border-shadow">
-      <!-- Card content -->
-      <div class="card-body">
-        <h4 class="h3-responsive card-title"><a>{{cardTitle2}}</a></h4>
-        <p class="card-text">{{cardDescription2}}</p>
-      </div>
-      <div class="card-body pt-0 d-flex align-items-end justify-content-end">
-        <mdb-icon far icon="bookmark" />
-      </div>
-    </div>
-    <!-- Card -->
-  </mdb-col>
-
-  <mdb-col lg="4" class="d-flex">
-    <!-- Card -->
-    <div class="card mb-3 border-shadow">
-      <!-- Card content -->
-      <div class="card-body">
-        <h4 class="h3-responsive card-title"><a>{{cardTitle3}}</a></h4>
-        <p class="card-text">{{cardDescription3}}</p>
-      </div>
-      <div class="card-body pt-0 d-flex align-items-end justify-content-end">
-        <mdb-icon icon="university" />
-      </div>
-    </div>
-    <!-- Card -->
-  </mdb-col>
-</mdb-row>
+  <section id="AudienceSection" class="py-5">
+    <mdb-row class="d-flex py-3 py-md-5">
+      <mdb-col col="12">
+        <h2 class="large-title mb-5">{{title}}</h2>
+      </mdb-col>
+      <mdb-col md="12" lg="10" class="border-list">
+        <div class="list-item">
+          <mdb-col col="12" class="pl-0">
+            <h3 class="h2-responsive mb-3">
+              <mdb-icon far icon="address-book" class="mr-4"/>
+              {{cardTitle1}}
+            </h3>
+          </mdb-col>
+          <mdb-col col="12" lg="10" xl="9" class="pl-0">
+            <p class="card-text">{{cardDescription1}}</p>
+          </mdb-col>
+        </div>
+        <div class="list-item">
+          <mdb-col col="12" class="pl-0">
+            <h3 class="h2-responsive mb-3">
+              <mdb-icon far icon="bookmark" class="mr-4"/>
+              {{cardTitle2}}
+            </h3>
+          </mdb-col>
+          <mdb-col col="12" lg="10" xl="9" class="pl-0">
+            <p class="card-text">{{cardDescription2}}</p>
+          </mdb-col>
+        </div>
+        <div class="list-item">
+          <mdb-col col="12" class="pl-0">
+            <h3 class="h2-responsive mb-3">
+              <mdb-icon icon="university" class="mr-4"/>
+              {{cardTitle3}}
+            </h3>
+          </mdb-col>
+          <mdb-col col="12" lg="10" xl="9" class="pl-0">
+            <p class="card-text">{{cardDescription3}}</p>
+          </mdb-col>
+        </div>
+      </mdb-col>
+    </mdb-row>
+  </section>
 </template>
 
 <script>
@@ -82,19 +74,7 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  border: 3pt solid black;
-  box-shadow: none;
-  border-radius: 0;
-}
 
-h4.card-title {
-  margin-bottom: 2rem;
-}
-.card-body i {
-  font-size: 1.8rem;
-}
-.card .card-body .card-text {
-  color: black;
-}
+
+
 </style>
