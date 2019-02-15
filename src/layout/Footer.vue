@@ -4,13 +4,15 @@
     <mdb-container fluid>
       <mdb-row class="d-flex flex-row align-items-center">
         <mdb-col col="2">
-          <router-link to="/" class="navbar-brand"><img :src="logo" height="46px" alt="radicle logo"></router-link>
+          <span @click="scrollToElement('introSection', $event); closeMenu()" class="d-inline-block">
+            <router-link to="/" class="navbar-brand d-inline-block" name="sectionUrl('introSection')"><img :src="logo" height="46px" alt="radicle logo"></router-link>
+          </span>
         </mdb-col>
         <mdb-col col="10" class="footer-right text-right">
           <span class="serif">Independent Art Market</span>
           <div class="d-inline-block">
             <mdb-icon class="mx-3" icon="heart"/>
-            <span @click="scrollToElement('DonateSection', $event)" class="font-weight-normal">
+            <span @click="scrollToElement('DonateSection', $event); closeMenu()" class="font-weight-normal">
               <router-link to="/" name="sectionUrl('DonateSection')">
                 Donate</router-link>
             </span>
@@ -46,10 +48,11 @@ export default {
     scrollToElement(element, event) {
       let element_id = document.getElementById(element);
       if (element_id) {
-        element_id.scrollIntoView({ block: "end", behavior: "smooth" });
-        // setTimeout(() => {
-        //    window.scrollBy(0, -40);
-        //  }, 700);
+        if (element_id.id === 'introSection'){
+          element_id.scrollIntoView({ block: "end", behavior: "smooth" });
+        } else {
+          element_id.scrollIntoView({ block: "start", behavior: "smooth" });
+        }
       }
     }
   }

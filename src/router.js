@@ -18,7 +18,6 @@ import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
 import TeamProfile from "./views/TeamProfile.vue";
 import Navbar from "./layout/Navbar.vue";
-import NavbarSplash from "./layout/NavbarSplash.vue";
 import Footer from "./layout/Footer.vue";
 
 import Artwork from "./views/Artwork";
@@ -53,7 +52,7 @@ const router = new Router({
       name: "index",
       components: {
         default: Index,
-        header: NavbarSplash,
+        header: Navbar,
         footer: Footer
       },
       props: {

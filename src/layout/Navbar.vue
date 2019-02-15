@@ -33,7 +33,10 @@
         <li class="nav-item ripple-parent">
           <router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link>
         </li>
+
         <auction-links v-if="loggedIn"/>
+        <splash-links v-if="splashLinks" class="text-white"/>
+
         <div class="mb-4"></div>
         <li v-if="!loggedIn" class="nav-item ripple-parent">
           <router-link to="/login" class="nav-link navbar-link">
@@ -69,11 +72,12 @@ function resizeThrottler(actualResizeHandler) {
   }
 }
 
-import { mdbContainer, mdbIcon, mdbRow, mdbCol, mdbNavbar, mdbNavbarToggler, mdbNavbarNav, mdbNavItem, mdbInput, mdbView, mdbMask, mdbBtn, mdbNavbarBrand } from 'mdbvue';
+import { mdbContainer, mdbIcon, mdbRow, mdbCol, mdbNavbar, mdbNavbarToggler, mdbNavbarNav, mdbNavItem, mdbInput, mdbBtn, mdbNavbarBrand } from 'mdbvue';
 import AccountLinks from "@/layout/AccountLinks";
 import AuctionLinks from "@/layout/AuctionLinks";
 import artworkSearchService from "@/services/artworkSearchService";
 import myAccountService from '../services/myAccountService';
+import SplashLinks from './SplashLinks';
 
 export default {
   name: 'Navbar',
@@ -85,14 +89,13 @@ export default {
       link3: "contact",
       link4: "donate",
       title: "title",
-      tagline: "tagline",
-      taglink1: '',
       taglink2: '',
-      bgImage: null,
-      logo: require("@/assets/img/logo/logo-black-256x256.png")
+      logo: require("@/assets/img/logo/logo-black-256x256.png"),
+      splashLinks: Boolean
     };
   },
   components: {
+    SplashLinks,
     AuctionLinks,
     AccountLinks,
     mdbContainer,
@@ -103,8 +106,6 @@ export default {
     mdbNavbarNav,
     mdbNavItem,
     mdbInput,
-    mdbView,
-    mdbMask,
     mdbBtn,
     mdbIcon,
     mdbNavbarBrand
@@ -113,15 +114,6 @@ export default {
     this.getContent();
   },
   computed: {
-    headerStyle() {
-      return {
-        "margin-top": "0px",
-        "background-image": `url(${this.bgImage})`,
-        "background-repeat": "no-repeat",
-        "background-size": "cover",
-        "background-position": "center center"
-      };
-    },
     featureAuctions() {
       return this.$store.state.constants.featureAuctions;
     },
@@ -131,21 +123,6 @@ export default {
     }
   },
   methods: {
-    bodyClick() {
-      let bodyClick = document.getElementById("bodyClick");
-
-      if (bodyClick === null) {
-        let body = document.querySelector("body");
-        let elem = document.createElement("div");
-        elem.setAttribute("id", "bodyClick");
-        body.appendChild(elem);
-
-        let bodyClick = document.getElementById("bodyClick");
-        bodyClick.addEventListener("click", this.toggleNavbarMobile);
-      } else {
-        bodyClick.remove();
-      }
-    },
     getContent() {
       this.$prismic.client.getSingle("navbar").then(document => {
         this.link1 = document.data.link1[0].text;
@@ -153,10 +130,7 @@ export default {
         this.link3 = document.data.link3[0].text;
         this.link4 = document.data.link4[0].text;
         this.title = document.data.title[0].text;
-        this.tagline = document.data.tagline[0].text;
-        this.taglink1 = document.data.taglink1[0].text;
         this.taglink2 = document.data.taglink2[0].text;
-        this.bgImage = document.data.background.url;
       });
     },
     doSearch() {
@@ -167,10 +141,12 @@ export default {
       artworkSearchService.newQuery(qString);
       this.$router.push("/search?query=" + qString);
     },
-    toggleNavbarMobile() {
-      this.NavbarStore.showNavbar = !this.NavbarStore.showNavbar;
-      this.toggledClass = !this.toggledClass;
-      this.bodyClick();
+    checkSplashLinks() {
+      let bodyClass = document.querySelector('body');
+      this.splashLinks = bodyClass.classList.contains('index');
+    },
+    scrollListener() {
+      resizeThrottler(this.handleScroll);
     },
     handleScroll() {
       let scrollValue =
@@ -187,22 +163,6 @@ export default {
         }
       }
     },
-    scrollListener() {
-      resizeThrottler(this.handleScroll);
-    },
-    scrollToElement(element, event) {
-      let domain = location.href;
-      if (domain.indexOf("team") === -1) {
-        event.preventDefault();
-      }
-      let element_id = document.getElementById(element);
-      if (element_id) {
-        element_id.scrollIntoView({ block: "start", behavior: "smooth" });
-        setTimeout(() => {
-            window.scrollBy(0, -40);
-          }, 700);
-      }
-    },
     logout() {
       localStorage.clear();
       sessionStorage.clear();
@@ -210,10 +170,11 @@ export default {
     }
   },
   mounted() {
+    this.checkSplashLinks();
     document.addEventListener("scroll", this.scrollListener);
     let navMenuItems = document.querySelectorAll(".navbar-collapse li a.nav-link.navbar-link");
     navMenuItems.forEach((item) => {
-        item.addEventListener('click', this.toggleMenu);
+      item.addEventListener('click', this.closeMenu);
     });
   },
   beforeDestroy() {
@@ -222,6 +183,12 @@ export default {
     navMenuItems.forEach((item) => {
       item.removeEventListener('click', this.toggleMenu);
     });
+  },
+  watch: {
+    '$route' () {
+        this.checkSplashLinks();
+        this.closeMenu();
+      }
   }
 };
 </script>

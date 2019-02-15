@@ -41,8 +41,14 @@ Vue.mixin({
   },
   methods: {
     toggleMenu(){
-      let toggler = document.querySelector('.navbar-toggler');
+      const toggler = document.querySelector('.navbar-toggler');
       toggler.click();
+    },
+    closeMenu() {
+      const nav = document.querySelector('.navbar-collapse');
+      if (nav.classList.contains('show-navbar')){
+        this.toggleMenu();
+      }
     }
   }
 });
