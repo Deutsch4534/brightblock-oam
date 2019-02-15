@@ -8,7 +8,7 @@
         <img :src="blockstackProfile.avatarUrl" class="img-fluid"/>
       </div>
       <div class="col-md-5 mb-4">
-        <div class="form-row">
+        <div class="row">
           <p><a href="http://localhost:8888/profiles" target="_blank">Edit blockstack profile</a></p>
         </div>
         <div class="form-row">
@@ -36,6 +36,23 @@
         </div>
         <div class="form-row mt-3">
           <mdb-btn size="lg" type="submit" class="btn-main btn-block">Submit Profile</mdb-btn>
+        </div>
+        <div class="row">
+          <mdb-popover trigger="click" :options="{placement: 'top'}">
+            <div class="popover">
+              <div class="popover-header">
+                Bitcoin Wallet
+              </div>
+              <div class="popover-body">
+                You'll need a bitcoin wallet to use radicle. We like the we like
+                <a href="https://electrum.org" target="_blank">electrum wallet <mdb-icon icon="external-link-alt" /></a>
+                as it's very user friendly.
+              </div>
+            </div>
+            <a @click.prevent="" slot="reference">
+              No wallet <mdb-icon far icon="question-circle" />
+            </a>
+          </mdb-popover>
         </div>
       </div>
     </div>

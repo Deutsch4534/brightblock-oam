@@ -120,7 +120,7 @@
                         <div class="col-md-6 mx-auto">
                           <img :src="teamImg3" alt="Thumbnail Image" class="img-raised rounded-circle img-fluid">
                         </div>
-                        <h4 class="card-title">Kendall Jenner
+                        <h4 class="card-title">Mum and Dad
                           <br>
                           <small class="card-description text-muted">Model</small>
                         </h4>
@@ -201,11 +201,11 @@ export default {
     },
     teamImg2: {
       type: String,
-      default: require("@/assets/img/faces/christian.jpg")
+      default: require("@/assets/img/faces/avatar.jpg")
     },
     teamImg3: {
       type: String,
-      default: require("@/assets/img/faces/kendall.jpg")
+      default: require("@/assets/img/faces/avatar.jpg")
     }
   },
   data() {

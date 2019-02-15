@@ -2,7 +2,7 @@
     <mdb-card class="bg-transparent mb-5 w-100">
       <router-link class="grid-item" :to="url">
         <mdb-view hover>
-          <mdb-card-image :src="artist.avatarUrl" :alt="artist.name" class="img-square"></mdb-card-image>
+          <mdb-card-image :src="avatar" :alt="artist.name" class="img-square"></mdb-card-image>
           <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
         </mdb-view>
       </router-link>
@@ -44,6 +44,12 @@ export default {
   computed: {
     url () {
       return '/artists/' + this.artist.username
+    },
+    avatar () {
+      if (this.artist.avatarUrl) {
+        return this.artist.avatarUrl;
+      }
+      return require("@/assets/img/faces/avatar.jpg");
     }
   }
 }

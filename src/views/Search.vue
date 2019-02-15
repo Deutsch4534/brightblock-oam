@@ -3,7 +3,7 @@
   <mdb-container class="py-3 py-md-4">
     <div class="row">
       <div class="col-12">
-        <h1 class="h1-responsive mb-5 text-white">Search results for "{{ queryString }}" ({{numberArtworks}})</h1>
+        <h1 class="h1-responsive mb-5 text-white">Search results ({{numberArtworks}})</h1>
         <!--<h2 class="h2-responsive mb-3 text-white">Refine search</h2>
         <filters @update="updateFilters($event)" class="text-white mb-5"/>-->
       </div>

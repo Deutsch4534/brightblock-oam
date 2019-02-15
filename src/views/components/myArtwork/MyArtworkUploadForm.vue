@@ -4,8 +4,13 @@
     <h1 class="h1-responsive">{{formTitle}}</h1>
     <form class="needs-validation py-5 form-transparent" novalidate @submit.prevent="checkForm" id="artworkForm">
 
+
+  <!-- item type -->
+  <div class="row justify-content-between">
+
+  <div class="col-md-5 mb-4">
     <div class="row ml-1 mb-4">
-      <div class="col-12 col-md-5">
+      <div class="col-12">
         <div class="row">
           <div class="col-6 custom-control custom-radio mb-0">
             <input type="radio" class="custom-control-input" id="customControlValidation2" name="artwork.itemType" v-model="artwork.itemType" value="digiart" required>
@@ -18,11 +23,6 @@
         </div>
       </div>
     </div>
-
-  <!-- item type -->
-  <div class="row justify-content-between">
-
-  <div class="col-md-5 mb-4">
     <div class="form-row">
         <!--<label for="validationCustom01">Artwork Title</label>-->
         <input type="text" class="form-control" id="validationCustom01" placeholder="Artwork Title" v-model="artwork.title" required>
@@ -111,6 +111,15 @@
         <input id="created">
       </datetime>
     </div>
+
+    <!-- Submit button row -->
+    <div class="row">
+      <div class="col-12 mt-3">
+        <mdb-btn type="submit" size="lg" class="btn-main btn-block">Submit Artwork</mdb-btn>
+      </div>
+    </div>
+    <div class="w-100"></div>
+
   </div>
 
         <!-- Left column
@@ -123,15 +132,15 @@
         <!-- Right column - image drop -->
         <div class="col-md-6">
           <h2 class="h3-responsive mb-5">
-            Set Artwork Images
+            Documents and Images
           </h2>
           <mdb-row>
             <!-- droppable area 1 -->
-            <mdb-col md="6" class="mb-4">
+            <mdb-col md="12" class="mb-4">
               <mdb-popover trigger="click" :options="{placement: 'top'}">
                 <div class="popover">
                   <div class="popover-header">
-                    The Cover
+                    Artwork
                   </div>
                   <div class="popover-body">
                     Your original digital image or a high res image of your artwork.
@@ -171,7 +180,7 @@
             <!--/droppable area 1 -->
 
             <!-- droppable area 2 -->
-            <mdb-col md="6" class="mb-4">
+            <mdb-col md="12" class="mb-4">
               <mdb-popover trigger="click" :options="{placement: 'top'}">
                 <div class="popover">
                   <div class="popover-header">
@@ -220,7 +229,7 @@
             <!-- /droppable area 2 -->
 
             <!-- droppable area 3 -->
-            <mdb-col md="6" class="mb-4">
+            <mdb-col md="12" class="mb-4">
               <mdb-popover trigger="click" :options="{placement: 'top'}">
                 <div class="popover">
                   <div class="popover-header">
@@ -266,13 +275,6 @@
         <!-- / image drop -->
       </div>
 
-      <!-- Submit button row -->
-      <div class="row">
-        <div class="col-12 col-md-5 mt-4">
-          <mdb-btn type="submit" size="lg" class="btn-main btn-block">Submit Artwork</mdb-btn>
-        </div>
-      </div>
-      <div class="w-100"></div>
     </form>
   </mdb-container>
 </template>
