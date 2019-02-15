@@ -1,5 +1,8 @@
 <template>
 <div>
+  <div id="introSection">
+    <intro-section />
+  </div>
   <!-- About section  -->
   <div class="border-top border-dark"></div>
   <mdb-container>
@@ -47,11 +50,11 @@
     </mdb-container>
 
   <!-- Auction section  -->
-  <div class="border-top border-dark"></div>
   <!--
+  <div class="border-top border-dark"></div>
     <mdb-container>
       <auction-section/>
-    </mdb-container>
+    </mdb-container> -->
 
   <!-- Donate section  -->
   <div class="border-top border-dark"></div>
@@ -79,9 +82,11 @@ import DonateSection from "./components/splash/DonateSection";
 import AudienceSection from "./components/splash/AudienceSection";
 import FeaturesSection from "./components/splash/FeaturesSection";
 import AuctionSection from './components/splash/AuctionSection';
+import IntroSection from './components/splash/IntroSection';
 
 export default {
   components: {
+    IntroSection,
     AuctionSection,
     mdbContainer,
     mdbRow,
@@ -94,7 +99,6 @@ export default {
     FeaturesSection,
   },
   name: "index",
-  bodyClass: "index-page",
   data() {
     return {
       title1: "Empowering the art community with tools to break free and solve current status quo",
@@ -111,6 +115,12 @@ export default {
       description6: "",
     };
   },
+  beforeMount() {
+    document.querySelector('body').classList.add('index');
+  },
+  beforeDestroy() {
+    document.querySelector('body').classList.remove('index');
+  }
 };
 </script>
 

@@ -19,7 +19,6 @@ import ProfileUpdate from "./views/ProfileUpdate.vue";
 import ProfileUpload from "./views/ProfileUpload.vue";
 import TeamProfile from "./views/TeamProfile.vue";
 import Navbar from "./layout/Navbar.vue";
-import NavbarSplash from "./layout/NavbarSplash.vue";
 import Footer from "./layout/Footer.vue";
 
 import Artwork from "./views/Artwork";
@@ -54,7 +53,7 @@ const router = new Router({
       name: "index",
       components: {
         default: Index,
-        header: NavbarSplash,
+        header: Navbar,
         footer: Footer
       },
       props: {
@@ -207,22 +206,26 @@ const router = new Router({
         footer: Footer
       },
       meta: { requiresAuth: true },
-      children: [
-        {
-          path: "/my-artwork/register-for-sale/:artworkId/:amount/:currency",
-          name: "registerForSale",
-          component: RegisterForSale,
-          props: true
-        },
-        {
-          path:
-            "/my-artwork/register-for-auction/" +
-            ":artworkId/:auctionId/:reserve/:increment/:currency",
-          name: "registerForAuction",
-          component: RegisterForAuction,
-          props: true
-        }
-      ]
+    },
+    {
+      path: "/my-artwork/register-for-sale/:artworkId/:amount/:currency",
+      name: "registerForSale",
+      components: {
+        default: RegisterForSale,
+        header: Navbar,
+        footer: Footer
+      }
+    },
+    {
+      path:
+        "/my-artwork/register-for-auction/" +
+        ":artworkId/:auctionId/:reserve/:increment/:currency",
+      name: "registerForAuction",
+      components: {
+        default: RegisterForAuction,
+        header: Navbar,
+        footer: Footer
+      }
     },
     {
       path: "/online-auction/:username/:auctionId",

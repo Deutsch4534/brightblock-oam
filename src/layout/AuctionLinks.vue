@@ -1,32 +1,38 @@
 <template>
   <mdb-dropdown tag="li" class="nav-item">
-    <mdb-dropdown-toggle tag="a" class="dropright" color="" navLink slot="toggle" waves-fixed>My Portfolio</mdb-dropdown-toggle>
+    <mdb-dropdown-toggle tag="a" class="dropright" color="" navLink slot="toggle" waves-fixed>
+      My Portfolio
+    </mdb-dropdown-toggle>
     <mdb-dropdown-menu class="dropdown-menu-left position-static">
-      <li v-if="loggedIn" v-on:click="toggleMenu">
+      <li v-if="loggedIn" v-on:click="closeMenu">
         <router-link
           class="dropdown-item"
           to="/my-artworks"
-          >My Art Work</router-link
+        >My Art Work
+        </router-link
         >
       </li>
-      <li v-if="loggedIn" v-on:click="toggleMenu">
+      <li v-if="loggedIn" v-on:click="closeMenu">
         <router-link
           class="dropdown-item"
           to="/my-artwork/upload"
-          >Upload Artwork</router-link>
+        >Upload Artwork
+        </router-link>
       </li>
-      <li v-if="loggedIn && featureAuctions" v-on:click="toggleMenu">
+      <li v-if="loggedIn && featureAuctions" v-on:click="closeMenu">
         <router-link
           class="dropdown-item"
           to="/my-auctions"
-          >My Auctions</router-link
+        >My Auctions
+        </router-link
         >
       </li>
-      <li v-if="loggedIn && featureAuctions" v-on:click="toggleMenu">
+      <li v-if="loggedIn && featureAuctions" v-on:click="closeMenu">
         <router-link
           class="dropdown-item"
           to="/my-auctions/upload"
-          >New Auction</router-link
+        >New Auction
+        </router-link
         >
       </li>
     </mdb-dropdown-menu>
@@ -34,11 +40,7 @@
 </template>
 
 <script>
-import { mdbNavbar, mdbNavItem, mdbNavbarNav, mdbNavbarToggler, mdbContainer, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle, mdbInput, mdbNavbarBrand, mdbIcon, mdbRow } from 'mdbvue';
-
-export default {
-  name: 'AccountLinks',
-  components: {
+  import {
     mdbNavbar,
     mdbNavItem,
     mdbNavbarNav,
@@ -52,67 +54,87 @@ export default {
     mdbNavbarBrand,
     mdbIcon,
     mdbRow
-  },
-  data() {
-    return {
-      showSearch: false,
-      query: null
-    };
-  },
-  computed: {
-    showAdmin() {
-      return this.$store.state.myAccountStore.myProfile.showAdmin;
+  } from 'mdbvue';
+
+  export default {
+    name: 'AccountLinks',
+    components: {
+      mdbNavbar,
+      mdbNavItem,
+      mdbNavbarNav,
+      mdbNavbarToggler,
+      mdbContainer,
+      mdbDropdown,
+      mdbDropdownItem,
+      mdbDropdownMenu,
+      mdbDropdownToggle,
+      mdbInput,
+      mdbNavbarBrand,
+      mdbIcon,
+      mdbRow
     },
-    featureAuctions() {
-      return this.$store.state.constants.featureAuctions;
+    data() {
+      return {
+        showSearch: false,
+        query: null
+      };
     },
-    username() {
-      return this.$store.state.myAccountStore.myProfile.name;
-    },
-    avatar() {
-      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      if (myProfile.loggedIn) {
-        return (
-          '<img style="width: 40px; height: 40px; border-radius: 20px;" src="' +
-          myProfile.avatarUrl +
-          '"/>'
-        );
-      } else {
-        return '<span class="icon-user"></span>';
+    computed: {
+      showAdmin() {
+        return this.$store.state.myAccountStore.myProfile.showAdmin;
+      },
+      featureAuctions() {
+        return this.$store.state.constants.featureAuctions;
+      },
+      username() {
+        return this.$store.state.myAccountStore.myProfile.name;
+      },
+      avatar() {
+        let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+        if (myProfile.loggedIn) {
+          return (
+            '<img style="width: 40px; height: 40px; border-radius: 20px;" src="' +
+            myProfile.avatarUrl +
+            '"/>'
+          );
+        } else {
+          return '<span class="icon-user"></span>';
+        }
+      },
+      avatarUrl() {
+        let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+        return myProfile.avatarUrl;
+      },
+      loggedIn() {
+        let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+        return myProfile.loggedIn;
       }
     },
-    avatarUrl() {
-      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      return myProfile.avatarUrl;
-    },
-    loggedIn() {
-      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      return myProfile.loggedIn;
-    }
-  },
-  methods: {}
-};
+    methods: {}
+  };
 </script>
 
 <style scoped>
- .dropdown-menu {
-    position: static!important;
+  .dropdown-menu {
+    position: static !important;
     background: transparent;
-    border:none;
+    border: none;
   }
+
   .dropdown .dropdown-menu .dropdown-item {
-    color: white!important;
+    color: white !important;
     font-size: 2rem;
     padding: 0.7rem 0.7rem 0.7rem 1.5rem;
   }
- .dropdown .dropdown-menu .dropdown-item:hover,
- .dropdown .dropdown-menu .dropdown-item:focus,
- .dropdown .dropdown-menu .dropdown-item:active,
- .dropdown .dropdown-menu .dropdown-item.router-link-active {
-   background-color: inherit;
-   box-shadow: none;
-   color: rgba(255, 255, 255, 0.75)!important;
- }
+
+  .dropdown .dropdown-menu .dropdown-item:hover,
+  .dropdown .dropdown-menu .dropdown-item:focus,
+  .dropdown .dropdown-menu .dropdown-item:active,
+  .dropdown .dropdown-menu .dropdown-item.router-link-active {
+    background-color: inherit;
+    box-shadow: none;
+    color: rgba(255, 255, 255, 0.75) !important;
+  }
 
   @media (max-width: 576px) {
     .dropdown .dropdown-menu .dropdown-item {

@@ -1,73 +1,74 @@
 <template>
-<mdb-card-body>
-  <mdb-card-title>
-    <mdb-popover trigger="click" :options="{placement: 'top'}">
-      <div class="popover">
-        <div class="popover-header">Sell Direct</div>
-        <div class="popover-body">
-          This option lists this item in our marketplace for direct sale.
+<div class="container mt-5">
+  <mdb-card-body>
+    <mdb-card-title>
+      <mdb-popover trigger="click" :options="{placement: 'top'}">
+        <div class="popover">
+          <div class="popover-header">Sell Direct</div>
+          <div class="popover-body">
+            This option lists this item in our marketplace for direct sale.
+          </div>
         </div>
-      </div>
-      <a @click.prevent="" slot="reference">Sell Direct <mdb-icon far icon="question-circle" /></a>
-    </mdb-popover>
-  </mdb-card-title>
-  <h5 class="my-3">{{artwork.title}}</h5>
-  <p v-if="canAuction"><router-link :to="registerForAuctionUrl()" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Sell in auction...</mdb-btn></router-link>
-  </p>
-  <mdb-card-text>
-    <form @submit.prevent="setPrice">
-      <p>This item can be bought for the price you specify.</p>
-      <p v-if="errors.length" :key="errors.length">
-        <b>Please correct the following error(s):</b>
-        <ul>
-          <li v-for="error in errors" :key="error.id">{{ error.message }}</li>
-        </ul>
-      </p>
+        <a @click.prevent="" slot="reference">Sell Direct <mdb-icon far icon="question-circle" /></a>
+      </mdb-popover>
+    </mdb-card-title>
+    <h5 class="my-3">{{artwork.title}}</h5>
+    <p v-if="canAuction"><router-link :to="registerForAuctionUrl()" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Sell in auction...</mdb-btn></router-link></p>
+    <mdb-card-text>
+      <form @submit.prevent="setPrice">
+        <p>This item can be bought for the price you specify.</p>
+        <p v-if="errors.length" :key="errors.length">
+          <b>Please correct the following error(s):</b>
+          <ul>
+            <li v-for="error in errors" :key="error.id">{{ error.message }}</li>
+          </ul>
+        </p>
 
-      <div class="row ml-3 mt-4">
-        <div class="col-6">
-          <mdb-popover trigger="click" :options="{placement: 'top'}">
-            <div class="popover">
-              <div class="popover-header">Currency</div>
-              <div class="popover-body">
-                The artwork will be sold for the amount of bitcoin that is equivalent to the
-                sale value in the Fiat currency you set here.
+        <div class="row ml-3 mt-4">
+          <div class="col-6">
+            <mdb-popover trigger="click" :options="{placement: 'top'}">
+              <div class="popover">
+                <div class="popover-header">Currency</div>
+                <div class="popover-body">
+                  The artwork will be sold for the amount of bitcoin that is equivalent to the
+                  sale value in the Fiat currency you set here.
+                </div>
               </div>
+              <a @click.prevent="" slot="reference">Select Currency <mdb-icon far icon="question-circle" /></a>
+            </mdb-popover>
+            <select class="browser-default custom-select" v-model="currency" id="currency" name="currency">
+              <option v-for="(value,key) in fiatRates" :key="key" :value="key">{{ key }}</option>
+            </select>
+            <p class="">
+              {{conversionMessage}}
+            </p>
+            <div class="invalid-feedback">
+              Please select the currency!
             </div>
-            <a @click.prevent="" slot="reference">Select Currency <mdb-icon far icon="question-circle" /></a>
-          </mdb-popover>
-          <select class="browser-default custom-select" v-model="currency" id="currency" name="currency">
-            <option v-for="(value,key) in fiatRates" :key="key" :value="key">{{ key }}</option>
-          </select>
-          <p class="">
-            {{conversionMessage}}
-          </p>
-          <div class="invalid-feedback">
-            Please select the currency!
           </div>
         </div>
-      </div>
 
-      <div class="row ml-3 mt-4">
-        <div class="col-md-6">
-          <label for="validationCustom01">Amount {{currencySymbol}}</label>
-          <input type="number" class="form-control" id="validationCustom01" step="50" placeholder="Sale value of artwork" v-model="amount" required>
-          <div class="invalid-feedback">
-            Please enter the amount!
+        <div class="row ml-3 mt-4">
+          <div class="col-md-6">
+            <label for="validationCustom01">Amount {{currencySymbol}}</label>
+            <input type="number" class="form-control" id="validationCustom01" step="1" placeholder="Sale value of artwork" v-model="amount" required>
+            <div class="invalid-feedback">
+              Please enter the amount!
+            </div>
+            <p>Note: set the value to 0 to remove from sale.</p>
+            <p class="hint">
+              {{valueInBitcoin}} Btc / {{valueInEther}} Eth
+            </p>
           </div>
-          <p>Note: set the value to 0 to remove from sale.</p>
-          <p class="hint">
-            {{valueInBitcoin}} Btc / {{valueInEther}} Eth
-          </p>
         </div>
-      </div>
-    </form>
-  </mdb-card-text>
-  <div class="rounded-bottom lighten-3 p-3">
-    <mdb-btn color="white" @click="closeModal" size="md">Cancel</mdb-btn>
-    <mdb-btn color="white" @click="setPrice" size="md">Save</mdb-btn>
-  </div>
-</mdb-card-body>
+      </form>
+    </mdb-card-text>
+    <div class="rounded-bottom lighten-3 p-3">
+      <mdb-btn color="white" @click="closeModal" size="md">Cancel</mdb-btn>
+      <mdb-btn color="white" @click="setPrice" size="md">Save</mdb-btn>
+    </div>
+  </mdb-card-body>
+</div>
 </template>
 
 <script>
@@ -102,7 +103,9 @@ export default {
   mounted() {
     this.artworkId = Number(this.$route.params.artworkId);
     this.amount = Number(this.$route.params.amount);
+    if (!this.amount) this.amount = 0;
     this.currency = this.$route.params.currency;
+    if (!this.currency) this.currency = 0;
     if (this.$route.query.from && this.$route.query.from === "auctions") {
       this.from = "/my-auctions/manage/" + this.$route.query.auctionId;
     }

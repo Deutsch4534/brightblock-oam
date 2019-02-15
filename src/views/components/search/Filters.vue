@@ -20,7 +20,7 @@
       <span class="left">Price</span>
       <span class="right">€ {{ filters.price }}-50.000 </span>
       <br/>
-      <input type="range" min="0" max="1000" step="50" class="slider" @change="updateFilter()" v-model="filters.price">
+      <input type="range" min="0" max="1000" step="1" class="slider" @change="updateFilter()" v-model="filters.price">
     </div>
     -->
   </div>

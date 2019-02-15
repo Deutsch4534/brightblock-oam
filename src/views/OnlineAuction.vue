@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-if="finished">
+<div class="container mt-5" v-if="finished">
   <div class="row">
     <div class="col-md-12 ">
     <mdb-media tag="div">

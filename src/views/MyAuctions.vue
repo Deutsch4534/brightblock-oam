@@ -2,20 +2,21 @@
   <mdb-container fluid class="bg-light flex-1 py-5">
     <mdb-container class="py-3 py-md-4">
       <router-view/>
-      <!-- <mdb-row v-if="myAuctionsFutureCount > 0"> -->
       <mdb-row>
-        <div class="col-md-12">
+        <mdb-col col="12">
           <h1 class="h1-responsive mb-5">My Auctions <span>({{myAuctionsFutureCount}})</span></h1>
-        </div>
-        <div v-if="myAuctionsFutureCount > 0">
-          <single-auction v-for="(auction, index) of myAuctionsFuture" :key="index" :auction="auction" :atype="'webcast'"/>
-        </div>
+        </mdb-col>
+      </mdb-row>
+      <mdb-row v-if="myAuctionsFutureCount > 0">
+        <single-auction v-for="(auction, index) of myAuctionsFuture" :key="index" :auction="auction" :atype="'webcast'"/>
       </mdb-row>
 
+      <mdb-row>
+        <mdb-col col="12">
+          <h1 class="h1-responsive mb-5">Past Auctions</h1>
+        </mdb-col>
+      </mdb-row>
       <mdb-row v-if="myAuctionsPastCount > 0">
-        <div class="col-md-12">
-          <h2 class="h1-responsive mb-5">Past Auctions</h2>
-        </div>
         <single-auction v-for="(auction, index) of myAuctionsPast" :key="index" :auction="auction" :atype="'archive'"/>
       </mdb-row>
     </mdb-container>

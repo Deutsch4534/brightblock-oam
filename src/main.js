@@ -1,5 +1,6 @@
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbvue/build/css/mdb.css';
+import './assets/styles.css';
 import Vue from "vue";
 import App from "./App.vue";
 import Vuex from "vuex";
@@ -42,8 +43,14 @@ Vue.mixin({
   },
   methods: {
     toggleMenu(){
-      let toggler = document.querySelector('.navbar-toggler');
+      const toggler = document.querySelector('.navbar-toggler');
       toggler.click();
+    },
+    closeMenu() {
+      const nav = document.querySelector('.navbar-collapse');
+      if (nav.classList.contains('show-navbar')){
+        this.toggleMenu();
+      }
     }
   }
 });

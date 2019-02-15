@@ -126,15 +126,17 @@ export default {
       return `/my-artwork/register/${this.artwork.id}`;
     },
     registerForSaleUrl() {
-      if (this.artwork.saleData.soid <= 1) {
-        let a = this.$store.getters["myArtworksStore/myArtwork"](this.artwork.id);
-        let id = this.artwork.id;
+      let a = this.$store.getters["myArtworksStore/myArtwork"](this.artwork.id);
+      let id = this.artwork.id;
+      if (this.artwork.saleData || !this.artwork.saleData.soid) {
+        let amount = 0;
+        let currency = "EUR";
+        return `/my-artwork/register-for-sale/${id}/${amount}/${currency}`;
+      } else if (this.artwork.saleData.soid <= 1) {
         let amount = a.saleData ? a.saleData.amount : 0;
         let currency = a.saleData ? a.saleData.fiatCurrency : "EUR";
         return `/my-artwork/register-for-sale/${id}/${amount}/${currency}`;
       } else if (this.artwork.saleData.soid === 2) {
-        let a = this.$store.getters["myArtworksStore/myArtwork"](this.artwork.id);
-        let id = this.artwork.id;
         let r = a.saleData ? a.saleData.reserve : 0;
         let i = a.saleData ? a.saleData.increment : 0;
         let c = a.saleData ? a.saleData.fiatCurrency : "EUR";

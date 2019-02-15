@@ -1,11 +1,11 @@
 <template>
 <div class="">
   <div v-if="sellingBuyNow">
-    <button class="btn btn-primary" @click="routeToBuyNow">Buy Now</button>
+    <button class="btn btn-main" @click="routeToBuyNow">Buy Now</button>
   </div>
   <div v-else-if="sellingAuction">
-    <button class="btn btn-primary" @click="routeToPublicAuction">Open Auction</button>
-    <button class="btn btn-primary" @click="routeToManageAuction">Manage Auction</button>
+    <button class="btn btn-main" @click="routeToPublicAuction">Open Auction</button>
+    <button class="btn btn-main" @click="routeToManageAuction">Manage Auction</button>
   </div>
   <div v-else>
     <h6>Not Selling</h6>

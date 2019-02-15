@@ -471,30 +471,8 @@
     }
   };
 </script>
-<style>
 
-</style>
 <style scoped>
-  .form-transparent .form-control,
-  .form-transparent >>> .form-control,
-  .form-transparent input,
-  .form-transparent textarea,
-  .form-transparent label {
-    background-color: transparent;
-    color: black;
-    font-weight: 300;
-    font-size: 0.85rem;
-  }
-
-  .form-transparent input::-webkit-input-placeholder,
-  .form-transparent input::-moz-placeholder,
-  .form-transparent input:-ms-input-placeholder,
-  .form-transparent input:-moz-placeholder {
-    color: rgba(0, 0, 0, 0.6);
-    font-weight: 300;
-    font-size: 0.85rem;
-  }
-
   #artworkForm .form-row {
     margin-bottom: 1rem;
   }
