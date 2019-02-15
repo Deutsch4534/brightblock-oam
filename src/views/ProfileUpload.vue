@@ -1,6 +1,6 @@
 <template>
 <div class="container-fluid bg-light flex-1">
-  <profile-upload-form :formTitle="'Create Your RA Profile'" :mode="'upload'"/>
+  <profile-upload-form :formTitle="'Create Your RA Profile'" :mode="'upload'" class="form-transparent"/>
 </div>
 </template>
 

@@ -50,11 +50,11 @@
     </mdb-container>
 
   <!-- Auction section  -->
-  <div class="border-top border-dark"></div>
   <!--
+  <div class="border-top border-dark"></div>
     <mdb-container>
       <auction-section/>
-    </mdb-container>
+    </mdb-container> -->
 
   <!-- Donate section  -->
   <div class="border-top border-dark"></div>
