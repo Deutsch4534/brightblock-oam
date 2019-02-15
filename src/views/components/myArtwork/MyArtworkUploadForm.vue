@@ -4,131 +4,121 @@
     <h1 class="h1-responsive">{{formTitle}}</h1>
     <form class="needs-validation py-5 form-transparent" novalidate @submit.prevent="checkForm" id="artworkForm">
 
-      <div class="row justify-content-between">
-
-        <!-- Left column -->
-        <div class="col-md-5 mb-4">
-
-          <!-- Input fields row -->
-          <div class="row mb-4">
-            <div class="col-6 custom-control custom-radio mb-0">
-              <input type="radio" class="custom-control-input" id="customControlValidation2" name="artwork.itemType"
-                     v-model="artwork.itemType" value="digiart" required>
-              <label class="custom-control-label" for="customControlValidation2">Digital Artwork</label>
-            </div>
-            <div class="col-6 custom-control custom-radio mb-0">
-              <input type="radio" class="custom-control-input" id="customControlValidation3" name="artwork.itemType"
-                     v-model="artwork.itemType" value="physart" required>
-              <label class="custom-control-label" for="customControlValidation3">Physical Artwork</label>
-            </div>
+    <div class="row ml-1 mb-4">
+      <div class="col-12 col-md-5">
+        <div class="row">
+          <div class="col-6 custom-control custom-radio mb-0">
+            <input type="radio" class="custom-control-input" id="customControlValidation2" name="artwork.itemType" v-model="artwork.itemType" value="digiart" required>
+            <label class="custom-control-label" for="customControlValidation2">Digital Artwork</label>
           </div>
-          <div class="row mb-3">
-            <!-- TODO - @Mike: Bitcoin Address is a new field, check the newly added property artwork.btcAddress -->
-            <input type="text" class="form-control" id="validationCustom00" placeholder="Bitcoin Address"
-                   v-model="artwork.btcAddress" required>
-            <div class="invalid-feedback">
-              Please enter a Bitcoin address!
-            </div>
-          </div>
-          <div class="row mb-3">
-            <input type="text" class="form-control" id="validationCustom01" placeholder="Artwork Title"
-                   v-model="artwork.title" required>
-            <div class="invalid-feedback">
-              Please enter a title!
-            </div>
-          </div>
-          <div class="row mb-3">
-            <textarea type="text" class="form-control" id="validationCustom02" placeholder="Description of the Artwork"
-                      v-model="artwork.description" required></textarea>
-            <div class="invalid-feedback">
-              Please enter a description!
-            </div>
-          </div>
-          <div class="row mb-3">
-            <textarea type="text" class="form-control" id="validationCustom03" placeholder="Keywords"
-                      v-model="artwork.keywords" required></textarea>
-            <div class="invalid-feedback">
-              Please enter some keywords!
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-6 pl-0">
-              <div class="row">
-              <div class="col-4">
-                <label for="validationCustom040" class="col-form-label">Edition</label>
-              </div>
-              <div class="col-8">
-                <input class="form-control" id="validationCustom040" type="number" v-model="artwork.edition" required>
-                <div class="invalid-feedback">
-                  Please enter number of editions!
-                </div>
-              </div>
-              </div>
-            </div>
-            <div class="col-6 pr-0">
-              <div class="row">
-                <div class="col-4 col-form-label text-center">
-                  <label for="validationCustom041">of</label>
-                </div>
-                <div class="col-8">
-                  <input class="form-control" id="validationCustom041" type="number" v-model="artwork.editions" required>
-                  <div class="invalid-feedback">
-                    Please enter total number of editions!
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-4 pl-0">
-              <input type="text" class="form-control" id="validationCustom06-1" placeholder="Medium / materials"
-                     v-model="artwork.medium" required>
-              <div class="invalid-feedback">
-                Please enter the Medium / Materials!
-              </div>
-            </div>
-            <div class="col-4">
-              <input type="text" class="form-control" id="validationCustom05-1" placeholder="Dimensions"
-                     v-model="artwork.dimensions" required>
-              <div class="invalid-feedback">
-                Please enter the Dimensions!
-              </div>
-            </div>
-            <div class="col-4 pr-0">
-              <input type="text" class="form-control" id="validationCustom05-2" placeholder="Year created"
-                     v-model="artwork.yearCreated" required>
-              <div class="invalid-feedback">
-                Please enter the year created!
-              </div>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-6 pl-0">
-              <input type="text" class="form-control" id="validationCustom05" placeholder="Owner"
-                     v-model="artwork.owner" required>
-              <div class="invalid-feedback">
-                Please enter the owner!
-              </div>
-            </div>
-            <div class="col-6 pr-0">
-              <input type="text" class="form-control" id="validationCustom06" placeholder="Artist"
-                     v-model="artwork.artist" required>
-              <div class="invalid-feedback">
-                Please enter the artist!
-              </div>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="text-danger" v-if="dateError">
-              The creation date must be before now!
-            </div>
-            <label for="created" slot="before" class="col-4 col-form-label pl-0">Created</label>
-            <datetime type="date" v-model="created" input-id="created" class="col-8 pr-0"
-                      input-class="form-control bg-transparent">
-              <input id="created">
-            </datetime>
+          <div class="col-6 custom-control custom-radio mb-0">
+            <input type="radio" class="custom-control-input" id="customControlValidation3" name="artwork.itemType" v-model="artwork.itemType" value="physart" required>
+            <label class="custom-control-label" for="customControlValidation3">Physical Artwork</label>
           </div>
         </div>
+      </div>
+    </div>
+
+  <!-- item type -->
+  <div class="row justify-content-between">
+
+  <div class="col-md-5 mb-4">
+    <div class="form-row">
+        <!--<label for="validationCustom01">Artwork Title</label>-->
+        <input type="text" class="form-control" id="validationCustom01" placeholder="Artwork Title" v-model="artwork.title" required>
+        <div class="invalid-feedback">
+          Please enter a title!
+        </div>
+    </div>
+    <div class="form-row">
+        <!--<label for="validationCustom02">Description of Artwork</label>-->
+        <textarea type="text" class="form-control" id="validationCustom02" placeholder="Description of the Artwork" v-model="artwork.description" required></textarea>
+        <div class="invalid-feedback">
+          Please enter a description!
+        </div>
+    </div>
+    <div class="form-row">
+        <!--<label for="validationCustom03">Keywords or tags</label>-->
+        <textarea type="text" class="form-control" id="validationCustom03" placeholder="Keywords" v-model="artwork.keywords" required></textarea>
+        <div class="invalid-feedback">
+          Please enter some keywords!
+        </div>
+    </div>
+    <div class="form-row">
+      <div class="col-6 form-row">
+        <div class="col-4">
+          <label for="validationCustom040" class="col-form-label">Edition</label>
+        </div>
+        <div class="col-8">
+          <input class="form-control" id="validationCustom040" type="number" v-model="artwork.edition" required>
+          <div class="invalid-feedback">
+          Please enter number of editions!
+        </div>
+        </div>
+      </div>
+      <div class="col-6 form-row">
+        <div class="col-4 col-form-label text-center">
+          <label for="validationCustom041">of</label>
+        </div>
+       <div class="col-8">
+        <input class="form-control" id="validationCustom041" type="number" v-model="artwork.editions" required>
+        <div class="invalid-feedback">
+          Please enter total number of editions!
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-4">
+        <input type="text" class="form-control" id="validationCustom06-1" placeholder="Medium / materials" v-model="artwork.medium" required>
+        <div class="invalid-feedback">
+          Please enter the Medium / Materials!
+        </div>
+      </div>
+      <div class="col-4">
+        <input type="text" class="form-control" id="validationCustom05-1" placeholder="Dimensions" v-model="artwork.dimensions" required>
+        <div class="invalid-feedback">
+          Please enter the Dimensions!
+        </div>
+      </div>
+      <div class="col-4">
+        <input type="text" class="form-control" id="validationCustom05-2" placeholder="Year created" v-model="artwork.yearCreated" required>
+        <div class="invalid-feedback">
+          Please enter the year created!
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-6">
+        <input type="text" class="form-control" id="validationCustom05" placeholder="Owner" v-model="artwork.owner" required>
+        <div class="invalid-feedback">
+          Please enter the owner!
+        </div>
+      </div>
+      <div class="col-6">
+        <input type="text" class="form-control" id="validationCustom06" placeholder="Artist" v-model="artwork.artist" required>
+        <div class="invalid-feedback">
+          Please enter the artist!
+        </div>
+      </div>
+    </div>
+    <div class="form-row mb-2">
+      <div class="text-danger" v-if="dateError">
+        The creation date must be before now!
+      </div>
+      <label for="created" slot="before" class="col-4 col-form-label">Created</label>
+      <datetime type="date" v-model="created" input-id="created" class="col-8" input-class="form-control bg-transparent">
+        <input id="created">
+      </datetime>
+    </div>
+  </div>
+
+        <!-- Left column
+        =======
+              <div class="row justify-content-between">
+        <div class="col-md-5 mb-4">
+        >>>>>>> feature/design
+        -->
 
         <!-- Right column - image drop -->
         <div class="col-md-6">
@@ -289,15 +279,9 @@
 
 <script>
   import {
-    mdbIcon,
-    mdbPopover,
-    mdbCol,
-    mdbRow,
-    mdbContainer,
-    mdbBtn
-  } from "mdbvue";
-  import MyArtworkManageImage from "./MyArtworkManageImage";
-  import moment from "moment";
+    mdbIcon, mdbPopover, mdbCol, mdbRow, mdbContainer, mdbBtn} from "mdbvue";
+    import MyArtworkManageImage from "./MyArtworkManageImage";
+    import moment from "moment";
 
   // noinspection JSUnusedGlobalSymbols
   export default {

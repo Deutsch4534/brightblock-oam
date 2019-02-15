@@ -10,7 +10,7 @@
           <mdb-icon class="mb-0 mr-2" icon="search" />
         </a>
         <input label="Search" type="text" class="mt-0 mb-0" v-model="query"
-               placeholder="Search" aria-label="Search"/>
+               placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
       </form>
       <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
     </mdb-navbar-brand>
@@ -208,7 +208,7 @@ export default {
       if (!this.query || this.query.length === 0) {
         qString = "*";
       }
-      artworkSearchService.newQuery(qString);
+      artworkSearchService.newQuery({field: "title", query: qString});
       this.$router.push("/search?query=" + qString);
     },
     toggleNavbarMobile() {
@@ -325,7 +325,7 @@ nav >>> .navbar-toggler {
 .navbar-collapse .nav-item { max-width: 90vw; }
   .navbar-collapse .nav-item,
   .navbar-collapse .nav-item .nav-link {  color: white!important; }
-  
+
   .navbar-collapse .nav-item .nav-link:hover,
   .navbar-collapse .nav-item .nav-link:focus,
   .navbar-collapse .nav-item .nav-link:active {

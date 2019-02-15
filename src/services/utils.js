@@ -97,8 +97,8 @@ const utils = {
       id: record.indexData.id,
       title: record.indexData.title,
       description: record.indexData.description,
+      lastUpdate: record.indexData.lastUpdate,
       keywords: record.indexData.keywords,
-      btcData: (record.indexData.btcData) ? record.indexData.btcData : {},
       itemType: record.indexData.itemType,
       uploader: record.indexData.uploader,
       artist: record.indexData.artist
@@ -130,8 +130,8 @@ const utils = {
       title: artwork.title,
       description: artwork.description,
       itemType: artwork.itemType,
+      lastUpdate: artwork.lastUpdate,
       keywords: artwork.keywords,
-      btcData: (artwork.btcData) ? artwork.btcData : {},
       owner: artwork.owner,
       uploader: artwork.uploader,
       artist: artwork.artist,
@@ -155,8 +155,7 @@ const utils = {
       coa: artwork.coa,
       created: artwork.created,
       supportingDocuments: artwork.supportingDocuments,
-      bcitem: artwork.bcitem,
-      artistry: (artwork.artistry) ? artwork.artistry : {}
+      bcitem: artwork.bcitem
     };
     if (artwork.artwork && artwork.artwork.length > 0) {
       provData.derivedTimestamp = utils.buildArtworkHash(
@@ -176,8 +175,7 @@ const utils = {
       images: provData.images,
       supportingDocuments: provData.supportingDocuments,
       created: provData.created,
-      bcitem: provData.bcitem,
-      artistry: (provData.artistry) ? provData.artistry : {}
+      bcitem: provData.bcitem
     };
     if (
       provData.artwork &&

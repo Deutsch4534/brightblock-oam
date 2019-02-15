@@ -1,25 +1,35 @@
 <template>
 <div class="container-fluid bg-light flex-1 py-5">
-  <my-artwork-upload-form :formTitle="'Upload Artwork'" :mode="'upload'"/>
+  <my-artwork-upload-form v-if="enabled" :formTitle="'Upload Artwork'" :mode="'upload'"/>
+  <contact-section :featureMessage="featureMessage" v-else class="black-text"/>
 </div>
 </template>
 
 <script>
 import MyArtworkUploadForm from "./components/myArtwork/MyArtworkUploadForm";
+import ContactSection from "./components/splash/ContactSection";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyArtworkUpload",
   bodyClass: "index-page",
   components: {
-    MyArtworkUploadForm
+    MyArtworkUploadForm,
+    ContactSection
   },
   data() {
     return {
-      enabled: false
+      enabled: false,
+      featureMessage: "Get in touch about how to upload artwork."
     };
   },
-  mounted() {},
+  mounted() {
+    let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+    this.enabled = myProfile.portrayal.bitcoinAddress;
+    if (!myProfile.portrayal.bitcoinAddress) {
+      this.$router.push("/profile/upload?from=upload-artwork");
+    }
+  },
   computed: {},
   methods: {}
 };

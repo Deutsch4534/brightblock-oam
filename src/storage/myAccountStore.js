@@ -20,18 +20,44 @@ const myAccountStore = {
     }
   },
   actions: {
-    fetchMyAccount({ commit }) {
+    fetchMyAccount({ state, commit }) {
       return new Promise(resolve => {
-        let myProfile;
-        if (myAccountService.isLoggedIn()) {
-          myProfile = myAccountService.myProfile();
-        } else {
-          myProfile = {
-            loggedIn: false
-          };
+        let myProfile = state.myProfile;
+        if (!myProfile.loggedIn) {
+          if (myAccountService.isLoggedIn()) {
+            myProfile = myAccountService.myProfile();
+            commit("myProfile", myProfile);
+          } else {
+            myProfile = {
+              loggedIn: false
+            };
+          }
         }
-        commit("myProfile", myProfile);
-        resolve(myProfile);
+        myAccountService.getPortrayal(function(portrayal) {
+          myProfile.portrayal = portrayal;
+          commit("myProfile", myProfile);
+          resolve(myProfile);
+        }, function(err) {
+          console.log(err);
+          resolve(myProfile);
+        });
+      });
+    },
+    updatePortrayal({ state, commit }, portrayal) {
+      return new Promise(resolve => {
+        myAccountService.updatePortrayal(
+          portrayal,
+          function(portrayal) {
+            let myProfile = state.myProfile;
+            myProfile.portrayal = portrayal;
+            commit("myProfile", myProfile);
+            resolve(myProfile);
+          },
+          function(error) {
+            console.log("Error updating profile: ", error);
+            resolve(error);
+          }
+        );
       });
     }
   }

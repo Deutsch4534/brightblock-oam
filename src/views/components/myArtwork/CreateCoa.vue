@@ -24,11 +24,11 @@
      will be embedded in your certificate of authenticity to make it easy
     to receive future payments.</p>
     <div class="row text-center">
-      <div class="col-md-12" v-if="artwork.artistry.btcAddress">
-        <canvas id="qrcode" width="150px"></canvas>
+      <div class="col-md-12">
+        <canvas id="qrcode" max-width="150px"></canvas>
       </div>
-      <div class="col-md-12" v-if="artwork.artistry.btcAddress">
-        {{artwork.artistry.btcAddress}} <a @click.prevent="changeBtcAddress = !changeBtcAddress"><mdb-icon icon="pen" /></a>
+      <div class="col-md-12" v-if="bitcoinAddress">
+        {{bitcoinAddress}} <a @click.prevent="changeBtcAddress = !changeBtcAddress"><mdb-icon icon="pen" /></a>
       </div>
       <div class="col-md-12" v-if="changeBtcAddress">
         <input type="text" width="50%" class="form-control" id="validationCustom01-1" placeholder="Your bitcoin address" v-on:keyup.13="saveBitcoinAddress" v-model="bitcoinAddress">
@@ -65,30 +65,21 @@ export default {
       artworkId: null,
       downloadLink: null,
       bitcoinAddress: null,
-      changeBtcAddress: false
+      changeBtcAddress: true
     };
   },
   mounted() {
     this.artworkId = Number(this.$route.params.artworkId);
     let $self = this;
     this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
-      let $qrCode = document.getElementById("qrcode");
-      this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId).then((artwork) => {
-        if (artwork) {
-          if (artwork && artwork.artistry && artwork.artistry.btcAddress) {
-            this.bitcoinAddress = artwork.artistry.btcAddress;
-            QRCode.toCanvas(
-              $qrCode,
-              artwork.artistry.btcAddress,
-              { errorCorrectionLevel: "H" },
-              function(error) {
-                if (error) console.error(error);
-                console.log("success!");
-              }
-            );
-          }
-        }
-      });
+      if (myProfile.portrayal.bitcoinAddress) {
+        this.bitcoinAddress = myProfile.portrayal.bitcoinAddress;
+        this.addQrCode(this.bitcoinAddress);
+      }
+      this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId);
+    });
+
+    this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
     });
   },
   computed: {
@@ -106,6 +97,19 @@ export default {
     },
   },
   methods: {
+    addQrCode(bitcoinAddress) {
+      let $qrCode = document.getElementById("qrcode");
+      if (bitcoinAddress) {
+        this.changeBtcAddress = false;
+        QRCode.toCanvas(
+          $qrCode, bitcoinAddress, { errorCorrectionLevel: "H" },
+          function(error) {
+            if (error) console.error(error);
+            console.log("success!");
+          }
+        );
+      }
+    },
     setByEventCoa (coa) {
       let artwork = this.$store.getters["myArtworksStore/myArtwork"](
         this.artworkId
@@ -120,17 +124,20 @@ export default {
       );
       let state = this.$store.getters["bitcoinStore/getClientState"];
       if (state.chain === "test") {
-        return `https://testnet.blockexplorer.com/tx/${artwork.btcData.bitcoinTx}`;
+        return `https://testnet.blockexplorer.com/tx/${artwork.saleData.bitcoinTx}`;
       }
-      return `https://www.blockchain.com/btc/tx/${artwork.btcData.bitcoinTx}`;
+      return `https://www.blockchain.com/btc/tx/${artwork.saleData.bitcoinTx}`;
     },
     saveBitcoinAddress: function() {
       if (this.bitcoinAddress) {
-        let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-          this.artworkId
-        );
-        artwork.artistry.btcAddress = this.bitcoinAddress;
-        this.$store.dispatch("myArtworksStore/updateArtwork", artwork);
+        let blockstackProfile = this.$store.getters["myAccountStore/getMyProfile"];
+        let portrayal = blockstackProfile.portrayal;
+        portrayal.bitcoinAddress = this.bitcoinAddress;
+        this.$store.dispatch("myAccountStore/updatePortrayal", portrayal)
+          .then(portrayal => {
+            this.addQrCode(this.bitcoinAddress);
+            this.$router.push("/my-artwork/upload");
+          });
       }
     },
     generateCoa: function() {
@@ -150,7 +157,7 @@ export default {
         artwork: artwork,
         qrCodeDataUrl: qrCodeDataUrl,
         siteName: "Radicle Art",
-        siteLogo: siteLogo
+        siteLogo: siteLogo,
       }
       let endPoint = this.$store.state.constants.ethGatewayUrl + "/api/convert/coa";
       xhrService.makePostCall(endPoint, data).then((response) => {

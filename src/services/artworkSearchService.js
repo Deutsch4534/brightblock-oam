@@ -8,84 +8,65 @@ import { getFile } from "blockstack";
  *  The service is a client to the brightblock sever side grpc client.
  **/
 const artworkSearchService = {
-  newQuery(queryString) {
+  newQuery(q) {
     store.commit("artworkSearchStore/clearSearchResults");
-    searchIndexService
-      .searchDappsIndex(
-        location.hostname,
-        "artwork",
-        "title",
-        queryString
-      )
-      .then(searchResults => {
-        searchResults.forEach(function(searchResult) {
-          artworkSearchService.userArtwork(
-            Number(searchResult.id),
-            searchResult.owner,
-            function(artwork) {
-              store.commit("artworkSearchStore/addSearchResult", artwork);
-            },
-            function(error) {
-              console.log("Error fetching recent artworks: ", error);
-            }
-          );
-        });
-      })
-      .catch(e => {
-        console.log("Unable to contact search index.", e);
+    searchIndexService.searchDappsIndex(location.hostname, "artwork", q.field, q.query).then(searchResults => {
+      if (!searchResults || searchResults.error) {
+        console.log(searchResults.error);
+        return;
+      }
+      let usersToFetch = [];
+      searchResults.forEach(function(searchResult) {
+        // get the unique users from the search
+        artworkSearchService.addUserOrNot(usersToFetch, searchResult.owner);
       });
+
+      _.forEach(usersToFetch, function(username) {
+        store.dispatch("userProfilesStore/fetchUserProfile", { username: username }, { root: true });
+        const artworkRootFileName = store.state.constants.artworkRootFileName;
+        // for each unique user get their root artwork file and then load the prov files matching the search
+        getFile(artworkRootFileName, { decrypt: false, username: username }).then(function(file) {
+          if (file) {
+            let userRootFile = JSON.parse(file);
+            searchResults.forEach(function(searchResult) {
+              // get the unique users from the search
+              artworkSearchService.storeArtwork(searchResult, userRootFile.records);
+            });
+          }
+        });
+      });
+    });
   },
 
-  findArtworks: function(query, success, failure) {
-    let domain = location.hostname;
-    searchIndexService
-      .searchDappsIndex(domain, "artwork", query.term, query.query)
-      .then(function(results) {
-        if (!results || results.length === 0) {
-          success();
-        } else {
-          // let users = [];
-          _.forEach(results, function(searchIndexData) {
-            try {
-              searchIndexData.id = Number(searchIndexData.id);
-              artworkSearchService.fetchProvenanceFile(
-                searchIndexData,
-                searchIndexData.owner,
-                success,
-                failure
-              );
+  storeArtwork: function(searchResult, records) {
+    let artworkId = Number(searchResult.id);
+    let index = _.findIndex(records, function(o) {
+      return o.id === artworkId;
+    });
+    if (index === -1) {
+      return;
+    }
+    let indexData = records[index];
+    artworkSearchService.fetchProvenanceFile(
+      indexData,
+      searchResult.owner,
+      function(artwork) {
+        store.commit("artworkSearchStore/addSearchResult", artwork);
+        store.commit("artworkSearchStore/addArtwork", artwork);
+      },
+      function(error) {
+        console.log("Error fetching recent artworks: ", error);
+      }
+    );
+  },
 
-              /**
-              artworkSearchService.userArtwork(
-                id,
-                searchIndexData.owner,
-                success,
-                failure
-              );
-              let index = _.findIndex(users, function(username) {
-                return username === searchIndexData.owner;
-              });
-              if (index === -1) {
-                artworkSearchService.userArtworks(
-                  {
-                    username: searchIndexData.owner,
-                    title: searchIndexData.title
-                  },
-                  success,
-                  failure
-                );
-                users.push(searchIndexData.owner);
-              }
-              **/
-            } catch (error) {
-              failure({ error: 2, message: "wrong id format." });
-            }
-          });
-        }
-      })
-      .catch(function() {
-        failure({ error: 2, message: "no artworks found" });
-      });
+  addUserOrNot: function(usersToFetch, userId) {
+    let uIndex = _.findIndex(usersToFetch, function(o) {
+      return o === userId;
+    });
+    if (uIndex === -1) {
+      usersToFetch.push(userId);
+    }
   },
 
   userArtworks: function(data, success, failure) {
@@ -96,17 +77,10 @@ const artworkSearchService = {
           success();
         } else {
           let userRootFile = JSON.parse(file);
+          let usersToFetch = [];
           _.forEach(userRootFile.records, function(indexData) {
-            store.dispatch(
-              "userProfilesStore/fetchUserProfile",
-              { username: indexData.uploader },
-              { root: true }
-            );
-            store.dispatch(
-              "userProfilesStore/fetchUserProfile",
-              { username: indexData.owner },
-              { root: true }
-            );
+            artworkSearchService.addUserOrNot(usersToFetch, indexData.uploader);
+            artworkSearchService.addUserOrNot(usersToFetch, indexData.owner);
             if (data.title) {
               if (data.title === indexData.title) {
                 artworkSearchService.fetchProvenanceFile(
@@ -124,6 +98,9 @@ const artworkSearchService = {
                 failure
               );
             }
+          });
+          _.forEach(usersToFetch, function(userId) {
+            store.dispatch("userProfilesStore/fetchUserProfile", { username: userId }, { root: true });
           });
         }
       })
@@ -148,16 +125,6 @@ const artworkSearchService = {
           });
           if (index > -1) {
             let indexData = userRootFile.records[index];
-            store.dispatch(
-              "userProfilesStore/fetchUserProfile",
-              { username: indexData.uploader },
-              { root: true }
-            );
-            store.dispatch(
-              "userProfilesStore/fetchUserProfile",
-              { username: indexData.owner },
-              { root: true }
-            );
             artworkSearchService.fetchProvenanceFile(
               indexData,
               username,

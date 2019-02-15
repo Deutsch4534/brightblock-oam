@@ -20,19 +20,20 @@
           <mdb-col md="6">
             <form class="contact-form">
               <mdb-row>
-                <mdb-col col="12">
-                    <mdb-input type="text" id="contact-name" label="Your name" />
-                </mdb-col>
-                <mdb-col col="12">
-                    <mdb-input type="text" id="contact-email" label="Your email" />
-                </mdb-col>
-                <mdb-col col="12">
-                  <mdb-input type="text" id="contact-subject" label="Subject" />
-                </mdb-col>
-                <mdb-col col="12">
-                  <div class="mb-0">
-                    <mdb-textarea id="contact-message" label="Your message" />
+                <mdb-col md="12">
+                  <mdb-input type="text" id="contact-name" label="Your name" v-model="name"/>
                   </div>
+                </mdb-col>
+                <mdb-col md="12">
+                  <mdb-input type="text" id="contact-email" label="Your email" v-model="email"/>
+                </mdb-col>
+              </mdb-row>
+              <mdb-row>
+                <mdb-col md="12">
+                  <mdb-input type="text" id="contact-subject" label="Subject" v-model="subject"/>
+                </mdb-col>
+                <mdb-col col="12">
+                  <mdb-textarea id="contact-message" label="Your message" v-model="message"/>
                 </mdb-col>
               </mdb-row>
               <div class="text-md-left mt-5 submit">

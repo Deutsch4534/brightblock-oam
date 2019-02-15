@@ -38,9 +38,7 @@ export default {
   props: {
     artist: {
       type: Object,
-      default () {
-        return {}
-      }
+      avatarUrl: require("@/assets/img/faces/avatar.jpg"),
     }
   },
   computed: {

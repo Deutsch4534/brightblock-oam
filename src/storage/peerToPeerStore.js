@@ -16,7 +16,6 @@ const peerToPeerStore = {
       if (matches.length > 0) {
         return matches[0];
       } else {
-        // store.dispatch('userProfilesStore/fetchUserProfile', {username: username}, {root: true})
         return {};
       }
     },

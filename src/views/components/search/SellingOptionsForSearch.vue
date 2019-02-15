@@ -4,8 +4,8 @@
     <button class="btn btn-primary" @click="routeToBuyNow">Buy Now</button>
   </div>
   <div v-else-if="sellingAuction">
-    <button class="btn btn-white" @click="routeToPublicAuction">Place Bid</button>
-    <button class="btn btn-white" @click="routeToManageAuction">Manage Auction</button>
+    <button class="btn btn-primary" @click="routeToPublicAuction">Open Auction</button>
+    <button class="btn btn-primary" @click="routeToManageAuction">Manage Auction</button>
   </div>
   <div v-else>
     <h6>Not Selling</h6>
@@ -46,7 +46,13 @@ export default {
   },
   computed: {
     sellingBuyNow() {
-      let priceSet = this.artwork.bcitem && this.artwork.bcitem.price > 0;
+      let fb = this.$store.state.constants.featureBitcoin;
+      let priceSet;
+      if (fb) {
+        priceSet = this.artwork.saleData.amount > 0;
+      } else {
+        priceSet = this.artwork.bcitem && this.artwork.bcitem.price > 0;
+      }
       return priceSet && this.artwork.saleData.soid === 1;
     },
     sellingAuction() {

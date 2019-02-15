@@ -71,12 +71,7 @@ export default {
     this.artworkId = Number(this.$route.params.artworkId);
     let $self = this;
     this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
-      this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId).then((artwork) => {
-        if (artwork) {
-          if (artwork && artwork.artistry && artwork.artistry.btcAddress) {
-          }
-        }
-      });
+      this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId);
     });
   },
   computed: {
@@ -105,12 +100,6 @@ export default {
     bitcoinState() {
       let state = this.$store.getters["bitcoinStore/getClientState"];
       return state;
-    },
-    btcAddress() {
-      let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-        this.artworkId
-      );
-      return a.artistry.btcAddress;
     },
     artwork() {
       let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
@@ -170,7 +159,7 @@ export default {
         bitcoinService.registerTx(regData,
           function(result) {
             $self.bitcoinTx = result.sentTx;
-            artwork.btcData.bitcoinTx = result.sentTx;
+            artwork.saleData.bitcoinTx = result.sentTx;
             $self.$store.dispatch("myArtworksStore/updateArtwork", artwork);
             $self.decodedTransaction = JSON.parse(result.decodedTransaction);
           }, function(error) {

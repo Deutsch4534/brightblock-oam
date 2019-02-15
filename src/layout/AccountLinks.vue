@@ -1,11 +1,11 @@
 <template>
   <mdb-dropdown tag="li" class="nav-item">
     <mdb-dropdown-toggle tag="a" class="user-menu dropleft pr-1" navLink color="stylish" slot="toggle" waves-fixed>
-      <mdb-icon icon="user-circle" />
+      <img style="width: 40px; height: 40px; border-radius: 20px;" :src="avatarUrl"/>
     </mdb-dropdown-toggle>
     <mdb-dropdown-menu class="dropdown-menu-right">
       <mdb-dropdown-item>
-        <a class="dropdown-item"><mdb-icon fab icon="500px" /> {{ username }}</a>
+        <a class="dropdown-item">{{ username }}</a>
       </mdb-dropdown-item>
       <mdb-dropdown-item>
         <router-link
@@ -13,6 +13,13 @@
           to="/admin/settings"
           v-if="showAdmin"
           >Admin</router-link
+        >
+      </mdb-dropdown-item>
+      <mdb-dropdown-item>
+        <router-link
+          class="dropdown-item"
+          to="/profile/update"
+          >Profile</router-link
         >
       </mdb-dropdown-item>
       <!--

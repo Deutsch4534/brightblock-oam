@@ -21,26 +21,6 @@ const auctionSearchService = {
 
   getUsersOnlineAuction: function(username) {
     return new Promise((resolve, reject) => {
-      /**
-      store
-        .dispatch("userProfilesStore/fetchUserProfile", { username: username })
-        .then(function() {
-          let gaiaUrl = store.getters["userProfilesStore/getGaiaUrl"](username);
-          if (!gaiaUrl) {
-            resolve();
-            return;
-          }
-          xhrService
-            .makeDirectCall(gaiaUrl + "auctions_v01.json")
-            .then(function(rootFile) {
-              resolve(rootFile.records);
-            })
-            .catch(function() {
-              reject(new Error({ error: 1, message: "no auctions found" }));
-            });
-        });
-    });
-    **/
       const auctionsRootFileName = store.state.constants.auctionsRootFileName;
       getFile(auctionsRootFileName, { decrypt: false, username: username })
         .then(function(file) {

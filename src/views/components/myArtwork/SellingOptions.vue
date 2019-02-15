@@ -1,15 +1,14 @@
 <template>
 <div>
+  <p class="font-weight-bold muted">{{artwork.owner}}</p>
   <div v-if="sellingBuyNow">
     <p class="font-weight-bold muted">Available to buy..</p>
-    {{sellingCurrencySymbol}} {{sellingAmount}} {{sellingCurrency}} / {{valueInEther}} Eth / {{valueInBitcoin}} Btc<br>
+    <p class="font-weight-bold muted">{{sellingBuyNowPrice}}</p>
   </div>
   <div v-else-if="sellingAuction">
     <p class="font-weight-bold muted">Selling in Auction</p>
+    <p class="font-weight-bold muted">{{sellingAuctionPrice}}</p>
     <div v-if="debugMode">
-      Reserve: {{sellingCurrencySymbol}} {{artwork.saleData.reserve}}
-      <br> {{sellingCurrency}} / {{valueReserveInEther}} Eth / {{valueReserveInBitcoin}} Btc
-      <br>
       <router-link :to="manageAuctionUrl" v-if="canManageAuction">manage |</router-link>
       <router-link :to="publicAuctionUrl">go to auction</router-link>
     </div>
@@ -37,8 +36,48 @@ export default {
   mounted() {},
   computed: {
     sellingBuyNow() {
-      let priceSet = this.artwork.bcitem && this.artwork.bcitem.price > 0;
+      let fb = this.$store.state.constants.featureBitcoin;
+      let priceSet;
+      if (fb) {
+        priceSet = this.artwork.saleData.amount > 0;
+      } else {
+        priceSet = this.artwork.bcitem && this.artwork.bcitem.price > 0;
+      }
       return priceSet && this.artwork.saleData.soid === 1;
+    },
+    sellingBuyNowPrice() {
+      let fb = this.$store.state.constants.featureBitcoin;
+      let symbol = moneyUtils.currencySymbol(this.artwork.saleData.fiatCurrency);
+      let currency = this.artwork.saleData.fiatCurrency;
+      let priceFiat, priceBtc, priceEth;
+      let saleData = this.artwork.saleData;
+      if (fb) {
+        priceBtc = moneyUtils.valueInBitcoin(saleData.fiatCurrency, saleData.amount);
+        priceFiat = this.artwork.saleData.amount;
+        priceEth = moneyUtils.valueInEther(saleData.fiatCurrency, saleData.amount);
+      } else {
+        priceBtc = moneyUtils.valueInBitcoinFromWei(this.artwork.bcitem.price);
+        priceFiat = this.artwork.saleData.amount;
+        priceEth = moneyUtils.valueInEtherFromWei(this.artwork.bcitem.price);
+      }
+      return symbol + " " + priceFiat + " " + currency + " / " + priceBtc + " btc";
+    },
+    sellingAuctionPrice() {
+      let fb = this.$store.state.constants.featureBitcoin;
+      let symbol = moneyUtils.currencySymbol(this.artwork.saleData.fiatCurrency);
+      let currency = this.artwork.saleData.fiatCurrency;
+      let priceFiat, priceBtc, priceEth;
+      let saleData = this.artwork.saleData;
+      if (fb) {
+        priceBtc = moneyUtils.valueInBitcoin(saleData.fiatCurrency, saleData.reserve);
+        priceFiat = this.artwork.saleData.reserve;
+        priceEth = moneyUtils.valueInEther(saleData.fiatCurrency, saleData.reserve);
+      } else {
+        priceBtc = moneyUtils.valueInBitcoinFromWei(this.artwork.bcitem.price);
+        priceFiat = this.artwork.saleData.reserve;
+        priceEth = moneyUtils.valueInEtherFromWei(this.artwork.bcitem.price);
+      }
+      return "Reserve:" + symbol + " " + priceFiat + " " + currency + " / " + priceBtc + " btc";
     },
     debugMode() {
       let debugMode = this.$store.state.constants.debugMode;
@@ -49,14 +88,6 @@ export default {
         this.artwork.saleData.soid === 2 && this.artwork.saleData.auctionId > 0
       );
     },
-    sellingAmount() {
-      let priceSet = this.artwork.bcitem && this.artwork.bcitem.price > 0;
-      if (priceSet) {
-        return this.artwork.saleData.amount;
-      } else {
-        return 0;
-      }
-    },
     canManageAuction() {
       let auction = this.$store.getters["myAuctionsStore/myAuction"](
         this.artwork.saleData.auctionId
@@ -65,30 +96,6 @@ export default {
       let username = this.$store.getters["myAccountStore/getMyProfile"]
         .username;
       return auction.administrator === username;
-    },
-    valueInEther() {
-      return moneyUtils.valueInEtherFromWei(this.artwork.bcitem.price);
-    },
-    valueReserveInEther() {
-      return moneyUtils.valueInEther(
-        this.artwork.saleData.fiatCurrency,
-        this.artwork.saleData.reserve
-      );
-    },
-    valueReserveInBitcoin() {
-      return moneyUtils.valueInBitcoin(
-        this.artwork.saleData.fiatCurrency,
-        this.artwork.saleData.reserve
-      );
-    },
-    valueInBitcoin() {
-      return moneyUtils.valueInBitcoinFromWei(this.artwork.bcitem.price);
-    },
-    sellingCurrency() {
-      return this.artwork.saleData.fiatCurrency;
-    },
-    sellingCurrencySymbol() {
-      return moneyUtils.currencySymbol(this.artwork.saleData.fiatCurrency);
     },
     manageAuctionUrl() {
       return `/my-auctions/manage/${this.artwork.saleData.auctionId}`;
@@ -107,4 +114,3 @@ a {
   text-decoration: underline;
 }
 </style>
-

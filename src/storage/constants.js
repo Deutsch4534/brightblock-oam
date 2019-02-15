@@ -15,6 +15,7 @@ export const CONSTANTS = {
   featureAuctions: true,
   debugMode: false,
   domain: location.origin,
+  portrayalRootFileName: "profiles_v01.json",
   artworkRootFileName: "records_v01.json",
   auctionsRootFileName: "auctions_v01.json",
   gaiaFileName: "record_"

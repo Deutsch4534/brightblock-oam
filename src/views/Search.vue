@@ -46,14 +46,7 @@ export default {
     if (!this.queryString) {
       this.queryString = "*";
     }
-    artworkSearchService.newQuery(this.queryString);
-    /**
-    this.$store.dispatch(
-      "artworkSearchStore/fetchSearchResults",
-      { term: "title", query: this.queryString },
-      { root: true }
-    );
-    **/
+    artworkSearchService.newQuery({field: "title", query: this.queryString});
   },
   methods: {
   },

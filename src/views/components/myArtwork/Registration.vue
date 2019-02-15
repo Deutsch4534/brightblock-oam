@@ -21,9 +21,9 @@
           </mdb-card-text>
         </mdb-card-body>
 
-        <create-coa v-if="artwork.btcData.bitcoinTx"/>
+        <create-coa v-if="artwork.saleData.bitcoinTx"/>
 
-        <register-bitcoin v-if="featureBitcoin && !artwork.btcData.bitcoinTx"/>
+        <register-bitcoin v-if="featureBitcoin && !artwork.saleData.bitcoinTx"/>
 
         <mdb-card-body v-if="featureEthereum">
           <mdb-card-title>Ethereum Blockchain ({{networkName}} network)</mdb-card-title>

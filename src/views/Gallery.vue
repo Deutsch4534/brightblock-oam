@@ -57,8 +57,7 @@ export default {
        // loading online auctions
      // });
      if (this.$store.state.constants.featureBitcoin) {
-       // this.$store.dispatch("artworkSearchStore/fetchSearchResults", {term: "title", query: "*"});
-       artworkSearchService.newQuery("*");
+       artworkSearchService.newQuery({field: "title", query: "*"});
      } else {
        this.$store.dispatch("ethStore/fetchClientState").then(clientState => {
          ethereumService.connectToBlockChain(clientState);

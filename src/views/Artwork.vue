@@ -1,10 +1,8 @@
 <template>
-  <mdb-container fluid class="bg-light flex-1 py-5">
-    <mdb-container>
-      <!--<mdb-card dark>-->
-      <mdb-row>
-        <mdb-col col="12" lg="10">
-          <mdb-row class="py-5">
+<mdb-container fluid class="bg-light flex-1 px-5">
+  <mdb-row>
+    <mdb-col col="12" lg="10">
+      <mdb-row class="py-5">
         <mdb-col col="12" md="6">
           <mdb-view hover>
             <img class="inplay-image img-fluid mb-4" width="100%" :src="artwork.image" :alt="artwork.title">
@@ -13,32 +11,39 @@
         </mdb-col>
         <mdb-col col="12" md="6" class="pl-md-5">
           <h1 class="h5-responsive">{{artwork.title}}</h1>
-          <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, 19/08/2016</p>
-          <p class="mb-0">{{artwork.description}}</p>
+          <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, {{created}}</p>
+          <p class="mb-1">{{artwork.description}}</p>
           <p>{{aboutArtwork.keywords}}</p>
-          <mdb-row class="pt-3">
-            <mdb-col col="12">
-              <p class="h5-responsive serif-italic">{{registerMessage}}</p>
-              <buy-artwork-form v-if="isRegistered && isPriceSet" :purchaseState="purchaseState" :artwork="artwork" @buy="buyArtwork()"/>
+          <payment-details v-if="showPaymentDetails" :artwork="artwork"/>
+          <mdb-row class="pt-3" v-else>
+            <mdb-col col="12" v-if="featureBitcoin">
+              <p class="h5-responsive serif-italic">{{registerMessageBtc}}</p>
+              <buy-artwork-form-btc v-if="isRegisteredBtc && isPriceSetBtc" :purchaseState="purchaseStateBtc" :artwork="artwork" @buy="buyArtwork()"/>
+            </mdb-col>
+            <mdb-col col="12" v-else>
+              <p class="h5-responsive serif-italic">{{registerMessageEth}}</p>
+              <buy-artwork-form-eth v-if="isRegisteredEth && isPriceSetEth" :purchaseState="purchaseStateEth" :artwork="artwork" @buy="buyArtwork()"/>
             </mdb-col>
           </mdb-row>
         </mdb-col>
       </mdb-row>
-        </mdb-col>
-      </mdb-row>
-    </mdb-container>
-  </mdb-container>
+    </mdb-col>
+  </mdb-row>
+</mdb-container>
 </template>
 
 <script>
 import AboutArtwork from "./components/artwork/AboutArtwork";
-import BuyArtworkForm from "./components/artwork/BuyArtworkForm";
+import PaymentDetails from "./components/artwork/PaymentDetails";
+import BuyArtworkFormEth from "./components/artwork/BuyArtworkFormEth";
+import BuyArtworkFormBtc from "./components/artwork/BuyArtworkFormBtc";
 import ethereumService from "@/services/ethereumService";
 import notify from "@/services/notify";
 import moneyUtils from "@/services/moneyUtils";
 import { Sticky } from 'mdbvue';
 import { mdbIcon, mdbMask, mdbView, mdbJumbotron, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
 import { mdbContainer, mdbCol, mdbRow } from 'mdbvue';
+import moment from "moment";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -48,7 +53,9 @@ export default {
   },
   bodyClass: "index-page",
   components: {
-    BuyArtworkForm,
+    PaymentDetails,
+    BuyArtworkFormBtc,
+    BuyArtworkFormEth,
     AboutArtwork,
     mdbContainer,
     mdbRow,
@@ -67,16 +74,13 @@ export default {
   data() {
     return {
       artwork: {
-        type: Object,
         image: require("@/assets/img/logo/logo-black-256x256.png"),
-        default() {
-          return {
-            bcitem: {},
-          };
-        }
+        bcitem: {},
+        saleData: {},
       },
       message: "",
-      sliderImage: 0
+      sliderImage: 0,
+      showPaymentDetails: false
     };
   },
   mounted() {
@@ -109,10 +113,19 @@ export default {
         artwork.artist
       );
     },
+    created() {
+      if (this.artwork.created) {
+        return moment(this.artwork.created).format("DD/MMM/YYYY");
+      }
+      return moment(this.artwork.id).format("DD/MMM/YYYY");
+    },
     headerStyle() {
       return {
         "background-image": `url(${this.artwork.image})`,
       };
+    },
+    featureBitcoin() {
+      return this.$store.state.constants.featureBitcoin;
     },
     aboutArtwork() {
       let artwork = this.artwork;
@@ -131,10 +144,20 @@ export default {
         image: artwork.image
       };
     },
-    purchaseState() {
+    purchaseStateBtc() {
       let artwork = this.artwork;
-      let username = this.$store.getters["myAccountStore/getMyProfile"]
-        .username;
+      let username = this.$store.getters["myAccountStore/getMyProfile"].username;
+      let ownedBySomeElse = artwork.owner !== username;
+      let priceSet = artwork.saleData.amount > 0;
+      let forSale = artwork.saleData && artwork.saleData.soid === 1;
+      let purchaseState = {
+        canBuy: username && forSale && priceSet && ownedBySomeElse
+      };
+      return purchaseState;
+    },
+    purchaseStateEth() {
+      let artwork = this.artwork;
+      let username = this.$store.getters["myAccountStore/getMyProfile"].username;
       let ownedBySomeElse = artwork.owner !== username;
       let priceSet = artwork.bcitem && artwork.bcitem.price > 0;
       let forSale = artwork.saleData && artwork.saleData.soid === 1;
@@ -143,24 +166,19 @@ export default {
       };
       return purchaseState;
     },
-    registerMessage() {
+    registerMessageEth() {
       let artwork = this.artwork;
       let message;
       try {
-        let registeredE = artwork.bcitem && artwork.bcitem.itemIndex && artwork.bcitem.itemIndex > 0;
-        let registeredB = artwork.btcData && artwork.btcData.bitcoinTx;
-        let registered = registeredB || registeredE;
-
-        let priceE = artwork.bcitem && artwork.bcitem.price > 0 && artwork.bcitem.price > 0;
-        let priceB = artwork.btcData && artwork.saleData.amount > 0;
-        let price = priceB || priceE;
+        let registered = artwork.bcitem && artwork.bcitem.itemIndex && artwork.bcitem.itemIndex > 0;
+        let price = artwork.bcitem && artwork.bcitem.price > 0 && artwork.bcitem.price > 0;
         if (!registered) {
           message = "Artwork not registered on blockchain."
         } else {
           if (price) {
-            message = "Artwork not registered on blockchain."
+            message = "Artwork is registered on blockchain."
           } else {
-            message =" Artwork is registered on chain but is not currently for sale."
+            message = "Artwork is registered on chain but is not currently for sale."
           }
         }
       } catch (e) {
@@ -168,23 +186,40 @@ export default {
       }
       return message;
     },
-    isRegistered() {
+    registerMessageBtc() {
       let artwork = this.artwork;
+      let message;
       try {
-        let registeredE = artwork.bcitem && artwork.bcitem.itemIndex && artwork.bcitem.itemIndex > 0;
-        let registeredB = artwork.btcData && artwork.btcData.bitcoinTx;
-        let registered = registeredB || registeredE;
+        let registered = artwork.saleData.bitcoinTx;
+        let price = artwork.saleData.amount > 0;
+        if (!registered) {
+          message = "Artwork not registered on blockchain."
+        } else {
+          if (price) {
+            message = "Artwork is registered on blockchain."
+          } else {
+            message = "Artwork is registered on chain but is not currently for sale."
+          }
+        }
       } catch (e) {
-        return false;
+          message = "Unregistered.";
       }
+      return message;
     },
-    isPriceSet() {
+    isRegisteredEth() {
       let artwork = this.artwork;
-      try {
-        return artwork.bcitem && artwork.bcitem.price > 0 && artwork.bcitem.price > 0;
-      } catch (e) {
-        return false;
-      }
+      return artwork.bcitem && artwork.bcitem.itemIndex && artwork.bcitem.itemIndex > 0;
+    },
+    isRegisteredBtc() {
+      return this.artwork.saleData.bitcoinTx;
+    },
+    isPriceSetBtc() {
+      let artwork = this.artwork;
+      return artwork.saleData.amount > 0;
+    },
+    isPriceSetEth() {
+      let artwork = this.artwork;
+      return artwork.bcitem && artwork.bcitem.price > 0 && artwork.bcitem.price > 0;
     },
     artworks() {
       let artwork = this.artwork;
@@ -195,6 +230,14 @@ export default {
   },
   methods: {
     buyArtwork() {
+      let fb = this.$store.state.constants.featureBitcoin;
+      if (fb) {
+        this.showPaymentDetails = !this.showPaymentDetails;
+      } else {
+        this.buyArtworkEth();
+      }
+    },
+    buyArtworkEth() {
       let artwork = this.artwork;
       // let seller = artwork.owner
       let seller = artwork.bcitem.blockstackId;
@@ -223,7 +266,7 @@ export default {
           });
           artwork.owner = buyer;
           artwork.bcitem.blockstackId = buyer;
-          artwork.saleData = moneyUtils.buildInitialSaleData();
+          artwork.saleData = moneyUtils.buildInitialSaleData(artwork.saleData.bitcoinTx);
           $self.$store
             .dispatch("myArtworksStore/transferArtwork", artwork)
             .then(artwork => {

@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import {
   Person,
   loadUserData,
@@ -8,9 +7,10 @@ import {
   isUserSignedIn,
   hexStringToECPair,
   redirectToSignIn,
-  signUserOut
+  signUserOut, getFile, putFile
 } from "blockstack";
 import store from "@/storage/store";
+import moment from "moment";
 
 const myAccountService = {
   myProfile: function() {
@@ -107,6 +107,42 @@ const myAccountService = {
       redirectToSignIn();
       store.dispatch("myAccountStore/fetchMyAccount");
     }
+  },
+  updatePortrayal: function(portrayal, success, failure) {
+    let portrayalRootFileName = store.state.constants.portrayalRootFileName;
+    if (!portrayal.bitcoinAddress) {
+      // for backwards compat with items created before this object was added.
+      throw new Error("Need the bitcoin address to do trading!");
+    }
+    var now = moment({}).valueOf();
+    portrayal.lastUpdate = now;
+    if (!portrayal.portrayalId) {
+      portrayal.profileId = now;
+    }
+    putFile(portrayalRootFileName, JSON.stringify(portrayal), {encrypt: false})
+      .then(function() {
+        success(portrayal);
+      })
+      .catch(function() {
+        failure({
+          ERR_CODE: 4,
+          message: "Error uploading profile: " + portrayal.portrayalId
+        });
+      });
+  },
+  getPortrayal: function(success, failure) {
+    let portrayalRootFileName = store.state.constants.portrayalRootFileName;
+    let portrayal = {};
+    getFile(portrayalRootFileName, { decrypt: false })
+      .then(function(file) {
+        if (file) {
+          portrayal = JSON.parse(file);
+        }
+        success(portrayal);
+      })
+      .catch(function() {
+        failure({ ERR_CODE: 5, message: "no portrayal found" });
+      });
   }
 };
 export default myAccountService;

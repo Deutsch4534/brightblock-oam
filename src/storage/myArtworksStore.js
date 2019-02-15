@@ -25,15 +25,24 @@ const myArtworksStore = {
     },
     canSell: (state, getters) => id => {
       let artwork = getters.myArtwork(id);
+      let fb = store.state.constants.featureBitcoin;
       let username = store.getters["myAccountStore/getMyProfile"].username;
+      if (fb) {
+        let registered = artwork && artwork.saleData && artwork.saleData.bitcoinTx;
+        return registered && artwork.owner === username;
+      }
       return (
-        artwork.bcitem &&
+        artwork && artwork.bcitem &&
         artwork.bcitem.itemIndex >= 0 &&
         artwork.owner === username
       );
     },
     canRegister: (state, getters) => id => {
       let artwork = getters.myArtwork(id);
+      let fb = store.state.constants.featureBitcoin;
+      if (fb) {
+        return !(artwork.saleData && artwork.saleData.bitcoinTx);
+      }
       if (artwork.bcitem && artwork.bcitem.itemIndex >= 0) {
         return false;
       }
@@ -59,9 +68,7 @@ const myArtworksStore = {
           keywords: "Photography,Illustration.3D,2D,Film & Video,Mix-media",
           artist: "unknown",
           owner: "unknown",
-          btcData: {},
           saleData: {},
-          artistry: {},
           editions: 1,
           edition: 1,
           medium: null,
@@ -179,7 +186,7 @@ const myArtworksStore = {
               text: "Item info removed from auction."
             });
             if (artwork) {
-              artwork.saleData = moneyUtils.buildInitialSaleData();
+              artwork.saleData = moneyUtils.buildInitialSaleData(artwork.saleData.bitcoinTx);
               store
                 .dispatch("myArtworksStore/updateArtwork", artwork)
                 .then(artwork => {
@@ -241,11 +248,13 @@ const myArtworksStore = {
                 if (!myArtwork.bcitem) {
                   myArtwork.bcitem = {};
                 }
-                myArtwork.bcitem.status = "registered";
-                moneyUtils.convertPrices(myArtwork, blockchainItem);
-                if (myArtwork.owner !== blockchainItem.blockstackId) {
-                  myArtwork.owner = blockchainItem.blockstackId;
-                  store.dispatch("myArtworksStore/updateArtwork", myArtwork);
+                if (store.state.constants.featureEthereum) {
+                  myArtwork.bcitem.status = "registered";
+                  moneyUtils.convertPrices(myArtwork, blockchainItem);
+                  if (blockchainItem.blockstackId && myArtwork.owner !== blockchainItem.blockstackId) {
+                    myArtwork.owner = blockchainItem.blockstackId;
+                    store.dispatch("myArtworksStore/updateArtwork", myArtwork);
+                  }
                 }
                 commit("addMyArtwork", myArtwork);
               } else {
@@ -271,7 +280,7 @@ const myArtworksStore = {
                 if (blockchainItem && blockchainItem.itemIndex > -1) {
                   myArtwork.blockchainItem = blockchainItem;
                   moneyUtils.convertPrices(myArtwork, blockchainItem);
-                  if (myArtwork.owner !== blockchainItem.blockstackId) {
+                  if (blockchainItem.blockstackId && myArtwork.owner !== blockchainItem.blockstackId) {
                     myArtwork.owner = blockchainItem.blockstackId;
                     store.dispatch("myArtworksStore/updateArtwork", myArtwork);
                   }
