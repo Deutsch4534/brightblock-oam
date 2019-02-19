@@ -39,6 +39,25 @@ const moneyUtils = {
     artwork.bcitem.priceInBtc = Math.round(priceInBtc * 100000) / 100000;
   },
 
+  round(value, exp) {
+    if (typeof exp === 'undefined' || Number(exp) === 0)
+      return Math.round(value);
+
+    value = Number(value);
+    exp = Number(exp);
+
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
+      return NaN;
+
+    // Shift
+    value = value.toString().split('e');
+    value = Math.round(Number((value[0] + 'e' + (value[1] ? (Number(value[1]) + exp) : exp))));
+
+    // Shift back
+    value = value.toString().split('e');
+    return Number((value[0] + 'e' + (value[1] ? (Number(value[1]) - exp) : -exp)));
+  },
+
   conversionMessage(currency) {
     try {
       let fiatRate = store.getters["conversionStore/getFiatRate"](currency);
@@ -133,6 +152,15 @@ const moneyUtils = {
     } catch (err) {
       return 0;
     }
+  },
+
+  rateInBitcoin(bitcoinAmount, percent) {
+    let rate = percent * bitcoinAmount / 100;
+    return moneyUtils.round(rate, 8);
+  },
+  rateInFiat(fiatAmount, percent) {
+    let rate = percent * fiatAmount / 100;
+    return moneyUtils.round(rate, 2);
   },
 
   buildInitialSaleData(bitcoinTx) {

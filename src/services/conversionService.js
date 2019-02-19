@@ -1,10 +1,9 @@
-// import eventBus from '@/services/eventBus'
 import SockJS from "sockjs-client";
 import Stomp from "@stomp/stompjs";
 import store from "@/storage/store";
 
 const conversionService = {
-  connectExchangeRates: function() {
+  subscribeExchangeRateNews: function() {
     let socket = new SockJS(store.state.constants.ethGatewayUrl + "/exchanges");
     let stompClient = Stomp.over(socket);
     let connectSuccess = function() {

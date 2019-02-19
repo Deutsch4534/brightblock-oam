@@ -33,8 +33,8 @@ const myAccountStore = {
             };
           }
         }
-        myAccountService.getPortrayal(function(portrayal) {
-          myProfile.portrayal = portrayal;
+        myAccountService.getAuxiliaryProfile(function(auxiliaryProfile) {
+          myProfile.auxiliaryProfile = auxiliaryProfile;
           commit("myProfile", myProfile);
           resolve(myProfile);
         }, function(err) {
@@ -43,13 +43,13 @@ const myAccountStore = {
         });
       });
     },
-    updatePortrayal({ state, commit }, portrayal) {
+    updateAuxiliaryProfile({ state, commit }, auxiliaryProfile) {
       return new Promise(resolve => {
-        myAccountService.updatePortrayal(
-          portrayal,
-          function(portrayal) {
+        myAccountService.updateAuxiliaryProfile(
+          auxiliaryProfile,
+          function(auxiliaryProfile) {
             let myProfile = state.myProfile;
-            myProfile.portrayal = portrayal;
+            myProfile.auxiliaryProfile = auxiliaryProfile;
             commit("myProfile", myProfile);
             resolve(myProfile);
           },

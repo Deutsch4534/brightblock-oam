@@ -7,6 +7,7 @@ import myAccountStore from "./myAccountStore";
 import userProfilesStore from "./userProfilesStore";
 import artworkSearchStore from "./artworkSearchStore";
 import conversionStore from "./conversionStore";
+import invoiceStore from "./invoiceStore";
 import ethStore from "./ethStore";
 import bitcoinStore from "./bitcoinStore";
 import onlineAuctionsStore from "./onlineAuctionsStore";
@@ -25,7 +26,8 @@ const store = new Vuex.Store({
     ethStore: ethStore,
     bitcoinStore: bitcoinStore,
     myAuctionsStore: myAuctionsStore,
-    onlineAuctionsStore: onlineAuctionsStore
+    onlineAuctionsStore: onlineAuctionsStore,
+    invoiceStore: invoiceStore
   },
   state: {
     constants: {},

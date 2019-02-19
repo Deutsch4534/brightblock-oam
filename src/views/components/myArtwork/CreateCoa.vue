@@ -72,8 +72,8 @@ export default {
     this.artworkId = Number(this.$route.params.artworkId);
     let $self = this;
     this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
-      if (myProfile.portrayal.bitcoinAddress) {
-        this.bitcoinAddress = myProfile.portrayal.bitcoinAddress;
+      if (myProfile.auxiliaryProfile.bitcoinAddress) {
+        this.bitcoinAddress = myProfile.auxiliaryProfile.bitcoinAddress;
         this.addQrCode(this.bitcoinAddress);
       }
       this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId);
@@ -122,7 +122,7 @@ export default {
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
         this.artworkId
       );
-      let state = this.$store.getters["bitcoinStore/getClientState"];
+      let state = this.$store.getters["bitcoinStore/getBitcoinState"];
       if (state.chain === "test") {
         return `https://testnet.blockexplorer.com/tx/${artwork.saleData.bitcoinTx}`;
       }
@@ -131,10 +131,10 @@ export default {
     saveBitcoinAddress: function() {
       if (this.bitcoinAddress) {
         let blockstackProfile = this.$store.getters["myAccountStore/getMyProfile"];
-        let portrayal = blockstackProfile.portrayal;
-        portrayal.bitcoinAddress = this.bitcoinAddress;
-        this.$store.dispatch("myAccountStore/updatePortrayal", portrayal)
-          .then(portrayal => {
+        let auxiliaryProfile = blockstackProfile.auxiliaryProfile;
+        auxiliaryProfile.bitcoinAddress = this.bitcoinAddress;
+        this.$store.dispatch("myAccountStore/updateAuxiliaryProfile", auxiliaryProfile)
+          .then(auxiliaryProfile => {
             this.addQrCode(this.bitcoinAddress);
             this.$router.push("/my-artwork/upload");
           });

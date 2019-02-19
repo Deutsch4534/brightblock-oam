@@ -25,9 +25,12 @@ export default {
   },
   mounted() {
     let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-    this.enabled = myProfile.portrayal.bitcoinAddress;
-    if (!myProfile.portrayal.bitcoinAddress) {
-      this.$router.push("/profile/upload?from=upload-artwork");
+    if (myProfile) {
+      if (!myProfile.auxiliaryProfile || !myProfile.auxiliaryProfile.bitcoinAddress) {
+        this.$router.push("/profile/upload?from=upload-artwork");
+      } else {
+        this.enabled = myProfile.auxiliaryProfile.bitcoinAddress;
+      }
     }
   },
   computed: {},

@@ -1,6 +1,7 @@
 // myAccountStore.js
 import userProfilesService from "@/services/userProfilesService";
 import _ from "lodash";
+import store from "@/storage/store";
 
 const userProfilesStore = {
   namespaced: true,
@@ -28,16 +29,15 @@ const userProfilesStore = {
         }
       };
     },
-    getProfile: state => username => {
-      if (!username) {
-        return {};
-      }
-      let matches = state.userProfiles.filter(
-        profile => profile.username === username
-      );
-      if (matches.length > 0) {
-        return matches[0];
-      } else {
+    getProfile: state => (username, doDispatch) => {
+      if (username) {
+        let matches = state.userProfiles.filter(profile => profile.username === username);
+        if (matches.length > 0) {
+          return matches[0];
+        }
+        if (!doDispatch) {
+          store.dispatch("userProfilesStore/fetchUserProfile", { username: username }, { root: true });
+        }
         return {};
       }
     },
@@ -67,6 +67,10 @@ const userProfilesStore = {
         return o.username === userProfile.username;
       });
       if (index === -1) {
+        if (!userProfile.name) {
+          let index = userProfile.username.indexOf(".");
+          userProfile.name = userProfile.username.substring(0, index);
+        }
         state.userProfiles.push(userProfile);
       }
     },
@@ -97,7 +101,7 @@ const userProfilesStore = {
         ) {
           resolve();
         }
-        let up = getters.getProfile(user.username);
+        let up = getters.getProfile(user.username, true);
         if (up && up.username) {
           resolve(up);
         } else {

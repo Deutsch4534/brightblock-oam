@@ -49,11 +49,11 @@ export default {
   mounted() {
     this.getContent();
     this.$store.dispatch("bitcoinStore/fetchBalance");
-    this.$store.dispatch("bitcoinStore/fetchClientState");
+    this.$store.dispatch("bitcoinStore/fetchBitcoinState");
   },
   computed: {
     chain() {
-      let s = this.$store.getters["bitcoinStore/getClientState"];
+      let s = this.$store.getters["bitcoinStore/getBitcoinState"];
       if (s) {
         return s.chain;
       }

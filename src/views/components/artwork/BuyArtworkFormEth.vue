@@ -10,11 +10,13 @@
       <p v-html="fiatMessage" class="inline-block mb-0"></p>
       <p v-html="ethMessage" class="inline-block mb-0"></p>
       <p v-html="btcMessage" class="inline-block mb-0"></p>
-        <mdb-btn :disabled="!purchaseState.canBuy"
-                 v-bind:class="{ 'white': purchaseState.canBuy, 'grey': !purchaseState.canBuy }" color="white"
-                 size="lg" @click="buyArtwork()" class="ml-4">purchase
-        </mdb-btn>
     </div>
+    <div class="row">
+      <div class="col-12 mt-3">
+        <mdb-btn @click="buyArtwork()" :disabled="!purchaseState.canBuy" type="submit" size="md" class="btn-main btn-block">Buy Artwork</mdb-btn>
+      </div>
+    </div>
+    <div class="w-100"></div>
   </div>
 </template>
 

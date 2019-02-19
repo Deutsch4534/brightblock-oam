@@ -5,11 +5,12 @@
       {{fiatMessage}} <mdb-btn size="sm" color="white" rounded>EUR</mdb-btn>
       {{btcMessage}} <mdb-btn size="sm" color="white" rounded>BTC</mdb-btn>
     </div>
-    <div class="d-flex align-items-center justify-content-start pt-5">
-        <mdb-btn v-bind:class="{ 'white': purchaseState.canBuy, 'grey': !purchaseState.canBuy }" color="white"
-                 size="lg" @click="buyArtwork()" class="ml-4">{{label}}
-        </mdb-btn>
+    <div class="row">
+      <div class="col-12 mt-3">
+        <mdb-btn @click="buyArtwork()" :disabled="!purchaseState.canBuy" type="submit" size="md" class="btn-main btn-block">{{label}}</mdb-btn>
+      </div>
     </div>
+    <div class="w-100"></div>
   </div>
 </template>
 
@@ -70,12 +71,12 @@ export default {
     label() {
       try {
         let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-        if (myProfile.username === this.artwork.owner) {
-          return "Show Addresses";
+        if (this.artwork && myProfile.username === this.artwork.owner) {
+          return "Payment Info";
         }
-        return "Purchase";
+        return "Buy Artwork";
       } catch (e) {
-        return "Punchase";
+        return "Buy Now";
       }
     }
   }

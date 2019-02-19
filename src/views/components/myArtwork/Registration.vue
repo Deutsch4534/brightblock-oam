@@ -90,7 +90,7 @@ export default {
     }
     let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
     this.$store.dispatch("bitcoinStore/fetchBalance");
-    this.$store.dispatch("bitcoinStore/fetchClientState");
+    this.$store.dispatch("bitcoinStore/fetchBitcoinState");
   },
   computed: {
     fiatRates() {

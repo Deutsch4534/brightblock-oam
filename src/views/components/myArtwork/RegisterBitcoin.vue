@@ -21,10 +21,10 @@
     and store it the bitcoin blockchain where it can be used to prove your
     ownership. You'll then be able to generate a Certificate of Ownership.
     <br/><br/>
-    <a @click.prevent="showTimestamp = !showTimestamp">Show this data!</a>
+    <a @click.prevent="showArtworkHash = !showArtworkHash">Show this data!</a>
   </mdb-card-text>
-  <mdb-card-text v-if="showTimestamp">
-    {{timestamp}}
+  <mdb-card-text v-if="showArtworkHash">
+    {{artworkHash}}
   </mdb-card-text>
   <a class="black-text d-flex justify-content-end"><mdb-btn color="primary" size="md" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
   <hr/>
@@ -35,9 +35,8 @@
 import CreateCoa from "./CreateCoa";
 import utils from "@/services/utils";
 import notify from "@/services/notify";
-import ethereumService from "@/services/ethereumService";
+import moment from "moment";
 import bitcoinService from "@/services/bitcoinService";
-// import OpenTimestamps from "javascript-opentimestamps";
 import { mdbPopover, mdbCol, mdbView, mdbMask, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
 
 // noinspection JSUnusedGlobalSymbols
@@ -64,7 +63,7 @@ export default {
       artworkId: null,
       from: "/my-artworks",
       bitcoinTx: null,
-      showTimestamp: null
+      showArtworkHash: null
     };
   },
   mounted() {
@@ -75,20 +74,7 @@ export default {
     });
   },
   computed: {
-    fiatRates() {
-      return this.$store.getters["conversionStore/getFiatRates"];
-    },
-    showSlogan() {
-      return this.$store.state.constants.debugMode;
-    },
-    networkName() {
-      try {
-        return this.$store.state.ethStore.clientState.metaMaskNetwork.networkName;
-      } catch (err) {
-        return "unknown network";
-      }
-    },
-    timestamp() {
+    artworkHash() {
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
         this.artworkId
       );
@@ -98,7 +84,7 @@ export default {
       return this.$store.state.constants.featureBitcoin;
     },
     bitcoinState() {
-      let state = this.$store.getters["bitcoinStore/getClientState"];
+      let state = this.$store.getters["bitcoinStore/getBitcoinState"];
       return state;
     },
     artwork() {
@@ -152,7 +138,8 @@ export default {
       try {
         let regData = {
           title: artwork.title,
-          timestamp: utils.buildBitcoinHash(artwork),
+          timestamp: moment({}),
+          artworkHash: utils.buildBitcoinHash(artwork),
           owner: artwork.owner
         };
         let $self = this;
@@ -168,18 +155,6 @@ export default {
       } catch (err) {
         console.log(err);
       }
-      /**
-      const file = Buffer.from(JSON.stringify(regData), "hex");
-      const detached = OpenTimestamps.DetachedTimestampFile.fromBytes(
-        new OpenTimestamps.Ops.OpSHA256(),
-        file
-      );
-      OpenTimestamps.stamp(detached).then(() => {
-        // const fileOts = detached.serializeToBytes()
-        const infoResult = OpenTimestamps.info(detached);
-        console.log(infoResult);
-      });
-      **/
     },
   }
 };

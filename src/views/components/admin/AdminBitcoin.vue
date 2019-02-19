@@ -55,12 +55,8 @@ export default {
     }
   },
   computed: {
-    clientState() {
-      let clientState = this.$store.state.ethStore.clientState;
-      return clientState;
-    },
     bitcoinState() {
-      let state = this.$store.getters["bitcoinStore/getClientState"];
+      let state = this.$store.getters["bitcoinStore/getBitcoinState"];
       return state;
     }
   }

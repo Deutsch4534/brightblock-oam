@@ -5,13 +5,13 @@ import bitcoinService from "@/services/bitcoinService";
 const bitcoinStore = {
   namespaced: true,
   state: {
-    clientState: {},
+    bitcoinState: {},
     balance: 0,
     target: 100.0
   },
   getters: {
-    getClientState: state => {
-      return state.clientState;
+    getBitcoinState: state => {
+      return state.bitcoinState;
     },
     getBalance: state => {
       return state.balance;
@@ -21,20 +21,20 @@ const bitcoinStore = {
     }
   },
   mutations: {
-    bitcoinClientState(state, clientState) {
-      state.clientState = clientState;
+    bitcoinState(state, bitcoinState) {
+      state.bitcoinState = bitcoinState;
     },
     setBalance(state, balance) {
       state.balance = balance;
     }
   },
   actions: {
-    fetchClientState({ commit }) {
+    fetchBitcoinState({ commit }) {
       return new Promise(resolve => {
-        bitcoinService.fetchClientState(
-          function(clientState) {
-            commit("bitcoinClientState", clientState);
-            resolve(clientState);
+        bitcoinService.fetchBitcoinState(
+          function(bitcoinState) {
+            commit("bitcoinState", bitcoinState);
+            resolve(bitcoinState);
           },
           function(error) {
             /**

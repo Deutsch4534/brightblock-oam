@@ -163,10 +163,10 @@ const artworkSearchStore = {
                 artwork.artwork[0] &&
                 artwork.artwork[0].dataUrl.length > 0
               ) {
-                let timestamp = utils.buildArtworkHash(
-                  artwork.artwork[0].dataUrl
-                );
                 if (store.state.constants.featureEthereum) {
+                  let timestamp = utils.buildArtworkHash(
+                    artwork.artwork[0].dataUrl
+                  );
                   let blockchainItem = store.getters[
                     "ethStore/getBlockchainItem"
                   ](timestamp);

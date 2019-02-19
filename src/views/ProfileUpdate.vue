@@ -1,18 +1,18 @@
 <template>
 <div class="container-fluid bg-light flex-1">
-  <profile-upload-form :formTitle="'Update Your RA Profile'" :mode="'update'"/>
+  <auxiliary-profile-form :formTitle="'Update Your RA Profile'" :mode="'update'"/>
 </div>
 </template>
 
 <script>
-import ProfileUploadForm from "./components/profile/ProfileUploadForm";
+import AuxiliaryProfileForm from "./components/profile/AuxiliaryProfileForm";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "ProfileUpdate",
   bodyClass: "index-page",
   components: {
-    ProfileUploadForm,
+    AuxiliaryProfileForm,
   },
   data() {
     return {

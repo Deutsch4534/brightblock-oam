@@ -7,6 +7,7 @@ import {
   isUserSignedIn,
   hexStringToECPair,
   redirectToSignIn,
+  decodeToken,
   signUserOut, getFile, putFile
 } from "blockstack";
 import store from "@/storage/store";
@@ -37,14 +38,20 @@ const myAccountService = {
         uname.indexOf("sybellaio") > -1 ||
         uname.indexOf("rosemarry") > -1 ||
         uname.indexOf("anton") > -1;
-      let privateKey = account.appPrivateKey + "01";
       let avatarUrl = person.avatarUrl();
       if (!avatarUrl) {
         avatarUrl =  require("@/assets/img/missing/anonuser3.png");
       }
+      let privateKey = account.appPrivateKey + "01";
       privateKey = hexStringToECPair(privateKey).toWIF();
+      var authResponseToken = account.authResponseToken;
+      var decodedToken = decodeToken(authResponseToken);
+      var publicKey = decodedToken.payload.public_keys[0];
+
       myProfile = {
         loggedIn: true,
+        identityAddress: account.identityAddress,
+        publicKey: publicKey,
         appPrivateKey: privateKey,
         showAdmin: showAdmin,
         name: name,
@@ -108,40 +115,43 @@ const myAccountService = {
       store.dispatch("myAccountStore/fetchMyAccount");
     }
   },
-  updatePortrayal: function(portrayal, success, failure) {
-    let portrayalRootFileName = store.state.constants.portrayalRootFileName;
-    if (!portrayal.bitcoinAddress) {
+  updateAuxiliaryProfile: function(auxiliaryProfile, success, failure) {
+    let auxiliaryProfileRootFileName = store.state.constants.auxiliaryProfileRootFileName;
+    // let myPublicKey = "02fe7675bc9340656964d9d99d4fa35444f81621433290ad32f3c7c06899f9c9fc";
+    if (!auxiliaryProfile.bitcoinAddress) {
       // for backwards compat with items created before this object was added.
       throw new Error("Need the bitcoin address to do trading!");
     }
     var now = moment({}).valueOf();
-    portrayal.lastUpdate = now;
-    if (!portrayal.portrayalId) {
-      portrayal.profileId = now;
+    auxiliaryProfile.lastUpdate = now;
+    if (!auxiliaryProfile.auxiliaryProfileId) {
+      auxiliaryProfile.profileId = now;
     }
-    putFile(portrayalRootFileName, JSON.stringify(portrayal), {encrypt: false})
+    // let myProfile = store.getters["myAccountStore/getMyProfile"];
+    putFile(auxiliaryProfileRootFileName, JSON.stringify(auxiliaryProfile), {encrypt: true})
       .then(function() {
-        success(portrayal);
+        success(auxiliaryProfile);
       })
       .catch(function() {
         failure({
           ERR_CODE: 4,
-          message: "Error uploading profile: " + portrayal.portrayalId
+          message: "Error uploading profile: " + auxiliaryProfile.auxiliaryProfileId
         });
       });
   },
-  getPortrayal: function(success, failure) {
-    let portrayalRootFileName = store.state.constants.portrayalRootFileName;
-    let portrayal = {};
-    getFile(portrayalRootFileName, { decrypt: false })
+  getAuxiliaryProfile: function(success, failure) {
+    let auxiliaryProfileRootFileName = store.state.constants.auxiliaryProfileRootFileName;
+    let auxiliaryProfile = {};
+    // let myProfile = store.getters["myAccountStore/getMyProfile"];
+    getFile(auxiliaryProfileRootFileName, { decrypt: true })
       .then(function(file) {
         if (file) {
-          portrayal = JSON.parse(file);
+          auxiliaryProfile = JSON.parse(file);
         }
-        success(portrayal);
+        success(auxiliaryProfile);
       })
       .catch(function() {
-        failure({ ERR_CODE: 5, message: "no portrayal found" });
+        failure({ ERR_CODE: 5, message: "no auxiliaryProfile found" });
       });
   }
 };

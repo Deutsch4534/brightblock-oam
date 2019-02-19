@@ -25,10 +25,10 @@ const userProfilesService = {
               userProfile.gaiaUrl = userProfile.apps[key];
             }
           }
-          const portrayalRootFileName = store.state.constants.portrayalRootFileName;
-          getFile(portrayalRootFileName, { decrypt: false, username: username }).then(function(file) {
+          const auxiliaryProfileRootFileName = store.state.constants.auxiliaryProfileRootFileName;
+          getFile(auxiliaryProfileRootFileName, { decrypt: false, username: username }).then(function(file) {
             if (file) {
-              userProfile.portrayal = JSON.parse(file);
+              userProfile.auxiliaryProfile = JSON.parse(file);
             }
             success(userProfile);
           })

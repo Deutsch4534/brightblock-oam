@@ -1,18 +1,18 @@
 <template>
 <div class="container-fluid bg-light flex-1">
-  <profile-upload-form :formTitle="'Create Your RA Profile'" :mode="'upload'" class="form-transparent"/>
+  <auxiliary-profile-form :formTitle="'Create Your RA Profile'" :mode="'upload'" class="form-transparent"/>
 </div>
 </template>
 
 <script>
-import ProfileUploadForm from "./components/profile/ProfileUploadForm";
+import AuxiliaryProfileForm from "./components/profile/AuxiliaryProfileForm";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "ProfileUpload",
   bodyClass: "index-page",
   components: {
-    ProfileUploadForm,
+    AuxiliaryProfileForm,
   },
   data() {
     return {

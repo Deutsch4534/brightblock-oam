@@ -29,7 +29,6 @@ const myArtworksStore = {
       let username = store.getters["myAccountStore/getMyProfile"].username;
       if (fb) {
         let registered = artwork && artwork.saleData && artwork.saleData.bitcoinTx;
-        console.log("sale data",artwork);
         return typeof (registered) === "string" && artwork.owner === username;
       }
       return (
