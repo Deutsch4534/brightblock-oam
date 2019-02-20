@@ -36,7 +36,14 @@ const myAccountStore = {
         myAccountService.getAuxiliaryProfile(function(auxiliaryProfile) {
           myProfile.auxiliaryProfile = auxiliaryProfile;
           commit("myProfile", myProfile);
-          resolve(myProfile);
+          myAccountService.getPublicKeyData(myProfile, function(publicKeyData) {
+            myProfile.publicKeyData = publicKeyData;
+            commit("myProfile", myProfile);
+            resolve(myProfile);
+          }, function(err) {
+            console.log(err);
+            resolve(myProfile);
+          });
         }, function(err) {
           console.log(err);
           resolve(myProfile);
@@ -50,6 +57,22 @@ const myAccountStore = {
           function(auxiliaryProfile) {
             let myProfile = state.myProfile;
             myProfile.auxiliaryProfile = auxiliaryProfile;
+            commit("myProfile", myProfile);
+            resolve(myProfile);
+          },
+          function(error) {
+            console.log("Error updating profile: ", error);
+            resolve(error);
+          }
+        );
+      });
+    },
+    updatePublicKeyData({ state, commit }, publicKeyData) {
+      return new Promise(resolve => {
+        let myProfile = state.myProfile;
+        myAccountService.updatePublicKeyData(publicKeyData,
+          function(publicKeyData) {
+            state.myProfile.publicKeyData = publicKeyData;
             commit("myProfile", myProfile);
             resolve(myProfile);
           },

@@ -43,12 +43,13 @@
         </div>
         <div class="row mb-4">
           <div class="col-md-6">
-            <input type="text" class="form-control" id="validationCustom01" placeholder="bitcoin address" v-model="auxiliaryProfile.bitcoinAddress" required>
+            <input type="text" class="form-control" id="validationCustom01" placeholder="bitcoin address" v-model="publicKeyData.bitcoinAddress" required>
             <div class="invalid-feedback">
               Required - an alphanumeric string 26-35 characters in length.
             </div>
           </div>
         </div>
+
         <div class="row mb-4">
           <div class="col-md-12">
             <mdb-popover trigger="click" :options="{placement: 'top'}">
@@ -75,6 +76,30 @@
             <input type="email" class="form-control" id="validationCustom02" placeholder="email address" v-model="auxiliaryProfile.emailAddress" required>
           </div>
         </div>
+
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <mdb-popover trigger="click" :options="{placement: 'top'}">
+              <div class="popover">
+                <div class="popover-header">
+                  Trusted users
+                </div>
+                <div class="popover-body">
+                  Comma separated list of blockstack user ids.
+                </div>
+              </div>
+              <a @click.prevent="" slot="reference">
+                Trusted users <mdb-icon far icon="question-circle" />
+              </a>
+            </mdb-popover>
+          </div>
+        </div>
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <input type="text" class="form-control" id="validationCustom03" placeholder="Share data with..." v-model="auxiliaryProfile.trustedIds">
+          </div>
+        </div>
+
         <address-form @addressUpdate="updateAddress" :address="auxiliaryProfile.shippingAddress" :addressTitle="'Shipping Address'" :addressBlurb="addressBlurb"/>
         <div class="form-row">
           <div class="col-md-12">
@@ -118,33 +143,37 @@ export default {
       errors: [],
       showAttachArt: false,
       addressBlurb: "Your shipping address is encrypted and stored in your gaia bucket. It will only ever be decrypted in case where this is necessary - such as when you have bought some artwork and the seller needs your shipping information",
+      publicKeyData: {},
       auxiliaryProfile: {
         shippingAddress: {}
       },
+      blockstackProfile: {}
     };
   },
   mounted() {
     this.$store.dispatch("myAccountStore/fetchMyAccount").then((profile) => {
-      if (profile.auxiliaryProfile) {
-        this.auxiliaryProfile = profile.auxiliaryProfile;
-        if (!this.auxiliaryProfile.shippingAddress) {
-          this.auxiliaryProfile.shippingAddress = {};
-        }
+      if (!profile.auxiliaryProfile) {
+        profile.auxiliaryProfile = {};
       }
+      this.blockstackProfile = profile;
+      this.auxiliaryProfile = profile.auxiliaryProfile;
+      if (!this.auxiliaryProfile.shippingAddress) {
+        this.auxiliaryProfile.shippingAddress = {};
+      }
+      this.publicKeyData = profile.publicKeyData;
     });
   },
   computed: {
-    blockstackProfile() {
-      let blockstackProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      return blockstackProfile;
-    }
   },
   methods: {
     upload: function() {
-      this.$store
-        .dispatch("myAccountStore/updateAuxiliaryProfile", this.auxiliaryProfile)
+      let $self = this;
+      this.$store.dispatch("myAccountStore/updateAuxiliaryProfile", this.auxiliaryProfile)
         .then(auxiliaryProfile => {
-          this.$router.push("/my-artwork/upload");
+          $self.$store.dispatch("myAccountStore/updatePublicKeyData", $self.publicKeyData)
+            .then(myProfile => {
+              $self.$router.push("/my-artwork/upload");
+            });
         });
     },
     updateAddress(event) {
@@ -155,7 +184,7 @@ export default {
       event.target.classList.add('was-validated');
       this.showAttachArt = false;
       this.errors = [];
-      if (!this.auxiliaryProfile.bitcoinAddress) {
+      if (!this.publicKeyData.bitcoinAddress) {
         this.errors.push("Your bitcoin address is required.");
       }
       if (!this.auxiliaryProfile.emailAddress) {

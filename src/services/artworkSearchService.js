@@ -8,7 +8,7 @@ import { getFile } from "blockstack";
  *  The service is a client to the brightblock sever side grpc client.
  **/
 const artworkSearchService = {
-  newQuery(q) {
+  newQuery(q, success) {
     store.commit("artworkSearchStore/clearSearchResults");
     searchIndexService.searchDappsIndex(location.hostname, "artwork", q.field, q.query).then(searchResults => {
       if (!searchResults || searchResults.error) {
@@ -30,7 +30,7 @@ const artworkSearchService = {
             let userRootFile = JSON.parse(file);
             searchResults.forEach(function(searchResult) {
               // get the unique users from the search
-              artworkSearchService.storeArtwork(searchResult, userRootFile.records);
+              artworkSearchService.storeArtwork(searchResult, userRootFile.records, success);
             });
           }
         });
@@ -38,7 +38,7 @@ const artworkSearchService = {
     });
   },
 
-  storeArtwork: function(searchResult, records) {
+  storeArtwork: function(searchResult, records, success) {
     let artworkId = Number(searchResult.id);
     let index = _.findIndex(records, function(o) {
       return o.id === artworkId;
@@ -53,6 +53,7 @@ const artworkSearchService = {
       function(artwork) {
         store.commit("artworkSearchStore/addSearchResult", artwork);
         store.commit("artworkSearchStore/addArtwork", artwork);
+        if (success) success(artwork);
       },
       function(error) {
         console.log("Error fetching recent artworks: ", error);

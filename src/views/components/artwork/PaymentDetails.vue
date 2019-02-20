@@ -24,8 +24,8 @@
   </mdb-card-text>
   <mdb-card-text>
   <div class="row">
-    <div class="col-12 mb-5">
-      <mdb-btn @click.prevent="closeModal()" type="submit" size="md" class="btn-main btn-block">Click here when paid</mdb-btn>
+    <div class="col-12 mb-5" @click="closeModal">
+      <mdb-btn type="submit" size="md" class="btn-main btn-block">Click here when paid</mdb-btn>
     </div>
   </div>
   <div class="w-100"></div>
@@ -79,15 +79,15 @@ export default {
     let artist = this.artwork.artist;
     let owner = this.artwork.owner;
     this.$store.dispatch("userProfilesStore/fetchUserProfile", { username: this.artwork.owner}).then(profile => {
-      if (profile.auxiliaryProfile.bitcoinAddress) {
-        this.ownerAddress = profile.auxiliaryProfile.bitcoinAddress;
+      if (profile.publicKeyData.bitcoinAddress) {
+        this.ownerAddress = profile.publicKeyData.bitcoinAddress;
         this.addQrCode("qrcode1", this.ownerAddress);
       }
     });
     if (artist !== owner) {
       this.$store.dispatch("userProfilesStore/fetchUserProfile", { username: this.artwork.artist}).then(profile => {
-        if (profile.auxiliaryProfile.bitcoinAddress) {
-          this.artistAddress = profile.auxiliaryProfile.bitcoinAddress;
+        if (profile.publicKeyData.bitcoinAddress) {
+          this.artistAddress = profile.publicKeyData.bitcoinAddress;
           this.addQrCode("qrcode2", this.artistAddress);
         }
       });

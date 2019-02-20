@@ -26,10 +26,10 @@ export default {
   mounted() {
     let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
     if (myProfile) {
-      if (!myProfile.auxiliaryProfile || !myProfile.auxiliaryProfile.bitcoinAddress) {
+      if (!myProfile.publicKeyData || !myProfile.publicKeyData.bitcoinAddress) {
         this.$router.push("/profile/upload?from=upload-artwork");
       } else {
-        this.enabled = myProfile.auxiliaryProfile.bitcoinAddress;
+        this.enabled = myProfile.publicKeyData.bitcoinAddress;
       }
     }
   },

@@ -22,6 +22,7 @@ import Navbar from "./layout/Navbar.vue";
 import Footer from "./layout/Footer.vue";
 
 import Artwork from "./views/Artwork";
+import Reconcile from "./views/Reconcile";
 
 import Search from "./views/Search";
 
@@ -157,6 +158,11 @@ const router = new Router({
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
       }
+    },
+    {
+      path: "/reconcile/:artworkId",
+      name: "reconcile",
+      components: { default: Reconcile, header: Navbar, footer: Footer }
     },
     {
       path: "/artworks/:owner/:artworkId",

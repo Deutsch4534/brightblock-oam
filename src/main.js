@@ -58,10 +58,15 @@ Vue.mixin({
 
 store.commit("constants", CONSTANTS);
 // artworkSearchService.newQuery("*");
-invoiceService.initInvoiceData();
+
 conversionService.subscribeExchangeRateNews();
 store.dispatch("fetchServerTime");
-store.dispatch("myAccountStore/fetchMyAccount");
+store.dispatch("myAccountStore/fetchMyAccount").then(profile => {
+  if (profile.loggedIn) {
+    invoiceService.initInvoiceData(profile);
+  }
+});
+// let myProfile = store.getters["myAccountStore/getMyProfile"];
 store.dispatch("conversionStore/fetchConversionData");
 
 new Vue({

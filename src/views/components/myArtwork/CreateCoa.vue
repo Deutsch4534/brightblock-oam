@@ -131,10 +131,10 @@ export default {
     saveBitcoinAddress: function() {
       if (this.bitcoinAddress) {
         let blockstackProfile = this.$store.getters["myAccountStore/getMyProfile"];
-        let auxiliaryProfile = blockstackProfile.auxiliaryProfile;
-        auxiliaryProfile.bitcoinAddress = this.bitcoinAddress;
-        this.$store.dispatch("myAccountStore/updateAuxiliaryProfile", auxiliaryProfile)
-          .then(auxiliaryProfile => {
+        let publicKeyData = blockstackProfile.publicKeyData;
+        publicKeyData.bitcoinAddress = this.bitcoinAddress;
+        this.$store.dispatch("myAccountStore/updatePublicKeyData", publicKeyData)
+          .then(publicKeyData => {
             this.addQrCode(this.bitcoinAddress);
             this.$router.push("/my-artwork/upload");
           });

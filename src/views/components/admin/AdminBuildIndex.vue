@@ -65,7 +65,7 @@ export default {
       showBuild2: false,
       namesResults: null,
       endPoint: "/index/dapps/fetch",
-      users: "brightblock.id,mike.personal.id",
+      users: "brightblock.id,mike.personal.id,rosemarry.id.blockstack,antoniomeic.id.blockstack",
       fromPage: null,
       toPage: null,
       sizeOfIndex: null,

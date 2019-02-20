@@ -37,7 +37,7 @@ import AboutArtwork from "./components/artwork/AboutArtwork";
 import InvoiceDetails from "./components/artwork/InvoiceDetails";
 import BuyArtworkFormEth from "./components/artwork/BuyArtworkFormEth";
 import BuyArtworkFormBtc from "./components/artwork/BuyArtworkFormBtc";
-import ethereumService from "@/services/ethereumService";
+import artworkSearchService from "@/services/artworkSearchService";
 import notify from "@/services/notify";
 import moneyUtils from "@/services/moneyUtils";
 import { Sticky } from 'mdbvue';
@@ -47,7 +47,7 @@ import moment from "moment";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: "Artwork",
+  name: "Reconcile",
   directives: {
     'sticky': Sticky
   },
@@ -84,7 +84,13 @@ export default {
     };
   },
   mounted() {
+    let $self = this;
     this.artworkId = Number(this.$route.params.artworkId);
+    artworkSearchService.newQuery({field: "id", query: this.artworkId}, function(artwork) {
+      $self.artwork = artwork;
+      $self.owner = artwork.owner;
+      $self.invoiceClaim = $self.$store.getters["invoiceStore/getInvoiceByLabel"](artwork.id + " :: " + artwork.title);
+    });
     this.owner = this.$route.params.owner;
     this.$store
       .dispatch("artworkSearchStore/fetchUserArtwork", {

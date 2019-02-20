@@ -8,10 +8,13 @@ import {
   hexStringToECPair,
   redirectToSignIn,
   decodeToken,
+  encryptContent,
   signUserOut, getFile, putFile
 } from "blockstack";
 import store from "@/storage/store";
 import moment from "moment";
+import userProfilesService from "@/services/userProfilesService";
+import _ from "lodash";
 
 const myAccountService = {
   myProfile: function() {
@@ -117,42 +120,92 @@ const myAccountService = {
   },
   updateAuxiliaryProfile: function(auxiliaryProfile, success, failure) {
     let auxiliaryProfileRootFileName = store.state.constants.auxiliaryProfileRootFileName;
-    // let myPublicKey = "02fe7675bc9340656964d9d99d4fa35444f81621433290ad32f3c7c06899f9c9fc";
-    if (!auxiliaryProfile.bitcoinAddress) {
-      // for backwards compat with items created before this object was added.
-      throw new Error("Need the bitcoin address to do trading!");
-    }
-    var now = moment({}).valueOf();
-    auxiliaryProfile.lastUpdate = now;
-    if (!auxiliaryProfile.auxiliaryProfileId) {
-      auxiliaryProfile.profileId = now;
-    }
-    // let myProfile = store.getters["myAccountStore/getMyProfile"];
     putFile(auxiliaryProfileRootFileName, JSON.stringify(auxiliaryProfile), {encrypt: true})
       .then(function() {
         success(auxiliaryProfile);
       })
       .catch(function() {
-        failure({
-          ERR_CODE: 4,
-          message: "Error uploading profile: " + auxiliaryProfile.auxiliaryProfileId
-        });
+        failure({ERR_CODE: 4, message: "Error uploading aux profile."});
       });
   },
+  updatePublicKeyData: function(publicKeyData, success, failure) {
+    // check for trusted ids for whom we want to encrypt our private data with their public key.
+    let publicKeyDataRootFileName = store.state.constants.publicKeyDataRootFileName;
+    let myProfile = store.getters["myAccountStore/getMyProfile"];
+    let auxiliaryProfile = myProfile.auxiliaryProfile;
+    publicKeyData.publicBlockstackKey = myProfile.publicKey;
+    if (auxiliaryProfile.trustedIds) {
+      let trustedIds = auxiliaryProfile.trustedIds.split(",");
+      _.forEach(trustedIds, function(trustedId) {
+        // fetch the users publicKeyData file - we need their pub key to encrypt our address!!!
+        let username = trustedId.trim();
+        userProfilesService.fetchUserProfile(username, function (userProfile) {
+          if (userProfile.publicKeyData && userProfile.publicKeyData.publicBlockstackKey) {
+            let pubkey = userProfile.publicKeyData.publicBlockstackKey;
+            publicKeyData.secured = [];
+            let encObj = {
+              username: username
+            };
+            if (auxiliaryProfile.emailAddress) {
+              encObj.emailAddress = encryptContent(auxiliaryProfile.emailAddress, pubkey);
+            }
+            if (auxiliaryProfile.shippingAddress) {
+              encObj.shippingAddress = encryptContent(JSON.stringify(auxiliaryProfile.shippingAddress), pubkey);
+            }
+            publicKeyData.secured.push(encObj);
+          }
+          putFile(publicKeyDataRootFileName, JSON.stringify(publicKeyData), {encrypt: false}).then(() => {
+            success(publicKeyData);
+          });
+        });
+      });
+    } else {
+      putFile(publicKeyDataRootFileName, JSON.stringify(publicKeyData), {encrypt: false}).then(() => {
+        success(publicKeyData);
+      });
+    }
+  },
   getAuxiliaryProfile: function(success, failure) {
+    // let myProfile = store.getters["myAccountStore/getMyProfile"];
     let auxiliaryProfileRootFileName = store.state.constants.auxiliaryProfileRootFileName;
     let auxiliaryProfile = {};
-    // let myProfile = store.getters["myAccountStore/getMyProfile"];
-    getFile(auxiliaryProfileRootFileName, { decrypt: true })
-      .then(function(file) {
-        if (file) {
-          auxiliaryProfile = JSON.parse(file);
-        }
+    let newRootFile = {
+      created: moment({}).valueOf(),
+    };
+    getFile(auxiliaryProfileRootFileName, { decrypt: true }).then(function(file) {
+      if (file) {
+        auxiliaryProfile = JSON.parse(file);
         success(auxiliaryProfile);
-      })
-      .catch(function() {
-        failure({ ERR_CODE: 5, message: "no auxiliaryProfile found" });
+      } else {
+        putFile(auxiliaryProfileRootFileName, JSON.stringify(newRootFile), {encrypt: true}).then(function(file) {
+          success(newRootFile);
+        });
+      }
+    })
+      .catch(function(err) {
+        putFile(auxiliaryProfileRootFileName, JSON.stringify(newRootFile), {encrypt: true}).then(function(file) {
+          success(newRootFile);
+        });
+        console.log(err);
+        // failure({ ERR_CODE: 5, message: "no auxiliaryProfile found: " + err });
       });
+  },
+  getPublicKeyData: function(myProfile, success, failure) {
+    let publicKeyDataRootFileName = store.state.constants.publicKeyDataRootFileName;
+    getFile(publicKeyDataRootFileName, { decrypt: false }).then(function(file) {
+      if (!file) {
+        let newRootFile = {
+          created: moment({}).valueOf(),
+          bitcoinAddress: (myProfile.auxiliaryProfile) ? myProfile.auxiliaryProfile.bitcoinAddress : null,
+          publicBlockstackKey: myProfile.publicKey
+        };
+        putFile(publicKeyDataRootFileName, JSON.stringify(newRootFile), {encrypt: false}).then(function(file) {
+          success(newRootFile);
+        });
+      } else {
+        success(JSON.parse(file));
+      }
+    });
   }
 };
 export default myAccountService;

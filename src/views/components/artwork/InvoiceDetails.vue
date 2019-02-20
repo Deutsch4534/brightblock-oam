@@ -118,6 +118,7 @@ export default {
       invoiceRows: [],
       showInstructions: false,
       showPaymentDetails: false,
+      isPaid: false,
       order: null,
       bitcoinUri: null
     };
@@ -132,6 +133,9 @@ export default {
       this.invoiceClaim = invoiceService.createInvoiceClaim(this.artwork, invoiceRates, invoiceAmounts);
       invoiceService.saveInvoiceClaim(this.invoiceClaim);
       this.showPaymentDetails = true;
+    } else if (this.invoiceClaim.transaction && this.invoiceClaim.transaction.txid) {
+      this.isPaid = true;
+      this.$router.push("/reconcile/" + this.artwork.id);
     } else {
       this.lookupTransaction();
     }
@@ -139,9 +143,6 @@ export default {
     this.bitcoinUri = invoiceService.getBitcoinUri(this.invoiceClaim);
   },
   computed: {
-    isPaid() {
-      return this.invoiceClaim.transaction && this.invoiceClaim.transaction.txid;
-    }
   },
   methods: {
     openPaymentDetails() {
@@ -154,6 +155,8 @@ export default {
         bitcoinService.lookupTransaction({timestamp: this.invoiceClaim.timestamp, amount: this.invoiceClaim.invoiceAmounts.totalBitcoin}, function(result) {
           if (result) {
             $self.invoiceClaim.transaction = result;
+            $self.isPaid = true;
+            $self.$router.push("/reconcile/" + $self.artwork.id);
           } else {
             $self.showPaymentDetails = true;
           }
