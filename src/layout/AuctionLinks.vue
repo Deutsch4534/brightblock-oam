@@ -1,25 +1,25 @@
 <template>
-  <mdb-dropdown tag="li" class="nav-item">
-    <mdb-dropdown-toggle tag="a" class="dropright" color="" navLink slot="toggle" waves-fixed>
+  <mdb-dropdown id="userSubMenu">
+    <mdb-dropdown-toggle id="userSubMenuBtn" style="text-transform: none;" slot="toggle" waves-fixed>
       My Portfolio
     </mdb-dropdown-toggle>
-    <mdb-dropdown-menu class="dropdown-menu-left position-static">
-      <li v-if="loggedIn" v-on:click="closeMenu">
+    <mdb-dropdown-menu class="dropdown-menu-left dropdown-submenu position-static">
+      <li v-if="loggedIn" @click="closeUserMenu">
         <router-link
           class="dropdown-item"
           to="/my-artworks"
-        >My Art Work
+        >My Artwork
         </router-link
         >
       </li>
-      <li v-if="loggedIn" v-on:click="closeMenu">
+      <li v-if="loggedIn" v-on:click.self @click="closeUserMenu">
         <router-link
           class="dropdown-item"
           to="/my-artwork/upload"
         >Upload Artwork
         </router-link>
       </li>
-      <li v-if="loggedIn && featureAuctions" v-on:click="closeMenu">
+      <li v-if="loggedIn && featureAuctions" @click="closeUserMenu">
         <router-link
           class="dropdown-item"
           to="/my-auctions"
@@ -27,7 +27,7 @@
         </router-link
         >
       </li>
-      <li v-if="loggedIn && featureAuctions" v-on:click="closeMenu">
+      <li v-if="loggedIn && featureAuctions" @click="closeUserMenu">
         <router-link
           class="dropdown-item"
           to="/my-auctions/upload"
@@ -37,6 +37,7 @@
       </li>
     </mdb-dropdown-menu>
   </mdb-dropdown>
+
 </template>
 
 <script>
@@ -47,6 +48,7 @@
     mdbNavbarToggler,
     mdbContainer,
     mdbDropdown,
+    mdbCollapse,
     mdbDropdownItem,
     mdbDropdownMenu,
     mdbDropdownToggle,
@@ -63,6 +65,7 @@
       mdbNavItem,
       mdbNavbarNav,
       mdbNavbarToggler,
+      mdbCollapse,
       mdbContainer,
       mdbDropdown,
       mdbDropdownItem,
@@ -110,7 +113,21 @@
         return myProfile.loggedIn;
       }
     },
-    methods: {}
+    methods: {
+     closeUserMenu(){
+        let mainMenu = document.getElementById('userMainMenu');
+        let mainMenuBtn = document.getElementById('userMainMenuBtn');
+        if(mainMenu.classList.contains('show')) {
+          mainMenuBtn.click();
+        }
+      }
+    },
+    mounted(){
+      let subMenu = document.getElementById('userSubMenu');
+      subMenu.addEventListener("click", function(e) {
+        e.stopPropagation();
+      });
+    }
   };
 </script>
 
@@ -121,25 +138,36 @@
     border: none;
   }
 
-  .dropdown .dropdown-menu .dropdown-item {
-    color: white !important;
-    font-size: 2rem;
-    padding: 0.7rem 0.7rem 0.7rem 1.5rem;
+  #userSubMenuBtn {
+    padding: 8px;
+    color: inherit;
+    font-size: 0.9375rem;
+    font-weight: 300;
   }
 
+  .dropdown .dropdown-menu .dropdown-item,
   .dropdown .dropdown-menu .dropdown-item:hover,
   .dropdown .dropdown-menu .dropdown-item:focus,
   .dropdown .dropdown-menu .dropdown-item:active,
   .dropdown .dropdown-menu .dropdown-item.router-link-active {
     background-color: inherit;
     box-shadow: none;
-    color: rgba(255, 255, 255, 0.75) !important;
+    color: inherit !important;
+  }
+
+  .dropdown-submenu {
+    padding-top:0;
+    padding-bottom: 0;
+  }
+
+  .dropdown-submenu a {
+    padding-left: 0;
+    padding-right: 0;
   }
 
   @media (max-width: 576px) {
     .dropdown .dropdown-menu .dropdown-item {
       font-size: 1.2rem;
-      padding: 0.5rem 0.5rem 0.5rem 1rem;
     }
   }
 </style>
