@@ -37,7 +37,6 @@
           <router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link>
         </li>
 
-        <!--<auction-links v-if="loggedIn"/>-->
         <splash-links v-if="splashLinks" class="text-white"/>
 
         <div class="mb-4"></div>
@@ -46,13 +45,6 @@
             Login
           </router-link>
         </li>
-    <!--    <li v-if="loggedIn" class="nav-item ripple-parent">
-          <a href="#"
-             @click.prevent="logout"
-             class="nav-link navbar-link">
-            Logout</a
-          >
-        </li>-->
       </mdb-navbar-nav>
     </mdb-navbar-toggler>
   </mdb-navbar>

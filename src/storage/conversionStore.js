@@ -1,6 +1,7 @@
 // ethStore.js
 import xhrService from "@/services/xhrService";
 import store from "@/storage/store";
+import conversionService from "@/services/conversionService";
 
 const conversionStore = {
   namespaced: true,
@@ -31,6 +32,7 @@ const conversionStore = {
     fetchConversionData({ commit, state }) {
       return new Promise(resolve => {
         store.dispatch("conversionStore/fetchFiatRates").then(fiatRates => {
+          conversionService.subscribeExchangeRateNews();
           commit("setFiatRates", fiatRates);
           store
             .dispatch("conversionStore/fetchShapeShiftCryptoRate", "eth_btc")

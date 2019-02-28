@@ -1,55 +1,36 @@
 <template>
   <mdb-dropdown>
     <mdb-dropdown-toggle class="user-menu dropleft px-2 py-0" color="stylish" slot="toggle" waves-fixed id="userMainMenuBtn">
-      <!--<img style="width: 40px; height: 40px; border-radius: 20px;" :src="avatarUrl"/>-->
-      <mdb-icon icon="user-circle" />
+      <img style="width: 40px; height: 40px; border-radius: 20px;" :src="avatarUrl"/>
+      <mdb-icon icon="fa-user-circle"/>
     </mdb-dropdown-toggle>
+
     <mdb-dropdown-menu class="dropdown-menu-right" id="userMainMenu" >
       <mdb-dropdown-item tag="div">
        {{ username }}
       </mdb-dropdown-item>
-      <mdb-dropdown-item v-if="showAdmin">
-        <router-link
-          class="dropdown-item"
-          to="/profile/update"
-          >Profile</router-link
-        >
+
+      <mdb-dropdown-item>
+        <router-link class="dropdown-item" to="/profile/update">Profile</router-link>
       </mdb-dropdown-item>
+
+      <auction-links v-if="loggedIn" class="text-dark"/>
+
       <mdb-dropdown-item v-if="hasInvoices">
         <router-link class="dropdown-item" to="/invoices">
           Invoices <mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge>
           <span class="sr-only">invoices</span>
         </router-link>
       </mdb-dropdown-item>
+
       <mdb-dropdown-item>
-        <router-link
-          class="dropdown-item"
-          to="/admin/settings"
-          v-if="showAdmin"
-          >Admin</router-link
-        >
+        <router-link class="dropdown-item" to="/admin/settings" v-if="showAdmin">Admin</router-link>
       </mdb-dropdown-item>
-      <!--<mdb-dropdown-item tag="div">-->
-        <auction-links v-if="loggedIn" class="text-dark"/>
-      <!--</mdb-dropdown-item>-->
-      <!--
+
       <mdb-dropdown-item>
-        <router-link
-          class="dropdown-item"
-          to="/account/userData"
-          >My Account</router-link
-        >
+        <a href="#" @click.prevent="logout">Logout</a>
       </mdb-dropdown-item>
-      -->
-      <mdb-dropdown-item tag="div">
-        <a
-          href="#"
-          @click.prevent="logout"
-          >
-          <!--<mdb-icon icon="fingerprint"/>-->
-          Logout</a
-        >
-      </mdb-dropdown-item>
+
     </mdb-dropdown-menu>
   </mdb-dropdown>
 
@@ -86,6 +67,8 @@ export default {
       showSearch: false,
       query: null
     };
+  },
+  mounted() {
   },
   computed: {
     showAdmin() {

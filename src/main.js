@@ -12,8 +12,6 @@ import linkResolver from "./prismic/linkResolver";
 
 import { CONSTANTS } from "@/storage/constants";
 // import notify from "@/services/notify";
-import invoiceService from "@/services/invoiceService";
-import conversionService from "@/services/conversionService";
 import Datetime from "vue-datetime";
 // You need a specific loader for CSS files
 import "vue-datetime/dist/vue-datetime.css";
@@ -57,18 +55,12 @@ Vue.mixin({
 });
 
 store.commit("constants", CONSTANTS);
-// artworkSearchService.newQuery("*");
-
-conversionService.subscribeExchangeRateNews();
 store.dispatch("fetchServerTime");
 store.dispatch("bitcoinStore/fetchBalance");
 store.dispatch("bitcoinStore/fetchBitcoinState");
 store.dispatch("myAccountStore/fetchMyAccount").then(profile => {
-  if (profile.loggedIn) {
-    invoiceService.initInvoiceData();
-  }
+  store.dispatch("invoiceStore/fetchInvoices");
 });
-// let myProfile = store.getters["myAccountStore/getMyProfile"];
 store.dispatch("conversionStore/fetchConversionData");
 
 new Vue({

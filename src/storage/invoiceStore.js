@@ -80,6 +80,13 @@ const invoiceStore = {
     }
   },
   actions: {
+    fetchInvoices({ commit, state, getters}, invoiceId) {
+      return new Promise(resolve => {
+        invoiceService.initInvoiceData(function(invoicesRootFile) {
+          commit("invoicesRootFile", invoicesRootFile);
+        });
+      });
+    },
     fetchInvoice({ commit, state, getters}, invoiceId) {
       return new Promise(resolve => {
         // invoices are fetched on page load - see main.js

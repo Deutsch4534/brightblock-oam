@@ -5,35 +5,16 @@
     </mdb-dropdown-toggle>
     <mdb-dropdown-menu class="dropdown-menu-left dropdown-submenu position-static">
       <li v-if="loggedIn" @click="closeUserMenu">
-        <router-link
-          class="dropdown-item"
-          to="/my-artworks"
-        >My Artwork
-        </router-link
-        >
+        <router-link class="dropdown-item" to="/my-artworks">My Artwork</router-link>
       </li>
       <li v-if="loggedIn" v-on:click.self @click="closeUserMenu">
-        <router-link
-          class="dropdown-item"
-          to="/my-artwork/upload"
-        >Upload Artwork
-        </router-link>
+        <router-link class="dropdown-item" to="/my-artwork/upload">Upload Artwork</router-link>
       </li>
       <li v-if="loggedIn && featureAuctions" @click="closeUserMenu">
-        <router-link
-          class="dropdown-item"
-          to="/my-auctions"
-        >My Auctions
-        </router-link
-        >
+        <router-link class="dropdown-item" to="/my-auctions">My Auctions</router-link>
       </li>
       <li v-if="loggedIn && featureAuctions" @click="closeUserMenu">
-        <router-link
-          class="dropdown-item"
-          to="/my-auctions/upload"
-        >New Auction
-        </router-link
-        >
+        <router-link class="dropdown-item" to="/my-auctions/upload">New Auction</router-link>
       </li>
     </mdb-dropdown-menu>
   </mdb-dropdown>
