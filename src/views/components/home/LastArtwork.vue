@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     artworkUrl() {
-      return `/artworks/${this.artwork.owner}/${this.artwork.id}`;
+      return `/artworks/${this.artwork.id}`;
     },
     debugMode() {
       return this.$store.getters["isDebugMode"];

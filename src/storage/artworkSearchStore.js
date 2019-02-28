@@ -43,7 +43,7 @@ const artworkSearchStore = {
     },
     getBitcoinResults: state => {
       let registered = state.artworks.filter(
-        artwork => artwork.saleData && artwork.saleData.bitcoinTx
+        artwork => artwork.bitcoinTx
       );
       registered = registered.sort(function compare(a, b) {
         if (a.saleData.amount > b.saleData.amount) {
@@ -54,6 +54,8 @@ const artworkSearchStore = {
         }
         return 0;
       });
+      let status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
+      registered = registered.filter(artwork => artwork.status !== status);
       return registered;
     },
     getRegisteredArtworks: state => {
@@ -181,7 +183,7 @@ const artworkSearchStore = {
             }
           },
           function(error) {
-            console.log("Error fetching recent artworks: ", error);
+            console.log("Error fetching user artworks: ", error);
           }
         );
       });
@@ -213,7 +215,7 @@ const artworkSearchStore = {
             }
           },
           function(error) {
-            console.log("Error fetching recent artworks: ", error);
+            console.log("Error fetching registered artworks: ", error);
           }
         );
       }

@@ -28,7 +28,7 @@ const myArtworksStore = {
       let fb = store.state.constants.featureBitcoin;
       let username = store.getters["myAccountStore/getMyProfile"].username;
       if (fb) {
-        let registered = artwork && artwork.saleData && artwork.saleData.bitcoinTx;
+        let registered = artwork && artwork.bitcoinTx;
         return typeof (registered) === "string" && artwork.owner === username;
       }
       return (
@@ -41,7 +41,7 @@ const myArtworksStore = {
       let artwork = getters.myArtwork(id);
       let fb = store.state.constants.featureBitcoin;
       if (fb) {
-        return !(artwork.saleData && artwork.saleData.bitcoinTx);
+        return !(artwork.bitcoinTx);
       }
       if (artwork.bcitem && artwork.bcitem.itemIndex >= 0) {
         return false;
@@ -55,7 +55,6 @@ const myArtworksStore = {
       return getters.unsold.length;
     },
     editable: (state, getters) => id => {
-      // let canReg = getters["canRegister"];
       let artwork = getters.myArtwork(id);
       let userProfile = store.getters["myAccountStore/getMyProfile"];
       return userProfile.username === artwork.owner;
@@ -102,6 +101,16 @@ const myArtworksStore = {
     unsold: state => {
       let username = store.getters["myAccountStore/getMyProfile"].username;
       return state.myArtworks.filter(artwork => username === artwork.owner);
+    },
+    selling: state => {
+      let username = store.getters["myAccountStore/getMyProfile"].username;
+      let status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
+      return state.myArtworks.filter(artwork => username === artwork.owner && artwork.status && artwork.status === status);
+    },
+    buying: state => {
+      let username = store.getters["myAccountStore/getMyProfile"].username;
+      let status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
+      return state.myArtworks.filter(artwork => username === artwork.buyer && artwork.status && artwork.status === status);
     },
     sold: state => {
       let username = store.getters["myAccountStore/getMyProfile"].username;
@@ -186,7 +195,7 @@ const myArtworksStore = {
               text: "Item info removed from auction."
             });
             if (artwork) {
-              artwork.saleData = moneyUtils.buildInitialSaleData(artwork.saleData.bitcoinTx);
+              artwork.saleData = moneyUtils.buildInitialSaleData();
               store
                 .dispatch("myArtworksStore/updateArtwork", artwork)
                 .then(artwork => {
@@ -237,12 +246,29 @@ const myArtworksStore = {
       myArtworksService.getMyArtworks(
         function(myArtwork) {
           commit("addMyArtwork", myArtwork);
-          store
-            .dispatch(
-              "ethStore/fetchBlockchainItem",
-              { timestamp: myArtwork.timestamp },
-              { root: true }
-            )
+        },
+      );
+    },
+    fetchMyArtwork({ commit }, artworkId) {
+      return new Promise(resolve => {
+        myArtworksService.getMyArtwork(artworkId,
+          function(myArtwork) {
+            commit("addMyArtwork", myArtwork);
+            resolve(myArtwork);
+          },
+          function(error) {
+            console.log("Error fetching artwork: " + artworkId, error);
+            resolve();
+          }
+        );
+      });
+    },
+
+    fetchMyArtworksEth({ commit }) {
+      myArtworksService.getMyArtworks(
+        function(myArtwork) {
+          commit("addMyArtwork", myArtwork);
+          store.dispatch("ethStore/fetchBlockchainItem", { timestamp: myArtwork.timestamp }, { root: true })
             .then(blockchainItem => {
               if (blockchainItem && blockchainItem.itemIndex > -1) {
                 if (!myArtwork.bcitem) {
@@ -270,7 +296,7 @@ const myArtworksStore = {
         }
       );
     },
-    fetchMyArtwork({ commit }, artworkId) {
+    fetchMyArtworkEth({ commit }, artworkId) {
       return new Promise(resolve => {
         myArtworksService.getMyArtwork(
           artworkId,

@@ -9,7 +9,7 @@
     <mdb-card-body class="px-0">
       <mdb-card-title class="h2-responsive subtitle">{{artwork.title}}<br /><span class="small">by: {{artwork.artist}}</span></mdb-card-title>
       <mdb-card-text v-if="debugMode">{{artwork.bcitem.itemIndex}}, Owner: {{artwork.owner}}</mdb-card-text>
-      <mdb-card-text v-if="debugMode">{{artwork.saleData.bitcoinTx}}, Owner: {{artwork.owner}}</mdb-card-text>
+      <mdb-card-text v-if="debugMode">{{artwork.bitcoinTx}}, Owner: {{artwork.owner}}</mdb-card-text>
       <mdb-card-text>{{artwork.description}}</mdb-card-text>
     </mdb-card-body>
   </mdb-card>
@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     artworkUrl() {
-      return `/artworks/${this.artwork.owner}/${this.artwork.id}`;
+      return `/artworks/${this.artwork.id}`;
     },
     debugMode() {
       return this.$store.getters["isDebugMode"];

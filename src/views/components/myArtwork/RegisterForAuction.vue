@@ -241,6 +241,7 @@ export default {
     },
     removeFromAuction() {
       let $self = this;
+      this.artwork.status = this.$store.state.constants.statuses.artwork.NOT_SELLING;
       this.$store
         .dispatch("myArtworksStore/removeFromAuction", {
           auctionId: this.artwork.saleData.auctionId,
@@ -262,7 +263,6 @@ export default {
         this.reserve,
         this.increment
       );
-      saleData.bitcoinTx = this.artwork.saleData.bitcoinTx;
       this.validate(saleData);
       if (this.errors.length > 0) {
         return;
@@ -270,6 +270,7 @@ export default {
       let $self = this;
       $self.message = "Please wait while we update the data.";
       this.artwork.saleData = saleData;
+      this.artwork.status = this.$store.state.constants.statuses.artwork.BIDDING_ENABLED;
       this.$store
         .dispatch("myArtworksStore/addToAuction", this.artwork)
         .then(() => {

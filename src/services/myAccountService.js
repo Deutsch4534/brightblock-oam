@@ -9,7 +9,7 @@ import {
   redirectToSignIn,
   decodeToken,
   encryptContent,
-  signUserOut, getFile, putFile
+  signUserOut, getFile, putFile, getPublicKeyFromPrivate
 } from "blockstack";
 import store from "@/storage/store";
 import moment from "moment";
@@ -50,6 +50,7 @@ const myAccountService = {
       var authResponseToken = account.authResponseToken;
       var decodedToken = decodeToken(authResponseToken);
       var publicKey = decodedToken.payload.public_keys[0];
+      publicKey = getPublicKeyFromPrivate(account.appPrivateKey);
 
       myProfile = {
         loggedIn: true,
@@ -147,10 +148,10 @@ const myAccountService = {
               username: username
             };
             if (auxiliaryProfile.emailAddress) {
-              encObj.emailAddress = encryptContent(auxiliaryProfile.emailAddress, pubkey);
+              encObj.emailAddress = encryptContent(auxiliaryProfile.emailAddress, {publicKey: pubkey});
             }
             if (auxiliaryProfile.shippingAddress) {
-              encObj.shippingAddress = encryptContent(JSON.stringify(auxiliaryProfile.shippingAddress), pubkey);
+              encObj.shippingAddress = encryptContent(JSON.stringify(auxiliaryProfile.shippingAddress), {publicKey: pubkey});
             }
             publicKeyData.secured.push(encObj);
           }
@@ -164,6 +165,40 @@ const myAccountService = {
         success(publicKeyData);
       });
     }
+  },
+  addRelationship: function(username, success, failure) {
+    // check for trusted ids for whom we want to encrypt our private data with their public key.
+    store.dispatch("userProfilesStore/fetchUserProfile", { username: username }, { root: true }).then(foreignProfile => {
+      if (!foreignProfile.publicKeyData || !foreignProfile.publicKeyData.publicBlockstackKey) {
+        return;
+      }
+      let myProfile = store.getters["myAccountStore/getMyProfile"];
+      let auxiliaryProfile = myProfile.auxiliaryProfile;
+      let publicKeyData = myProfile.publicKeyData;
+      let pubkey = foreignProfile.publicKeyData.publicBlockstackKey;
+      if (!publicKeyData.secured) publicKeyData.secured = [];
+      let encObj = {
+        username: foreignProfile.username
+      };
+      if (auxiliaryProfile.emailAddress) {
+        encObj.emailAddress = encryptContent(auxiliaryProfile.emailAddress, {publicKey: pubkey});
+      }
+      if (auxiliaryProfile.shippingAddress) {
+        encObj.shippingAddress = encryptContent(JSON.stringify(auxiliaryProfile.shippingAddress), {publicKey: pubkey});
+      }
+      let index = _.findIndex(publicKeyData.secured, function(o) {
+        return o.username === username;
+      });
+      if (index === -1) {
+        publicKeyData.secured.push(encObj);
+      } else {
+        publicKeyData.secured.splice(index, 1, encObj);
+      }
+      let publicKeyDataRootFileName = store.state.constants.publicKeyDataRootFileName;
+      putFile(publicKeyDataRootFileName, JSON.stringify(publicKeyData), {encrypt: false}).then(() => {
+        success(publicKeyData);
+      });
+    });
   },
   getAuxiliaryProfile: function(success, failure) {
     // let myProfile = store.getters["myAccountStore/getMyProfile"];

@@ -26,5 +26,15 @@ export const CONSTANTS = {
   publicKeyDataRootFileName: "public_key_data_v01.json",
   artworkRootFileName: "records_v01.json",
   auctionsRootFileName: "auctions_v01.json",
-  gaiaFileName: "record_"
+  gaiaFileName: "record_",
+  statuses: {
+    artwork: {
+      NOT_REGISTERED: "NOT_REGISTERED",
+      NOT_SELLING: "NOT_SELLING",
+      PURCHASE_ENABLED: "PURCHASE_ENABLED",
+      BIDDING_ENABLED: "BIDDING_ENABLED",
+      PURCHASE_BEGUN: "PURCHASE_BEGUN",
+      PURCHASE_COMPLETE: "PURCHASE_COMPLETE",
+    }
+  }
 };

@@ -2,16 +2,17 @@ import SockJS from "sockjs-client";
 import Stomp from "@stomp/stompjs";
 import store from "@/storage/store";
 import utils from "@/services/utils";
+import bitcoinService from "@/services/bitcoinService";
+import artworkSearchService from "@/services/artworkSearchService";
 import moneyUtils from "@/services/moneyUtils";
 import moment from "moment";
+import _ from "lodash";
 import {
   getFile, putFile
 } from "blockstack";
 
 const invoiceService = {
-  initInvoiceData: function() {
-    store.dispatch("bitcoinStore/fetchBalance");
-    store.dispatch("bitcoinStore/fetchBitcoinState");
+  initInvoiceData: function(success, failure) {
     const invoicesRootFileName = store.state.constants.invoicesRootFileName;
     getFile(invoicesRootFileName, { decrypt: true }).then(function(file) {
       if (!file) {
@@ -21,13 +22,13 @@ const invoiceService = {
           records: []
         };
         putFile(invoicesRootFileName, JSON.stringify(newRootFile), {encrypt: true}).then(function(file) {
-          store.commit("invoiceStore/invoicesRootFile", newRootFile);
           invoiceService.subscribeInvoiceNews();
+          if (success) success(newRootFile);
         });
       } else {
         let invoicesRootFile = JSON.parse(file);
-        store.commit("invoiceStore/invoicesRootFile", invoicesRootFile);
         invoiceService.subscribeInvoiceNews();
+        if (success) success(invoicesRootFile);
       }
     });
   },
@@ -70,26 +71,103 @@ const invoiceService = {
         });
       });
   },
+  watchForPayment: function(invoice, success, failure) {
+    if (invoiceService.intval) {
+      clearInterval(invoiceService.intval);
+    }
+    // check this os the buyer initiating the watch..
+    let myProfile = store.getters["myAccountStore/getMyProfile"];
+    if (myProfile.username !== invoice.buyer.blockstackId) {
+      return;
+    }
+    invoiceService.intval = setInterval(function() {
+      bitcoinService.lookupTransaction({timestamp: invoice.timestamp, amount: invoice.invoiceAmounts.totalBitcoin}, function(transaction) {
+        if (!transaction) {
+          return;
+        }
+        if (invoice.buyerTransaction) {
+          if (invoice.confirmed) {
+            return;
+          }
+          if (transaction.confirmations > 5) {
+            invoice.confirmed = true;
+          }
+        }
+        invoice.buyerTransaction = transaction;
+        invoiceService.saveInvoiceClaim(invoice);
+        // lookup artwok in buyers gaia - indicates the artwork has already been transferred..
+        artworkSearchService.userArtwork(invoice.artworkId, invoice.buyer.blockstackId,
+          function(artwork) {
+            if (!artwork) { // NOT NOT NOT
+              if (!artwork.saleHistories) {
+                artwork.saleHistories = [];
+              }
+              let sh = _.find(artwork.saleHistories, function(o) {
+                return o.buyersTxid === transaction.txid;
+              });
+              if (!sh) {
+                artwork.saleHistories.push({
+                  seller: artwork.owner,
+                  buyer: invoice.buyer.blockstackId,
+                  buyersTxid: transaction.txid,
+                  buyersInvoiceId: invoice.invoiceId,
+                  confirmations: transaction.confirmations
+                });
+              }
+              artwork.buyer = invoice.buyer.blockstackId;
+              artwork.status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
+              //searchIndexService.addRecord("artwork", artwork);
+              store.dispatch('myAccountStore/addRelationship', invoice.seller.blockstackId);
+              store.dispatch('myArtworksStore/transferArtwork', artwork).then(artwork => {
+                console.log("transferred artwork: " + artwork.title + " from " + invoice.seller.blockstackId + " to " + invoice.buyer.blockstackId);
+                // artwork transferred - don't pay the seller untils goods confirmed...
+                // bitcoinService.payUpstreamTransaction({invoice: invoice}, function(result) {
+                //  console.log(result);
+                //  sh.provenanceTxid = result;
+                // });
+              });
+            }
+          },
+          function(error) {
+            console.log("Error while watching for payment: ", error);
+          }
+        );
+      });
+    }, 5000);
+  },
   createInvoiceClaim: function(artwork, invoiceRates, invoiceAmounts) {
     let buyer = store.getters["myAccountStore/getMyProfile"];
     let seller = store.getters["userProfilesStore/getProfile"](artwork.owner);
+    let gallerist = store.getters["userProfilesStore/getProfile"](artwork.gallerist);
+    let artist = store.getters["userProfilesStore/getProfile"](artwork.artist);
+    var now = moment({}).valueOf();
     return {
+      invoiceId: now,
+      timestamp: now,
       invoiceAmounts: invoiceAmounts,
       invoiceRates: invoiceRates,
       label: artwork.id + " :: " + artwork.title,
       message: "Invoice for artwork purchased on article.art",
-      timestamp: moment({}),
       artworkHash: utils.buildBitcoinHash(artwork),
       title: artwork.title,
+      itemType: artwork.itemType,
       artworkId: artwork.id,
       state: "intention",
+      gallerist: (gallerist) ? {
+        blockstackId: gallerist.username,
+        publicKey: gallerist.publicKeyData.bitcoinAddress,
+      } : {},
+      artist: (artist) ? {
+        blockstackId: artist.username,
+        publicKey: artist.publicKeyData.bitcoinAddress,
+      } : {},
       seller: {
         blockstackId: seller.username,
-        publicKey: seller.auxiliaryProfile.bitcoinAddress,
+        publicKey: seller.publicKeyData.bitcoinAddress,
       },
       buyer: {
         blockstackId: buyer.username,
-        publicKey: buyer.auxiliaryProfile.bitcoinAddress,
+        publicKey: buyer.publicKeyData.bitcoinAddress,
       }
     };
   },
@@ -115,6 +193,7 @@ const invoiceService = {
         bitcoinArtistAmount: bitcoinArtistAmount,
         fiatGalleryAmount: fiatGalleryAmount,
         bitcoinGalleryAmount: bitcoinGalleryAmount,
+        fiatCurrency: saleData.fiatCurrency,
         totalFiat: totalFiat,
         totalBitcoin: totalBitcoin,
       };
@@ -129,14 +208,21 @@ const invoiceService = {
     uri += "&message=" + invoiceClaim.message;
     return encodeURI(uri);
   },
-  populateInvoiceRows: function(artwork, invoiceRates, invoiceAmounts) {
-    let sellerIsArtist = artwork.artist === artwork.owner;
+  populateInvoiceRows: function(invoiceClaim) {
+    let gallerist = (invoiceClaim.gallerist) ? invoiceClaim.gallerist.blockstackId : null;
+    let owner = invoiceClaim.seller.blockstackId;
+    let artist = (invoiceClaim.artist) ? invoiceClaim.artist.blockstackId : owner;
+    let sellerIsArtist = artist === owner;
+
+    let invoiceRates = invoiceClaim.invoiceRates;
+    let invoiceAmounts = invoiceClaim.invoiceAmounts;
+
     let count = 1;
     let invoiceRows = [];
     invoiceRows.push({
       counter: count++,
       party: (sellerIsArtist) ? "Artist" : "Seller",
-      notes: artwork.owner,
+      notes: owner,
       rate: "",
       fiatAmount: invoiceAmounts.fiatAmount,
       bitcoinAmount: invoiceAmounts.bitcoinAmount
@@ -145,7 +231,7 @@ const invoiceService = {
       invoiceRows.push({
         counter: count++,
         party: "Artist",
-        notes: artwork.artist,
+        notes: artist,
         rate: invoiceRates.artistResidualFee + " %",
         fiatAmount: invoiceAmounts.fiatArtistAmount,
         bitcoinAmount: invoiceAmounts.bitcoinArtistAmount
@@ -154,8 +240,8 @@ const invoiceService = {
     invoiceRows.push({
       counter: count++,
       party: "Gallery",
-      notes: artwork.gallery,
-      rate: (artwork.gallery) ? invoiceRates.galleryResidualFee + " %" : "n/a",
+      notes: gallerist,
+      rate: (gallerist) ? invoiceRates.galleryResidualFee + " %" : "n/a",
       fiatAmount: invoiceAmounts.fiatGalleryAmount,
       bitcoinAmount: invoiceAmounts.bitcoinGalleryAmount
     });

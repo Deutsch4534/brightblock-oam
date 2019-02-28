@@ -2,6 +2,9 @@
 import userProfilesService from "@/services/userProfilesService";
 import _ from "lodash";
 import store from "@/storage/store";
+import {
+  decryptContent
+} from "blockstack";
 
 const userProfilesStore = {
   namespaced: true,
@@ -28,6 +31,27 @@ const userProfilesStore = {
           }
         }
       };
+    },
+    getShippingAddress: state => (buyer, seller) => {
+      if (buyer) {
+        let buyerProfile = _.find(state.userProfiles, function(o) {
+          return o.username === buyer;
+        });
+        if (buyerProfile) {
+          let secured = _.find(buyerProfile.publicKeyData.secured, function(o) {
+            return o.username === seller;
+          });
+          if (secured) {
+            try {
+              // json is parsed in decrypt method.
+              let sa = decryptContent(secured.shippingAddress);
+              return sa;
+            } catch (err) {
+              return {};
+            }
+          }
+        }
+      }
     },
     getProfile: state => (username, doDispatch) => {
       if (username) {

@@ -92,13 +92,13 @@
       <div class="col-6">
         <input type="text" class="form-control" id="validationCustom05" placeholder="Owner" v-model="artwork.owner" required>
         <div class="invalid-feedback">
-          Please enter the owner!
+          Please enter the blockstack id of the owner!
         </div>
       </div>
       <div class="col-6">
         <input type="text" class="form-control" id="validationCustom06" placeholder="Artist" v-model="artwork.artist" required>
         <div class="invalid-feedback">
-          Please enter the artist!
+          Please enter the blockstack id of the artist!
         </div>
       </div>
     </div>
@@ -344,6 +344,9 @@
     },
     methods: {
       upload: function () {
+        if (!this.artwork.status) {
+          this.artwork.status = this.$store.state.constants.statuses.artwork.NOT_REGISTERED;
+        }
         this.alertMessage =
           "Please wait while we upload your artwork to your storage..";
         this.showAlert = true;
@@ -394,6 +397,12 @@
         }
         if (!this.artwork.medium) {
           this.errors.push("medium needed.");
+        }
+        if (!this.artwork.artist || this.artwork.artist.indexOf(".id") === -1) {
+          this.errors.push("Blockstack id of the artist is missing.");
+        }
+        if (!this.artwork.owner || this.artwork.owner.indexOf(".id") === -1) {
+          this.errors.push("Blockstack id of the owner is missing.");
         }
         if (this.created) {
           this.artwork.created = moment(this.created).valueOf();

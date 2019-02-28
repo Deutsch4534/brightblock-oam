@@ -5,40 +5,14 @@
   <mdb-card-text>
     <p>Your artwork has been <a :href="blockchainInfoUrl()" target="_blank">registered</a> with the Bitcoin blockchain.</p>
   </mdb-card-text>
-  <mdb-card-text>
-    <p>Your
-    <mdb-popover trigger="click" :options="{placement: 'top'}">
-      <div class="popover">
-        <div class="popover-header">
-          bitcoin address
-        </div>
-        <div class="popover-body">
-          Enter your bitcoin address for people to make payments and donations. We will embed the qrcode of your
-          address in the Certificate of Authenticity for your artwork.
-        </div>
-      </div>
-      <a @click.prevent="" slot="reference">
-        bitcoin address <mdb-icon far icon="question-circle" />
-      </a>
-    </mdb-popover>
-     will be embedded in your certificate of authenticity to make it easy
-    to receive future payments.</p>
-    <div class="row text-center">
-      <div class="col-md-12">
-        <canvas id="qrcode" max-width="150px"></canvas>
-      </div>
-      <div class="col-md-12" v-if="bitcoinAddress">
-        {{bitcoinAddress}} <a @click.prevent="changeBtcAddress = !changeBtcAddress"><mdb-icon icon="pen" /></a>
-      </div>
-      <div class="col-md-12" v-if="changeBtcAddress">
-        <input type="text" width="50%" class="form-control" id="validationCustom01-1" placeholder="Your bitcoin address" v-on:keyup.13="saveBitcoinAddress" v-model="bitcoinAddress">
-      </div>
-    </div>
-  </mdb-card-text>
-  <div class="rounded-bottom lighten-3 text-right p-3">
+  <bitcoin-address-entry v-if="showBitcoinAddress" :myProfile="myProfile" @bitcoinAddressUpdate="updateBitcoinAddress"/>
+  <div class="rounded-bottom lighten-3 text-right p-3" v-if="validBitcoinAdress">
     <a class="black-text" @click.prevent="generateCoa()"><mdb-btn color="primary" size="md">Generate COA</mdb-btn></a>
     <a v-if="downloadLink" :href="downloadLink" _target="blank" class="black-text"><mdb-btn color="primary" size="md">Download PDF</mdb-btn></a>
     <a v-if="artwork.coa" class="black-text" @click.prevent="openCoa()"><mdb-btn color="primary" size="md">Open COA</mdb-btn></a>
+    <router-link :to="registerForSaleUrl()" class="inline-block" v-if="artwork.coa">
+      <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Sell</mdb-btn>
+    </router-link>
   </div>
 </mdb-card-body>
 </template>
@@ -46,12 +20,13 @@
 <script>
 import xhrService from "@/services/xhrService";
 import { mdbPopover, mdbIcon, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
-import QRCode from "qrcode";
+import BitcoinAddressEntry from "../utils/BitcoinAddressEntry";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "Registration",
   components: {
+    BitcoinAddressEntry,
     mdbCardBody,
     mdbPopover,
     mdbIcon,
@@ -64,22 +39,19 @@ export default {
       result: null,
       artworkId: null,
       downloadLink: null,
-      bitcoinAddress: null,
-      changeBtcAddress: true
+      showBitcoinAddress: false,
+      validBitcoinAdress: false,
+      message: null,
+      myProfile: {}
     };
   },
   mounted() {
     this.artworkId = Number(this.$route.params.artworkId);
     let $self = this;
     this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
-      if (myProfile.auxiliaryProfile.bitcoinAddress) {
-        this.bitcoinAddress = myProfile.auxiliaryProfile.bitcoinAddress;
-        this.addQrCode(this.bitcoinAddress);
-      }
       this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId);
-    });
-
-    this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
+      this.myProfile = myProfile;
+      this.showBitcoinAddress = true;
     });
   },
   computed: {
@@ -92,30 +64,21 @@ export default {
       }
       return a ? a : {};
     },
-    featureBitcoin() {
-      return this.$store.state.constants.featureBitcoin;
-    },
+    hasBitcoinAddress() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      return myProfile.publicKeyData.bitcoinAddress;
+    }
   },
   methods: {
-    addQrCode(bitcoinAddress) {
-      let $qrCode = document.getElementById("qrcode");
-      if (bitcoinAddress) {
-        this.changeBtcAddress = false;
-        QRCode.toCanvas(
-          $qrCode, bitcoinAddress, { errorCorrectionLevel: "H" },
-          function(error) {
-            if (error) console.error(error);
-            console.log("success!");
-          }
-        );
-      }
-    },
     setByEventCoa (coa) {
       let artwork = this.$store.getters["myArtworksStore/myArtwork"](
         this.artworkId
       );
       artwork.coa = coa;
       this.$store.dispatch("myArtworksStore/updateArtwork", artwork);
+    },
+    updateBitcoinAddress(newAddress) {
+      this.validBitcoinAdress = newAddress;
     },
     blockchainInfoUrl() {
 
@@ -124,21 +87,9 @@ export default {
       );
       let state = this.$store.getters["bitcoinStore/getBitcoinState"];
       if (state.chain === "test") {
-        return `https://testnet.blockexplorer.com/tx/${artwork.saleData.bitcoinTx}`;
+        return `https://testnet.blockexplorer.com/tx/${artwork.bitcoinTx}`;
       }
-      return `https://www.blockchain.com/btc/tx/${artwork.saleData.bitcoinTx}`;
-    },
-    saveBitcoinAddress: function() {
-      if (this.bitcoinAddress) {
-        let blockstackProfile = this.$store.getters["myAccountStore/getMyProfile"];
-        let publicKeyData = blockstackProfile.publicKeyData;
-        publicKeyData.bitcoinAddress = this.bitcoinAddress;
-        this.$store.dispatch("myAccountStore/updatePublicKeyData", publicKeyData)
-          .then(publicKeyData => {
-            this.addQrCode(this.bitcoinAddress);
-            this.$router.push("/my-artwork/upload");
-          });
-      }
+      return `https://www.blockchain.com/btc/tx/${artwork.bitcoinTx}`;
     },
     generateCoa: function() {
       let canvas, qrCodeDataUrl;
@@ -173,6 +124,28 @@ export default {
         title = title.replace(/\s/g, '_');
         let filename = title + "_" + artwork.id + ".pdf";
         return url + filename;
+      }
+    },
+    registerForSaleUrl() {
+      let a = this.$store.getters["myArtworksStore/myArtwork"](this.artworkId);
+      let id = this.artworkId;
+      if (a.saleData || !a.saleData.soid) {
+        let amount = 0;
+        let currency = "EUR";
+        return `/my-artwork/register-for-sale/${id}/${amount}/${currency}`;
+      } else if (a.saleData.soid <= 1) {
+        let amount = a.saleData ? a.saleData.amount : 0;
+        let currency = a.saleData ? a.saleData.fiatCurrency : "EUR";
+        return `/my-artwork/register-for-sale/${id}/${amount}/${currency}`;
+      } else if (a.saleData.soid === 2) {
+        let r = a.saleData ? a.saleData.reserve : 0;
+        let i = a.saleData ? a.saleData.increment : 0;
+        let c = a.saleData ? a.saleData.fiatCurrency : "EUR";
+        let aid = -1;
+        if (a.saleData && a.saleData.auctionId) {
+          aid = a.saleData.auctionId;
+        }
+        return `/my-artwork/register-for-auction/${id}/${aid}/${r}/${i}/${c}`;
       }
     },
     /**

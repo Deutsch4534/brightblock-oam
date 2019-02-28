@@ -93,20 +93,28 @@ const utils = {
       record.provData.supportingDocuments = [];
     }
     let artworkData = this.getArtworkData(record.provData);
+    let bitcoinTx = record.indexData.bitcoinTx;
+    if (record.indexData.saleData && record.indexData.saleData.bitcoinTx) {
+      bitcoinTx = record.indexData.saleData.bitcoinTx;
+      if (record.indexData.bitcoinTx) {
+        bitcoinTx = record.indexData.bitcoinTx;
+      }
+    }
     return _.merge(artworkData, {
       id: record.indexData.id,
       title: record.indexData.title,
       description: record.indexData.description,
       lastUpdate: record.indexData.lastUpdate,
       keywords: record.indexData.keywords,
+      buyer: record.indexData.buyer,
+      bitcoinTx: bitcoinTx,
+      status: record.indexData.status,
+      saleHistories: record.indexData.saleHistories,
       itemType: record.indexData.itemType,
       uploader: record.indexData.uploader,
-      artist: record.indexData.artist
-        ? record.indexData.artist
-        : record.indexData.uploader,
-      owner: record.indexData.owner
-        ? record.indexData.owner
-        : record.indexData.uploader,
+      artist: record.indexData.artist ? record.indexData.artist : record.indexData.uploader,
+      owner: record.indexData.owner ? record.indexData.owner : record.indexData.uploader,
+      gallerist: record.indexData.gallerist ? record.indexData.gallerist : null,
       saleData: record.indexData.saleData,
       medium: record.indexData.medium,
       dimensions: record.indexData.dimensions,
@@ -132,8 +140,13 @@ const utils = {
       itemType: artwork.itemType,
       lastUpdate: artwork.lastUpdate,
       keywords: artwork.keywords,
+      buyer: artwork.buyer,
+      status: artwork.status,
+      bitcoinTx: artwork.bitcoinTx,
+      saleHistories: artwork.saleHistories,
       owner: artwork.owner,
       uploader: artwork.uploader,
+      gallerist: artwork.gallerist,
       artist: artwork.artist,
       medium: artwork.medium,
       dimensions: artwork.dimensions,

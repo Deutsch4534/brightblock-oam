@@ -22,7 +22,8 @@ import Navbar from "./layout/Navbar.vue";
 import Footer from "./layout/Footer.vue";
 
 import Artwork from "./views/Artwork";
-import Reconcile from "./views/Reconcile";
+import Invoices from "./views/Invoices";
+import Invoice from "./views/Invoice";
 
 import Search from "./views/Search";
 
@@ -160,12 +161,17 @@ const router = new Router({
       }
     },
     {
-      path: "/reconcile/:artworkId",
-      name: "reconcile",
-      components: { default: Reconcile, header: Navbar, footer: Footer }
+      path: "/invoice/:invoiceId",
+      name: "invoice",
+      components: { default: Invoice, header: Navbar, footer: Footer }
     },
     {
-      path: "/artworks/:owner/:artworkId",
+      path: "/invoices",
+      name: "invoices",
+      components: { default: Invoices, header: Navbar, footer: Footer }
+    },
+    {
+      path: "/artworks/:artworkId",
       name: "artwork",
       components: { default: Artwork, header: Navbar, footer: Footer },
       props: {

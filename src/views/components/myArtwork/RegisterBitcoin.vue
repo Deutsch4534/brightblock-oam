@@ -146,7 +146,7 @@ export default {
         bitcoinService.registerTx(regData,
           function(result) {
             $self.bitcoinTx = result.sentTx;
-            artwork.saleData.bitcoinTx = result.sentTx;
+            artwork.bitcoinTx = result.sentTx;
             $self.$store.dispatch("myArtworksStore/updateArtwork", artwork);
             $self.decodedTransaction = JSON.parse(result.decodedTransaction);
           }, function(error) {

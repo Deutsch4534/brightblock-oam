@@ -82,6 +82,22 @@ const myAccountStore = {
           }
         );
       });
+    },
+    addRelationship({ state, commit }, username) {
+      return new Promise(resolve => {
+        let myProfile = state.myProfile;
+        myAccountService.addRelationship(username,
+          function(publicKeyData) {
+            state.myProfile.publicKeyData = publicKeyData;
+            commit("myProfile", myProfile);
+            resolve(myProfile);
+          },
+          function(error) {
+            console.log("Error updating profile: ", error);
+            resolve(error);
+          }
+        );
+      });
     }
   }
 };

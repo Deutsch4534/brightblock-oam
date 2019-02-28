@@ -14,6 +14,18 @@
       </form>
       <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
     </mdb-navbar-brand>
+    <!--
+    <mdb-navbar-nav right v-if="hasInvoices">
+      <mdb-nav-item href="#">
+        <router-link to="/invoices" class="nav-link navbar-link login-link mr-2">
+          <mdb-btn color="primary">
+            Invoices <mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge>
+            <span class="sr-only">invoices</span>
+          </mdb-btn>
+        </router-link>
+      </mdb-nav-item>
+    </mdb-navbar-nav>
+    -->
     <mdb-navbar-nav right>
       <li v-if="!loggedIn" class="nav-item ripple-parent">
         <router-link to="/login" class="nav-link navbar-link login-link mr-2">
@@ -72,7 +84,7 @@ function resizeThrottler(actualResizeHandler) {
   }
 }
 
-import { mdbContainer, mdbIcon, mdbRow, mdbCol, mdbNavbar, mdbNavbarToggler, mdbNavbarNav, mdbNavItem, mdbInput, mdbBtn, mdbNavbarBrand } from 'mdbvue';
+import { mdbBadge, mdbContainer, mdbIcon, mdbRow, mdbCol, mdbNavbar, mdbNavbarToggler, mdbNavbarNav, mdbNavItem, mdbInput, mdbBtn, mdbNavbarBrand } from 'mdbvue';
 import AccountLinks from "@/layout/AccountLinks";
 import AuctionLinks from "@/layout/AuctionLinks";
 import artworkSearchService from "@/services/artworkSearchService";
@@ -107,6 +119,7 @@ export default {
     mdbNavItem,
     mdbInput,
     mdbBtn,
+    mdbBadge,
     mdbIcon,
     mdbNavbarBrand
   },
@@ -120,6 +133,13 @@ export default {
     loggedIn() {
       let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
       return myProfile.loggedIn;
+    },
+    hasInvoices() {
+      let invoices = this.$store.getters["invoiceStore/getInvoices"];
+      if (!invoices || !invoices.records) {
+        return 0;
+      }
+      return invoices.records.length;
     }
   },
   methods: {

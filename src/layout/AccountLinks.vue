@@ -10,16 +10,22 @@
       <mdb-dropdown-item>
         <router-link
           class="dropdown-item"
-          to="/admin/settings"
-          v-if="showAdmin"
-          >Admin</router-link
+          to="/profile/update"
+          >Profile</router-link
         >
+      </mdb-dropdown-item>
+      <mdb-dropdown-item v-if="hasInvoices">
+        <router-link class="dropdown-item" to="/invoices">
+          Invoices <mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge>
+          <span class="sr-only">invoices</span>
+        </router-link>
       </mdb-dropdown-item>
       <mdb-dropdown-item>
         <router-link
           class="dropdown-item"
-          to="/profile/update"
-          >Profile</router-link
+          to="/admin/settings"
+          v-if="showAdmin"
+          >Admin</router-link
         >
       </mdb-dropdown-item>
       <!--
@@ -46,7 +52,7 @@
 </template>
 
 <script>
-import { mdbNavbar, mdbNavItem, mdbNavbarNav, mdbNavbarToggler, mdbContainer, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle, mdbInput, mdbNavbarBrand, mdbIcon, mdbRow } from 'mdbvue';
+import { mdbBadge, mdbNavbar, mdbNavItem, mdbNavbarNav, mdbNavbarToggler, mdbContainer, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle, mdbInput, mdbNavbarBrand, mdbIcon, mdbRow } from 'mdbvue';
 import myAccountService from "@/services/myAccountService";
 
 export default {
@@ -63,6 +69,7 @@ export default {
     mdbDropdownToggle,
     mdbInput,
     mdbNavbarBrand,
+    mdbBadge,
     mdbIcon,
     mdbRow
   },
@@ -75,6 +82,13 @@ export default {
   computed: {
     showAdmin() {
       return this.$store.state.myAccountStore.myProfile.showAdmin;
+    },
+    hasInvoices() {
+      let invoices = this.$store.getters["invoiceStore/getInvoices"];
+      if (!invoices || !invoices.records) {
+        return 0;
+      }
+      return invoices.records.length;
     },
     username() {
       return this.$store.state.myAccountStore.myProfile.name;

@@ -49,7 +49,7 @@ export default {
       return this.$store.state.constants.debugMode;
     },
     url() {
-      return `/artworks/${this.artwork.owner}/${this.artwork.id}`;
+      return `/artworks/${this.artwork.id}`;
     }
   }
 }

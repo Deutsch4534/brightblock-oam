@@ -52,7 +52,7 @@ export default {
       return this.$store.state.constants.debugMode;
     },
     buyNowUrl() {
-      return `/artworks/${this.artwork.owner}/${this.artwork.id}`;
+      return `/artworks/${this.artwork.id}`;
     }
   }
 };
@@ -67,4 +67,3 @@ export default {
     color: white!important;
   }
 </style>
-

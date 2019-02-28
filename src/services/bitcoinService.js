@@ -35,22 +35,26 @@ const bitcoinService = {
       success(response.data.details);
     });
   },
-  placeOrder: function(data, success, failure) {
-    //success({
-    //  rawTx: "bananas",
-    //  decodedTransaction: "oranges"
-    //});
-    let endPoint = store.state.constants.btcGatewayUrl + "/bitcoin/placeOrder";
+  lookupTransaction: function(data, success, failure) {
+    let endPoint = store.state.constants.btcGatewayUrl + "/bitcoin/lookupTransaction";
     xhrService.makePostCall(endPoint, data).then(function(response) {
       success(response.data.details);
     });
   },
-  lookupTransaction: function(data, success, failure) {
-    //success({
-    //  rawTx: "bananas",
-    //  decodedTransaction: "oranges"
-    //});
-    let endPoint = store.state.constants.btcGatewayUrl + "/bitcoin/lookupTransaction";
+  paySeller: function(invoice, success, failure) {
+    let endPoint = store.state.constants.btcGatewayUrl + "/bitcoin/paySeller";
+    xhrService.makePostCall(endPoint, invoice).then(function(response) {
+      success(response.data.details);
+    });
+  },
+  checkAddress: function(data, success, failure) {
+    let endPoint = store.state.constants.btcGatewayUrl + "/bitcoin/checkAddress";
+    xhrService.makePostCall(endPoint, data).then(function(response) {
+      success(response.data.details);
+    });
+  },
+  messageForSeller: function(data, success, failure) {
+    let endPoint = store.state.constants.btcGatewayUrl + "/bitcoin/messageForSeller";
     xhrService.makePostCall(endPoint, data).then(function(response) {
       success(response.data.details);
     });

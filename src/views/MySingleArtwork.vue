@@ -6,10 +6,9 @@
     </mdb-view>
     <mdb-card-body class="px-0 pb-2 mb-0">
       <mdb-card-title class="subtitle"><mdb-icon title="Digital work" far icon="dot-circle" v-if="artwork.itemType === 'digiart'"/> {{artwork.title}}</mdb-card-title>
-      <mdb-card-text>
-        <p>{{artwork.description}}</p>
-        <selling-options :artwork="artwork" v-if="sellingStatus === 'unsold'"/>
-        <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
+      <mdb-card-text><p>{{artwork.description}}</p>
+      <selling-options :artwork="artwork" v-if="!sold"/>
+      <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
         <p>by {{artistProfile.name}}, 11/08/2018</p>
       </mdb-card-text>
     </mdb-card-body>
@@ -18,7 +17,7 @@
         <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Register</mdb-btn>
       </router-link>
       <router-link :to="registerUrl" class="inline-block" v-else>
-        <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="sellingStatus === 'unsold'">CoA</mdb-btn>
+        <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">CoA</mdb-btn>
       </router-link>
       <router-link :to="registerForSaleUrl" class="inline-block">
         <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="canSell">Sell</mdb-btn>
@@ -60,7 +59,7 @@ export default {
     mdbBtn
   },
   props: {
-    sellingStatus: "sold",
+    sold: true,
     artwork: {
       type: Object,
       default() {
@@ -114,11 +113,14 @@ export default {
         this.artwork.owner
       );
     },
+    artworkWidth() {
+      return `col-sm-${this.width}`;
+    },
     editUrl() {
       return `/my-artwork/update/${this.artwork.id}`;
     },
     buyNowUrl() {
-      return `/artworks/${this.artwork.id}`;
+      return `/artworks/${this.artwork.owner}/${this.artwork.id}`;
     },
     registerUrl() {
       return `/my-artwork/register/${this.artwork.id}`;

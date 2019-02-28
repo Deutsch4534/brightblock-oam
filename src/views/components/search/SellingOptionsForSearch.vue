@@ -1,6 +1,9 @@
 <template>
 <div class="">
-  <div v-if="sellingBuyNow">
+  <div v-if="purchaseBegun">
+    <h6>Offer Made</h6>
+  </div>
+  <div v-else-if="sellingBuyNow">
     <button class="btn btn-main" @click="routeToBuyNow">Buy Now</button>
   </div>
   <div v-else-if="sellingAuction">
@@ -40,7 +43,7 @@ export default {
       this.$router.push(r);
     },
     routeToBuyNow() {
-      let r = `/artworks/${this.artwork.owner}/${this.artwork.id}`;
+      let r = `/artworks/${this.artwork.id}`;
       this.$router.push(r);
     }
   },
@@ -59,6 +62,9 @@ export default {
       return (
         this.artwork.saleData.soid === 2 && this.artwork.saleData.auctionId > 0
       );
+    },
+    purchaseBegun() {
+      return this.artwork.status === this.$store.state.constants.statuses.artwork.PURCHASE_BEGUN;
     },
     sellingAmount() {
       let priceSet = this.artwork.bcitem && this.artwork.bcitem.price > 0;

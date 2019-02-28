@@ -61,9 +61,11 @@ store.commit("constants", CONSTANTS);
 
 conversionService.subscribeExchangeRateNews();
 store.dispatch("fetchServerTime");
+store.dispatch("bitcoinStore/fetchBalance");
+store.dispatch("bitcoinStore/fetchBitcoinState");
 store.dispatch("myAccountStore/fetchMyAccount").then(profile => {
   if (profile.loggedIn) {
-    invoiceService.initInvoiceData(profile);
+    invoiceService.initInvoiceData();
   }
 });
 // let myProfile = store.getters["myAccountStore/getMyProfile"];

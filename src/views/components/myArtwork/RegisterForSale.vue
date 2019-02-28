@@ -162,9 +162,11 @@ export default {
       }
 
       artwork.saleData.soid = 1;
+      artwork.status = this.$store.state.constants.statuses.artwork.PURCHASE_ENABLED;
       artwork.saleData.amount = Number(this.amount);
       if (artwork.saleData.amount === 0) {
         artwork.saleData.soid = 0;
+        artwork.status = this.$store.state.constants.statuses.artwork.NOT_SELLING;
       }
       artwork.saleData.reserve = 0;
       artwork.saleData.increment = 0;
@@ -183,6 +185,7 @@ export default {
 
       let $self = this;
       let fb = this.$store.state.constants.featureBitcoin;
+
       if (fb) {
         this.message =
           "Setting Price: Blockchain called - saving data changes...";
@@ -198,6 +201,7 @@ export default {
         this.setPriceEthereum(artwork);
       }
     },
+
     setPriceEthereum: function(artwork) {
       this.message =
         "Setting Price: Please confirm the transaction in your wallet...";

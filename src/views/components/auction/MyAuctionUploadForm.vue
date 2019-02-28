@@ -140,7 +140,7 @@
 import moment from "moment";
 import { mdbBtn, mdbBtnGroup, mdbContainer, mdbRow, mdbCol, mdbAlert } from 'mdbvue';
 import { Datetime } from 'vue-datetime'
-import MediaUpload from "../MediaUpload";
+import MediaUpload from "../utils/MediaUpload";
 
 // noinspection JSUnusedGlobalSymbols
 export default {

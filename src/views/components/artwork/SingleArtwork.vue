@@ -28,7 +28,7 @@ export default {
       return `col-sm-${this.width}`
     },
     artworkUrl () {
-      return `/artworks/${this.artwork.owner}/${this.artwork.id}`
+      return `/artworks/${this.artwork.id}`
     }
   }
 }

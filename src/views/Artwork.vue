@@ -14,25 +14,25 @@
           <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, {{created}}</p>
           <p class="mb-1">{{artwork.description}}</p>
           <p>{{aboutArtwork.keywords}}</p>
-          <mdb-row class="pt-3" v-if="!showInvoiceDetails">
-            <mdb-col col="12">
-              <p class="h5-responsive serif-italic">{{registerMessageBtc}}</p>
-              <buy-artwork-form-btc v-if="isRegisteredBtc && isPriceSetBtc" :purchaseState="purchaseStateBtc" :artwork="artwork" @buy="buyArtwork()"/>
-            </mdb-col>
-          </mdb-row>
         </mdb-col>
+        <shopping-owner-view v-if="iamowner" :artwork="artwork"/>
+        <shopping-buyer-view v-else-if="iambuyer && purchaseBegun" :artwork="artwork"/>
+        <invoice-details v-else-if="showInvoiceDetails" :invoiceClaim="invoiceClaim"/>
+        <buy-artwork-form-btc v-if="isRegisteredBtc && isPriceSetBtc && !purchaseBegun && !iamowner" :purchaseState="purchaseStateBtc" :artwork="artwork" @buy="buyArtwork()"/>
       </mdb-row>
     </mdb-col>
   </mdb-row>
-  <invoice-details v-if="showInvoiceDetails" :artwork="artwork" :seller="seller" :buyer="buyer"/>
 </mdb-container>
 </template>
 
 <script>
+import ShoppingOwnerView from "./components/invoice/ShoppingOwnerView";
+import ShoppingBuyerView from "./components/invoice/ShoppingBuyerView";
 import AboutArtwork from "./components/artwork/AboutArtwork";
-import InvoiceDetails from "./components/artwork/InvoiceDetails";
+import InvoiceDetails from "./components/invoice/InvoiceDetails";
 import BuyArtworkFormBtc from "./components/artwork/BuyArtworkFormBtc";
 import bitcoinService from "@/services/bitcoinService";
+import artworkSearchService from "@/services/artworkSearchService";
 import notify from "@/services/notify";
 import moneyUtils from "@/services/moneyUtils";
 import utils from "@/services/utils";
@@ -50,6 +50,8 @@ export default {
   bodyClass: "index-page",
   components: {
     InvoiceDetails,
+    ShoppingOwnerView,
+    ShoppingBuyerView,
     BuyArtworkFormBtc,
     AboutArtwork,
     mdbContainer,
@@ -73,6 +75,7 @@ export default {
         bcitem: {},
         saleData: {},
       },
+      invoiceClaim: {},
       message: "",
       owner: null,
       sliderImage: 0,
@@ -81,21 +84,27 @@ export default {
   },
   mounted() {
     this.artworkId = Number(this.$route.params.artworkId);
-    this.owner = this.$route.params.owner;
-    // trigger dispatch is not already loaded
-    this.$store.getters["userProfilesStore/getProfile"](this.owner);
     this.$store.getters["myAccountStore/getMyProfile"];
-    this.$store
-      .dispatch("artworkSearchStore/fetchUserArtwork", {username: this.owner, artworkId: this.artworkId})
-      .then(artwork => {
-        this.artwork = artwork;
-        if (artwork) {
-          // check for redirect to auctions...
-          if (this.artwork.saleData.auctionId) {
-            this.$router.push("/online-auction/" + artwork.owner + "/" + artwork.saleData.auctionId);
+    let $self = this;
+    artworkSearchService.newQuery({field: "id", query: this.artworkId}, function(artwork) {
+      $self.artwork = artwork;
+      if (artwork) {
+        $self.owner = artwork.owner;
+        $self.$store.getters["userProfilesStore/getProfile"]($self.owner);
+        if (artwork.buyer) $self.$store.getters["userProfilesStore/getProfile"](artwork.buyer);
+        $self.$store.dispatch("invoiceStore/fetchInvoice", $self.artworkId).then(invoiceClaim => {
+          if (invoiceClaim) {
+            $self.invoiceClaim = invoiceClaim;
+          } else {
+            $self.invoiceClaim = $self.$store.getters["invoiceStore/getPreparedInvoice"]($self.artwork);
           }
+        })
+        // check for redirect to auctions...
+        if ($self.artwork.saleData.auctionId) {
+          $self.$router.push("/online-auction/" + artwork.owner + "/" + artwork.saleData.auctionId);
         }
-      });
+      }
+    });
   },
   computed: {
     artist() {
@@ -105,11 +114,21 @@ export default {
       }
       return {name: "loading.."};
     },
-    seller() {
-      this.$store.getters["userProfilesStore/getProfile"](this.owner)
+    buyerShippingAddress() {
+      let artwork = this.artwork;
+      let buyer = this.$store.getters["userProfilesStore/getShippingAddress"](artwork.buyer, artwork.owner);
+      return buyer;
     },
-    buyer() {
-      this.$store.getters["myAccountStore/getMyProfile"]
+    iamowner() {
+      let profile = this.$store.getters["myAccountStore/getMyProfile"];
+      return profile.username === this.artwork.owner;
+    },
+    iambuyer() {
+      let profile = this.$store.getters["myAccountStore/getMyProfile"];
+      return profile.username === this.artwork.buyer;
+    },
+    purchaseBegun() {
+      return this.artwork.status === this.$store.state.constants.statuses.artwork.PURCHASE_BEGUN;
     },
     created() {
       if (this.artwork.created) {
@@ -145,28 +164,8 @@ export default {
       };
       return purchaseState;
     },
-    registerMessageBtc() {
-      let artwork = this.artwork;
-      let message;
-      try {
-        let registered = artwork.saleData.bitcoinTx;
-        let price = artwork.saleData.amount > 0;
-        if (!registered) {
-          message = "Artwork not registered on blockchain."
-        } else {
-          if (price) {
-            message = "Artwork is registered on blockchain."
-          } else {
-            message = "Artwork is registered on chain but is not currently for sale."
-          }
-        }
-      } catch (e) {
-          message = "Unregistered.";
-      }
-      return message;
-    },
     isRegisteredBtc() {
-      return this.artwork.saleData.bitcoinTx;
+      return this.artwork.bitcoinTx;
     },
     isPriceSetBtc() {
       let artwork = this.artwork;

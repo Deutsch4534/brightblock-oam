@@ -3,8 +3,8 @@ import store from "@/storage/store";
 import _ from "lodash";
 import utils from "./utils";
 import searchIndexService from "@/services/searchIndexService";
+import artworkSearchService from "@/services/artworkSearchService";
 import moment from "moment";
-import notify from "@/services/notify";
 
 const myArtworksService = {
   initBlockstackRootFile: function() {
@@ -21,6 +21,18 @@ const myArtworksService = {
   },
 
   getMyArtworks: function(success, failure) {
+    let myProfile = store.getters["myAccountStore/getMyProfile"];
+    artworkSearchService.queryByOwner(myProfile.username,
+      function(searchResults) {
+        myArtworksService.getMyArtworksCont(searchResults, success, failure);
+      },
+      function(err) {
+        console.log(err);
+      }
+    );
+  },
+
+  getMyArtworksCont: function(searchResults, success, failure) {
     const artworkRootFileName = store.state.constants.artworkRootFileName;
     getFile(artworkRootFileName, { decrypt: false })
       .then(function(file) {
@@ -34,17 +46,28 @@ const myArtworksService = {
           );
           let usersToFetch = [];
           _.forEach(blockstackRootFile.records, function(indexData) {
-            if (!indexData.uploader) {
-              let userProfile = store.getters["myAccountStore/getMyProfile"];
-              indexData.uploader = userProfile.username;
+            try {
+              if (!indexData.uploader) {
+                let userProfile = store.getters["myAccountStore/getMyProfile"];
+                indexData.uploader = userProfile.username;
+              }
+              let searchResult = _.find(searchResults, function(o) {
+                return Number(o.id) === indexData.id;
+              });
+              if (searchResult) {
+                indexData.buyer = searchResult.buyer;
+                indexData.status = searchResult.status;
+              }
+              myArtworksService.addUserOrNot(usersToFetch, indexData.uploader);
+              myArtworksService.addUserOrNot(usersToFetch, indexData.owner);
+              myArtworksService.fetchMyProvenanceFile(
+                indexData,
+                success,
+                failure
+              );
+            } catch (err) {
+              console.log(err);
             }
-            myArtworksService.addUserOrNot(usersToFetch, indexData.uploader);
-            myArtworksService.addUserOrNot(usersToFetch, indexData.owner);
-            myArtworksService.fetchMyProvenanceFile(
-              indexData,
-              success,
-              failure
-            );
           });
           _.forEach(usersToFetch, function(userId) {
             store.dispatch("userProfilesStore/fetchUserProfile", { username: userId }, { root: true });
@@ -106,6 +129,7 @@ const myArtworksService = {
   },
 
   transferArtwork: function(artwork, success, failure) {
+    /**
     searchIndexService.removeRecord("id", artwork.id).then(function(message) {
       notify.info({
         title: "Transfer Artwork.",
@@ -113,6 +137,8 @@ const myArtworksService = {
       });
       myArtworksService.uploadOrTransferArtwork(artwork, success, failure);
     });
+    **/
+    myArtworksService.uploadOrTransferArtwork(artwork, success, failure);
   },
 
   uploadArtwork: function(artwork, success, failure) {
@@ -131,22 +157,10 @@ const myArtworksService = {
       .then(function(file) {
         if (!file) {
           myArtworksService.initBlockstackRootFile().then(function(file) {
-            myArtworksService.uploadProvenanceFile(
-              artworkRootFileName,
-              file,
-              artwork,
-              success,
-              failure
-            );
+            myArtworksService.uploadProvenanceFile(artworkRootFileName,file,artwork,success,failure);
           });
         } else {
-          myArtworksService.uploadProvenanceFile(
-            artworkRootFileName,
-            file,
-            artwork,
-            success,
-            failure
-          );
+          myArtworksService.uploadProvenanceFile(artworkRootFileName,file,artwork,success,failure);
         }
       })
       .catch(function() {

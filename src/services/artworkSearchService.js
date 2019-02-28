@@ -8,6 +8,24 @@ import { getFile } from "blockstack";
  *  The service is a client to the brightblock sever side grpc client.
  **/
 const artworkSearchService = {
+  queryById(artworkId, success) {
+    searchIndexService.searchDappsIndex(location.hostname, "artwork", "id", artworkId).then(searchResult => {
+      if (!searchResult || searchResult.error) {
+        console.log(searchResult.error);
+        return;
+      }
+      success(searchResult[0]);
+    });
+  },
+  queryByOwner(owner, success) {
+    searchIndexService.searchDappsIndex(location.hostname, "artwork", "owner", owner).then(searchResults => {
+      if (!searchResults || searchResults.error) {
+        console.log(searchResults.error);
+        searchResults = [];
+      }
+      success(searchResults);
+    });
+  },
   newQuery(q, success) {
     store.commit("artworkSearchStore/clearSearchResults");
     searchIndexService.searchDappsIndex(location.hostname, "artwork", q.field, q.query).then(searchResults => {
@@ -47,6 +65,8 @@ const artworkSearchService = {
       return;
     }
     let indexData = records[index];
+    indexData.buyer = searchResult.buyer;
+    indexData.status = searchResult.status;
     artworkSearchService.fetchProvenanceFile(
       indexData,
       searchResult.owner,
@@ -56,7 +76,7 @@ const artworkSearchService = {
         if (success) success(artwork);
       },
       function(error) {
-        console.log("Error fetching recent artworks: ", error);
+        console.log("Error fetching recent artworks: " + searchResult.title, error);
       }
     );
   },
@@ -164,7 +184,7 @@ const artworkSearchService = {
               })
             );
           } catch (err) {
-            console.error("Corrupt json file - skipping! file: " + file, err);
+            console.error("Parsing error - skipping: " + indexData.title, err);
           }
         } else {
           failure({ ERR_CODE: 1, message: "no provenance file found" });

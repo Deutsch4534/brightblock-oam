@@ -149,7 +149,7 @@ export default {
       let artwork = this.artwork;
       let message;
       try {
-        let registered = artwork.saleData.bitcoinTx;
+        let registered = artwork.bitcoinTx;
         let price = artwork.saleData.amount > 0;
         if (!registered) {
           message = "Artwork not registered on blockchain."
@@ -166,7 +166,7 @@ export default {
       return message;
     },
     isRegisteredBtc() {
-      return this.artwork.saleData.bitcoinTx;
+      return this.artwork.bitcoinTx;
     },
     isPriceSetBtc() {
       let artwork = this.artwork;

@@ -1,8 +1,11 @@
 <template>
-<div class="container">
-  <mdb-card-body>
-    <mdb-card-title>Invoice Details
+<div class="container mt-4">
+  <mdb-card-body v-if="!showPaymentDetails">
+    <mdb-card-title>
+    Invoice Details - <span class="text-danger">{{bitcoinState.chain}} chain</span>
+    <!--
     <span class="text-danger">UNDER CONSTRUCTION - <a @click.prevent="showInstructions = !showInstructions">show more</a></span>
+    -->
     </mdb-card-title>
     <mdb-card-text v-if="showInstructions">
     <p>Some links which may be helpful here..
@@ -17,7 +20,7 @@
     </mdb-card-text>
     <mdb-card-text>
       <div class="row mb-4">
-        <div class="col-md-12">{{bitcoinState.chain}} chain, balance: {{balance}}</div>
+        <div class="col-md-12"></div>
       </div>
       <div class="row mb-4">
         <mdb-tbl responsive>
@@ -27,7 +30,7 @@
               <th>Party</th>
               <th>Notes</th>
               <th>Rate</th>
-              <th>{{artwork.saleData.fiatCurrency}}</th>
+              <th>{{invoiceClaim.invoiceAmounts.fiatCurrency}}</th>
               <th>
                 <mdb-popover trigger="click" :options="{placement: 'top'}">
                   <div class="popover">
@@ -35,8 +38,8 @@
                       BTC
                     </div>
                     <div class="popover-body">
-                      Amounts in Bitcoin (BTC) are calculated in real time from the amount the
-                      artwork is listed in the fiat currency chosen by the seller.
+                      Amounts in Bitcoin (BTC) are calculated in real time from the amount
+                      listed in the fiat currency chosen by the seller.
                     </div>
                   </div>
                   <a @click.prevent="" slot="reference">
@@ -47,8 +50,8 @@
             </tr>
           </mdb-tbl-head>
           <mdb-tbl-body>
-            <tr scope="row" v-for="(row, index) in invoiceRows" :key="index" :class="row.rowClass">
-              <th scope="row">{{row.counter}}</th>
+            <tr v-for="(row, index) in invoiceRows" :key="index" :class="row.rowClass">
+              <th>{{row.counter}}</th>
               <td>{{row.party}}</td>
               <td>{{row.notes}}</td>
               <td>{{row.rate}}</td>
@@ -60,24 +63,55 @@
       </div>
     </mdb-card-text>
   </mdb-card-body>
-  <div v-if="!isPaid">
-    <div class="row" v-if="!showPaymentDetails">
-      <div class="col-12 mb-5">
-        <mdb-btn @click="openPaymentDetails()" type="submit" size="md" class="btn-main btn-block">Continue to Payment</mdb-btn>
+  <div v-if="!paymentReceived">
+    <div class="row">
+      <div class="col-12 mb-5" v-if="!showPaymentDetails">
+        <mdb-btn @click="openPaymentDetails()" size="md" class="btn-main btn-block">Accept and Pay</mdb-btn>
       </div>
     </div>
     <div class="w-100"></div>
-    <payment-details v-if="showPaymentDetails" :artwork="artwork" :bitcoinUri="bitcoinUri" @registerPayment="lookupTransaction"/>
+    <payment-details v-if="showPaymentDetails" :bitcoinUri="bitcoinUri" :invoiceClaim="invoiceClaim" @registerPayment="lookupTransaction"/>
   </div>
   <div v-else>
     <div class="row">
       <div class="col-12 mb-5">
-        <mdb-btn type="submit" size="md" class="btn-main btn-block">Invoice Paid - Status = {{invoiceClaim.state}}</mdb-btn>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 mb-5">
-        {{invoiceClaim.transaction.txid}}
+      <mdb-tbl responsive>
+        <mdb-tbl-head color="primary-color" textWhite>
+          <tr>
+            <th>#</th>
+            <th>Payment received</th>
+            <th>
+              <mdb-popover trigger="click" :options="{placement: 'top'}">
+                <div class="popover">
+                  <div class="popover-header">
+                    Block Confirmations
+                  </div>
+                  <div class="popover-body">
+                    The number of bitcoin block confirmations for your payment - 6 or more is considered paid.
+                  </div>
+                </div>
+                <a @click.prevent="" slot="reference">
+                  Confirmations <mdb-icon far icon="question-circle" />
+                </a>
+              </mdb-popover>
+            </th>
+          </tr>
+        </mdb-tbl-head>
+        <mdb-tbl-body>
+          <tr class="table-info">
+            <th></th>
+            <td>{{timeReceived}}</td>
+            <td>{{confirmations}}</td>
+          </tr>
+          <tr class="table-info" v-if="paymentConfirmed">
+            <th>
+
+            </th>
+            <td></td>
+            <td @click=""><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Confirm Receipt</mdb-btn></td>
+          </tr>
+        </mdb-tbl-body>
+      </mdb-tbl>
       </div>
     </div>
   </div>
@@ -90,6 +124,7 @@ import { mdbTbl, mdbTblHead, mdbTblBody } from 'mdbvue';
 import bitcoinService from "@/services/bitcoinService";
 import invoiceService from "@/services/invoiceService";
 import PaymentDetails from "./PaymentDetails";
+import moment from "moment";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -107,9 +142,10 @@ export default {
     mdbTblBody
   },
   props: {
-    artwork: {},
-    seller: null,
-    buyer: null
+    invoiceClaim: {
+      invoiceAmounts: {},
+      invoiceRates: {}
+    }
   },
   data() {
     return {
@@ -118,7 +154,6 @@ export default {
       invoiceRows: [],
       showInstructions: false,
       showPaymentDetails: false,
-      isPaid: false,
       order: null,
       bitcoinUri: null
     };
@@ -126,27 +161,41 @@ export default {
   mounted() {
     this.balance = this.$store.getters["bitcoinStore/getBalance"];
     this.bitcoinState = this.$store.getters["bitcoinStore/getBitcoinState"];
-    this.invoiceClaim = this.$store.getters["invoiceStore/getInvoiceByLabel"](this.artwork.id + " :: " + this.artwork.title);
-    if (!this.invoiceClaim) {
-      let invoiceRates = this.$store.state.constants.invoiceRates;
-      let invoiceAmounts = invoiceService.getInvoiceAmounts(invoiceRates, this.artwork.saleData, this.artwork.gallery, this.artwork.artist !== this.artwork.owner);
-      this.invoiceClaim = invoiceService.createInvoiceClaim(this.artwork, invoiceRates, invoiceAmounts);
-      invoiceService.saveInvoiceClaim(this.invoiceClaim);
-      this.showPaymentDetails = true;
-    } else if (this.invoiceClaim.transaction && this.invoiceClaim.transaction.txid) {
-      this.isPaid = true;
-      this.$router.push("/reconcile/" + this.artwork.id);
-    } else {
-      this.lookupTransaction();
-    }
-    this.invoiceRows = invoiceService.populateInvoiceRows(this.artwork, this.invoiceClaim.invoiceRates, this.invoiceClaim.invoiceAmounts);
+    this.invoiceRows = invoiceService.populateInvoiceRows(this.invoiceClaim);
     this.bitcoinUri = invoiceService.getBitcoinUri(this.invoiceClaim);
   },
   computed: {
+    confirmations() {
+      if (!this.invoiceClaim || !this.invoiceClaim.transaction) {
+        return "none";
+      }
+      return this.invoiceClaim.transaction.confirmations;
+    },
+    paymentReceived() {
+      return this.invoiceClaim.transaction;
+    },
+    paymentConfirmed() {
+      return this.invoiceClaim.transaction.confirmations > 5;
+    },
+    timeReceived(date) {
+      return moment(this.invoiceClaim.timestamp).format();
+    }
   },
   methods: {
     openPaymentDetails() {
-      this.showPaymentDetails = true;
+      let $self = this;
+      invoiceService.saveInvoiceClaim($self.invoiceClaim, function(res) {
+        invoiceService.watchForPayment($self.invoiceClaim);
+        $self.showPaymentDetails = true;
+      });
+    },
+    confirmGoodsReceived() {
+      let $self = this;
+      bitcoinService.payUpstreamTransaction({invoice: invoice}, function(result) {
+        console.log(result);
+        saleHistory.provenanceTxid = result;
+        artwork.saleHistory.push(saleHistory);
+      });
     },
     lookupTransaction() {
       try {
@@ -155,8 +204,6 @@ export default {
         bitcoinService.lookupTransaction({timestamp: this.invoiceClaim.timestamp, amount: this.invoiceClaim.invoiceAmounts.totalBitcoin}, function(result) {
           if (result) {
             $self.invoiceClaim.transaction = result;
-            $self.isPaid = true;
-            $self.$router.push("/reconcile/" + $self.artwork.id);
           } else {
             $self.showPaymentDetails = true;
           }

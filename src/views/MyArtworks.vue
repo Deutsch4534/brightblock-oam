@@ -9,17 +9,32 @@
       </mdb-row>
       <mdb-row v-else>
       <router-view/>
+        <div class="col-12 mb-5" v-if="numberArtworksSelling">
+          <h1 class="h1-responsive mb-5">Artworks Selling <span>({{numberArtworksSelling}})</span></h1>
+        </div>
+        <div class="col-12">
+          <my-artworks-list :artworks="selling"/>
+        </div>
+
+        <div class="col-12 mb-5" v-if="numberArtworksBuying">
+          <h1 class="h1-responsive mb-5">Artworks Buying <span>({{numberArtworksBuying}})</span></h1>
+        </div>
+        <div class="col-12">
+          <my-artworks-list :artworks="buying"/>
+        </div>
+
         <div class="col-12 mb-5">
           <h1 class="h1-responsive mb-5">Artworks <span>({{numberArtworksUnsold}})</span></h1>
         </div>
         <div class="col-12">
-          <my-artworks-list :artworks="unsold" :sold="false" :show-load-button="false" :chunks="6"/>
+          <my-artworks-list :artworks="unsold" />
         </div>
+
         <div class="col-12 mb-5">
           <h2 class="h1-responsive mb-5">Sold Artworks <span>({{numberArtworksSold}})</span></h2>
         </div>
         <div class="col-12">
-          <my-artworks-list :artworks="sold" :sold="true" :show-load-button="false" :chunks="6"/>
+          <my-artworks-list :artworks="sold"/>
         </div>
       </mdb-row>
     </mdb-container>
@@ -67,8 +82,20 @@ export default {
     unsold() {
       return this.$store.getters["myArtworksStore/unsold"];
     },
+    selling() {
+      return this.$store.getters["myArtworksStore/selling"];
+    },
     sold() {
       return this.$store.getters["myArtworksStore/sold"];
+    },
+    buying() {
+      return this.$store.getters["myArtworksStore/buying"];
+    },
+    numberArtworksBuying() {
+      return this.$store.getters["myArtworksStore/buying"].length;
+    },
+    numberArtworksSelling() {
+      return this.$store.getters["myArtworksStore/selling"].length;
     },
     numberArtworksSold() {
       return this.$store.getters["myArtworksStore/numberArtworksSold"];

@@ -52,6 +52,7 @@
         <option value="description">description</option>
         <option value="keywords">keywords</option>
         <option value="owner">owner</option>
+        <option value="id">id</option>
       </select>
     </div>
     <div class="form-group mb-2 pr-2">
@@ -83,11 +84,13 @@
       <p><small>Found: {{ dappsResults.length }}  </small></p>
       <div v-for="(result, index) in dappsResults" :key="index" style="padding: 10px; margin-bottom: 30px; border-radius: 10px; border: 1pt solid #ccc">
         <div class="row">
-          <div class="col-md-3"><img :src="result.image" alt="dsvdsvsv" width="50px"/></div>
+          <div class="col-md-2"><img :src="result.image" alt="dsvdsvsv" width="50px"/></div>
           <div class="col-md-2">{{ result.id }}</div>
           <div class="col-md-2">{{ result.domain }}</div>
-          <div class="col-md-3">{{ result.title }}</div>
+          <div class="col-md-2">{{ result.title }}</div>
           <div class="col-md-2">{{ result.owner }}</div>
+          <div class="col-md-1">{{ result.buyer }}</div>
+          <div class="col-md-1">{{ result.status }}</div>
         </div>
       </div>
     </div>
@@ -165,14 +168,12 @@ export default {
     },
 
     fetchArtworkFile: function(searchResult) {
-      artworkSearchService.userArtwork(
-        Number(searchResult.id),
-        searchResult.owner,
+      artworkSearchService.userArtwork(Number(searchResult.id), searchResult.owner,
         function(artwork) {
           searchResult.image = artwork.artwork[0].dataUrl;
         },
         function(error) {
-          console.log("Error fetching recent artworks: ", error);
+          console.log("Error querying in admin for recent artworks: ", error);
           searchResult.artwork = error;
         }
       );

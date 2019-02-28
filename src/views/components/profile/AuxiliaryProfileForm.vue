@@ -2,7 +2,7 @@
 <mdb-container class="py-5">
   <!-- Supported elements -->
   <h2 class="h2-responsive">{{formTitle}}</h2>
-  <form class="needs-validation py-5" novalidate @submit.prevent="checkForm" id="blockstackProfileForm">
+  <form class="needs-validation py-5" novalidate @submit.prevent=checkForm($event) id="blockstackProfileForm">
     <div class="row">
       <div class="col-md-2">
         <img :src="blockstackProfile.avatarUrl" class="img-fluid"/>
@@ -15,40 +15,8 @@
           <p class="muted hint">Note: This data is encrypted and stored in your storage bucket - it is only ever
           decrypted and displayed to buyers / sellers in order to complete transactions.</p>
         </div>
-        <div class="row mb-4">
-          <div class="col-md-12">
-            <mdb-popover trigger="click" :options="{placement: 'top'}">
-              <div class="popover">
-                <div class="popover-header">
-                  Public Bitcoin Address
-                </div>
-                <div class="popover-body">
-                  We use your bitcoin address for the following;
-                  <ul>
-                    <li>For payments to be made to your bitcoin wallet.</li>
-                    <li>For generating certificates of authenticity for artwork.</li>
-                  </ul>
-                </div>
-                <div class="popover-body">
-                  You'll need a bitcoin wallet to use radicle. We use the
-                  <a href="https://electrum.org" target="_blank">electrum wallet <mdb-icon icon="external-link-alt" /></a>
-                  and the <a href="https://bitcoin.org/en/download">bitcoin core <mdb-icon icon="external-link-alt" /></a> wallets to test the site.
-                </div>
-              </div>
-              <a @click.prevent="" slot="reference">
-                Public Bitcoin Address <mdb-icon far icon="question-circle" />
-              </a>
-            </mdb-popover>
-          </div>
-        </div>
-        <div class="row mb-4">
-          <div class="col-md-6">
-            <input type="text" class="form-control" id="validationCustom01" placeholder="bitcoin address" v-model="publicKeyData.bitcoinAddress" required>
-            <div class="invalid-feedback">
-              Required - an alphanumeric string 26-35 characters in length.
-            </div>
-          </div>
-        </div>
+
+        <bitcoin-address-entry v-if="showBitcoinAddress" :myProfile="myProfile" @bitcoinAddressUpdate="updateBitcoinAddress"/>
 
         <div class="row mb-4">
           <div class="col-md-12">
@@ -73,7 +41,12 @@
         </div>
         <div class="row mb-4">
           <div class="col-md-6">
-            <input type="email" class="form-control" id="validationCustom02" placeholder="email address" v-model="auxiliaryProfile.emailAddress" required>
+            <input type="email" class="form-control" id="vc-email" placeholder="email address" v-model="auxiliaryProfile.emailAddress" required>
+          </div>
+        </div>
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <input type="text" class="form-control" id="vc-bspubkey" placeholder="pubkey" v-model="myProfile.publicKey" readonly>
           </div>
         </div>
 
@@ -101,9 +74,10 @@
         </div>
 
         <address-form @addressUpdate="updateAddress" :address="auxiliaryProfile.shippingAddress" :addressTitle="'Shipping Address'" :addressBlurb="addressBlurb"/>
+
         <div class="form-row">
           <div class="col-md-12">
-            <mdb-btn size="lg" type="submit" class="btn-main btn-block">Submit</mdb-btn>
+            <mdb-btn size="lg" type="submit" class="btn-main btn-block"><a @click="checkForm($event)">Submit</a></mdb-btn>
           </div>
         </div>
       </div>
@@ -115,14 +89,16 @@
 <script>
 import { mdbIcon, mdbPopover, mdbCol, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
 import MyArtworkManageImage from "../myArtwork/MyArtworkManageImage";
-import AddressForm from "../AddressForm";
+import AddressForm from "../utils/AddressForm";
 import moment from "moment";
 import myAccountService from "@/services/myAccountService";
+import BitcoinAddressEntry from "../utils/BitcoinAddressEntry";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "AuxiliaryProfileForm",
   components: {
+    BitcoinAddressEntry,
     MyArtworkManageImage,
     AddressForm,
     mdbContainer,
@@ -143,11 +119,15 @@ export default {
       errors: [],
       showAttachArt: false,
       addressBlurb: "Your shipping address is encrypted and stored in your gaia bucket. It will only ever be decrypted in case where this is necessary - such as when you have bought some artwork and the seller needs your shipping information",
-      publicKeyData: {},
+      myProfile: {
+        publicKeyData: {}
+      },
       auxiliaryProfile: {
         shippingAddress: {}
       },
-      blockstackProfile: {}
+      blockstackProfile: {},
+      validBitcoinAdress: false,
+      showBitcoinAddress: false
     };
   },
   mounted() {
@@ -160,7 +140,8 @@ export default {
       if (!this.auxiliaryProfile.shippingAddress) {
         this.auxiliaryProfile.shippingAddress = {};
       }
-      this.publicKeyData = profile.publicKeyData;
+      this.myProfile = profile;
+      this.showBitcoinAddress = true;
     });
   },
   computed: {
@@ -170,21 +151,23 @@ export default {
       let $self = this;
       this.$store.dispatch("myAccountStore/updateAuxiliaryProfile", this.auxiliaryProfile)
         .then(auxiliaryProfile => {
-          $self.$store.dispatch("myAccountStore/updatePublicKeyData", $self.publicKeyData)
-            .then(myProfile => {
-              $self.$router.push("/my-artwork/upload");
-            });
+          // $self.$router.push("/my-artwork/upload");
         });
     },
-    updateAddress(event) {
-      this.auxiliaryProfile.shippingAddress = event;
+    updateBitcoinAddress(newAddress) {
+      this.validBitcoinAdress = newAddress;
+    },
+    updateAddress(newAddress) {
+      this.auxiliaryProfile.shippingAddress = newAddress;
     },
     checkForm(event) {
-      event.preventDefault();
-      event.target.classList.add('was-validated');
+      if (event) {
+        event.preventDefault;
+        event.target.classList.add('was-validated');
+      }
       this.showAttachArt = false;
       this.errors = [];
-      if (!this.publicKeyData.bitcoinAddress) {
+      if (!this.myProfile.publicKeyData.bitcoinAddress) {
         this.errors.push("Your bitcoin address is required.");
       }
       if (!this.auxiliaryProfile.emailAddress) {
