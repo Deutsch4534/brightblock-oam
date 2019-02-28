@@ -22,7 +22,6 @@
         </mdb-card-body>
 
         <create-coa v-if="artwork.bitcoinTx"/>
-
         <register-bitcoin v-else/>
 
         <mdb-card-body v-if="featureEthereum">

@@ -14,21 +14,12 @@
       </form>
       <!-- <router-link to="/" name="sectionUrl(link1 + 'Section')" class="navbar-brand"><img :src="logo" height="50" alt=""></router-link> -->
     </mdb-navbar-brand>
-    <!--
-    <mdb-navbar-nav right v-if="hasInvoices">
-      <mdb-nav-item href="#">
-        <router-link to="/invoices" class="nav-link navbar-link login-link mr-2">
-          <mdb-btn color="primary">
-            Invoices <mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge>
-            <span class="sr-only">invoices</span>
-          </mdb-btn>
-        </router-link>
-      </mdb-nav-item>
-    </mdb-navbar-nav>
-    -->
-    <mdb-navbar-nav right>
+    <mdb-navbar-nav right class="flex-row align-items-center">
+      <li v-if="loggedIn" class="nav-item ripple-parent">
+        <router-link to="/my-artwork/upload" class="nav-link navbar-link nav-cta px-2 d-none d-sm-block">Upload Artwork</router-link>
+      </li>
       <li v-if="!loggedIn" class="nav-item ripple-parent">
-        <router-link to="/login" class="nav-link navbar-link login-link mr-2">
+        <router-link to="/login" class="nav-link navbar-link login-link px-2">
         Login
         </router-link>
       </li>
@@ -46,7 +37,7 @@
           <router-link to="/online-auctions" class="nav-link navbar-link">Auctions</router-link>
         </li>
 
-        <auction-links v-if="loggedIn"/>
+        <!--<auction-links v-if="loggedIn"/>-->
         <splash-links v-if="splashLinks" class="text-white"/>
 
         <div class="mb-4"></div>
@@ -55,13 +46,13 @@
             Login
           </router-link>
         </li>
-        <li v-if="loggedIn" class="nav-item ripple-parent">
+    <!--    <li v-if="loggedIn" class="nav-item ripple-parent">
           <a href="#"
              @click.prevent="logout"
              class="nav-link navbar-link">
             Logout</a
           >
-        </li>
+        </li>-->
       </mdb-navbar-nav>
     </mdb-navbar-toggler>
   </mdb-navbar>
@@ -275,26 +266,28 @@ nav >>> .navbar-brand {
     transform: rotate(90deg);
     font-size: 24px;
   }
-  .search-form input, .login-link { font-size: 20px; font-weight: 300; letter-spacing: 0.5px;}
+  .search-form input, .login-link, .nav-cta { font-size: 20px; font-weight: normal; }
   .search-form input { border-bottom: none; }
   .search-form input:focus { box-shadow: none!important; border-bottom: none!important; }
 
   .search-form input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     color: black;
+    text-transform: uppercase;
   }
   .search-form input::-moz-placeholder { /* Firefox 19+ */
     color: black;
+    text-transform: uppercase;
   }
   .search-form input:-ms-input-placeholder { /* IE 10+ */
     color: black;
+    text-transform: uppercase;
   }
   .search-form input:-moz-placeholder { /* Firefox 18- */
     color: black;
+    text-transform: uppercase;
   }
   .search-form button.transparent { border: none; background: transparent; color: black; }
 
-.jarallax2 {
-}
 .navbar a { color: inherit; }
 
 @media (max-width: 990px) {

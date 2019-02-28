@@ -1,13 +1,14 @@
 <template>
-  <mdb-dropdown tag="li" class="nav-item">
-    <mdb-dropdown-toggle tag="a" class="user-menu dropleft pr-1" navLink color="stylish" slot="toggle" waves-fixed>
-      <img style="width: 40px; height: 40px; border-radius: 20px;" :src="avatarUrl"/>
+  <mdb-dropdown>
+    <mdb-dropdown-toggle class="user-menu dropleft px-2 py-0" color="stylish" slot="toggle" waves-fixed id="userMainMenuBtn">
+      <!--<img style="width: 40px; height: 40px; border-radius: 20px;" :src="avatarUrl"/>-->
+      <mdb-icon icon="user-circle" />
     </mdb-dropdown-toggle>
-    <mdb-dropdown-menu class="dropdown-menu-right">
-      <mdb-dropdown-item>
-        <a class="dropdown-item">{{ username }}</a>
+    <mdb-dropdown-menu class="dropdown-menu-right" id="userMainMenu" >
+      <mdb-dropdown-item tag="div">
+       {{ username }}
       </mdb-dropdown-item>
-      <mdb-dropdown-item>
+      <mdb-dropdown-item v-if="showAdmin">
         <router-link
           class="dropdown-item"
           to="/profile/update"
@@ -28,6 +29,9 @@
           >Admin</router-link
         >
       </mdb-dropdown-item>
+      <!--<mdb-dropdown-item tag="div">-->
+        <auction-links v-if="loggedIn" class="text-dark"/>
+      <!--</mdb-dropdown-item>-->
       <!--
       <mdb-dropdown-item>
         <router-link
@@ -37,23 +41,24 @@
         >
       </mdb-dropdown-item>
       -->
-      <mdb-dropdown-item>
+      <mdb-dropdown-item tag="div">
         <a
           href="#"
-          class="dropdown-item"
           @click.prevent="logout"
           >
-          <mdb-icon icon="fingerprint"/>
+          <!--<mdb-icon icon="fingerprint"/>-->
           Logout</a
         >
       </mdb-dropdown-item>
     </mdb-dropdown-menu>
   </mdb-dropdown>
+
 </template>
 
 <script>
-import { mdbBadge, mdbNavbar, mdbNavItem, mdbNavbarNav, mdbNavbarToggler, mdbContainer, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle, mdbInput, mdbNavbarBrand, mdbIcon, mdbRow } from 'mdbvue';
+import { mdbNavbar, mdbNavItem, mdbNavbarNav, mdbNavbarToggler, mdbBtn, mdbContainer, mdbCollapse, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle, mdbInput, mdbNavbarBrand, mdbIcon, mdbRow } from 'mdbvue';
 import myAccountService from "@/services/myAccountService";
+import AuctionLinks from "./AuctionLinks";
 
 export default {
   name: 'AccountLinks',
@@ -62,8 +67,10 @@ export default {
     mdbNavItem,
     mdbNavbarNav,
     mdbNavbarToggler,
+    mdbBtn,
     mdbContainer,
     mdbDropdown,
+    mdbCollapse,
     mdbDropdownItem,
     mdbDropdownMenu,
     mdbDropdownToggle,
@@ -71,7 +78,8 @@ export default {
     mdbNavbarBrand,
     mdbBadge,
     mdbIcon,
-    mdbRow
+    mdbRow,
+    AuctionLinks
   },
   data() {
     return {
@@ -123,13 +131,41 @@ export default {
     }
   }
 };
+
 </script>
 <style scoped>
+  .dropdown-menu {
+    min-width: 200px;
+    border: none;
+    top: 11px;
+    border-radius: 0;
+  }
+
+  .btn.dropdown-toggle { color: black; }
+  .dropdown .dropdown-menu .dropdown-item,
   .dropdown .dropdown-menu .dropdown-item:hover {
     background: initial;
     box-shadow: none;
     color: initial!important;
   }
 
-  .fa-user-circle { font-size: 1.7rem; }
+  .dropdown-submenu {
+    position:relative;
+  }
+
+  .dropdown-submenu .dropdown-menu {
+    top:0;
+    left:100%;
+  }
+
+  .dropdown-item {
+    font-size: 0.9375rem;
+    font-weight: 300;
+  }
+
+  .dropdown-item > a {
+    padding: 0;
+  }
+
+  .fa-user-circle { font-size: 1.7rem; padding-bottom: 4px;}
 </style>
