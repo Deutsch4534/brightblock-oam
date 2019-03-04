@@ -1,8 +1,8 @@
 <template>
   <mdb-dropdown>
     <mdb-dropdown-toggle class="user-menu dropleft px-2 py-0" color="stylish" slot="toggle" waves-fixed id="userMainMenuBtn">
-      <!--<img style="width: 40px; height: 40px; border-radius: 20px;" :src="avatarUrl"/>-->
-      <mdb-icon icon="user-circle" />
+      <img style="width: 40px; height: 40px; border-radius: 20px;" :src="avatarUrl"/>
+      <!--<mdb-icon icon="user-circle" />-->
     </mdb-dropdown-toggle>
 
     <mdb-dropdown-menu class="dropdown-menu-right" id="userMainMenu" >

@@ -98,7 +98,7 @@ export default {
           if (invoiceClaim) {
             $self.invoiceClaim = invoiceClaim;
           } else {
-            this.$store.dispatch("invoiceStore/prepareNewInvoice", artwork).then((invoice) => {
+            $self.$store.dispatch("invoiceStore/prepareNewInvoice", artwork).then((invoice) => {
               $self.invoiceClaim = invoice;
             });
           }

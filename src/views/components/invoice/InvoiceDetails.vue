@@ -2,7 +2,7 @@
 <div class="container mt-4">
   <mdb-card-body v-if="!showPaymentDetails">
     <mdb-card-title>
-    Invoice Details - <span class="text-danger">{{bitcoinState.chain}} chain</span> {{invoice.title}}
+    Invoice Details - <span class="text-danger">{{bitcoinState.chain}} chain</span> {{invoiceClaim.title}}
     <!--
     <span class="text-danger">UNDER CONSTRUCTION - <a @click.prevent="showInstructions = !showInstructions">show more</a></span>
     -->
