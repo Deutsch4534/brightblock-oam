@@ -1,7 +1,7 @@
 <template>
 <mdb-container class="py-5">
   <!-- Supported elements -->
-  <h2 class="h2-responsive">{{formTitle}}</h2>
+  <h2 class="h2-responsive">{{formTitle}}: {{myProfile.name}}</h2>
   <form class="needs-validation py-5" novalidate @submit.prevent=checkForm($event) id="blockstackProfileForm">
     <div class="row">
       <div class="col-md-2">

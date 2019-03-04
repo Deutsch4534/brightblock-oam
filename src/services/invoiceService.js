@@ -4,9 +4,9 @@ import store from "@/storage/store";
 import utils from "@/services/utils";
 import bitcoinService from "@/services/bitcoinService";
 import artworkSearchService from "@/services/artworkSearchService";
+import myArtworksService from "@/services/myArtworksService";
 import moneyUtils from "@/services/moneyUtils";
 import moment from "moment";
-import _ from "lodash";
 import {
   getFile, putFile
 } from "blockstack";
@@ -71,9 +71,13 @@ const invoiceService = {
         });
       });
   },
+
   watchForPayment: function(invoice, success, failure) {
     if (invoiceService.intval) {
       clearInterval(invoiceService.intval);
+    }
+    if (invoice.buyerTransaction && invoice.confirmed) {
+      return;
     }
     // check this os the buyer initiating the watch..
     let myProfile = store.getters["myAccountStore/getMyProfile"];
@@ -85,13 +89,15 @@ const invoiceService = {
         if (!transaction) {
           return;
         }
+        invoice.state = "confirming";
         if (invoice.buyerTransaction) {
-          if (invoice.confirmed) {
-            return;
-          }
           if (transaction.confirmations > 5) {
             invoice.confirmed = true;
+            invoice.state = "confirmed";
           }
+        } else {
+          // here indicates the first instance of the buyers transaction being detected.
+          // i.e. blockchain transaction exits but its not yet been saved on invoice.
         }
         invoice.buyerTransaction = transaction;
         invoiceService.saveInvoiceClaim(invoice);
@@ -99,23 +105,9 @@ const invoiceService = {
         artworkSearchService.userArtwork(invoice.artworkId, invoice.buyer.blockstackId,
           function(artwork) {
             if (!artwork) { // NOT NOT NOT
-              if (!artwork.saleHistories) {
-                artwork.saleHistories = [];
-              }
-              let sh = _.find(artwork.saleHistories, function(o) {
-                return o.buyersTxid === transaction.txid;
-              });
-              if (!sh) {
-                artwork.saleHistories.push({
-                  seller: artwork.owner,
-                  buyer: invoice.buyer.blockstackId,
-                  buyersTxid: transaction.txid,
-                  buyersInvoiceId: invoice.invoiceId,
-                  confirmations: transaction.confirmations
-                });
-              }
               artwork.buyer = invoice.buyer.blockstackId;
               artwork.status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
+              myArtworksService.addSaleHistory(artwork, invoice.invoiceId, transaction.txid, transaction.confirmations);
               //searchIndexService.addRecord("artwork", artwork);
               store.dispatch('myAccountStore/addRelationship', invoice.seller.blockstackId);
               store.dispatch('myArtworksStore/transferArtwork', artwork).then(artwork => {
@@ -135,17 +127,12 @@ const invoiceService = {
       });
     }, 5000);
   },
-  createInvoiceClaim: function(artwork, invoiceRates, invoiceAmounts) {
+  createInvoiceClaim: function(gallerist, seller, artist, artwork) {
     let buyer = store.getters["myAccountStore/getMyProfile"];
-    let seller = store.getters["userProfilesStore/getProfile"](artwork.owner);
-    let gallerist = store.getters["userProfilesStore/getProfile"](artwork.gallerist);
-    let artist = store.getters["userProfilesStore/getProfile"](artwork.artist);
     var now = moment({}).valueOf();
     return {
       invoiceId: now,
       timestamp: now,
-      invoiceAmounts: invoiceAmounts,
-      invoiceRates: invoiceRates,
       label: artwork.id + " :: " + artwork.title,
       message: "Invoice for artwork purchased on article.art",
       artworkHash: utils.buildBitcoinHash(artwork),
@@ -155,19 +142,19 @@ const invoiceService = {
       state: "intention",
       gallerist: (gallerist) ? {
         blockstackId: gallerist.username,
-        publicKey: gallerist.publicKeyData.bitcoinAddress,
+        bitcoinAddress: gallerist.publicKeyData.bitcoinAddress,
       } : {},
       artist: (artist) ? {
         blockstackId: artist.username,
-        publicKey: artist.publicKeyData.bitcoinAddress,
+        bitcoinAddress: artist.publicKeyData.bitcoinAddress,
       } : {},
       seller: {
         blockstackId: seller.username,
-        publicKey: seller.publicKeyData.bitcoinAddress,
+        bitcoinAddress: seller.publicKeyData.bitcoinAddress,
       },
       buyer: {
         blockstackId: buyer.username,
-        publicKey: buyer.publicKeyData.bitcoinAddress,
+        bitcoinAddress: buyer.publicKeyData.bitcoinAddress,
       }
     };
   },
@@ -207,6 +194,20 @@ const invoiceService = {
     uri += "&label=" + invoiceClaim.label;
     uri += "&message=" + invoiceClaim.message;
     return encodeURI(uri);
+  },
+  getInvoiceState: function(invoice) {
+    if (invoice.state === "settled") {
+      return "settled";
+    } else if (invoice.state === "confirmed" || invoice.state === "confirming") {
+      return "in escrow";
+    } else if (invoice.state === "settling") {
+      return "in settlement";
+    } else if (invoice.state === "settled") {
+      return "settled";
+    } else if (invoice.state === "intention") {
+      return "unpaid";
+    }
+    return "confirming: " + invoice.buyerTransaction.confirmations;
   },
   populateInvoiceRows: function(invoiceClaim) {
     let gallerist = (invoiceClaim.gallerist) ? invoiceClaim.gallerist.blockstackId : null;

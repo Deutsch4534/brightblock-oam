@@ -15,8 +15,8 @@
           <p class="mb-1">{{artwork.description}}</p>
           <p>{{aboutArtwork.keywords}}</p>
         </mdb-col>
-        <shopping-owner-view v-if="iamowner" :artwork="artwork"/>
-        <shopping-buyer-view v-else-if="iambuyer && purchaseBegun" :artwork="artwork"/>
+        <shopping-owner-view v-if="ready && iamowner" :artwork="artwork"/>
+        <shopping-buyer-view v-else-if="ready && iambuyer && purchaseBegun" :artwork="artwork"/>
         <invoice-details v-else-if="showInvoiceDetails" :invoiceClaim="invoiceClaim"/>
         <buy-artwork-form-btc v-if="isRegisteredBtc && isPriceSetBtc && !purchaseBegun && !iamowner" :purchaseState="purchaseStateBtc" :artwork="artwork" @buy="buyArtwork()"/>
       </mdb-row>
@@ -75,6 +75,7 @@ export default {
         bcitem: {},
         saleData: {},
       },
+      ready: false,
       invoiceClaim: {},
       message: "",
       owner: null,
@@ -89,6 +90,7 @@ export default {
     artworkSearchService.newQuery({field: "id", query: this.artworkId}, function(artwork) {
       $self.artwork = artwork;
       if (artwork) {
+        $self.ready = true;
         $self.owner = artwork.owner;
         $self.$store.getters["userProfilesStore/getProfile"]($self.owner);
         if (artwork.buyer) $self.$store.getters["userProfilesStore/getProfile"](artwork.buyer);
@@ -96,7 +98,9 @@ export default {
           if (invoiceClaim) {
             $self.invoiceClaim = invoiceClaim;
           } else {
-            $self.invoiceClaim = $self.$store.getters["invoiceStore/getPreparedInvoice"]($self.artwork);
+            this.$store.dispatch("invoiceStore/prepareNewInvoice", artwork).then((invoice) => {
+              $self.invoiceClaim = invoice;
+            });
           }
         })
         // check for redirect to auctions...

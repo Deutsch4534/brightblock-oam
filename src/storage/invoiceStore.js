@@ -25,24 +25,6 @@ const invoiceStore = {
     getInvoices: state => {
       return state.invoices;
     },
-    getPreparedInvoice: state => artwork => {
-      if (artwork) {
-        let invoiceRates = store.state.constants.invoiceRates;
-        let invoiceAmounts = invoiceService.getInvoiceAmounts(invoiceRates, artwork.saleData, artwork.gallerist, artwork.artist !== artwork.owner);
-        let invoiceClaim = invoiceService.createInvoiceClaim(artwork, invoiceRates, invoiceAmounts);
-        return invoiceClaim;
-      }
-      return null;
-    },
-    getInvoiceByLabel: state => label => {
-      let invoices = state.invoices.records.filter(
-        invoice => invoice.label === label
-      );
-      if (invoices && invoices.length === 1) {
-        return invoices[0];
-      }
-      return null;
-    },
     getInvoiceById: state => invoiceId => {
       let records = state.invoices.records.filter(invoice => invoice.invoiceId === invoiceId);
       if (!records || records.length === 0) {
@@ -69,6 +51,9 @@ const invoiceStore = {
       state.transactions = transactions;
     },
     addInvoice(state, invoice) {
+      if (!invoice || !invoice.invoiceId) {
+        return;
+      }
       let index = _.findIndex(state.invoices.records, function(u) {
         return u.invoiceId === invoice.invoiceId;
       });
@@ -93,27 +78,49 @@ const invoiceStore = {
         invoiceService.initInvoiceData(function(invoicesRootFile) {
           commit("invoicesRootFile", invoicesRootFile);
           let invoiceClaim = getters.getInvoiceById(invoiceId);
-          if (invoiceClaim) {
+          if (invoiceClaim && !invoiceClaim.confirmed) {
             invoiceService.watchForPayment(invoiceClaim);
           }
           resolve(invoiceClaim);
         });
       });
     },
-    paySeller({ commit, state, getters}, artwork) {
+    prepareNewInvoice({ commit, state, getters}, artwork) {
       return new Promise(resolve => {
-        let invoiceClaim = getters.getInvoiceById(artwork.id);
-        if (invoiceClaim.sellerTransaction) {
-          resolve();
-          return;
-        }
-        bitcoinService.paySeller(function(invoicesRootFile) {
-          commit("invoicesRootFile", invoicesRootFile);
-          if (invoiceClaim) {
-            invoiceService.watchForPayment(invoiceClaim);
-          }
-          resolve(invoiceClaim);
+        store.dispatch("userProfilesStore/fetchUserProfile", { username: artwork.gallerist }, { root: true }).then(profile => {
+          let gallerist = profile;
+          store.dispatch("userProfilesStore/fetchUserProfile", { username: artwork.owner }, { root: true }).then(profile => {
+            let seller = profile;
+            store.dispatch("userProfilesStore/fetchUserProfile", { username: artwork.artist }, { root: true }).then(profile => {
+              let artist = profile;
+              let invoiceClaim = invoiceService.createInvoiceClaim(gallerist, seller, artist, artwork);
+              invoiceClaim.invoiceRates = store.state.constants.invoiceRates;
+              invoiceClaim.invoiceAmounts = invoiceService.getInvoiceAmounts(invoiceClaim.invoiceRates, artwork.saleData, artwork.gallerist, artwork.artist !== artwork.owner);
+              resolve(invoiceClaim);
+            });
+          });
         });
+      });
+    },
+    paySeller({ commit, state, getters}, invoiceId) {
+      return new Promise(resolve => {
+        let invoiceClaim = getters.getInvoiceById(invoiceId);
+        if (invoiceClaim.state === "confirmed") {
+          // settlement is after successful pay seller.
+          // can't settle until the buyers original tx is confirmed
+          bitcoinService.paySeller(invoiceClaim, function(transaction) {
+            invoiceClaim.state = "settling";
+            invoiceClaim.sellerTransaction = transaction;
+            invoiceService.saveInvoiceClaim(invoiceClaim, function() {
+              commit("addInvoice", invoiceClaim);
+              resolve(invoiceClaim);
+            }, function() {
+              resolve();
+            });
+          });
+        } else {
+          resolve();
+        }
       });
     }
   }

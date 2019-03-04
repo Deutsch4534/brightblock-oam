@@ -36,8 +36,7 @@ export default {
   methods: {},
   computed: {
     confirmations() {
-      let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.invoice.artworkId);
-      return (!invoice || !invoice.buyerTransaction) ? "unpaid" : invoice.buyerTransaction.confirmations;
+      return invoiceService.getInvoiceState(this.invoiceClaim);
     },
     invoiceUrl() {
       let theId = this.invoice.invoiceId;

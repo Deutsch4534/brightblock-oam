@@ -32,10 +32,13 @@ export default {
     this.$store.dispatch("invoiceStore/fetchInvoice", this.invoiceId).then(invoiceClaim => {
       if (invoiceClaim) {
         this.invoiceClaim = invoiceClaim;
+        this.showInvoiceDetails = true;
       } else {
-        this.invoiceClaim = this.$store.getters["invoiceStore/getPreparedInvoice"](this.artwork);
+        this.$store.dispatch("invoiceStore/prepareNewInvoice", this.artwork).then((invoiceClaim) => {
+            this.invoiceClaim = invoiceClaim;
+            this.showInvoiceDetails = true;
+        });
       }
-      this.showInvoiceDetails = true;
     })
   },
   computed: {

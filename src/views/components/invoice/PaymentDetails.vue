@@ -94,9 +94,6 @@ export default {
           console.log("success!");
         }
       );
-    },
-    closeModal() {
-      this.$emit("registerPayment");
     }
   }
 };

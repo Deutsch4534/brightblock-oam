@@ -1,6 +1,6 @@
 <template>
 <div class="container-fluid bg-light flex-1">
-  <auxiliary-profile-form :formTitle="'Create Your RA Profile'" :mode="'upload'" class="form-transparent"/>
+  <auxiliary-profile-form :formTitle="'RA Profile'" :mode="'upload'" class="form-transparent"/>
 </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
 <div class="container-fluid bg-light flex-1">
-  <auxiliary-profile-form :formTitle="'Update Your RA Profile'" :mode="'update'"/>
+  <auxiliary-profile-form :formTitle="'RA Profile'" :mode="'update'"/>
 </div>
 </template>
 

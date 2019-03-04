@@ -14,8 +14,6 @@
       until you have received the artwork. Please check your
       <router-link to="/profile/update">email and shipping address details</router-link>
       are up to date.</p>
-      <p>{{invoice.buyerTransaction.confirmations}}</p>
-      <p>{{invoice.buyerTransaction.amount}}</p>
       <p>{{invoice.invoiceAmounts.totalBitcoin}}</p>
       <p>{{invoice.sellerTransaction}}</p>
     </mdb-col>
@@ -47,7 +45,7 @@ export default {
   },
   mounted() {
     let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.artwork.id);
-    if (artwork.itemType === "digiart" && !invoice.sellerTransaction) {
+    if (this.artwork.itemType === "digiart" && !invoice.sellerTransaction) {
       // initiate transaction to pay it forward, do the provenance change and
       // update the artwork record to show the buyer as owner.
       this.$store.dispatch("invoiceStore/paySeller", this.artwork).then(invoiceClaim => {

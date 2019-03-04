@@ -7,6 +7,36 @@ import artworkSearchService from "@/services/artworkSearchService";
 import moment from "moment";
 
 const myArtworksService = {
+  addSaleHistory: function(artwork, invoiceId, txid, confirmations) {
+    if (!artwork.saleHistories) {
+      artwork.saleHistories = [];
+    }
+    let sh = _.find(artwork.saleHistories, function(o) {
+      return o.buyersTxid === txid;
+    });
+    if (!sh) {
+      artwork.saleHistories.splice(0, 0, {
+        seller: artwork.owner,
+        buyer: artwork.buyer,
+        buyersTxid: txid,
+        buyersInvoiceId: invoiceId,
+        confirmations: confirmations
+      });
+    }
+  },
+  addSaleHistoryPaySellerData: function(artwork, buyersTxid, sellersTxid) {
+    if (!artwork.saleHistories) {
+      artwork.saleHistories = [];
+    }
+    let sh = _.find(artwork.saleHistories, function(o) {
+      return o.buyersTxid === buyersTxid;
+    });
+    if (!sh) {
+      throw new Error("Missing sale history?");
+    }
+    sh.sellersTxid = sellersTxid;
+  },
+
   initBlockstackRootFile: function() {
     const artworkRootFileName = store.state.constants.artworkRootFileName;
     var now = moment({}).valueOf();

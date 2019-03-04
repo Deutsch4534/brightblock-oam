@@ -2,7 +2,7 @@
 <div class="container mt-4">
   <mdb-card-body v-if="!showPaymentDetails">
     <mdb-card-title>
-    Invoice Details - <span class="text-danger">{{bitcoinState.chain}} chain</span>
+    Invoice Details - <span class="text-danger">{{bitcoinState.chain}} chain</span> {{invoice.title}}
     <!--
     <span class="text-danger">UNDER CONSTRUCTION - <a @click.prevent="showInstructions = !showInstructions">show more</a></span>
     -->
@@ -70,7 +70,7 @@
       </div>
     </div>
     <div class="w-100"></div>
-    <payment-details v-if="showPaymentDetails" :bitcoinUri="bitcoinUri" :invoiceClaim="invoiceClaim" @registerPayment="lookupTransaction"/>
+    <payment-details v-if="showPaymentDetails" :bitcoinUri="bitcoinUri" :invoiceClaim="invoiceClaim"/>
   </div>
   <div v-else>
     <div class="row">
@@ -108,7 +108,7 @@
 
             </th>
             <td></td>
-            <td @click=""><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Confirm Receipt</mdb-btn></td>
+            <td @click="paySeller"><mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Confirm Receipt</mdb-btn></td>
           </tr>
         </mdb-tbl-body>
       </mdb-tbl>
@@ -125,6 +125,7 @@ import bitcoinService from "@/services/bitcoinService";
 import invoiceService from "@/services/invoiceService";
 import PaymentDetails from "./PaymentDetails";
 import moment from "moment";
+import myArtworksService from "@/services/myArtworksService";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -165,17 +166,14 @@ export default {
     this.bitcoinUri = invoiceService.getBitcoinUri(this.invoiceClaim);
   },
   computed: {
-    confirmations() {
-      if (!this.invoiceClaim || !this.invoiceClaim.transaction) {
-        return "none";
-      }
-      return this.invoiceClaim.transaction.confirmations;
-    },
     paymentReceived() {
       return this.invoiceClaim.transaction;
     },
+    confirmations() {
+      return invoiceService.getInvoiceState(this.invoiceClaim);
+    },
     paymentConfirmed() {
-      return this.invoiceClaim.transaction.confirmations > 5;
+      return this.invoiceClaim.state === "confirmed";
     },
     timeReceived(date) {
       return moment(this.invoiceClaim.timestamp).format();
@@ -189,28 +187,17 @@ export default {
         $self.showPaymentDetails = true;
       });
     },
-    confirmGoodsReceived() {
-      let $self = this;
-      bitcoinService.payUpstreamTransaction({invoice: invoice}, function(result) {
-        console.log(result);
-        saleHistory.provenanceTxid = result;
-        artwork.saleHistory.push(saleHistory);
-      });
-    },
-    lookupTransaction() {
-      try {
-        this.showPaymentDetails = false;
-        let $self = this;
-        bitcoinService.lookupTransaction({timestamp: this.invoiceClaim.timestamp, amount: this.invoiceClaim.invoiceAmounts.totalBitcoin}, function(result) {
-          if (result) {
-            $self.invoiceClaim.transaction = result;
-          } else {
-            $self.showPaymentDetails = true;
+    paySeller() {
+      let artwork = this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.invoiceClaim.artworkId).then((artwork) => {
+        this.$store.dispatch("invoiceStore/paySeller", this.invoiceClaim.artworkId).then((invoiceClaim) => {
+          if (invoiceClaim) {
+            artwork.owner = invoiceClaim.seller.blockstackId;
+            artwork.buyer = null;
+            myArtworksService.addSaleHistoryPaySellerData(artwork, invoiceClaim.buyerTransaction.txid, invoiceClaim.sellerTransaction.txid);
+            this.$store.dispatch("myArtworksStore/updateArtwork", artwork);
           }
         });
-      } catch (err) {
-        console.log(err);
-      }
+      });
     }
   }
 };

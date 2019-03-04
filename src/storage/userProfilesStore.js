@@ -148,6 +148,8 @@ const userProfilesStore = {
                 resolve();
               }
             );
+          } else {
+            resolve(state.userProfiles[index]);
           }
         }
       });
