@@ -13,6 +13,7 @@
 
 <script>
 import { mdbBtn } from "mdbvue";
+import invoiceService from "@/services/invoiceService";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -36,7 +37,9 @@ export default {
   methods: {},
   computed: {
     confirmations() {
-      return invoiceService.getInvoiceState(this.invoiceClaim);
+      if (this.invoice) {
+        return invoiceService.getInvoiceState(this.invoice);
+      }
     },
     invoiceUrl() {
       let theId = this.invoice.invoiceId;
