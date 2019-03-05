@@ -1,28 +1,16 @@
 <template>
 <mdb-container class="py-5">
-  <mdb-modal v-if="modal" @close="modal = false">
-    <mdb-modal-header>
-      <mdb-modal-title>Profile Change</mdb-modal-title>
-    </mdb-modal-header>
-    <mdb-modal-body>{{profileUpdateMessage}}
-      <ul>
-        <li><router-link to="/my-artwork/upload">Upload Artwork</router-link></li>
-        <li><router-link to="/gallery">Gallery</router-link></li>
-      </ul>
-    </mdb-modal-body>
-    <mdb-modal-footer>
-      <mdb-btn color="secondary" @click.native="modal = false">Close</mdb-btn>
-    </mdb-modal-footer>
-  </mdb-modal>
-
+  <confirmation-modal :modal="modal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
   <!-- Supported elements -->
   <h2 class="h2-responsive">{{formTitle}}: {{myProfile.name}}</h2>
-  <form class="needs-validation py-5" novalidate @submit.prevent=checkForm($event) id="blockstackProfileForm">
     <div class="row">
+
       <div class="col-md-2">
         <img :src="blockstackProfile.avatarUrl" class="img-fluid"/>
       </div>
+
       <div class="col-md-8 mb-4">
+
         <div class="row">
           <p><a href="http://localhost:8888/profiles" target="_blank">Edit blockstack profile</a></p>
         </div>
@@ -33,6 +21,7 @@
 
         <bitcoin-address-entry v-if="showBitcoinAddress" :myProfile="myProfile" @bitcoinAddressUpdate="updateBitcoinAddress"/>
 
+        <form class="needs-validation py-5" novalidate @submit.prevent=checkForm($event) id="blockstackProfileForm">
         <div class="row mb-4">
           <div class="col-md-12">
             <mdb-popover trigger="click" :options="{placement: 'top'}">
@@ -97,16 +86,16 @@
             <mdb-btn size="lg" type="submit" class="btn-main btn-block"><a @click="checkForm($event)">Submit</a></mdb-btn>
           </div>
         </div>
-      </div>
+      </form>
     </div>
-  </form>
+  </div>
 </mdb-container>
 </template>
 
 <script>
 import { mdbIcon, mdbPopover, mdbCol, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
-import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter } from 'mdbvue';
 import MyArtworkManageImage from "../myArtwork/MyArtworkManageImage";
+import ConfirmationModal from "../utils/ConfirmationModal";
 import AddressForm from "../utils/AddressForm";
 import moment from "moment";
 import myAccountService from "@/services/myAccountService";
@@ -118,12 +107,8 @@ export default {
   components: {
     BitcoinAddressEntry,
     MyArtworkManageImage,
+    ConfirmationModal,
     AddressForm,
-    mdbModal,
-    mdbModalHeader,
-    mdbModalTitle,
-    mdbModalBody,
-    mdbModalFooter,
     mdbContainer,
     mdbIcon,
     mdbPopover,
@@ -141,7 +126,11 @@ export default {
     return {
       errors: [],
       modal: false,
-      showAttachArt: false,
+      modalTitle: "Profile updated",
+      modalContent: "<p>Profile updated successfully: where to next?</p><ul class='m-3'>" +
+          "<li class='mb-3'><router-link to='/my-artwork/upload'>Upload Artwork</router-link></li>" +
+          "<li><router-link to='/gallery'>Gallery</router-link></li>" +
+        "</ul>",
       addressBlurb: "Your shipping address is encrypted and stored in your gaia bucket. It will only ever be decrypted in case where this is necessary - such as when you have bought some artwork and the seller needs your shipping information",
       myProfile: {
         publicKeyData: {}
@@ -183,6 +172,9 @@ export default {
           $self.modal = true;
         });
     },
+    closeModal: function() {
+      this.modal = false;
+    },
     updateBitcoinAddress(newAddress) {
       this.validBitcoinAdress = newAddress;
     },
@@ -194,7 +186,6 @@ export default {
         event.preventDefault;
         event.target.classList.add('was-validated');
       }
-      this.showAttachArt = false;
       this.errors = [];
       if (!this.myProfile.publicKeyData.bitcoinAddress) {
         this.errors.push("Your bitcoin address is required.");
@@ -206,36 +197,6 @@ export default {
         return false;
       } else {
         this.upload();
-      }
-    },
-    deleteProfilePicture: function() {
-      this.blockstackProfile.images = [];
-    },
-    loadProfilePicture: function(e) {
-      this.load(e, this.blockstackProfile.images, 1);
-    },
-    load: function(e, arrayToLoad, limit) {
-      this.showAttachArt = false;
-      let userFiles = e.dataTransfer.files;
-      let fileObject = null;
-      for (let i = 0; i < userFiles.length; i++) {
-        if (i === limit) {
-          break;
-        }
-        fileObject = userFiles[i];
-        let thisFile = {
-          lastModified: fileObject.lastModified,
-          lastModifiedDate: fileObject.lastModifiedDate,
-          name: fileObject.name,
-          size: fileObject.size,
-          type: fileObject.type
-        };
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          thisFile.dataUrl = e.target.result;
-          arrayToLoad.push(thisFile);
-        };
-        reader.readAsDataURL(fileObject);
       }
     }
   }

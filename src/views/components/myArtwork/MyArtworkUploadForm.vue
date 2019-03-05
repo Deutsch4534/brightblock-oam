@@ -3,8 +3,6 @@
     <!-- Supported elements -->
     <h1 class="h1-responsive">{{formTitle}}</h1>
     <form class="needs-validation py-5 form-transparent" novalidate @submit.prevent="checkForm" id="artworkForm">
-
-
   <!-- item type -->
   <div class="row justify-content-between">
 
@@ -310,7 +308,7 @@
         artwork: {
           artistry: {},
           itemType: null,
-          keywords: "Photography,Illustration.3D,2D,Film & Video,Mix-media",
+          keywords: "digital,artwork,illustration",
           artist: null,
           owner: null,
           editions: 1,

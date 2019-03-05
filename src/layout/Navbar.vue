@@ -17,15 +17,9 @@
         <router-link class="btn nav-link navbar-link px-3" to="/gallery">Gallery</router-link>
         <router-link class="btn nav-link navbar-link px-3" to="/artists">Artists</router-link>
         <router-link class="btn nav-link navbar-link px-3" to="/online-auctions">Auctions</router-link>
-
         <upload-links v-if="loggedIn"/>
-
-        <mdb-nav-item v-if="!loggedIn">
-          <router-link to="/login">Login</router-link>
-        </mdb-nav-item>
-
         <account-links v-if="loggedIn"/>
-
+        <router-link v-else class="btn nav-link navbar-link px-3" to="/login">Login</router-link>
       </mdb-navbar-nav>
     </mdb-navbar-toggler>
 
@@ -54,7 +48,6 @@ import AccountLinks from "@/layout/AccountLinks";
 import UploadLinks from "@/layout/UploadLinks";
 import artworkSearchService from "@/services/artworkSearchService";
 import myAccountService from '../services/myAccountService';
-import SplashLinks from './SplashLinks';
 
 export default {
   name: 'Navbar',
@@ -68,11 +61,9 @@ export default {
       title: "title",
       taglink2: '',
       logo: require("@/assets/img/logo/logo-black-256x256.png"),
-      splashLinks: Boolean
     };
   },
   components: {
-    SplashLinks,
     UploadLinks,
     AccountLinks,
     mdbContainer,

@@ -107,7 +107,7 @@ export default {
     border: none;
     top: 11px;
     border-radius: 0;
-    margin-top: -10px;
+    margin-top: -5px;
   }
 
   .btn.dropdown-toggle { color: black; }
