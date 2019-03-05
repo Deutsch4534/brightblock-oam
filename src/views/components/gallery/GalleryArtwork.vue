@@ -7,7 +7,7 @@
         </mdb-view>
       </router-link>
     <mdb-card-body class="px-0">
-      <mdb-card-title class="h2-responsive subtitle">{{artwork.title}}<br /><span class="small">by: {{artwork.artist}}</span></mdb-card-title>
+      <mdb-card-title class="h2-responsive subtitle">{{artwork.title}}<br /><span class="small">by: {{shortName(artwork.artist)}}</span></mdb-card-title>
       <mdb-card-text v-if="debugMode">{{artwork.bcitem.itemIndex}}, Owner: {{artwork.owner}}</mdb-card-text>
       <mdb-card-text v-if="debugMode">{{artwork.bitcoinTx}}, Owner: {{artwork.owner}}</mdb-card-text>
       <mdb-card-text>{{artwork.description}}</mdb-card-text>
@@ -54,6 +54,16 @@ export default {
       } else {
         this.responsive = false;
       }
+    },
+    shortName(bsname) {
+      if (!bsname) {
+        return "";
+      }
+      let user = this.$store.getters["userProfilesStore/getProfile"](bsname);
+      if (user && user.name) {
+        return user.name;
+      }
+      return bsname.split(".")[0];
     }
   },
   computed: {

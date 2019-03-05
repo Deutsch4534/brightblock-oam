@@ -1,32 +1,21 @@
 <template>
   <mdb-dropdown>
-    <mdb-dropdown-toggle class="user-menu dropleft px-2 py-0" color="stylish" slot="toggle" waves-fixed id="userMainMenuBtn">
-      <img style="width: 40px; height: 40px; border-radius: 20px;" :src="avatarUrl"/>
-      <!--<mdb-icon icon="user-circle" />-->
+    <mdb-dropdown-toggle tag="a" class="dropleft" slot="toggle">
+      Upload
     </mdb-dropdown-toggle>
 
     <mdb-dropdown-menu class="dropdown-menu-right" id="userMainMenu" >
-      <mdb-dropdown-item tag="div">
-       <strong>{{ username }}</strong>
+
+      <mdb-dropdown-item>
+        <router-link to="/my-artwork/upload" class="dropdown-item">Upload Artwork</router-link>
       </mdb-dropdown-item>
 
       <mdb-dropdown-item>
-        <router-link class="dropdown-item" to="/profile/update">Settings</router-link>
-      </mdb-dropdown-item>
-
-      <mdb-dropdown-item v-if="hasInvoices">
-        <router-link class="dropdown-item" to="/invoices">
-          Invoices <mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge>
-          <span class="sr-only">invoices</span>
-        </router-link>
+        <router-link to="/my-auctions/upload" class="dropdown-item">Upload Auction</router-link>
       </mdb-dropdown-item>
 
       <mdb-dropdown-item>
-        <router-link class="dropdown-item" to="/admin/settings" v-if="showAdmin">Admin</router-link>
-      </mdb-dropdown-item>
-
-      <mdb-dropdown-item>
-        <a href="#" class="dropdown-item" @click.prevent="logout">Logout</a>
+        <router-link to="/my-artworks" class="dropdown-item">My Artwork</router-link>
       </mdb-dropdown-item>
 
     </mdb-dropdown-menu>
@@ -118,6 +107,7 @@ export default {
     border: none;
     top: 11px;
     border-radius: 0;
+    margin-top: -10px;
   }
 
   .btn.dropdown-toggle { color: black; }

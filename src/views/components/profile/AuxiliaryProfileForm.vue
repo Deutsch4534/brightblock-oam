@@ -1,5 +1,20 @@
 <template>
 <mdb-container class="py-5">
+  <mdb-modal v-if="modal" @close="modal = false">
+    <mdb-modal-header>
+      <mdb-modal-title>Profile Change</mdb-modal-title>
+    </mdb-modal-header>
+    <mdb-modal-body>{{profileUpdateMessage}}
+      <ul>
+        <li><router-link to="/my-artwork/upload">Upload Artwork</router-link></li>
+        <li><router-link to="/gallery">Gallery</router-link></li>
+      </ul>
+    </mdb-modal-body>
+    <mdb-modal-footer>
+      <mdb-btn color="secondary" @click.native="modal = false">Close</mdb-btn>
+    </mdb-modal-footer>
+  </mdb-modal>
+
   <!-- Supported elements -->
   <h2 class="h2-responsive">{{formTitle}}: {{myProfile.name}}</h2>
   <form class="needs-validation py-5" novalidate @submit.prevent=checkForm($event) id="blockstackProfileForm">
@@ -44,11 +59,13 @@
             <input type="email" class="form-control" id="vc-email" placeholder="email address" v-model="auxiliaryProfile.emailAddress" required>
           </div>
         </div>
+        <!--
         <div class="row mb-4">
           <div class="col-md-6">
             <input type="text" class="form-control" id="vc-bspubkey" placeholder="pubkey" v-model="myProfile.publicKey" readonly>
           </div>
         </div>
+        -->
 
         <div class="row mb-4">
           <div class="col-md-12">
@@ -58,7 +75,7 @@
                   Trusted users
                 </div>
                 <div class="popover-body">
-                  Comma separated list of blockstack user ids.
+                  Trusted users will be able to decrypt your profile information - please enter as comma separated list of blockstack user ids.
                 </div>
               </div>
               <a @click.prevent="" slot="reference">
@@ -88,6 +105,7 @@
 
 <script>
 import { mdbIcon, mdbPopover, mdbCol, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
+import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter } from 'mdbvue';
 import MyArtworkManageImage from "../myArtwork/MyArtworkManageImage";
 import AddressForm from "../utils/AddressForm";
 import moment from "moment";
@@ -101,6 +119,11 @@ export default {
     BitcoinAddressEntry,
     MyArtworkManageImage,
     AddressForm,
+    mdbModal,
+    mdbModalHeader,
+    mdbModalTitle,
+    mdbModalBody,
+    mdbModalFooter,
     mdbContainer,
     mdbIcon,
     mdbPopover,
@@ -117,6 +140,7 @@ export default {
   data() {
     return {
       errors: [],
+      modal: false,
       showAttachArt: false,
       addressBlurb: "Your shipping address is encrypted and stored in your gaia bucket. It will only ever be decrypted in case where this is necessary - such as when you have bought some artwork and the seller needs your shipping information",
       myProfile: {
@@ -127,7 +151,8 @@ export default {
       },
       blockstackProfile: {},
       validBitcoinAdress: false,
-      showBitcoinAddress: false
+      showBitcoinAddress: false,
+      profileUpdateMessage: "Profile updated successfully: where to next?"
     };
   },
   mounted() {
@@ -151,7 +176,11 @@ export default {
       let $self = this;
       this.$store.dispatch("myAccountStore/updateAuxiliaryProfile", this.auxiliaryProfile)
         .then(auxiliaryProfile => {
-          // $self.$router.push("/my-artwork/upload");
+          $self.modal = true;
+        })
+        .catch(() => {
+          $self.profileUpdateMessage = "Error updating profile.";
+          $self.modal = true;
         });
     },
     updateBitcoinAddress(newAddress) {

@@ -41,6 +41,7 @@ Vue.mixin({
     };
   },
   methods: {
+    /**
     toggleMenu(){
       const toggler = document.querySelector('.navbar-toggler');
       toggler.click();
@@ -51,6 +52,7 @@ Vue.mixin({
         this.toggleMenu();
       }
     }
+    **/
   }
 });
 

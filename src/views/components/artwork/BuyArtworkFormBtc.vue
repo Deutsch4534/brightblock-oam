@@ -1,24 +1,19 @@
 <template>
-<mdb-col col="12" md="8" class="pl-md-5" v-else>
-  <mdb-row class="pt-3">
-    <mdb-col col="12">
-      <p class="h5-responsive serif-italic">{{registerMessageBtc}}</p>
-      <div>
-        <!-- TODO: Connect currency buttons to conditionally display price next to button -->
-        <div>
-          {{fiatMessage}} <mdb-btn size="sm" color="white" rounded>EUR</mdb-btn>
-          {{btcMessage}} <mdb-btn size="sm" color="white" rounded>BTC</mdb-btn>
-        </div>
-        <div class="row">
-          <div class="col-12 mt-3">
-            <mdb-btn @click="buyArtwork()" :disabled="!purchaseState.canBuy" type="submit" size="md" class="btn-main btn-block">{{label}}</mdb-btn>
-          </div>
-        </div>
-        <div class="w-100"></div>
+<mdb-row class="pt-1">
+  <mdb-col col="12">
+    <p class="h5-responsive serif-italic">{{registerMessageBtc}}</p>
+    <div>
+      {{moneySymbol}} <strong>{{artwork.saleData.amount}}</strong> EUR = <strong>{{btcMessage}}</strong> BTC
+    </div>
+    <div class="row">
+      <div class="col-12 mt-3">
+        <router-link v-if="iamowner" to="/my-artworks"><mdb-btn size="md" class="btn-main btn-block">{{label}}</mdb-btn></router-link>
+        <mdb-btn v-else @click="buyArtwork()" :disabled="!purchaseState.canBuy" type="submit" size="md" class="btn-main btn-block">{{label}}</mdb-btn>
       </div>
-    </mdb-col>
-  </mdb-row>
-</mdb-col>
+    </div>
+    <div class="w-100"></div>
+  </mdb-col>
+</mdb-row>
 </template>
 
 <script>
@@ -36,6 +31,7 @@ export default {
   },
   props: {
     purchaseState: {},
+    iamowner: false,
     artwork: {
       type: Object,
       default() {
@@ -48,19 +44,9 @@ export default {
   methods: {
     buyArtwork() {
       this.$emit("buy");
-    }
+    },
   },
   computed: {
-    fiatMessage() {
-      try {
-        let symbol = moneyUtils.currencySymbol(this.artwork.saleData.fiatCurrency);
-        let fc = this.artwork.saleData.fiatCurrency;
-        let amount = this.artwork.saleData.amount;
-        return symbol + " " + amount;
-      } catch (e) {
-        return "";
-      }
-    },
     registerMessageBtc() {
       let artwork = this.artwork;
       let message;
@@ -81,6 +67,13 @@ export default {
       }
       return message;
     },
+    moneySymbol() {
+      try {
+        return moneyUtils.currencySymbol(this.artwork.saleData.fiatCurrency);
+      } catch (e) {
+        return "";
+      }
+    },
     btcMessage() {
       try {
         let value = moneyUtils.valueInBitcoin(this.artwork.saleData.fiatCurrency, this.artwork.saleData.amount);
@@ -91,12 +84,17 @@ export default {
     },
     label() {
       try {
+        if (this.iamowner) {
+           return "manage artwork";
+        }
         let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
         if (this.artwork && myProfile.username === this.artwork.owner) {
           return "Payment Info";
         }
-        return "Buy Artwork";
+        let value = moneyUtils.valueInBitcoin(this.artwork.saleData.fiatCurrency, this.artwork.saleData.amount);
+        return "Buy Artwork " + value + " BTC";
       } catch (e) {
+        console.log("Error formatting buy label: " + e);
         return "Buy Now";
       }
     }

@@ -60,7 +60,7 @@ const ethereumService = {
     });
   },
   getNetworkType: function() {
-    let networkId = this.getWeb3().version.network;
+    let networkId = -1; // this.getWeb3().version.network;
     let networkName = "";
     switch (networkId) {
       case "1":

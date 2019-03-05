@@ -28,6 +28,7 @@ import Invoice from "./views/Invoice";
 import Search from "./views/Search";
 
 import MyArtworks from "./views/MyArtworks";
+import MyArtwork from "./views/MyArtwork";
 import Registration from "./views/components/myArtwork/Registration";
 import RegisterForSale from "./views/components/myArtwork/RegisterForSale";
 import RegisterForAuction from "./views/components/myArtwork/RegisterForAuction";
@@ -51,7 +52,7 @@ Vue.use(Router);
 const router = new Router({
   routes: [
     {
-      path: "/",
+      path: "/index",
       name: "index",
       components: {
         default: Index,
@@ -64,13 +65,18 @@ const router = new Router({
       }
     },
     {
+      path: "/",
+      name: "gallery",
+      components: {
+        default: Gallery,
+        header: Navbar,
+        footer: Footer
+      }
+    },
+    {
       path: "/gallery",
       name: "gallery",
       components: { default: Gallery, header: Navbar, footer: Footer },
-      props: {
-        header: { colorOnScroll: 400 },
-        footer: { backgroundColor: "black" }
-      }
     },
     {
       path: "/login",
@@ -214,6 +220,16 @@ const router = new Router({
       name: "my-artworks",
       components: {
         default: MyArtworks,
+        header: Navbar,
+        footer: Footer
+      },
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/my-artworks/:artworkId",
+      name: "my-artwork",
+      components: {
+        default: MyArtwork,
         header: Navbar,
         footer: Footer
       },

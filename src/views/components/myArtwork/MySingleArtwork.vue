@@ -118,7 +118,7 @@ export default {
       return `/my-artwork/update/${this.artwork.id}`;
     },
     buyNowUrl() {
-      return `/artworks/${this.artwork.id}`;
+      return `/my-artworks/${this.artwork.id}`;
     },
     registerUrl() {
       return `/my-artwork/register/${this.artwork.id}`;

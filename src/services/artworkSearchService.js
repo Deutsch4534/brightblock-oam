@@ -51,7 +51,13 @@ const artworkSearchService = {
               artworkSearchService.storeArtwork(searchResult, userRootFile.records, success);
             });
           }
-        });
+        })
+          .catch(function() {
+            console.log({
+              ERR_CODE: 101,
+              message: "Error fetching root artworkfile for user=" + username
+            });
+          });
       });
     });
   },

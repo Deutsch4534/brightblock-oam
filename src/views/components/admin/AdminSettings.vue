@@ -32,6 +32,10 @@
     <div class="col-md-2">Debug Mode:</div>
     <div class="col-md-10"><mdb-btn class="primary" @click="toggleDebugMode">{{debugModeLabel}}</mdb-btn></div>
   </div>
+  <div class="row">
+    <div class="col-md-2">Power User:</div>
+    <div class="col-md-10"><mdb-btn class="primary" @click="togglePowerUser">{{powerUserLabel}}</mdb-btn></div>
+  </div>
 
   <h3>Feature Settings</h3>
   <div class="row">
@@ -148,6 +152,15 @@ export default {
     toggleDebugMode() {
       this.$store.commit("toggleDebugMode");
     },
+    togglePowerUser() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      if (myProfile.showAdmin) {
+        myProfile.showAdmin = false;
+      } else {
+        myProfile.showAdmin = true;
+      }
+      this.$store.commit("myAccountStore/myProfile", myProfile);
+    },
     toggleAuctionsFeature() {
       this.$store.commit("toggleFeatureAuctions");
     },
@@ -261,6 +274,14 @@ export default {
     debugMode() {
       let debugMode = this.$store.state.constants.debugMode;
       return debugMode;
+    },
+    powerUserLabel() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      if (myProfile.showAdmin) {
+        return "on";
+      } else {
+        return "off";
+      }
     },
     debugModeLabel() {
       let debugMode = this.$store.getters["isDebugMode"];

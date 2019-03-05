@@ -12,9 +12,8 @@
           <span class="serif">Independent Art Market</span>
           <div class="d-inline-block">
             <mdb-icon class="mx-3" icon="heart"/>
-            <span @click="scrollToElement('DonateSection', $event); closeMenu()" class="font-weight-normal">
-              <router-link to="/" name="sectionUrl('DonateSection')">
-                Donate</router-link>
+            <span class="font-weight-normal">
+              <router-link to="/index" name="sectionUrl('DonateSection')">Info</router-link>
             </span>
           </div>
         </mdb-col>

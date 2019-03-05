@@ -5,8 +5,10 @@
         <single-artist :artist="artist" class="col-sm-12 col-md-4 col-lg-3 mb-3 artist-page"/>
         <div class="col-sm-12 col-md-8 col-lg-9">
           <h2 class="h3-responsive mb-5">All artworks</h2>
-          <div id="artist-all-artworks">
-            <last-artworks :artworks="artworks"/>
+          <div id="artist-all-artworks" class="bg-dark flex-1 p-5 m-3">
+            <div class="row">
+              <gallery-artwork v-for="(artwork, index) in artworks" :key="index" :artwork="artwork" class="gallery-item col-sm-6 col-md-6 col-lg-6"/>
+            </div>
           </div>
         </div>
       </mdb-row>
@@ -20,14 +22,14 @@ import SingleArtwork from './components/artwork/SingleArtwork'
 import ArtworksList from './components/artwork/ArtworksList'
 import { mdbContainer, mdbRow } from 'mdbvue';
 import SingleArtist from './components/artists/SingleArtist'
-import LastArtworks from "./components/home/LastArtworks";
+import GalleryArtwork from "./components/gallery/GalleryArtwork";
 import artworkSearchService from "@/services/artworkSearchService";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: 'Artist',
   components: {
-    LastArtworks,
+    GalleryArtwork,
     ArtworksList,
     SingleArtwork,
     SingleArtist,

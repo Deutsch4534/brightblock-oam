@@ -13,12 +13,12 @@
           <h1 class="h5-responsive"><mdb-icon title="Digital work" far icon="dot-circle" v-if="artwork.itemType === 'digiart'"/> {{artwork.title}}</h1>
           <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, {{created}}</p>
           <p class="mb-1">{{artwork.description}}</p>
-          <p>{{aboutArtwork.keywords}}</p>
+          <p>{{keywords}}</p>
+          <buy-artwork-form-btc v-if="isRegisteredBtc && isPriceSetBtc && !purchaseBegun" :iamowner="iamowner" :purchaseState="purchaseStateBtc" :artwork="artwork" @buy="buyArtwork()"/>
         </mdb-col>
-        <shopping-owner-view v-if="ready && iamowner" :artwork="artwork"/>
-        <shopping-buyer-view v-else-if="ready && iambuyer && purchaseBegun" :artwork="artwork"/>
+        <!-- <shopping-owner-view v-if="ready && iamowner" :artwork="artwork"/> -->
+        <shopping-buyer-view v-if="ready && iambuyer && purchaseBegun" :artwork="artwork"/>
         <invoice-details v-else-if="showInvoiceDetails" :invoiceClaim="invoiceClaim"/>
-        <buy-artwork-form-btc v-if="isRegisteredBtc && isPriceSetBtc && !purchaseBegun && !iamowner" :purchaseState="purchaseStateBtc" :artwork="artwork" @buy="buyArtwork()"/>
       </mdb-row>
     </mdb-col>
   </mdb-row>
@@ -139,6 +139,13 @@ export default {
         return moment(this.artwork.created).format("DD/MMM/YYYY");
       }
       return moment(this.artwork.id).format("DD/MMM/YYYY");
+    },
+    keywords() {
+      if (this.artwork.keywords) {
+        let keys = this.artwork.keywords.split(",");
+        return keys.join(" ");
+      }
+      return "";
     },
     aboutArtwork() {
       let artwork = this.artwork;

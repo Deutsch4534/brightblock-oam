@@ -1,6 +1,6 @@
 <template>
 <mdb-container id="ContactSection" class="py-5">
-    <section class="py-3 py-md-5 px-0">
+    <section class="px-0">
       <mdb-row>
         <mdb-col col="12" lg="10">
         <h2 class="large-title mb-5">{{title}}</h2>

@@ -10,8 +10,8 @@
       <router-link :to="buyNowUrl">
         <mdb-card-title class="h2-responsive subtitle">{{artwork.title}}</mdb-card-title>
       </router-link>
-      <mdb-card-text>{{artwork.description}}<br /><span class="small">by: {{artwork.artist}}</span></mdb-card-text>
-      <mdb-card-text v-if="debugMode">of: {{artwork.owner}}</mdb-card-text>
+      <mdb-card-text>{{artwork.description}}<br /><span class="small">by: {{shortName(artwork.artist)}}</span></mdb-card-text>
+      <mdb-card-text v-if="debugMode">of: {{shortName(artwork.owner)}}</mdb-card-text>
       <mdb-card-text><selling-options-for-search :artwork="artwork"/></mdb-card-text>
 
     </mdb-card-body>
@@ -47,13 +47,25 @@ export default {
       default: 4
     }
   },
+  methods: {
+    shortName(bsname) {
+      if (!bsname) {
+        return "";
+      }
+      let user = this.$store.getters["userProfilesStore/getProfile"](bsname);
+      if (user && user.name) {
+        return user.name;
+      }
+      return bsname.split(".")[0];
+    }
+  },
   computed: {
     debugMode() {
       return this.$store.state.constants.debugMode;
     },
     buyNowUrl() {
       return `/artworks/${this.artwork.id}`;
-    }
+    },
   }
 };
 </script>
