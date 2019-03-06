@@ -4,7 +4,7 @@
 <nav class="navbar navbar-expand-lg">
 
   <!-- mdbNavbar brand -->
-  <form class="search-form">
+  <form class="md-form search-form">
     <a type="button" @click="doSearch"><mdb-icon class="mb-0 mr-2" icon="search" /></a>
     <input label="Search" type="text" class="mt-0 mb-0" v-model="query" placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
   </form>
@@ -17,17 +17,16 @@
       <span class="white-text"><i class="fas fa-bars fa-1x"></i></span>
   </button>
 
-  <div class="collapse navbar-collapse" :class="toggleClass" id="navbarSupportedContent">
+  <div class="collapse navbar-collapse text-right" :class="toggleClass" id="navbarSupportedContent">
   <!--  <span class="dark-blue-text"><i class="fas fa-bars fa-1x"></i></span> -->
     <ul class="navbar-nav ml-auto">
-
-      <li class="nav-item"><router-link class="nav-link navbar-link" to="/gallery">Gallery</router-link></li>
-      <li class="nav-item"><router-link class="nav-link navbar-link" to="/artists">Artists</router-link></li>
-      <li class="nav-item"><router-link class="nav-link navbar-link" to="/online-auctions">Auctions</router-link></li>
-      <li class="nav-item"><router-link class="nav-link navbar-link" to="/my-artworks">My Artwork</router-link></li>
+      <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/gallery">Gallery</router-link></li>
+      <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/artists">Artists</router-link></li>
+      <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/online-auctions">Auctions</router-link></li>
+      <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/my-artworks">My Artwork</router-link></li>
       <upload-links v-if="loggedIn"/>
       <account-links v-if="loggedIn"/>
-      <li class="nav-item"><router-link v-if="!loggedIn" class="btn nav-link navbar-link px-3" to="/login">Login</router-link></li>
+      <li class="nav-item" @click="closeMenu"><router-link v-if="!loggedIn" class="btn nav-link navbar-link px-3" to="/login">Login</router-link></li>
     </ul>
   </div>
 
@@ -117,6 +116,9 @@ export default {
         this.taglink2 = document.data.taglink2[0].text;
       });
     },
+    closeMenu() {
+      this.toggleClass = "";
+    },
     toggleNav() {
       if (this.toggleClass === "show") {
         this.toggleClass = "";
@@ -168,8 +170,13 @@ export default {
   background-color: #ccc;
   z-index: 10;
   padding: 30px;
-  margin-left: 400px;
+  padding-left: 90px;
 }
+
+.navbar .md-form {
+  margin: 0;
+}
+
 i.fa-search {
   color: black;
   transform: rotate(90deg);
@@ -177,22 +184,26 @@ i.fa-search {
 }
 .search-form input, .login-link, .nav-cta { font-size: 20px; font-weight: normal; }
 .search-form input { border-bottom: none; }
-.search-form input:focus { box-shadow: none!important; border-bottom: none!important; }
+.search-form input:focus { box-shadow: none!important; border-bottom: 1pt solid black!important; }
 
 .search-form input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: black;
+  color: grey;
+  font-size: 0.7em;
   text-transform: uppercase;
 }
 .search-form input::-moz-placeholder { /* Firefox 19+ */
-  color: black;
+  color: grey;
+  font-size: 0.7em;
   text-transform: uppercase;
 }
 .search-form input:-ms-input-placeholder { /* IE 10+ */
-  color: black;
+  color: grey;
+  font-size: 0.7em;
   text-transform: uppercase;
 }
 .search-form input:-moz-placeholder { /* Firefox 18- */
-  color: black;
+  color: grey;
+  font-size: 0.7em;
   text-transform: uppercase;
 }
 .search-form button.transparent { border: none; background: transparent; color: black; }
