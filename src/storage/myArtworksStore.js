@@ -64,7 +64,7 @@ const myArtworksStore = {
       if (!artwork) {
         artwork = {
           itemType: "digiart",
-          keywords: "Photography,Illustration.3D,2D,Film & Video,Mix-media",
+          keywords: "digital,artwork,illustration",
           artist: "unknown",
           owner: "unknown",
           saleData: {},

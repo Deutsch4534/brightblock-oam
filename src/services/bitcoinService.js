@@ -26,10 +26,8 @@ const bitcoinService = {
       });
   },
   registerTx: function(data, success, failure) {
-    //success({
-    //  rawTx: "bananas",
-    //  decodedTransaction: "oranges"
-    //});
+    // let decTx = JSON.stringify({decodeTx: "03efesfewfew"});
+    // success({"sentTx":"oranges", rawTx: "0r34ewwedscdsvd", decodedTransaction: decTx});
     let endPoint = store.state.constants.btcGatewayUrl + "/bitcoin/register";
     xhrService.makePostCall(endPoint, data).then(function(response) {
       success(response.data.details);

@@ -128,8 +128,8 @@ export default {
       modal: false,
       modalTitle: "Profile updated",
       modalContent: "<p>Profile updated successfully: where to next?</p><ul class='m-3'>" +
-          "<li class='mb-3'><router-link to='/my-artwork/upload'>Upload Artwork</router-link></li>" +
-          "<li><router-link to='/gallery'>Gallery</router-link></li>" +
+        "<li class='mb-3'><a href='#/my-artwork/upload'>Upload Artwork</a></li>" +
+        "<li><a href='#/gallery'>Gallery</a></li>" +
         "</ul>",
       addressBlurb: "Your shipping address is encrypted and stored in your gaia bucket. It will only ever be decrypted in case where this is necessary - such as when you have bought some artwork and the seller needs your shipping information",
       myProfile: {

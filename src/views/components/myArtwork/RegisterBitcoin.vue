@@ -1,5 +1,5 @@
 <template>
-<mdb-card-body v-if="featureBitcoin">
+<mdb-card-body>
   <mdb-card-title>
     <mdb-popover trigger="click" :options="{placement: 'top'}">
       <div class="popover">
@@ -7,8 +7,8 @@
           Bitcoin Blockchain
         </div>
         <div class="popover-body">
-          We display your bitcoin address with your artwork and in your certificate of authenticity
-          to maximise your income from your artwork.
+          The bitcoin address of the artist can be displayed in the certificate of authenticity
+          of the artwork.
         </div>
       </div>
       <a @click.prevent="" slot="reference">
@@ -26,13 +26,12 @@
   <mdb-card-text v-if="showArtworkHash">
     {{artworkHash}}
   </mdb-card-text>
-  <a class="black-text d-flex justify-content-end"><mdb-btn color="primary" size="md" :disabled="registered" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
+  <a class="black-text d-flex justify-content-end" v-if="!bitcoinTx"><mdb-btn color="primary" size="md" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
   <hr/>
 </mdb-card-body>
 </template>
 
 <script>
-import CreateCoa from "./CreateCoa";
 import utils from "@/services/utils";
 import notify from "@/services/notify";
 import moment from "moment";
@@ -43,7 +42,6 @@ import { mdbPopover, mdbCol, mdbView, mdbMask, mdbRow, mdbContainer, mdbCard, md
 export default {
   name: "Registration",
   components: {
-    CreateCoa,
     mdbPopover,
     mdbContainer,
     mdbCol,
@@ -63,61 +61,43 @@ export default {
       artworkId: null,
       from: "/my-artworks",
       bitcoinTx: null,
-      showArtworkHash: null
+      showArtworkHash: null,
     };
   },
   mounted() {
     this.artworkId = Number(this.$route.params.artworkId);
     let $self = this;
     this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
-      this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId);
+      this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId).then(artwork => {
+        this.bitcoinTx = artwork.bitcoinTx;
+      });
     });
   },
   computed: {
     artworkHash() {
-      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-        this.artworkId
-      );
+      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
       return utils.buildBitcoinHash(artwork);
-    },
-    featureBitcoin() {
-      return this.$store.state.constants.featureBitcoin;
     },
     bitcoinState() {
       let state = this.$store.getters["bitcoinStore/getBitcoinState"];
       return state;
     },
     artwork() {
-      let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-        this.artworkId
-      );
+      let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
       if (!a.image) {
         a.image = require("@/assets/img/logo/logo-black-256x256.png");
       }
       return a ? a : {};
     },
     myArtist() {
-      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-        this.artworkId
-      );
+      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
       return this.$store.getters["userProfilesStore/getProfile"](
         artwork.artist
       );
     },
-    registered() {
-      if (!this.artworkId) {
-        return false;
-      }
-      let bcstatus = this.$store.getters["myArtworksStore/bcstatus"](
-        this.artworkId
-      );
-      return bcstatus.itemId > -1;
-    },
     canRegister() {
       try {
-        let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-          this.artworkId
-        );
+        let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
         return artwork.artwork.length > 0;
       } catch (e) {
         return false;
@@ -125,16 +105,9 @@ export default {
     }
   },
   methods: {
-    closeModal: function() {
-      this.$router.push(this.from);
-    },
-    setByEventCoa (coa) {
-      // moved to child - we just update the store so no need for parent to know.
-    },
     registerArtworkBitcoin: function() {
-      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-        this.artworkId
-      );
+      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
+      this.modal = true;
       try {
         let regData = {
           title: artwork.title,
@@ -145,14 +118,15 @@ export default {
         let $self = this;
         bitcoinService.registerTx(regData,
           function(result) {
-            $self.bitcoinTx = result.sentTx;
-            artwork.bitcoinTx = result.sentTx;
+            $self.artwork.bitcoinTx = result.sentTx;
             $self.$store.dispatch("myArtworksStore/updateArtwork", artwork);
-            $self.decodedTransaction = JSON.parse(result.decodedTransaction);
+            $self.$emit("registerStatusUpdate", result.sentTx);
           }, function(error) {
+            $self.$emit("registerStatusUpdate", error);
             console.log(error);
           });
       } catch (err) {
+        $self.$emit("registerStatusUpdate", error);
         console.log(err);
       }
     },
