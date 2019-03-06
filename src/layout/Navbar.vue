@@ -1,34 +1,39 @@
 <template>
 <!-- Main navigation 424f95 -->
 <header>
-  <!-- Navbar -->
-  <mdb-navbar>
+<nav class="navbar navbar-expand-lg">
 
-    <!-- mdbNavbar brand -->
-    <mdb-navbar-brand>
-      <form class="md-form search-form">
-        <a type="button" @click="doSearch"><mdb-icon class="mb-0 mr-2" icon="search" /></a>
-        <input label="Search" type="text" class="mt-0 mb-0" v-model="query" placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
-      </form>
-    </mdb-navbar-brand>
-    <mdb-navbar-toggler>
-      <mdb-navbar-nav right>
+  <!-- mdbNavbar brand -->
+  <form class="navbar-brand">
+    <a type="button" @click="doSearch"><mdb-icon class="mb-0 mr-2" icon="search" /></a>
+    <input label="Search" type="text" class="mt-0 mb-0" v-model="query" placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
+  </form>
+  <button @click.prevent="toggleNav" class="navbar-toggler toggler-example black darken-3" type="button"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="white-text"><i class="fas fa-bars fa-1x"></i></span>
+  </button>
 
-        <router-link class="btn nav-link navbar-link px-3" to="/gallery">Gallery</router-link>
-        <router-link class="btn nav-link navbar-link px-3" to="/artists">Artists</router-link>
-        <router-link class="btn nav-link navbar-link px-3" to="/online-auctions">Auctions</router-link>
-        <router-link class="btn nav-link navbar-link px-3" to="/my-artworks">My Artwork</router-link>
+  <div class="collapse navbar-collapse" :class="toggleClass" id="navbarSupportedContent">
+  <!--  <span class="dark-blue-text"><i class="fas fa-bars fa-1x"></i></span> -->
+    <ul class="navbar-nav ml-auto">
 
-        <upload-links v-if="loggedIn"/>
-        <account-links v-if="loggedIn"/>
-        <router-link v-else class="btn nav-link navbar-link px-3" to="/login">Login</router-link>
-      </mdb-navbar-nav>
-    </mdb-navbar-toggler>
+      <li class="nav-item"><router-link class="nav-link navbar-link" to="/gallery">Gallery</router-link></li>
+      <li class="nav-item"><router-link class="nav-link navbar-link" to="/artists">Artists</router-link></li>
+      <li class="nav-item"><router-link class="nav-link navbar-link" to="/online-auctions">Auctions</router-link></li>
+      <li class="nav-item"><router-link class="nav-link navbar-link" to="/my-artworks">My Artwork</router-link></li>
+      <upload-links v-if="loggedIn"/>
+      <account-links v-if="loggedIn"/>
+      <li class="nav-item"><router-link v-if="!loggedIn" class="btn nav-link navbar-link px-3" to="/login">Login</router-link></li>
+    </ul>
+  </div>
 
-  </mdb-navbar>
-  <!--/.Navbar-->
-</header>
+</nav>
 <!-- Main navigation -->
+</header>
 </template>
 
 <script>
@@ -62,6 +67,7 @@ export default {
       link4: "donate",
       title: "title",
       taglink2: '',
+      toggleClass: '',
       logo: require("@/assets/img/logo/logo-black-256x256.png"),
     };
   },
@@ -111,6 +117,13 @@ export default {
         this.taglink2 = document.data.taglink2[0].text;
       });
     },
+    toggleNav() {
+      if (this.toggleClass === "show") {
+        this.toggleClass = "";
+      } else {
+        this.toggleClass = "show";
+      }
+    },
     doSearch() {
       let qString = this.query;
       if (!this.query || this.query.length === 0) {
@@ -142,18 +155,20 @@ export default {
 .navbar {
   border-bottom: 1px solid lightgray;
   box-shadow: none;
-  height: 55px;
-  max-height: 55px;
-  flex-wrap: nowrap;
-  background: white;
-  color: black;
+  min-height: 55px;
 }
 .navbar-link {
   text-transform: uppercase;
   font-size: 0.8em;
-  margin: 0;
 }
 .navbar-toggler-icon {
-  background: blue;
+  background-color: blue;
 }
+.show {
+  background-color: #ccc;
+  z-index: 10;
+  padding: 30px;
+  margin-left: 400px;
+}
+
 </style>

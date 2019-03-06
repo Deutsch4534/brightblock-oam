@@ -1,7 +1,7 @@
 <template>
   <mdb-dropdown>
-    <mdb-dropdown-toggle class="user-menu dropleft px-2 py-0" color="stylish" slot="toggle" waves-fixed id="userMainMenuBtn">
-      <img style="width: 40px; height: 40px; border-radius: 20px;" :src="avatarUrl"/>
+    <mdb-dropdown-toggle tag="a" navLink color="" slot="toggle"  waves-fixed>
+      <img style="width: 35px; height: 25px; border-radius: 15px;" :src="avatarUrl"/>
       <!--<mdb-icon icon="user-circle" />-->
     </mdb-dropdown-toggle>
 
@@ -113,38 +113,44 @@ export default {
 
 </script>
 <style scoped>
-  .dropdown-menu {
-    min-width: 200px;
-    border: none;
-    top: 11px;
-    border-radius: 0;
-  }
+.nav-link {
+  text-transform: uppercase;
+  font-size: 0.8em;
+}
+.dropdown-menu {
+  min-width: 200px;
+  border: none;
+  top: 11px;
+  border-radius: 0;
+  margin-top: -5px;
+}
 
-  .btn.dropdown-toggle { color: black; }
-  .dropdown .dropdown-menu .dropdown-item,
-  .dropdown .dropdown-menu .dropdown-item:hover {
-    background: initial;
-    box-shadow: none;
-    color: initial!important;
-  }
+.btn.dropdown-toggle { color: black; }
+.dropdown .dropdown-menu .dropdown-item,
+.dropdown .dropdown-menu .dropdown-item:hover {
+  background: initial;
+  box-shadow: none;
+  color: initial!important;
+}
 
-  .dropdown-submenu {
-    position:relative;
-  }
+.dropdown-submenu {
+  position:relative;
+}
 
-  .dropdown-submenu .dropdown-menu {
-    top:0;
-    left:100%;
-  }
+.dropdown-submenu .dropdown-menu {
+  top:0;
+  left:100%;
+}
 
-  .dropdown-item {
-    font-size: 0.9375rem;
-    font-weight: 300;
-  }
+.dropdown-item {
+  font-size: 0.9375rem;
+  font-weight: 300;
+}
 
-  .dropdown-item > a {
-    padding: 0;
-  }
+.dropdown-item > a {
+  padding: 0;
+}
 
-  .fa-user-circle { font-size: 1.7rem; padding-bottom: 4px;}
+.fa-user-circle { font-size: 1.7rem; padding-bottom: 4px;}
+
 </style>
