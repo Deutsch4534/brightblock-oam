@@ -142,19 +142,19 @@ const invoiceService = {
       state: "intention",
       gallerist: (gallerist) ? {
         blockstackId: gallerist.username,
-        bitcoinAddress: gallerist.publicKeyData.bitcoinAddress,
+        bitcoinAddress: (gallerist.publicKeyData) ? gallerist.publicKeyData.bitcoinAddress : null,
       } : {},
       artist: (artist) ? {
         blockstackId: artist.username,
-        bitcoinAddress: artist.publicKeyData.bitcoinAddress,
+        bitcoinAddress: (artist.publicKeyData) ? artist.publicKeyData.bitcoinAddress : null,
       } : {},
       seller: {
         blockstackId: seller.username,
-        bitcoinAddress: seller.publicKeyData.bitcoinAddress,
+        bitcoinAddress: (seller.publicKeyData) ? seller.publicKeyData.bitcoinAddress : null,
       },
       buyer: {
         blockstackId: buyer.username,
-        bitcoinAddress: buyer.publicKeyData.bitcoinAddress,
+        bitcoinAddress: (buyer.publicKeyData) ? buyer.publicKeyData.bitcoinAddress : null,
       }
     };
   },
