@@ -10,10 +10,18 @@
       <mdb-card>
         <mdb-card-title>{{artwork.title}}</mdb-card-title>
         <mdb-card-title class="text-right"><small>{{myArtist.name}}</small></mdb-card-title>
+          <mdb-card-text>
+            <p>A <a @click.prevent="showArtworkHash = !showArtworkHash">hash of your artwork</a> has been
+            <a :href="blockchainInfoUrl()" target="_blank">registered</a> with the Bitcoin blockchain.</p>
+          </mdb-card-text>
+          <mdb-card-text v-if="showArtworkHash">
+            {{artworkHash}}
+          </mdb-card-text>
 
-        <create-coa v-if="showCoa"/>
+        <create-coa v-if="artwork.bitcoinTx"/>
 
-        <register-bitcoin v-else @registerStatusUpdate="updateRegisterStatus"/>
+        <register-bitcoin v-if="!artwork.bitcoinTx" @registerStatusUpdate="updateRegisterStatus"/>
+
 
         <mdb-view hover>
           <img class="img-fluid" width="100%" :src="artwork.image" :alt="artwork.title"></img>
@@ -61,7 +69,7 @@ export default {
       message: null,
       artworkId: null,
       from: "/my-artworks",
-      bitcoinTx: null,
+      showArtworkHash: false,
       showModal: false,
       modalTitle: "Registering Ownership",
       modalContent: "<p>Transaction sent - confirmation takes ~ 6 blocks which is about an hour..</p>" +
@@ -81,6 +89,14 @@ export default {
     closeModal: function() {
       this.showModal = false;
     },
+    blockchainInfoUrl() {
+      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
+      let state = this.$store.getters["bitcoinStore/getBitcoinState"];
+      if (state.chain === "test") {
+        return `https://testnet.blockexplorer.com/tx/${artwork.bitcoinTx}`;
+      }
+      return `https://www.blockchain.com/btc/tx/${artwork.bitcoinTx}`;
+    },
     updateRegisterStatus(transaction) {
       this.showModal = true;
     },
@@ -92,6 +108,10 @@ export default {
         a.image = require("@/assets/img/logo/logo-black-256x256.png");
       }
       return a ? a : {};
+    },
+    artworkHash() {
+      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
+      return utils.buildBitcoinHash(artwork);
     },
     showCoa() {
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);

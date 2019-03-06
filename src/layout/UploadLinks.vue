@@ -14,10 +14,6 @@
         <router-link to="/my-auctions/upload" class="dropdown-item">Upload Auction</router-link>
       </mdb-dropdown-item>
 
-      <mdb-dropdown-item>
-        <router-link to="/my-artworks" class="dropdown-item">My Artwork</router-link>
-      </mdb-dropdown-item>
-
     </mdb-dropdown-menu>
   </mdb-dropdown>
 

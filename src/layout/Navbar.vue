@@ -17,6 +17,8 @@
         <router-link class="btn nav-link navbar-link px-3" to="/gallery">Gallery</router-link>
         <router-link class="btn nav-link navbar-link px-3" to="/artists">Artists</router-link>
         <router-link class="btn nav-link navbar-link px-3" to="/online-auctions">Auctions</router-link>
+        <router-link class="btn nav-link navbar-link px-3" to="/my-artworks">My Artwork</router-link>
+
         <upload-links v-if="loggedIn"/>
         <account-links v-if="loggedIn"/>
         <router-link v-else class="btn nav-link navbar-link px-3" to="/login">Login</router-link>
@@ -140,7 +142,8 @@ export default {
 .navbar {
   border-bottom: 1px solid lightgray;
   box-shadow: none;
-  max-height: 54px;
+  height: 55px;
+  max-height: 55px;
   flex-wrap: nowrap;
   background: white;
   color: black;
@@ -149,5 +152,8 @@ export default {
   text-transform: uppercase;
   font-size: 0.8em;
   margin: 0;
+}
+.navbar-toggler-icon {
+  background: blue;
 }
 </style>

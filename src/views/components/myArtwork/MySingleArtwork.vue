@@ -18,7 +18,7 @@
         <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Register</mdb-btn>
       </router-link>
       <router-link :to="registerUrl" class="inline-block" v-else>
-        <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="sellingStatus === 'unsold'">CoA</mdb-btn>
+        <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="artwork.bitcoinTx">CoA</mdb-btn>
       </router-link>
       <router-link :to="registerForSaleUrl" class="inline-block">
         <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="canSell">Sell</mdb-btn>

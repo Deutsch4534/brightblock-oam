@@ -32,7 +32,7 @@
     <div class="col-md-12" v-if="myProfile.publicKeyData.bitcoinAddress && !removedAddress">
       {{myProfile.publicKeyData.bitcoinAddress}}
        <a @click.prevent="toggleAddressInput"><mdb-icon icon="pen" /></a>
-       <a @click.prevent="removeAddress"><mdb-icon icon="trash-alt"/></a>
+       <!-- <a @click.prevent="removeAddress"><mdb-icon icon="trash-alt"/></a> -->
     </div>
     <div class="col-md-12 text-danger" v-if="message">
       <p>{{message}}</p>
