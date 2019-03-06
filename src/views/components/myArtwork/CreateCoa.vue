@@ -5,7 +5,7 @@
   <mdb-card-text>
     <p>Your artwork has been <a :href="blockchainInfoUrl()" target="_blank">registered</a> with the Bitcoin blockchain.</p>
   </mdb-card-text>
-  <bitcoin-address-entry v-if="showBitcoinAddress" :myProfile="myProfile" @bitcoinAddressUpdate="updateBitcoinAddress"/>
+  <bitcoin-address-entry v-if="showBitcoinAddress" @bitcoinAddressUpdate="updateBitcoinAddress"/>
   <div class="rounded-bottom lighten-3 text-right p-3" v-if="validBitcoinAdress">
     <a v-if="artwork.coa" class="black-text" @click.prevent="openCoa()"><mdb-btn color="primary" size="md">Open COA</mdb-btn></a>
     <a v-else class="black-text" @click.prevent="generateCoa()"><mdb-btn color="primary" size="md">Generate COA</mdb-btn></a>

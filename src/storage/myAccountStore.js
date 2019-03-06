@@ -72,7 +72,7 @@ const myAccountStore = {
         let myProfile = state.myProfile;
         myAccountService.updatePublicKeyData(publicKeyData,
           function(publicKeyData) {
-            state.myProfile.publicKeyData = publicKeyData;
+            myProfile.publicKeyData = publicKeyData;
             commit("myProfile", myProfile);
             resolve(myProfile);
           },

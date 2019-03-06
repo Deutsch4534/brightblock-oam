@@ -19,7 +19,7 @@
           decrypted and displayed to buyers / sellers in order to complete transactions.</p>
         </div>
 
-        <bitcoin-address-entry v-if="showBitcoinAddress" :myProfile="myProfile" @bitcoinAddressUpdate="updateBitcoinAddress"/>
+        <bitcoin-address-entry v-if="showBitcoinAddress" @bitcoinAddressUpdate="updateBitcoinAddress"/>
 
         <form class="needs-validation py-5" novalidate @submit.prevent=checkForm($event) id="blockstackProfileForm">
         <div class="row mb-4">
@@ -139,7 +139,6 @@ export default {
         shippingAddress: {}
       },
       blockstackProfile: {},
-      validBitcoinAdress: false,
       showBitcoinAddress: false,
       profileUpdateMessage: "Profile updated successfully: where to next?"
     };
@@ -176,7 +175,7 @@ export default {
       this.modal = false;
     },
     updateBitcoinAddress(newAddress) {
-      this.validBitcoinAdress = newAddress;
+      // this.validBitcoinAdress = newAddress;
     },
     updateAddress(newAddress) {
       this.auxiliaryProfile.shippingAddress = newAddress;

@@ -26,16 +26,18 @@
    will be embedded in your certificate of authenticity to make it easy
   to receive future payments.</p>
   <div class="row text-center">
-    <div class="col-md-12" v-if="myProfile.publicKeyData.bitcoinAddress">
-      <canvas id="qrcode" max-width="150px"></canvas>
+    <div class="col-md-4 offset-4">
+      <canvas id="qrcode" max-width="150px" style="display:none;"></canvas>
     </div>
-    <div class="col-md-12" v-if="myProfile.publicKeyData.bitcoinAddress">
-      {{myProfile.publicKeyData.bitcoinAddress}} <a @click.prevent="toggleAddressInput"><mdb-icon icon="pen" /></a>
+    <div class="col-md-12" v-if="myProfile.publicKeyData.bitcoinAddress && !removedAddress">
+      {{myProfile.publicKeyData.bitcoinAddress}}
+       <a @click.prevent="toggleAddressInput"><mdb-icon icon="pen" /></a>
+       <a @click.prevent="removeAddress"><mdb-icon icon="trash-alt"/></a>
     </div>
     <div class="col-md-12 text-danger" v-if="message">
       <p>{{message}}</p>
     </div>
-    <div class="col-md-12" v-if="changeBtcAddress">
+    <div class="col-md-12" v-if="changeBtcAddress || removedAddress">
       <input type="text" width="50%" class="form-control" required id="vc-bitcoin-address" placeholder="Your bitcoin address" v-on:keyup.13="saveBitcoinAddress($event)" v-model="myProfile.publicKeyData.bitcoinAddress">
     </div>
   </div>
@@ -59,46 +61,56 @@ export default {
     mdbBtn
   },
   props: {
-    myProfile: {
-      publicKeyData: {
-        bitcoinAddress: null
-      }
-    },
   },
   data() {
     return {
-      changeBtcAddress: true,
+      changeBtcAddress: false,
       message: null,
+      removedAddress: false,
     };
   },
   mounted() {
-    if (this.myProfile.publicKeyData.bitcoinAddress) {
-      // this.addQrCode(this.myProfile.publicKeyData.bitcoinAddress);
-      this.checkBitcoinAddress(this.myProfile.publicKeyData.bitcoinAddress);
+    let blockstackProfile = this.$store.getters["myAccountStore/getMyProfile"];
+    if (blockstackProfile.publicKeyData.bitcoinAddress) {
+      this.checkBitcoinAddress(blockstackProfile.publicKeyData.bitcoinAddress);
+    } else {
+      this.changeBtcAddress = true;
     }
   },
   computed: {
+    myProfile() {
+      let blockstackProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      return blockstackProfile;
+    },
   },
   methods: {
     saveBitcoinAddress: function(event) {
       if (event) event.preventDefault();
-      let bitcoinAddress = this.myProfile.publicKeyData.bitcoinAddress;
-      this.checkBitcoinAddress(bitcoinAddress);
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      this.checkBitcoinAddress(myProfile.publicKeyData.bitcoinAddress);
     },
     toggleAddressInput: function() {
       this.changeBtcAddress = !this.changeBtcAddress;
-      this.message = null;
+    },
+    removeAddress: function() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      myProfile.publicKeyData.bitcoinAddress = undefined;
+      this.changeBtcAddress = false;
+      document.getElementById("qrcode").style.display = "none";
+      this.$store.commit("myAccountStore/myProfile", myProfile);
+      this.removedAddress = true;
+      this.$store.dispatch("myAccountStore/updatePublicKeyData", myProfile.publicKeyData);
     },
     checkBitcoinAddress(bitcoinAddress) {
       let $self = this;
       bitcoinService.checkAddress({address: bitcoinAddress}, function(result) {
         if (result) {
+          $self.removedAddress = false;
           let blockstackProfile = $self.$store.getters["myAccountStore/getMyProfile"];
-          let publicKeyData = blockstackProfile.publicKeyData;
-          publicKeyData.bitcoinAddress = bitcoinAddress;
+          blockstackProfile.publicKeyData.bitcoinAddress = bitcoinAddress;
           $self.addQrCode(bitcoinAddress);
           $self.$emit("bitcoinAddressUpdate", true);
-          $self.$store.dispatch("myAccountStore/updatePublicKeyData", publicKeyData);
+          $self.$store.dispatch("myAccountStore/updatePublicKeyData", blockstackProfile.publicKeyData);
           $self.message = null;
         } else {
           $self.message = "Invalid address - is it the right key for the current bitcoin network?";
@@ -108,6 +120,7 @@ export default {
     addQrCode(bitcoinAddress) {
       let $qrCode = document.getElementById("qrcode");
       if (bitcoinAddress) {
+        $qrCode.style.display = "block";;
         this.changeBtcAddress = false;
         QRCode.toCanvas(
           $qrCode, bitcoinAddress, { errorCorrectionLevel: "H" },
@@ -116,6 +129,8 @@ export default {
             console.log("success!");
           }
         );
+      } else {
+        $qrCode.style.display = "none";
       }
     },
   }
