@@ -4,7 +4,7 @@
 <nav class="navbar navbar-expand-lg">
 
   <!-- mdbNavbar brand -->
-  <form class="navbar-brand">
+  <form class="search-form">
     <a type="button" @click="doSearch"><mdb-icon class="mb-0 mr-2" icon="search" /></a>
     <input label="Search" type="text" class="mt-0 mb-0" v-model="query" placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
   </form>
@@ -170,5 +170,31 @@ export default {
   padding: 30px;
   margin-left: 400px;
 }
+i.fa-search {
+  color: black;
+  transform: rotate(90deg);
+  font-size: 24px;
+}
+.search-form input, .login-link, .nav-cta { font-size: 20px; font-weight: normal; }
+.search-form input { border-bottom: none; }
+.search-form input:focus { box-shadow: none!important; border-bottom: none!important; }
+
+.search-form input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: black;
+  text-transform: uppercase;
+}
+.search-form input::-moz-placeholder { /* Firefox 19+ */
+  color: black;
+  text-transform: uppercase;
+}
+.search-form input:-ms-input-placeholder { /* IE 10+ */
+  color: black;
+  text-transform: uppercase;
+}
+.search-form input:-moz-placeholder { /* Firefox 18- */
+  color: black;
+  text-transform: uppercase;
+}
+.search-form button.transparent { border: none; background: transparent; color: black; }
 
 </style>
