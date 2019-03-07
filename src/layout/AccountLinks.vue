@@ -14,13 +14,6 @@
         <router-link class="dropdown-item" to="/profile/update">Settings</router-link>
       </mdb-dropdown-item>
 
-      <mdb-dropdown-item v-if="hasInvoices">
-        <router-link class="dropdown-item" to="/invoices">
-          Invoices <mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge>
-          <span class="sr-only">invoices</span>
-        </router-link>
-      </mdb-dropdown-item>
-
       <mdb-dropdown-item>
         <router-link class="dropdown-item" to="/admin/settings" v-if="showAdmin">Admin</router-link>
       </mdb-dropdown-item>
@@ -69,13 +62,6 @@ export default {
   computed: {
     showAdmin() {
       return this.$store.state.myAccountStore.myProfile.showAdmin;
-    },
-    hasInvoices() {
-      let invoices = this.$store.getters["invoiceStore/getInvoices"];
-      if (!invoices || !invoices.records) {
-        return 0;
-      }
-      return invoices.records.length;
     },
     username() {
       return this.$store.state.myAccountStore.myProfile.name;

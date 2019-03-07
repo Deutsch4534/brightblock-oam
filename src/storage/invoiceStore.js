@@ -79,13 +79,21 @@ const invoiceStore = {
           commit("invoicesRootFile", invoicesRootFile);
           let invoiceClaim = getters.getInvoiceById(invoiceId);
           if (invoiceClaim && !invoiceClaim.confirmed) {
-            invoiceService.watchForPayment(invoiceClaim);
+            invoiceService.watchForPayment(invoiceClaim, function(invoiceClaim) {
+              if (invoiceClaim) {
+                commit("addInvoice", invoiceClaim);
+                resolve(invoiceClaim);
+              }
+            });
+          } else {
+            commit("addInvoice", invoiceClaim);
+            resolve(invoiceClaim);
           }
-          resolve(invoiceClaim);
         });
       });
     },
-    prepareNewInvoice({ commit, state, getters}, artwork) {
+    prepareNewInvoice({ commit, state, getters}, data) {
+      let artwork = data.artwork;
       return new Promise(resolve => {
         store.dispatch("userProfilesStore/fetchUserProfile", { username: artwork.gallerist }, { root: true }).then(profile => {
           let gallerist = profile;
@@ -96,7 +104,13 @@ const invoiceStore = {
               let invoiceClaim = invoiceService.createInvoiceClaim(gallerist, seller, artist, artwork);
               invoiceClaim.invoiceRates = store.state.constants.invoiceRates;
               invoiceClaim.invoiceAmounts = invoiceService.getInvoiceAmounts(invoiceClaim.invoiceRates, artwork.saleData, artwork.gallerist, artwork.artist !== artwork.owner);
-              resolve(invoiceClaim);
+              if (data.saveInvoice) {
+                invoiceService.saveInvoiceClaim(invoiceClaim, function(res) {
+                  resolve(invoiceClaim);
+                });
+              } else {
+                resolve(invoiceClaim);
+              }
             });
           });
         });
@@ -105,18 +119,22 @@ const invoiceStore = {
     paySeller({ commit, state, getters}, invoiceId) {
       return new Promise(resolve => {
         let invoiceClaim = getters.getInvoiceById(invoiceId);
-        if (invoiceClaim.state === "confirmed") {
+        if (invoiceClaim.state !== "confirmed") {
           // settlement is after successful pay seller.
           // can't settle until the buyers original tx is confirmed
           bitcoinService.paySeller(invoiceClaim, function(transaction) {
-            invoiceClaim.state = "settling";
-            invoiceClaim.sellerTransaction = transaction;
-            invoiceService.saveInvoiceClaim(invoiceClaim, function() {
-              commit("addInvoice", invoiceClaim);
-              resolve(invoiceClaim);
-            }, function() {
+            if (transaction) {
+              invoiceClaim.state = "settling";
+              invoiceClaim.sellerTransaction = JSON.parse(transaction.decodedTransaction);
+              invoiceService.saveInvoiceClaim(invoiceClaim, function() {
+                commit("addInvoice", invoiceClaim);
+                resolve(invoiceClaim);
+              }, function() {
+                resolve();
+              });
+            } else {
               resolve();
-            });
+            }
           });
         } else {
           resolve();

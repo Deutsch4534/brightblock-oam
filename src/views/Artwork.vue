@@ -14,11 +14,14 @@
           <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, {{created}}</p>
           <p class="mb-1">{{artwork.description}}</p>
           <p>{{keywords}}</p>
-          <buy-artwork-form-btc v-if="isRegisteredBtc && isPriceSetBtc && !purchaseBegun" :iamowner="iamowner" :purchaseState="purchaseStateBtc" :artwork="artwork" @buy="buyArtwork()"/>
+          <buy-artwork-form-btc v-if="isRegisteredAndPriceSet" :artwork="artwork"/>
+          <div v-else>
+            <mdb-btn rounded color="white" :disabled="true" size="md" class="mr-1 ml-0 waves-light">not for sale</mdb-btn>
+            <router-link to="/gallery">
+              <mdb-btn rounded color="white" size="md" class="mr-1 ml-0 waves-light">continue browsing</mdb-btn>
+            </router-link>
+          </div>
         </mdb-col>
-        <!-- <shopping-owner-view v-if="ready && iamowner" :artwork="artwork"/> -->
-        <shopping-buyer-view v-if="ready && iambuyer && purchaseBegun" :artwork="artwork"/>
-        <invoice-details v-else-if="showInvoiceDetails" :invoiceClaim="invoiceClaim"/>
       </mdb-row>
     </mdb-col>
   </mdb-row>
@@ -26,10 +29,8 @@
 </template>
 
 <script>
-import ShoppingOwnerView from "./components/invoice/ShoppingOwnerView";
-import ShoppingBuyerView from "./components/invoice/ShoppingBuyerView";
 import AboutArtwork from "./components/artwork/AboutArtwork";
-import InvoiceDetails from "./components/invoice/InvoiceDetails";
+import OrderDetails from "./components/orders/OrderDetails";
 import BuyArtworkFormBtc from "./components/artwork/BuyArtworkFormBtc";
 import bitcoinService from "@/services/bitcoinService";
 import artworkSearchService from "@/services/artworkSearchService";
@@ -37,7 +38,7 @@ import notify from "@/services/notify";
 import moneyUtils from "@/services/moneyUtils";
 import utils from "@/services/utils";
 import { Sticky } from 'mdbvue';
-import { mdbIcon, mdbMask, mdbView, mdbJumbotron, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
+import { mdbIcon, mdbMask, mdbView, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
 import { mdbContainer, mdbCol, mdbRow } from 'mdbvue';
 import moment from "moment";
 
@@ -49,9 +50,7 @@ export default {
   },
   bodyClass: "index-page",
   components: {
-    InvoiceDetails,
-    ShoppingOwnerView,
-    ShoppingBuyerView,
+    OrderDetails,
     BuyArtworkFormBtc,
     AboutArtwork,
     mdbContainer,
@@ -65,22 +64,14 @@ export default {
     mdbCardTitle,
     mdbCardText,
     mdbBtn,
-    mdbJumbotron,
     mdbView
   },
   data() {
     return {
       artwork: {
         image: require("@/assets/img/logo/logo-black-256x256.png"),
-        bcitem: {},
         saleData: {},
       },
-      ready: false,
-      invoiceClaim: {},
-      message: "",
-      owner: null,
-      sliderImage: 0,
-      showInvoiceDetails: false,
     };
   },
   mounted() {
@@ -90,19 +81,6 @@ export default {
     artworkSearchService.newQuery({field: "id", query: this.artworkId}, function(artwork) {
       $self.artwork = artwork;
       if (artwork) {
-        $self.ready = true;
-        $self.owner = artwork.owner;
-        $self.$store.getters["userProfilesStore/getProfile"]($self.owner);
-        if (artwork.buyer) $self.$store.getters["userProfilesStore/getProfile"](artwork.buyer);
-        $self.$store.dispatch("invoiceStore/fetchInvoice", $self.artworkId).then(invoiceClaim => {
-          if (invoiceClaim) {
-            $self.invoiceClaim = invoiceClaim;
-          } else {
-            $self.$store.dispatch("invoiceStore/prepareNewInvoice", artwork).then((invoice) => {
-              $self.invoiceClaim = invoice;
-            });
-          }
-        })
         // check for redirect to auctions...
         if ($self.artwork.saleData.auctionId) {
           $self.$router.push("/online-auction/" + artwork.owner + "/" + artwork.saleData.auctionId);
@@ -117,22 +95,6 @@ export default {
         return this.$store.getters["userProfilesStore/getProfile"](artwork.artist);
       }
       return {name: "loading.."};
-    },
-    buyerShippingAddress() {
-      let artwork = this.artwork;
-      let buyer = this.$store.getters["userProfilesStore/getShippingAddress"](artwork.buyer, artwork.owner);
-      return buyer;
-    },
-    iamowner() {
-      let profile = this.$store.getters["myAccountStore/getMyProfile"];
-      return profile.username === this.artwork.owner;
-    },
-    iambuyer() {
-      let profile = this.$store.getters["myAccountStore/getMyProfile"];
-      return profile.username === this.artwork.buyer;
-    },
-    purchaseBegun() {
-      return this.artwork.status === this.$store.state.constants.statuses.artwork.PURCHASE_BEGUN;
     },
     created() {
       if (this.artwork.created) {
@@ -164,23 +126,8 @@ export default {
         image: artwork.image
       };
     },
-    purchaseStateBtc() {
-      let artwork = this.artwork;
-      let username = this.$store.getters["myAccountStore/getMyProfile"].username;
-      let ownedBySomeElse = artwork.owner !== username;
-      let priceSet = artwork.saleData.amount > 0;
-      let forSale = artwork.saleData && artwork.saleData.soid === 1;
-      let purchaseState = {
-        canBuy: username && forSale && priceSet && ownedBySomeElse
-      };
-      return purchaseState;
-    },
-    isRegisteredBtc() {
-      return this.artwork.bitcoinTx;
-    },
-    isPriceSetBtc() {
-      let artwork = this.artwork;
-      return artwork.saleData.amount > 0;
+    isRegisteredAndPriceSet() {
+      return this.artwork.bitcoinTx && this.artwork.saleData.amount > 0;
     },
     artworks() {
       let artwork = this.artwork;
@@ -189,28 +136,11 @@ export default {
       );
     }
   },
-  methods: {
-    buyArtwork() {
-      this.showInvoiceDetails = !this.showInvoiceDetails;
-    },
-
-    scrollToAboutSection() {
-      const element = this.$refs.about;
-      const top = element.$el.offsetTop;
-      window.scrollTo(0, top);
-    },
-
-    sliderImageChanged(imageNum) {
-      this.sliderImage = imageNum;
-    }
-  }
+  methods: {}
 };
 </script>
 <style>
 .view img {
   width: 100%;
-}
-.jumbotron {
-  height: 130vh;
 }
 </style>

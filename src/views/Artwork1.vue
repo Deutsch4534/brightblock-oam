@@ -14,7 +14,7 @@
           <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, {{created}}</p>
           <p class="mb-1">{{artwork.description}}</p>
           <p>{{aboutArtwork.keywords}}</p>
-          <mdb-row class="pt-3" v-if="!showInvoiceDetails">
+          <mdb-row class="pt-3" v-if="!showOrderDetails">
             <mdb-col col="12">
               <p class="h5-responsive serif-italic">{{registerMessageBtc}}</p>
               <buy-artwork-form-btc v-if="isRegisteredBtc && isPriceSetBtc" :purchaseState="purchaseStateBtc" :artwork="artwork" @buy="buyArtwork()"/>
@@ -24,13 +24,13 @@
       </mdb-row>
     </mdb-col>
   </mdb-row>
-  <invoice-details v-if="showInvoiceDetails" :artwork="artwork" :seller="seller" :buyer="buyer"/>
+  <order-details v-if="showOrderDetails" :artwork="artwork" :seller="seller" :buyer="buyer"/>
 </mdb-container>
 </template>
 
 <script>
 import AboutArtwork from "./components/artwork/AboutArtwork";
-import InvoiceDetails from "./components/artwork/InvoiceDetails";
+import OrderDetails from "./components/artwork/OrderDetails";
 import BuyArtworkFormBtc from "./components/artwork/BuyArtworkFormBtc";
 import bitcoinService from "@/services/bitcoinService";
 import notify from "@/services/notify";
@@ -49,7 +49,7 @@ export default {
   },
   bodyClass: "index-page",
   components: {
-    InvoiceDetails,
+    OrderDetails,
     BuyArtworkFormBtc,
     AboutArtwork,
     mdbContainer,
@@ -76,7 +76,7 @@ export default {
       message: "",
       owner: null,
       sliderImage: 0,
-      showInvoiceDetails: false,
+      showOrderDetails: false,
     };
   },
   mounted() {
@@ -181,7 +181,7 @@ export default {
   },
   methods: {
     buyArtwork() {
-      this.showInvoiceDetails = !this.showInvoiceDetails;
+      this.showOrderDetails = !this.showOrderDetails;
     },
 
     scrollToAboutSection() {

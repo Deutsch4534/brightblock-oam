@@ -17,7 +17,7 @@
       <span class="white-text"><i class="fas fa-bars fa-1x"></i></span>
   </button>
 
-  <div class="collapse navbar-collapse text-right" :class="toggleClass" id="navbarSupportedContent">
+  <div class="collapse navbar-collapse" :class="toggleClass" id="navbarSupportedContent">
   <!--  <span class="dark-blue-text"><i class="fas fa-bars fa-1x"></i></span> -->
     <ul class="navbar-nav ml-auto">
       <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/gallery">Gallery</router-link></li>
@@ -25,6 +25,7 @@
       <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/online-auctions">Auctions</router-link></li>
       <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/my-artworks">My Artwork</router-link></li>
       <upload-links v-if="loggedIn"/>
+      <li v-if="hasInvoices" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/orders"><i class="fas fa-shopping-bag"></i><sup><mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge></sup></router-link></li>
       <account-links v-if="loggedIn"/>
       <li class="nav-item" @click="closeMenu"><router-link v-if="!loggedIn" class="btn nav-link navbar-link px-3" to="/login">Login</router-link></li>
     </ul>
@@ -157,7 +158,7 @@ export default {
 .navbar {
   border-bottom: 1px solid lightgray;
   box-shadow: none;
-  min-height: 55px;
+  min-height: 50px;
 }
 .navbar-link {
   text-transform: uppercase;
@@ -167,10 +168,13 @@ export default {
   background-color: blue;
 }
 .show {
-  background-color: #ccc;
+  background-color: black;
+  border: 1pt solid white;
+  color: white;
+  font-weight: bold;
   z-index: 10;
+  margin: 50px;
   padding: 30px;
-  padding-left: 90px;
 }
 
 .navbar .md-form {

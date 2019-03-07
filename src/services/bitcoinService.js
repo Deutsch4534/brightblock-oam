@@ -39,6 +39,12 @@ const bitcoinService = {
       success(response.data.details);
     });
   },
+  consolidate: function(success, failure) {
+    let endPoint = store.state.constants.btcGatewayUrl + "/bitcoin/consolidate";
+    xhrService.makePostCall(endPoint).then(function(response) {
+      success(response.data.details);
+    });
+  },
   paySeller: function(invoice, success, failure) {
     let endPoint = store.state.constants.btcGatewayUrl + "/bitcoin/paySeller";
     xhrService.makePostCall(endPoint, invoice).then(function(response) {

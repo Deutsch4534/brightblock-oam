@@ -1,13 +1,15 @@
 <template>
 <tr scope="row" v-if="invoice && invoice.label">
   <th scope="row">
-    <router-link :to="invoiceUrl" class="inline-block">id:  {{invoice.invoiceId}}</router-link>
+    <router-link :to="invoiceUrl" class="inline-block">{{invoice.invoiceId}}</router-link>
   </th>
   <td>{{invoice.seller.blockstackId}}</td>
-  <td>{{invoice.label}}</td>
+  <td>{{getArtworkTitle}}</td>
   <td>{{invoice.invoiceAmounts.totalFiat}} {{invoice.invoiceAmounts.fiatCurrency}}</td>
   <td>{{invoice.invoiceAmounts.totalBitcoin}}</td>
-  <td>{{confirmations}}</td>
+  <td>
+    <router-link :to="invoiceUrl" class="inline-block">{{status}}</router-link>
+  </td>
 </tr>
 </template>
 
@@ -17,7 +19,7 @@ import invoiceService from "@/services/invoiceService";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: "InvoiceItem",
+  name: "OrderItem",
   components: {
     mdbBtn
   },
@@ -36,17 +38,23 @@ export default {
   },
   methods: {},
   computed: {
-    confirmations() {
+    status() {
       if (this.invoice) {
-        return invoiceService.getInvoiceState(this.invoice);
+        return invoiceService.getInvoiceLabelFromState(this.invoice.state);
       }
+    },
+    getArtworkTitle() {
+      return this.invoice.title;
+    },
+    openOrderUrl() {
+      this.$router.push("/order/" + this.invoice.invoiceId);
     },
     invoiceUrl() {
       let theId = this.invoice.invoiceId;
       if (!theId) {
         theId = this.invoice.artworkId;
       }
-      return `/invoice/${theId}`;
+      return `/order/${theId}`;
     }
   }
 };

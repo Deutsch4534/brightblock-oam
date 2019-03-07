@@ -22,8 +22,8 @@ import Navbar from "./layout/Navbar.vue";
 import Footer from "./layout/Footer.vue";
 
 import Artwork from "./views/Artwork";
-import Invoices from "./views/Invoices";
-import Invoice from "./views/Invoice";
+import Orders from "./views/Orders";
+import Order from "./views/Order";
 
 import Search from "./views/Search";
 
@@ -167,14 +167,14 @@ const router = new Router({
       }
     },
     {
-      path: "/invoice/:invoiceId",
-      name: "invoice",
-      components: { default: Invoice, header: Navbar, footer: Footer }
+      path: "/order/:orderId",
+      name: "order",
+      components: { default: Order, header: Navbar, footer: Footer }
     },
     {
-      path: "/invoices",
-      name: "invoices",
-      components: { default: Invoices, header: Navbar, footer: Footer }
+      path: "/orders",
+      name: "orders",
+      components: { default: Orders, header: Navbar, footer: Footer }
     },
     {
       path: "/artworks/:artworkId",

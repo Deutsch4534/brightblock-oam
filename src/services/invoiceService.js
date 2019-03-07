@@ -77,16 +77,17 @@ const invoiceService = {
       clearInterval(invoiceService.intval);
     }
     if (invoice.buyerTransaction && invoice.confirmed) {
-      return;
+      if (success) success(invoice);
     }
     // check this os the buyer initiating the watch..
     let myProfile = store.getters["myAccountStore/getMyProfile"];
     if (myProfile.username !== invoice.buyer.blockstackId) {
-      return;
+      if (failure) failure("Current user is not the buyer");
     }
     invoiceService.intval = setInterval(function() {
       bitcoinService.lookupTransaction({timestamp: invoice.timestamp, amount: invoice.invoiceAmounts.totalBitcoin}, function(transaction) {
         if (!transaction) {
+          if (success) success(invoice);
           return;
         }
         invoice.state = "confirming";
@@ -101,31 +102,48 @@ const invoiceService = {
         }
         invoice.buyerTransaction = transaction;
         invoiceService.saveInvoiceClaim(invoice);
-        // lookup artwok in buyers gaia - indicates the artwork has already been transferred..
+        // lookup artwork in buyers gaia - indicates the artwork has already been transferred..
         artworkSearchService.userArtwork(invoice.artworkId, invoice.buyer.blockstackId,
           function(artwork) {
-            if (!artwork) { // NOT NOT NOT
-              artwork.buyer = invoice.buyer.blockstackId;
-              artwork.status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
-              myArtworksService.addSaleHistory(artwork, invoice.invoiceId, transaction.txid, transaction.confirmations);
-              //searchIndexService.addRecord("artwork", artwork);
-              store.dispatch('myAccountStore/addRelationship', invoice.seller.blockstackId);
-              store.dispatch('myArtworksStore/transferArtwork', artwork).then(artwork => {
-                console.log("transferred artwork: " + artwork.title + " from " + invoice.seller.blockstackId + " to " + invoice.buyer.blockstackId);
-                // artwork transferred - don't pay the seller untils goods confirmed...
-                // bitcoinService.payUpstreamTransaction({invoice: invoice}, function(result) {
-                //  console.log(result);
-                //  sh.provenanceTxid = result;
-                // });
-              });
+            if (!artwork) {
+              // artwork not in buyers storage - transfer it now...
+              invoiceService.transferArtworkToBuyer(invoice, success);
+            } else {
+              try {
+                if (success) success(invoice);
+                if (invoice.state === "confirmed") {
+                  clearInterval(invoiceService.intval);
+                }
+              } catch (err) {
+                // console.log("Error");
+              }
             }
           },
-          function(error) {
-            console.log("Error while watching for payment: ", error);
+          function() {
+            // artwork not in buyers storage - transfer it now...
+            invoiceService.transferArtworkToBuyer(invoice, success);
           }
         );
       });
     }, 5000);
+  },
+  transferArtworkToBuyer: function(invoice, success) {
+    artworkSearchService.userArtwork(invoice.artworkId, invoice.seller.blockstackId,
+      function(artwork) {
+        artwork.buyer = invoice.buyer.blockstackId;
+        artwork.status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
+        myArtworksService.addSaleHistory(artwork, invoice.invoiceId, invoice.buyerTransaction.txid, invoice.buyerTransaction.confirmations);
+        store.dispatch('myAccountStore/addRelationship', invoice.seller.blockstackId);
+        store.dispatch('myArtworksStore/transferArtwork', artwork).then(artwork => {
+          // artwork transferred - don't pay the seller untils goods confirmed...
+          console.log("transferred artwork: " + artwork.title + " from " + invoice.seller.blockstackId + " to " + invoice.buyer.blockstackId);
+          if (success) success(invoice);
+        });
+      },
+      function(error) {
+        console.log("Error while watching for payment: ", error);
+        // if (success) success(invoice);
+      });
   },
   createInvoiceClaim: function(gallerist, seller, artist, artwork) {
     let buyer = store.getters["myAccountStore/getMyProfile"];
@@ -139,7 +157,7 @@ const invoiceService = {
       title: artwork.title,
       itemType: artwork.itemType,
       artworkId: artwork.id,
-      state: "intention",
+      state: "unpaid",
       gallerist: (gallerist) ? {
         blockstackId: gallerist.username,
         bitcoinAddress: (gallerist.publicKeyData) ? gallerist.publicKeyData.bitcoinAddress : null,
@@ -195,19 +213,35 @@ const invoiceService = {
     uri += "&message=" + invoiceClaim.message;
     return encodeURI(uri);
   },
-  getInvoiceState: function(invoice) {
-    if (invoice.state === "settled") {
+  getInvoiceLabelFromState: function(state) {
+    if (state === "settled") {
       return "settled";
-    } else if (invoice.state === "confirmed" || invoice.state === "confirming") {
-      return "in escrow";
-    } else if (invoice.state === "settling") {
-      return "in settlement";
-    } else if (invoice.state === "settled") {
-      return "settled";
-    } else if (invoice.state === "intention") {
+    } else if (state === "settling") {
+      return "settling";
+    } else if (state === "confirmed") {
+      return "confirmed";
+    } else if (state === "confirming") {
+      return "confirming";
+    } else if (state === "unpaid") {
       return "unpaid";
     }
-    return "confirming: " + invoice.buyerTransaction.confirmations;
+    return "unkown";
+  },
+  getInvoiceStatusFromState: function(state) {
+    if (state === "settled") {
+      return 6;
+    } else if (state === "settling") {
+      return 5;
+    } else if (state === "confirmed") {
+      return 4;
+    } else if (state === "confirming") {
+      return 3;
+    } else if (state === "settled") {
+      return 2;
+    } else if (state === "unpaid") {
+      return 1;
+    }
+    return "unkown";
   },
   populateInvoiceRows: function(invoiceClaim) {
     let gallerist = (invoiceClaim.gallerist) ? invoiceClaim.gallerist.blockstackId : null;
@@ -222,7 +256,7 @@ const invoiceService = {
     let invoiceRows = [];
     invoiceRows.push({
       counter: count++,
-      party: (sellerIsArtist) ? "Artist" : "Seller",
+      party: (sellerIsArtist) ? "Owner/Artist" : "Owner",
       notes: owner,
       rate: "",
       fiatAmount: invoiceAmounts.fiatAmount,
@@ -255,7 +289,7 @@ const invoiceService = {
       bitcoinAmount: invoiceAmounts.bitcoinPlatformAmount
     });
     invoiceRows.push({
-      rowClass: "table-info",
+      rowClass: "white",
       counter: "",
       party: "Total",
       notes: "",

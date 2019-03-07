@@ -10,7 +10,7 @@
   <mdb-container class="mt-5" v-else>
     <mdb-row>
       <div class="col-12">
-        <h1 class="h1-responsive mb-5">Invoices</h1>
+        <h1 class="h1-responsive mb-5">Purchase Orders</h1>
       </div>
       <div class="col-12">
         <div class="row">
@@ -18,15 +18,15 @@
             <mdb-tbl-head color="primary-color" textWhite>
               <tr>
                 <th>#</th>
-                <th>payee</th>
-                <th>label</th>
-                <th>total fiat</th>
-                <th>total btc</th>
-                <th>paid</th>
+                <th>Payee</th>
+                <th>Title</th>
+                <th>Total fiat</th>
+                <th>Total btc</th>
+                <th>Status</th>
               </tr>
             </mdb-tbl-head>
             <mdb-tbl-body>
-              <invoice-item v-for="invoice in invoices" :key="invoice.artworkId" :invoice="invoice" class="col-sm-6 col-md-4 col-lg-4"/>
+              <order-item v-for="invoice in invoices" :key="invoice.artworkId" :invoice="invoice" class="col-sm-6 col-md-4 col-lg-4"/>
             </mdb-tbl-body>
           </mdb-tbl>
         </div>
@@ -36,16 +36,16 @@
 </template>
 
 <script>
-import InvoiceItem from "./components/invoice/InvoiceItem";
+import OrderItem from "./components/orders/OrderItem";
 import { mdbContainer, mdbCol, mdbRow } from 'mdbvue';
 import { mdbTbl, mdbTblHead, mdbTblBody } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: "Invoices",
+  name: "Orders",
   bodyClass: "index-page",
   components: {
-    InvoiceItem,
+    OrderItem,
     mdbContainer,
     mdbRow,
     mdbCol,

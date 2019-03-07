@@ -9,49 +9,44 @@
     <div class="col-md-2">Blocks:</div>
     <div class="col-md-10">{{ bitcoinState.blocks }}</div>
   </div>
-  <h3>API Settings</h3>
+  <h3>Bitcoin Maintenance</h3>
   <div class="row">
-    <div class="col-md-2">Bitcoin Gateway:</div>
-    <div class="col-md-10">{{ constants.ethGatewayUrl }}</div>
+    <div class="col-md-4">Consolidate Unspent Outputs:</div>
+    <div class="col-md-8"><mdb-btn class="primary" @click="consolidate">consolidate</mdb-btn></div>
   </div>
 
 </div>
 </template>
 
 <script>
-import ethereumService from "@/services/ethereumService";
-import axios from "axios";
+import bitcoinService from "@/services/bitcoinService";
+import { mdbContainer, mdbRow, mdbCol, mdbInput, mdbTextarea, mdbBtn, mdbIcon, mdbModal, mdbModalHeader, mdbModalBody, mdbModalFooter } from 'mdbvue';
 
 export default {
   components: {
+    mdbContainer,
+    mdbRow,
+    mdbCol,
+    mdbInput,
+    mdbTextarea,
+    mdbBtn,
+    mdbIcon,
+    mdbModal,
+    mdbModalHeader,
+    mdbModalBody,
+    mdbModalFooter
   },
   data() {
     return {
-      gaiaHubUrl: "",
-      address: "",
-      network: "",
-      networkExpected: "",
-      contract: "",
-      numberOfItems: "",
-      contractAddress: "",
-      gaiaListResult: [],
-      gaiaResult: null,
-      gaiaStoreResult: null,
-      gaiaFileResult: null
     };
   },
   mounted() {
-    this.gaiaHubUrl = this.$store.state.constants.gaiaHubUrl;
-    this.network = ethereumService.getNetworkType();
-    this.networkExpected = this.$store.state.constants.networkExpected;
-    let hubConfig = localStorage.getItem("blockstack-gaia-hub-config");
-    let hubJSON = JSON.parse(hubConfig);
-    this.address = hubJSON.address;
   },
   methods: {
-    listUnspent() {
-      ethereumService.loadContract(this.contractAddress);
-      location.reload();
+    consolidate() {
+      bitcoinService.consolidate(function(result) {
+        console.log(result);
+      });
     }
   },
   computed: {

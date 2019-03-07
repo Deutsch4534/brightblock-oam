@@ -1,6 +1,11 @@
 <template>
 <div class="container">
-  <mdb-card-body>
+  <mdb-card-body  v-if="invoiceClaim.buyerTransaction">
+    <mdb-card-text>
+      <div class="row text-center">Payment has been received with thanks - you can check the status of the order in the confirmation tab.</div>
+    </mdb-card-text>
+  </mdb-card-body>
+  <mdb-card-body v-else>
     <mdb-card-title>
       <mdb-popover trigger="click" :options="{placement: 'top'}">
         <div class="popover">
@@ -8,7 +13,7 @@
             Ra.Pay
           </div>
           <div class="popover-body">
-          Payment is held in escrow until the transaction is fully completed.
+          Payment is held in escrow until the transaction is complete.
           </div>
           <div class="popover-body">
           This allows us to automate payment of refunds in cases of dispute and also to
@@ -16,17 +21,12 @@
           </div>
         </div>
         <a @click.prevent="" slot="reference">
-          RaPay <mdb-icon far icon="question-circle" />
+          Payment Methods <mdb-icon far icon="question-circle" />
         </a>
       </mdb-popover>
-      {{invoiceClaim.title}}
     </mdb-card-title>
     <mdb-card-text>
-      Please;
-      <ul>
-        <li>pay the invoice below using your bitcoin wallet,</li>
-        <li>stay on this page until we issue an acknowledgment.</li>
-      </ul>
+      Please pay using your bitcoin wallet and then <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" @click="sentPayment">click here.</mdb-btn>
     </mdb-card-text>
     <mdb-card-text>
     <div class="w-100"></div>
@@ -94,6 +94,9 @@ export default {
           console.log("success!");
         }
       );
+    },
+    sentPayment() {
+      this.$emit("paymentSent");
     }
   }
 };
