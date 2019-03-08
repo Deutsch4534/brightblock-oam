@@ -103,7 +103,7 @@ export default {
       if (artwork.artist) {
         return this.$store.getters["userProfilesStore/getProfile"](artwork.artist);
       }
-      return {name: "loading.."};
+      return {name: ""};
     },
     seller() {
       this.$store.getters["userProfilesStore/getProfile"](this.owner)

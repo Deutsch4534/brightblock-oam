@@ -5,7 +5,7 @@
 
   <!-- mdbNavbar brand -->
   <form class="md-form search-form">
-    <a type="button" @click="doSearch"><mdb-icon class="mb-0 mr-2" icon="search" /></a>
+    <a type="button" @click.prevent="doSearch"><mdb-icon class="mb-0 mr-2" icon="search" /></a>
     <input label="Search" type="text" class="mt-0 mb-0" v-model="query" placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
   </form>
   <button @click.prevent="toggleNav" class="navbar-toggler toggler-example black darken-3" type="button"
@@ -69,6 +69,7 @@ export default {
       taglink2: '',
       toggleClass: '',
       logo: require("@/assets/img/logo/logo-black-256x256.png"),
+      // logo: require("@/assets/img/logo/logo_white.png")
     };
   },
   components: {

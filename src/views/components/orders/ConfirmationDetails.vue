@@ -1,24 +1,43 @@
 <template>
-<div class="container">
-  <mdb-card-body>
+<div class="container mt-4">
     <div class="row">
       <div class="col-12">
-        <p>Order Number: {{invoiceClaim.invoiceId}}</p>
-        <p>Payment received: {{timeReceived}}</p>
-        <p v-if="paymentDetected">Current state: {{invoiceStatus()}} by {{confirmations}} blocks</p>
+        <p><a href="#" @click.prevent="showBlockchainInfo = !showBlockchainInfo">Open full details</a></p>
+        <div class="mb-4" v-if="showBlockchainInfo">
+          <div class="row">
+            <div class="col-3">Network</div>
+            <div class="col-6">{{bitcoinState.chain}}</div>
+          </div>
+          <div class="row">
+            <div class="col-3">Transactions</div>
+            <div class="col-6"><a :href="registerBlockchainUrl()" target="_blank">Provenance</a></div>
+          </div>
+          <div class="row" v-if="invoiceClaim.buyerTransaction">
+            <div class="col-3"></div>
+            <div class="col-6"><a :href="buyerBlockchainUrl()" target="_blank">Payment</a></div>
+          </div>
+          <div class="row" v-if="invoiceClaim.sellerTransaction">
+            <div class="col-3"></div>
+            <div class="col-6"><a :href="sellerBlockchainUrl()" target="_blank">Settlement</a></div>
+          </div>
+        </div>
+        <div>Order Number: {{invoiceClaim.invoiceId}}</div>
+        <div>Order created: {{timeReceived}}</div>
+        <div>Order state: {{invoiceClaim.state}}</div>
+        <div v-if="unpaid">Payment not yet received</div>
+        <div v-else-if="confirming">Payment received - not yet confirmed</div>
+        <div v-else-if="confirmed">
+          Payment has been confirmed
+          <div v-if="!digiArt">{{paySeller()}}</div>
+          <div v-else><mdb-btn @click="paySeller" rounded color="white" size="sm" class="mx-0 waves-light">pay seller</mdb-btn></div>
+        </div>
+        <div v-else-if="settling">Owner / artist are being paid</div>
+        <div v-else-if="settled">Owner / artist have been paid</div>
+        <div v-else>
+          <div><mdb-btn @click="paySeller" rounded color="white" size="sm" class="mx-0 waves-light">pay seller</mdb-btn></div>
+        </div>
       </div>
     </div>
-    <div class=" text-center">
-      <div class="col-12">
-        <p><mdb-btn @click="paySeller" rounded color="white" size="sm" class="mx-0 waves-light">pay seller</mdb-btn></p>
-      </div>
-    </div>
-    <div class="row" v-if="sendUpstreamPayment">
-      <div class="col-12">
-        <p>Transaction confirmed - paying seller {{paySeller()}}</p>
-      </div>
-    </div>
-  </mdb-card-body>
 </div>
 </template>
 
@@ -48,35 +67,42 @@ export default {
     invoiceClaim: {
       invoiceAmounts: {},
       invoiceRates: {}
-    }
+    },
+    registerTx: null
   },
   data() {
     return {
       bitcoinState: {},
-      balance: null,
-      invoiceRows: [],
+      showBlockchainInfo: false,
       showInstructions: false,
       showPaymentDetails: false,
       order: null,
     };
   },
   mounted() {
-    this.balance = this.$store.getters["bitcoinStore/getBalance"];
     this.bitcoinState = this.$store.getters["bitcoinStore/getBitcoinState"];
-    this.invoiceRows = invoiceService.populateInvoiceRows(this.invoiceClaim);
   },
   computed: {
-    paymentDetected() {
-      return this.invoiceClaim.buyerTransaction;
+    settled() {
+      return this.invoiceClaim.sellerTransaction && this.invoiceClaim.sellerTransaction.confirmations > 5;
+    },
+    settling() {
+      return this.invoiceClaim.sellerTransaction && this.invoiceClaim.sellerTransaction.confirmations < 6;
+    },
+    confirming() {
+      return !this.invoiceClaim.sellerTransaction && this.invoiceClaim.buyerTransaction.confirmations < 6;
+    },
+    confirmed() {
+      return !this.invoiceClaim.sellerTransaction && this.invoiceClaim.buyerTransaction.confirmations > 5;
+    },
+    unpaid() {
+      return !this.invoiceClaim.sellerTransaction && !this.invoiceClaim.buyerTransaction;
     },
     confirmations() {
       return this.invoiceClaim.buyerTransaction.confirmations;
     },
-    paymentConfirmed() {
-      return this.invoiceClaim.state === "confirmed" && this.invoiceClaim.itemType !== "digiart";
-    },
-    sendUpstreamPayment() {
-      return this.invoiceClaim.state === "confirmed" && this.invoiceClaim.itemType === "digiart";
+    digiArt() {
+      return this.invoiceClaim.itemType === "digiart";
     },
     timeReceived() {
       let date = moment(this.invoiceClaim.timestamp).format(moment.HTML5_FMT.DATE);
@@ -91,11 +117,36 @@ export default {
       }
       return this.invoiceClaim.state;
     },
+    registerBlockchainUrl() {
+      if (this.bitcoinState.chain === "test") {
+        return `https://testnet.blockexplorer.com/tx/${this.registerTx}`;
+      }
+      return `https://www.blockchain.com/btc/tx/${this.registerTx}`;
+    },
+    buyerBlockchainUrl() {
+      let txid = this.invoiceClaim.buyerTransaction.txid;
+      if (this.bitcoinState.chain === "test") {
+        return `https://testnet.blockexplorer.com/tx/${txid}`;
+      }
+      return `https://www.blockchain.com/btc/tx/${txid}`;
+    },
+    sellerBlockchainUrl() {
+      try {
+        let txid = this.invoiceClaim.sellerTransaction.txid;
+        if (this.bitcoinState.chain === "test") {
+          return `https://testnet.blockexplorer.com/tx/${txid}`;
+        }
+        return `https://www.blockchain.com/btc/tx/${txid}`;
+      } catch (err) {
+        return null;
+      }
+    },
     sendBuyNow() {
       this.$emit("buyNow");
     },
     paySeller() {
       this.$emit("paySeller");
+      return "payment sent..";
     }
   }
 };

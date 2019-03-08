@@ -116,19 +116,24 @@ const invoiceStore = {
         });
       });
     },
-    paySeller({ commit, state, getters}, invoiceId) {
+    paySeller({ commit, state, getters}, invoice) {
       return new Promise(resolve => {
-        let invoiceClaim = getters.getInvoiceById(invoiceId);
-        if (invoiceClaim.state !== "confirmed") {
+        if (!invoice.sellerTransaction) {
           // settlement is after successful pay seller.
           // can't settle until the buyers original tx is confirmed
-          bitcoinService.paySeller(invoiceClaim, function(transaction) {
-            if (transaction) {
-              invoiceClaim.state = "settling";
-              invoiceClaim.sellerTransaction = JSON.parse(transaction.decodedTransaction);
-              invoiceService.saveInvoiceClaim(invoiceClaim, function() {
-                commit("addInvoice", invoiceClaim);
-                resolve(invoiceClaim);
+          bitcoinService.paySeller(invoice, function(transaction) {
+            if (transaction && transaction.sentTx) {
+              invoice.state = "settling";
+              invoice.sellerTransaction = {};
+              invoice.sellerTransaction.txid = transaction.sentTx;
+              invoice.sellerTransaction.confirmations = 0;
+              invoiceService.saveInvoiceClaim(invoice, function() {
+                // invoiceService.transferArtworkToBuyer(invoice, true, function(artwork) {
+                // need to wait for confirmations before transferring...
+                console.log("settling purchase for artwork: " + invoice.title);
+                commit("addInvoice", invoice);
+                resolve(invoice);
+                // });
               }, function() {
                 resolve();
               });

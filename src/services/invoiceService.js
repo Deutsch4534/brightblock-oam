@@ -107,7 +107,7 @@ const invoiceService = {
           function(artwork) {
             if (!artwork) {
               // artwork not in buyers storage - transfer it now...
-              invoiceService.transferArtworkToBuyer(invoice, success);
+              invoiceService.transferArtworkToBuyer(invoice, false, success);
             } else {
               try {
                 if (success) success(invoice);
@@ -121,17 +121,23 @@ const invoiceService = {
           },
           function() {
             // artwork not in buyers storage - transfer it now...
-            invoiceService.transferArtworkToBuyer(invoice, success);
+            invoiceService.transferArtworkToBuyer(invoice, false, success);
           }
         );
       });
     }, 5000);
   },
-  transferArtworkToBuyer: function(invoice, success) {
+  transferArtworkToBuyer: function(invoice, settled, success) {
     artworkSearchService.userArtwork(invoice.artworkId, invoice.seller.blockstackId,
       function(artwork) {
-        artwork.buyer = invoice.buyer.blockstackId;
-        artwork.status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
+        if (settled) {
+          artwork.owner = invoice.buyer.blockstackId;
+          artwork.buyer = null;
+          artwork.status = store.state.constants.statuses.artwork.PURCHASE_COMPLETE;
+        } else {
+          artwork.buyer = invoice.buyer.blockstackId;
+          artwork.status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
+        }
         myArtworksService.addSaleHistory(artwork, invoice.invoiceId, invoice.buyerTransaction.txid, invoice.buyerTransaction.confirmations);
         store.dispatch('myAccountStore/addRelationship', invoice.seller.blockstackId);
         store.dispatch('myArtworksStore/transferArtwork', artwork).then(artwork => {

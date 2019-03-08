@@ -2,7 +2,7 @@
 <div class="container">
   <mdb-card-body  v-if="invoiceClaim.buyerTransaction">
     <mdb-card-text>
-      <div class="row text-center">Payment has been received with thanks - you can check the status of the order in the confirmation tab.</div>
+      <div class="row">Payment has been received with thanks - you can check the status of the order in the confirmation tab.</div>
     </mdb-card-text>
   </mdb-card-body>
   <mdb-card-body v-else>
@@ -13,20 +13,18 @@
             Ra.Pay
           </div>
           <div class="popover-body">
-          Payment is held in escrow until the transaction is complete.
-          </div>
-          <div class="popover-body">
-          This allows us to automate payment of refunds in cases of dispute and also to
-          seemlessly transfer provenance from seller to buyer.
+          Payments are held in an escrow until confirmed on the bitcoin network - this usually takes about an hour.
+          If shipping is involved we will hold your payment and pay to the seller once you confirmed
+          receipt of the goods.
           </div>
         </div>
         <a @click.prevent="" slot="reference">
-          Payment Methods <mdb-icon far icon="question-circle" />
+          Payment <mdb-icon far icon="question-circle" />
         </a>
       </mdb-popover>
     </mdb-card-title>
     <mdb-card-text>
-      Please pay using your bitcoin wallet and then <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" @click="sentPayment">click here.</mdb-btn>
+      Please pay using your bitcoin wallet. <!-- and then <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" @click="sentPayment">click here.</mdb-btn> -->
     </mdb-card-text>
     <mdb-card-text>
     <div class="w-100"></div>

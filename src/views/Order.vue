@@ -21,7 +21,7 @@
           </mdb-row>
           <order-details :invoiceClaim="invoice" v-if="showOrderDetails" @buyNow="buyNow"/>
           <payment-details v-if="showPaymentDetails" :bitcoinUri="bitcoinUri" :invoiceClaim="invoice" @paymentSent="paymentSent"/>
-          <confirmation-details v-if="showConfirmationDetails" :invoiceClaim="invoice" @paySeller="paySeller"/>
+          <confirmation-details v-if="showConfirmationDetails" :invoiceClaim="invoice" :registerTx="artwork.bitcoinTx" @paySeller="paySeller"/>
         </mdb-col>
       </mdb-row>
     </mdb-col>
@@ -88,7 +88,7 @@ export default {
       if (artwork.artist) {
         return this.$store.getters["userProfilesStore/getProfile"](artwork.artist);
       }
-      return {name: "loading.."};
+      return {name: ""};
     },
     created() {
       if (this.artwork.created) {
@@ -97,11 +97,18 @@ export default {
       return moment(this.artwork.id).format("DD/MMM/YYYY");
     },
     artwork() {
+      let defArtwork = {
+        image: require("@/assets/img/logo/logo-black-256x256.png"),
+        saleData: {}
+      };
       let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
       if (!invoice) {
-        return {};
+        return defArtwork;
       }
       let artwork = this.$store.getters["artworkSearchStore/getArtwork"](invoice.artworkId);
+      if (!artwork.id) {
+        return defArtwork;
+      }
       return artwork;
     },
     bitcoinUri() {
@@ -175,8 +182,7 @@ export default {
     },
     paySeller() {
       let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
-      let artwork = this.$store.getters["artworkSearchStore/getArtwork"](invoice.artworkId);
-      this.$store.dispatch("invoiceStore/paySeller", invoice.artworkId).then((invoiceClaim) => {
+      this.$store.dispatch("invoiceStore/paySeller", invoice).then((invoiceClaim) => {
         if (invoiceClaim) {
           artwork.owner = invoiceClaim.seller.blockstackId;
           artwork.buyer = null;

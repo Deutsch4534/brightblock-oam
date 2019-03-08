@@ -1,12 +1,6 @@
 <template>
   <mdb-container fluid class="bg-dark flex-1 py-5">
     <mdb-container class="py-3 py-md-4">
-      <mdb-row>
-        <div class="col-12">
-          <h1 class="h1-responsive mb-5 text-white">Gallery</h1>
-        </div>
-      </mdb-row>
-        <!-- <mdb-row v-masonry item-selector=".gallery-item" transition-duration="0.3s" stagger="0.03s"  horizontal-order="true"> -->
         <mdb-row>
           <gallery-artwork v-for="(artwork, index) in artworks" :key="index" :artwork="artwork" class="gallery-item col-sm-6 col-md-4 col-lg-3"/>
          </mdb-row>
