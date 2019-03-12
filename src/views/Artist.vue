@@ -6,8 +6,8 @@
         <div class="col-sm-12 col-md-8 col-lg-9 pl-5 pb-3">
           <h2 class="text-white pb-3">All artworks</h2>
           <div id="artist-all-artworks" class="bg-dark flex-1">
-            <div class="row">
-              <single-result v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item col-sm-6 col-md-6 col-lg-6"/>
+            <div class="row article">
+              <single-result v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item"/>
             </div>
           </div>
         </div>

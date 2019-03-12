@@ -1,6 +1,6 @@
 <template>
     <mdb-card class="bg-transparent mb-5 w-100">
-      <router-link class="grid-item" :to="url">
+      <router-link class="grid-item" :to="artistUrl">
         <mdb-view hover>
           <mdb-card-image :src="avatar" :alt="artist.name" class="img-square"></mdb-card-image>
           <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
@@ -41,7 +41,7 @@ export default {
     }
   },
   computed: {
-    url () {
+    artistUrl () {
       return '/artists/' + this.artist.username
     },
     avatar () {

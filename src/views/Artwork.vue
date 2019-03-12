@@ -10,7 +10,7 @@
       </mdb-col>
       <mdb-col col="12" md="5" class="pl-md-3">
         <h1 class="h5-responsive">{{artwork.title}}</h1>
-        <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, {{created}}</p>
+        <p class="h5-responsive">by <router-link :to="artistUrl()"><u>{{artist.name}}</u></router-link>, {{created}}</p>
         <p class="mb-1">{{artwork.description}}</p>
         <p><b><small>{{keywords}}</small></b></p>
         <buy-artwork-form-btc v-if="isRegisteredAndPriceSet" :artwork="artwork"/>
@@ -134,7 +134,12 @@ export default {
       );
     }
   },
-  methods: {}
+  methods: {
+    artistUrl () {
+      let artwork = this.artwork;
+      return '/artists/' + artwork.artist;
+    }
+  }
 };
 </script>
 <style>
