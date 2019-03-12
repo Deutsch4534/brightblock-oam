@@ -1,17 +1,21 @@
 <template>
 <div class="">
   <div v-if="purchaseBegun">
-    <h6>Offer Made</h6>
+    <p style="font-size: 0.8em">Offer Made</p>
   </div>
   <div v-else-if="sellingBuyNow">
-    <button class="btn btn-main" @click="routeToBuyNow">Buy Now</button>
+    <p style="font-size: 0.8em">{{artwork.saleData.amount}} EUR
+    <br/>{{btcMessage}} BTC</p>
+  <!--  <button class="btn btn-green" @click="routeToBuyNow">Buy Now</button> -->
   </div>
   <div v-else-if="sellingAuction">
-    <button class="btn btn-main" @click="routeToPublicAuction">Open Auction</button>
-    <button class="btn btn-main" @click="routeToManageAuction">Manage Auction</button>
+  <!--
+    <button class="btn btn-green" @click="routeToPublicAuction">Open Auction</button>
+    <button class="btn btn-green" @click="routeToManageAuction">Manage Auction</button>
+  -->
   </div>
   <div v-else>
-    <h6>Not Selling</h6>
+    <p style="font-size: 0.8em">Not Selling</p>
   </div>
 </div>
 </template>
@@ -57,6 +61,21 @@ export default {
         priceSet = this.artwork.bcitem && this.artwork.bcitem.price > 0;
       }
       return priceSet && this.artwork.saleData.soid === 1;
+    },
+    btcMessage() {
+      try {
+        let value = moneyUtils.valueInBitcoin(this.artwork.saleData.fiatCurrency, this.artwork.saleData.amount);
+        return value;
+      } catch (e) {
+        return "";
+      }
+    },
+    moneySymbol() {
+      try {
+        return moneyUtils.currencySymbol(this.artwork.saleData.fiatCurrency);
+      } catch (e) {
+        return "";
+      }
     },
     sellingAuction() {
       return (

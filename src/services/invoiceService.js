@@ -33,11 +33,20 @@ const invoiceService = {
     });
   },
   subscribeInvoiceNews: function() {
+    if (!invoiceService.subscribed) {
+      invoiceService.subscribed = true;
+    } else {
+      return;
+    }
     let socket = new SockJS(store.state.constants.btcGatewayUrl + "/invoices");
-    let stompClient = Stomp.over(socket);
-    stompClient.debug = null;
+    invoiceService.stompClient = Stomp.over(socket);
+    //stompClient.subscribe("/app/chat", function(message) {
+    //  console.log("Hi");
+    //});
+    invoiceService.stompClient.debug = null;
     let connectSuccess = function() {
-      stompClient.subscribe("/topic/invoices", function(response) {
+      //invoiceService.stompClient.send("/app/watch-list", {order: 123});
+      invoiceService.stompClient.subscribe("/topic/invoices", function(response) {
         let transactions = JSON.parse(response.body);
         store.commit("invoiceStore/transactions", transactions);
       });
@@ -49,8 +58,8 @@ const invoiceService = {
         console.log("[SysadmOnly] WebSocket Error: " + error);
       }
     };
-    stompClient.connect(
-      {},
+    invoiceService.stompClient.connect(
+      {headers: [{"userId" : "me"}]},
       connectSuccess,
       connectError
     );
@@ -73,8 +82,8 @@ const invoiceService = {
   },
 
   watchForPayment: function(invoice, success, failure) {
-    if (invoiceService.intval) {
-      clearInterval(invoiceService.intval);
+    if (invoiceService.watchForPaymentInterval) {
+      clearInterval(invoiceService.watchForPaymentInterval);
     }
     if (invoice.buyerTransaction && invoice.confirmed) {
       if (success) success(invoice);
@@ -84,9 +93,14 @@ const invoiceService = {
     if (myProfile.username !== invoice.buyer.blockstackId) {
       if (failure) failure("Current user is not the buyer");
     }
-    invoiceService.intval = setInterval(function() {
+    invoiceService.watchForPaymentInterval = setInterval(function() {
       bitcoinService.lookupTransaction({timestamp: invoice.timestamp, amount: invoice.invoiceAmounts.totalBitcoin}, function(transaction) {
         if (!transaction) {
+          if (success) success(invoice);
+          return;
+        }
+        if (invoice.confirmed) {
+          clearInterval(invoiceService.watchForPaymentInterval);
           if (success) success(invoice);
           return;
         }
@@ -110,10 +124,10 @@ const invoiceService = {
               invoiceService.transferArtworkToBuyer(invoice, false, success);
             } else {
               try {
-                if (success) success(invoice);
                 if (invoice.state === "confirmed") {
-                  clearInterval(invoiceService.intval);
+                  clearInterval(invoiceService.watchForPaymentInterval);
                 }
+                if (success) success(invoice);
               } catch (err) {
                 // console.log("Error");
               }
@@ -249,6 +263,18 @@ const invoiceService = {
     }
     return "unkown";
   },
+  populatePayRow: function(invoiceClaim) {
+    let invoiceAmounts = invoiceClaim.invoiceAmounts;
+    return {
+      rowClass: "white",
+      counter: "",
+      party: "Total",
+      notes: "",
+      rate: "",
+      fiatAmount: invoiceAmounts.totalFiat,
+      bitcoinAmount: invoiceAmounts.totalBitcoin
+    };
+  },
   populateInvoiceRows: function(invoiceClaim) {
     let gallerist = (invoiceClaim.gallerist) ? invoiceClaim.gallerist.blockstackId : null;
     let owner = invoiceClaim.seller.blockstackId;
@@ -293,15 +319,6 @@ const invoiceService = {
       rate: invoiceRates.platformFee + " %",
       fiatAmount: invoiceAmounts.fiatPlatformAmount,
       bitcoinAmount: invoiceAmounts.bitcoinPlatformAmount
-    });
-    invoiceRows.push({
-      rowClass: "white",
-      counter: "",
-      party: "Total",
-      notes: "",
-      rate: "",
-      fiatAmount: invoiceAmounts.totalFiat,
-      bitcoinAmount: invoiceAmounts.totalBitcoin
     });
     return invoiceRows;
   }

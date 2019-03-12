@@ -4,9 +4,12 @@
 <nav class="navbar navbar-expand-lg">
 
   <!-- mdbNavbar brand -->
-  <form class="md-form search-form">
-    <a type="button" @click.prevent="doSearch"><mdb-icon class="mb-0 mr-2" icon="search" /></a>
-    <input label="Search" type="text" class="mt-0 mb-0" v-model="query" placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
+  <span class="d-inline-block mr-3">
+    <router-link to="/" class="navbar-brand d-inline-block" ><img :src="logo" height="20px" alt="radicle logo"></router-link>
+  </span>
+  <form class="md-form search-form ml-2" @submit.prevent="">
+    <a type="button" @click.prevent="doSearch"><mdb-icon class="" icon="search" /></a>
+    <input label="Search" type="text" class="mt-0 mb-0 ml-1" v-model="query" placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
   </form>
   <button @click.prevent="toggleNav" class="navbar-toggler toggler-example black darken-3" type="button"
       data-toggle="collapse"
@@ -22,12 +25,12 @@
     <ul class="navbar-nav ml-auto">
       <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/gallery">Gallery</router-link></li>
       <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/artists">Artists</router-link></li>
-      <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/online-auctions">Auctions</router-link></li>
-      <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/my-artworks">My Artwork</router-link></li>
+      <li v-if="featureAuctions" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/online-auctions">Auctions</router-link></li>
+      <li v-if="loggedIn" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/my-artworks">My Artwork</router-link></li>
       <upload-links v-if="loggedIn"/>
-      <li v-if="hasInvoices" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/orders"><i class="fas fa-shopping-bag"></i><sup><mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge></sup></router-link></li>
+      <li v-if="loggedIn && hasInvoices" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/orders"><i class="fas fa-shopping-bag"></i><sup><mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge></sup></router-link></li>
       <account-links v-if="loggedIn"/>
-      <li class="nav-item" @click="closeMenu"><router-link v-if="!loggedIn" class="btn nav-link navbar-link px-3" to="/login">Login</router-link></li>
+      <li class="nav-item" @click="closeMenu"><router-link v-if="!loggedIn" class="nav-link navbar-link" to="/login">Login</router-link></li>
     </ul>
   </div>
 
@@ -68,8 +71,8 @@ export default {
       title: "title",
       taglink2: '',
       toggleClass: '',
-      logo: require("@/assets/img/logo/logo-black-256x256.png"),
-      // logo: require("@/assets/img/logo/logo_white.png")
+      // logo: require("@/assets/img/logo/logo-black-256x256.png"),
+      logo: require("@/assets/img/logo/Radicle_logo-test.png")
     };
   },
   components: {
@@ -157,9 +160,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .navbar {
-  border-bottom: 1px solid lightgray;
   box-shadow: none;
-  min-height: 50px;
+  min-height: 60px;
 }
 .navbar-link {
   text-transform: uppercase;
@@ -183,13 +185,13 @@ export default {
 }
 
 i.fa-search {
-  color: black;
+  color: gray;
   transform: rotate(90deg);
-  font-size: 24px;
+  font-size: 14px;
 }
-.search-form input, .login-link, .nav-cta { font-size: 20px; font-weight: normal; }
+.search-form input, .login-link, .nav-cta { font-size: 16px; font-weight: normal; }
 .search-form input { border-bottom: none; }
-.search-form input:focus { box-shadow: none!important; border-bottom: 1pt solid black!important; }
+.search-form input:focus { box-shadow: none!important; border-bottom: 1pt solid gray!important; }
 
 .search-form input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: grey;

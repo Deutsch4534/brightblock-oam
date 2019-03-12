@@ -1,36 +1,25 @@
 <template>
 <mdb-container fluid class="bg-light flex-1 px-5">
-  <mdb-row>
-    <mdb-col col="12" lg="10">
-      <mdb-row class="py-5">
-        <mdb-col col="12" md="4">
-          <mdb-view hover>
-            <img class="inplay-image img-fluid mb-4" width="100%" :src="artwork.image" :alt="artwork.title">
-            <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
-            <h1 class="h5-responsive">{{artwork.title}}</h1>
-            <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, {{created}}</p>
-            <p class="h5-responsive" v-if="artwork.itemType === 'digiart'">Digital Artwork</p>
-            <p class="h5-responsive" v-else>Physical Artwork</p>
-          </mdb-view>
-        </mdb-col>
-        <mdb-col col="12" md="8">
-          <mdb-row>
-            <mdb-col col="12" lg="10">
-              1. <a :class="breadClass('review')" @click="goto('review')">Order</a> --> 2. <a :class="breadClass('pay')" @click="goto('pay')">Payment</a> --> 3. <a :class="breadClass('confirm')" @click="goto('confirm')">Confirm</a>
-            </mdb-col>
-          </mdb-row>
-          <order-details :invoiceClaim="invoice" v-if="showOrderDetails" @buyNow="buyNow"/>
-          <payment-details v-if="showPaymentDetails" :bitcoinUri="bitcoinUri" :invoiceClaim="invoice" @paymentSent="paymentSent"/>
-          <confirmation-details v-if="showConfirmationDetails" :invoiceClaim="invoice" :registerTx="artwork.bitcoinTx" @paySeller="paySeller"/>
-        </mdb-col>
-      </mdb-row>
-    </mdb-col>
-  </mdb-row>
+  <mdb-container class="mt-5">
+    <mdb-row>
+      <mdb-col col="12" md="5">
+        <mdb-view hover>
+          <img class="inplay-image img-fluid mb-4" width="100%" :src="artwork.image" :alt="artwork.title">
+          <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+        </mdb-view>
+      </mdb-col>
+      <mdb-col col="12" md="7" class="pl-md-5">
+        <h1 class="h5-responsive">{{artwork.title}}</h1>
+        <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, {{created}}</p>
+        <payment-details v-if="showPaymentDetails" :bitcoinUri="bitcoinUri" :invoiceClaim="invoice" @paymentSent="paymentSent"/>
+        <confirmation-details v-if="showConfirmationDetails" :invoiceClaim="invoice" :registerTx="artwork.bitcoinTx" @paySeller="paySeller"/>
+      </mdb-col>
+    </mdb-row>
+  </mdb-container>
 </mdb-container>
 </template>
 
 <script>
-import OrderDetails from "./components/orders/OrderDetails";
 import artworkSearchService from "@/services/artworkSearchService";
 import { mdbContainer, mdbRow, mdbCol, mdbIcon, mdbMask, mdbView, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
 import moment from "moment";
@@ -44,7 +33,6 @@ export default {
   name: "Order",
   bodyClass: "index-page",
   components: {
-    OrderDetails,
     PaymentDetails,
     ConfirmationDetails,
     mdbContainer,
@@ -63,23 +51,34 @@ export default {
   data() {
     return {
       orderId: null,
-      showOrderDetails: false,
       showPaymentDetails: false,
-      showConfirmationDetails: false
+      showConfirmationDetails: false,
+      bitcoinUri: null
     };
   },
   mounted() {
     this.orderId = Number(this.$route.params.orderId);
     let $self = this;
     this.$store.dispatch("invoiceStore/fetchInvoice", this.orderId).then(invoice => {
-      let status = invoiceService.getInvoiceStatusFromState(invoice.state);
-      artworkSearchService.newQuery({field: "id", query: invoice.artworkId}, function(artwork) {
-        if (status === 1) {
-          $self.showOrderDetails = true;
+      if (invoice) {
+        artworkSearchService.newQuery({field: "id", query: invoice.artworkId});
+        if (invoice.state === "unpaid") {
+          $self.bitcoinUri = invoiceService.getBitcoinUri(invoice);
+          $self.showPaymentDetails = true;
+          $self.watchChainForPayment();
+        } else if (invoice.state === "confirming") {
+          $self.showConfirmationDetails = true;
+          $self.watchChainForPayment();
         } else {
           $self.showConfirmationDetails = true;
+          $self.checkPayment();
+          if (invoice.state === "settling" || invoice.state === "settled") {
+            $self.checkSettlement();
+          }
         }
-      });
+      } else {
+        console.log("Order id but no order?");
+      }
     })
   },
   computed: {
@@ -111,11 +110,6 @@ export default {
       }
       return artwork;
     },
-    bitcoinUri() {
-      let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
-      let bitcoinUri = invoiceService.getBitcoinUri(invoice);
-      return bitcoinUri;
-    },
     invoice() {
       let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
       if (!invoice) {
@@ -128,68 +122,44 @@ export default {
     }
   },
   methods: {
-    breadClass(id) {
-      if (id === "review") {
-        if (this.showOrderDetails) {
-          return "text-danger";
-        }
-      } else if (id === "pay") {
-        if (this.showPaymentDetails) {
-          return "text-danger";
-        }
-      } else if (id === "confirm") {
-        if (this.showConfirmationDetails) {
-          return "text-danger";
-        }
-      }
-      return "";
-    },
-    invoiceStatus() {
-      let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
-      return invoiceService.getInvoiceStatusFromState(invoice.state);
-    },
     buyNow() {
-      this.showOrderDetails = false;
       this.showPaymentDetails = true;
       this.showConfirmationDetails = false;
-    },
-    goto(view) {
-      this.showOrderDetails = false;
-      this.showPaymentDetails = false;
-      this.showConfirmationDetails = false;
-      if (view === "review") {
-        this.showOrderDetails = true;
-      } else if (view === "pay") {
-        this.showPaymentDetails = true;
-      } else if (view === "confirm") {
-        this.showConfirmationDetails = true;
-      }
-    },
-    reopenPaymentInfo() {
-      this.showConfirmationDetails = false;
-      this.showOrderDetails = false;
-      this.showPaymentDetails = true;
-    },
-    reopenOrderInfo() {
-      this.showConfirmationDetails = false;
-      this.showOrderDetails = true;
-      this.showPaymentDetails = false;
     },
     paymentSent() {
       this.showConfirmationDetails = true;
-      this.showOrderDetails = false;
       this.showPaymentDetails = false;
+    },
+    checkPayment() {
+      this.$store.dispatch("invoiceStore/checkPayment", this.orderId);
+    },
+    checkSettlement() {
+      this.$store.dispatch("invoiceStore/checkSettlement", this.orderId);
+    },
+    watchChainForPayment() {
+      let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
+      invoiceService.watchForPayment(invoice, function(invoice) {
+        if (invoice && invoice.buyerTransaction) {
+          $self.showPaymentDetails = false;
+          $self.showConfirmationDetails = true;
+        }
+      });
     },
     paySeller() {
       let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
-      this.$store.dispatch("invoiceStore/paySeller", invoice).then((invoiceClaim) => {
-        if (invoiceClaim) {
-          artwork.owner = invoiceClaim.seller.blockstackId;
-          artwork.buyer = null;
-          myArtworksService.addSaleHistoryPaySellerData(artwork, invoiceClaim.buyerTransaction.txid, invoiceClaim.sellerTransaction.txid);
-          this.$store.dispatch("myArtworksStore/updateArtwork", artwork);
-        }
-      });
+      if (!invoice.sellerTransaction) {
+        this.$store.dispatch("invoiceStore/paySeller", invoice).then((invoice) => {
+          if (invoice) {
+            this.$store.dispatch("myArtworksStore/fetchMyArtwork", invoice.artworkId).then((artwork) => {
+              artwork.owner = invoice.seller.blockstackId;
+              artwork.buyer = null;
+              artwork.status = this.$store.state.constants.statuses.artwork.PURCHASE_COMPLETE;
+              myArtworksService.addSaleHistoryPaySellerData(artwork, invoice.buyerTransaction.txid, invoice.sellerTransaction.txid);
+              this.$store.dispatch("myArtworksStore/updateArtwork", artwork);
+            });
+          }
+        });
+      }
     }
   }
 };

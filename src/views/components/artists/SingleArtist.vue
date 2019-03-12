@@ -7,8 +7,7 @@
         </mdb-view>
       </router-link>
       <mdb-card-body class="px-0">
-        <mdb-card-title class="artist-name h2-responsive">{{artist.name}}</mdb-card-title>
-        <mdb-card-text>{{artist.description}}</mdb-card-text>
+        <mdb-card-title class="text-white">{{artist.name}}</mdb-card-title>
       </mdb-card-body>
     </mdb-card>
 </template>

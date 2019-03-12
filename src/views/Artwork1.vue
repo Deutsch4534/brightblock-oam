@@ -10,7 +10,7 @@
           </mdb-view>
         </mdb-col>
         <mdb-col col="12" md="8" class="pl-md-5">
-          <h1 class="h5-responsive"><mdb-icon title="Digital work" far icon="dot-circle" v-if="artwork.itemType === 'digiart'"/> {{artwork.title}}</h1>
+          <h1 class="h5-responsive">{{artwork.title}}</h1>
           <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, {{created}}</p>
           <p class="mb-1">{{artwork.description}}</p>
           <p>{{aboutArtwork.keywords}}</p>

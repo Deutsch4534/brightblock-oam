@@ -23,18 +23,17 @@
         </div>
         <div>Order Number: {{invoiceClaim.invoiceId}}</div>
         <div>Order created: {{timeReceived}}</div>
-        <div>Order state: {{invoiceClaim.state}}</div>
         <div v-if="unpaid">Payment not yet received</div>
-        <div v-else-if="confirming">Payment received - not yet confirmed</div>
+        <div v-else-if="confirming">Payment received (confirming - {{buyerConfirmations}} / 6)</div>
         <div v-else-if="confirmed">
-          Payment has been confirmed
-          <div v-if="!digiArt">{{paySeller()}}</div>
+          Payment has been confirmed (with {{buyerConfirmations}} confirmations)
+          <div v-if="digiArt">{{paySeller()}}</div>
           <div v-else><mdb-btn @click="paySeller" rounded color="white" size="sm" class="mx-0 waves-light">pay seller</mdb-btn></div>
         </div>
-        <div v-else-if="settling">Owner / artist are being paid</div>
-        <div v-else-if="settled">Owner / artist have been paid</div>
+        <div v-else-if="settling">Owner / artist are being paid ({{sellerConfirmations}} / 6 confirmations)</div>
+        <div v-else-if="settled">Owner / artist have been paid (with {{sellerConfirmations}} confirmations)</div>
         <div v-else>
-          <div><mdb-btn @click="paySeller" rounded color="white" size="sm" class="mx-0 waves-light">pay seller</mdb-btn></div>
+          <div>status in between</div>
         </div>
       </div>
     </div>
@@ -83,6 +82,16 @@ export default {
     this.bitcoinState = this.$store.getters["bitcoinStore/getBitcoinState"];
   },
   computed: {
+    buyerConfirmations() {
+      return this.invoiceClaim.buyerTransaction.confirmations;
+    },
+    sellerConfirmations() {
+      try {
+        return this.invoiceClaim.sellerTransaction.confirmations;
+      } catch (err) {
+        return 0;
+      }
+    },
     settled() {
       return this.invoiceClaim.sellerTransaction && this.invoiceClaim.sellerTransaction.confirmations > 5;
     },
@@ -145,7 +154,9 @@ export default {
       this.$emit("buyNow");
     },
     paySeller() {
-      this.$emit("paySeller");
+      if (!this.invoiceClaim.sellerTransaction) {
+        this.$emit("paySeller");
+      }
       return "payment sent..";
     }
   }

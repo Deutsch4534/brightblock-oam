@@ -19,7 +19,8 @@
           </div>
         </div>
         <a @click.prevent="" slot="reference">
-          Payment <mdb-icon far icon="question-circle" />
+          Payment -
+          <a @click.prevent="showOrderDetails = !showOrderDetails">click here for details</a>
         </a>
       </mdb-popover>
     </mdb-card-title>
@@ -39,7 +40,11 @@
         </div>
       </div>
     </mdb-card-text>
+    <mdb-card-text>
+      <a @click.prevent="showOrderDetails = !showOrderDetails"><small>Order details</small></a>
+    </mdb-card-text>
   </mdb-card-body>
+  <order-details :invoiceClaim="invoiceClaim" v-if="showOrderDetails"/>
 </div>
 </template>
 
@@ -48,11 +53,13 @@ import xhrService from "@/services/xhrService";
 import { mdbPopover, mdbIcon, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
 import QRCode from "qrcode";
 import moneyUtils from "@/services/moneyUtils";
+import OrderDetails from "./OrderDetails";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "PaymentDetails",
   components: {
+    OrderDetails,
     mdbCardBody,
     mdbPopover,
     mdbIcon,
@@ -66,14 +73,8 @@ export default {
   },
   data() {
     return {
+      showOrderDetails: false,
     };
-  },
-  watch: {
-    // whenever question changes, this function will run
-    invoiceClaim: function (newQuestion, oldQuestion) {
-      this.answer = 'Waiting for you to stop typing...'
-      this.debouncedGetAnswer()
-    }
   },
   mounted() {
     if (this.bitcoinUri) {

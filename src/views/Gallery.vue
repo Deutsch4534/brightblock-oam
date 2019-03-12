@@ -2,14 +2,14 @@
   <mdb-container fluid class="bg-dark flex-1 py-5">
     <mdb-container class="py-3 py-md-4">
         <mdb-row>
-          <gallery-artwork v-for="(artwork, index) in artworks" :key="index" :artwork="artwork" class="gallery-item col-sm-6 col-md-4 col-lg-3"/>
+          <single-result v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item col-sm-6 col-md-4 col-lg-3"/>
          </mdb-row>
     </mdb-container>
   </mdb-container>
 </template>
 
 <script>
-import GalleryArtwork from "./components/gallery/GalleryArtwork";
+import SingleResult from "./components/search/SingleResult";
 import artworkSearchService from "../services/artworkSearchService";
 import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
 import { mdbContainer, mdbRow } from 'mdbvue';
@@ -26,7 +26,7 @@ export default {
     mdbBtn,
     // SingleAuction,
     // LastArtwork,
-    GalleryArtwork
+    SingleResult
   },
   name: "home",
   bodyClass: "index-page",

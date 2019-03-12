@@ -10,28 +10,27 @@
 
         <!-- i am owner - send this user to my artwork / my artworks -->
         <router-link v-if="iamowner" to="/my-artworks">
-          <mdb-btn rounded color="white" size="md" class="mr-1 ml-0 waves-light">manage artwork</mdb-btn>
+          <mdb-btn class="btn btn-green" size="sm" waves-light>manage artwork</mdb-btn>
         </router-link>
 
         <!-- order placed / purchase in progress - user has placed an order for this artwork or some other user? -->
         <div v-else-if="purchaseBegun">
 
           <router-link v-if="iambuyer" :to="invoiceUrl">
-            <mdb-btn rounded color="white" size="md" class="mr-1 ml-0 waves-light">proceed to checkout</mdb-btn>
+            <mdb-btn class="btn btn-green" size="sm" waves-light>proceed to checkout</mdb-btn>
           </router-link>
 
-          <mdb-btn v-else rounded color="white" :disabled="true" size="md" class="mr-1 ml-0 waves-light">sold</mdb-btn>
+          <mdb-btn v-else class="btn btn-green " size="sm" waves-light :disabled="true">sold</mdb-btn>
 
           <router-link to="/gallery">
-            <mdb-btn rounded color="white" size="md" class="mr-1 ml-0 waves-light">continue browsing</mdb-btn>
+            <mdb-btn class="btn btn-green" size="sm">continue browsing</mdb-btn>
           </router-link>
 
         </div>
 
         <!-- purchase not in progress - user is free to place order? -->
         <div v-else>
-          <!-- <mdb-btn @click="buyArtwork()" rounded color="white" size="md" class="mr-1 ml-0 waves-light">BUY</mdb-btn> -->
-          <mdb-btn @click="addToCart()" rounded color="white" size="md" class="mr-1 ml-0 waves-light">ADD TO CART</mdb-btn>
+          <mdb-btn class="btn btn-green" size="sm" @click="buyArtwork()">buy</mdb-btn>
         </div>
 
       </div>
@@ -60,7 +59,6 @@ export default {
       type: Object,
       default() {
         return {
-          bcitem: {}
         };
       },
     }
@@ -140,7 +138,7 @@ export default {
           return "Payment Info";
         }
         let value = moneyUtils.valueInBitcoin(this.artwork.saleData.fiatCurrency, this.artwork.saleData.amount);
-        return "ADD TO CART " + value + " BTC";
+        return "BUY NOW " + value + " BTC";
       } catch (e) {
         console.log("Error formatting buy label: " + e);
         return "Buy Now";

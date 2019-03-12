@@ -1,30 +1,28 @@
 <template>
 <mdb-container fluid class="bg-light flex-1 px-5">
-  <mdb-row>
-    <mdb-col col="12" lg="10">
-      <mdb-row class="py-5">
-        <mdb-col col="12" md="4">
-          <mdb-view hover>
-            <img class="inplay-image img-fluid mb-4" width="100%" :src="artwork.image" :alt="artwork.title">
-            <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
-          </mdb-view>
-        </mdb-col>
-        <mdb-col col="12" md="8" class="pl-md-5">
-          <h1 class="h5-responsive"><mdb-icon title="Digital work" far icon="dot-circle" v-if="artwork.itemType === 'digiart'"/> {{artwork.title}}</h1>
-          <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, {{created}}</p>
-          <p class="mb-1">{{artwork.description}}</p>
-          <p>{{keywords}}</p>
-          <buy-artwork-form-btc v-if="isRegisteredAndPriceSet" :artwork="artwork"/>
-          <div v-else>
-            <mdb-btn rounded color="white" :disabled="true" size="md" class="mr-1 ml-0 waves-light">not for sale</mdb-btn>
-            <router-link to="/gallery">
-              <mdb-btn rounded color="white" size="md" class="mr-1 ml-0 waves-light">continue browsing</mdb-btn>
-            </router-link>
-          </div>
-        </mdb-col>
-      </mdb-row>
-    </mdb-col>
-  </mdb-row>
+  <mdb-container class="mt-5">
+    <mdb-row>
+      <mdb-col col="12" md="7">
+        <mdb-view hover>
+          <img class="inplay-image img-fluid mb-4" width="100%" :src="artwork.image" :alt="artwork.title">
+          <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+        </mdb-view>
+      </mdb-col>
+      <mdb-col col="12" md="5" class="pl-md-3">
+        <h1 class="h5-responsive">{{artwork.title}}</h1>
+        <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, {{created}}</p>
+        <p class="mb-1">{{artwork.description}}</p>
+        <p><b><small>{{keywords}}</small></b></p>
+        <buy-artwork-form-btc v-if="isRegisteredAndPriceSet" :artwork="artwork"/>
+        <div v-else>
+          <button :disabled="true" class="btn btn-green waves-light">not for sale</button>
+          <router-link to="/gallery">
+            <button class="btn btn-green">continue browsing</button>
+          </router-link>
+        </div>
+      </mdb-col>
+    </mdb-row>
+  </mdb-container>
 </mdb-container>
 </template>
 

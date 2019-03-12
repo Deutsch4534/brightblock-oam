@@ -100,7 +100,8 @@ const myArtworksStore = {
     },
     unsold: state => {
       let username = store.getters["myAccountStore/getMyProfile"].username;
-      return state.myArtworks.filter(artwork => username === artwork.owner);
+      let status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
+      return state.myArtworks.filter(artwork => username === artwork.owner && artwork.status !== status);
     },
     selling: state => {
       let username = store.getters["myAccountStore/getMyProfile"].username;
@@ -114,7 +115,8 @@ const myArtworksStore = {
     },
     sold: state => {
       let username = store.getters["myAccountStore/getMyProfile"].username;
-      return state.myArtworks.filter(artwork => username !== artwork.owner);
+      let status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
+      return state.myArtworks.filter(artwork => username !== artwork.owner && artwork.status !== status);
     },
     auctioning: state => auctionId => {
       return state.myArtworks.filter(

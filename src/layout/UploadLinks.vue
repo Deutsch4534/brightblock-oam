@@ -10,7 +10,7 @@
         <router-link to="/my-artwork/upload" class="dropdown-item">Upload Artwork</router-link>
       </mdb-dropdown-item>
 
-      <mdb-dropdown-item>
+      <mdb-dropdown-item v-if="featureAuctions">
         <router-link to="/my-auctions/upload" class="dropdown-item">Upload Auction</router-link>
       </mdb-dropdown-item>
 
@@ -54,6 +54,9 @@ export default {
   computed: {
     showAdmin() {
       return this.$store.state.myAccountStore.myProfile.showAdmin;
+    },
+    featureAuctions() {
+      return this.$store.state.constants.featureAuctions;
     },
     hasInvoices() {
       let invoices = this.$store.getters["invoiceStore/getInvoices"];

@@ -2,7 +2,7 @@
   <router-link :to="artworkUrl" :class="[artworkWidth]" class="col-xs-12 grid-item">
     <img :src="artwork.image" :alt="artwork.title">
     <!-- TO DO: in design, artwork caption is artist name -->
-    <p class="art-title"><mdb-icon title="Digital work" far icon="dot-circle" v-if="artwork.itemType === 'digiart'"/> {{artwork.title}}</p>
+    <p class="art-title">{{artwork.title}}</p>
     <p class="artwork-caption">{{artwork.description}}</p>
   </router-link>
 </template>

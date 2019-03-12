@@ -2,7 +2,7 @@
   <mdb-card class="bg-transparent mb-4 w-100">
     <router-link class="grid-item" :to="buyNowUrl">
       <mdb-view hover>
-      <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
+        <mdb-card-image :src="artwork.image" :alt="artwork.title" style="height: 200px;"></mdb-card-image>
         <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
       </mdb-view>
     </router-link>
@@ -10,10 +10,11 @@
       <router-link :to="buyNowUrl">
         <mdb-card-title class="h2-responsive subtitle">{{artwork.title}}</mdb-card-title>
       </router-link>
-      <mdb-card-text>{{artwork.description}}<br /><span class="small">by: {{shortName(artwork.artist)}}</span></mdb-card-text>
+      <mdb-card-text>
+        <span class="small">by: {{shortName(artwork.artist)}}</span>
+        <selling-options-for-search :artwork="artwork"/>
+      </mdb-card-text>
       <mdb-card-text v-if="debugMode">of: {{shortName(artwork.owner)}}</mdb-card-text>
-      <mdb-card-text><selling-options-for-search :artwork="artwork"/></mdb-card-text>
-
     </mdb-card-body>
   </mdb-card>
 </template>

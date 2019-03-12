@@ -110,7 +110,8 @@ const router = new Router({
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
-      }
+      },
+      meta: { requiresAuth: true }
     },
     {
       path: "/profile/update",
@@ -128,7 +129,8 @@ const router = new Router({
         default: ProfileUpload,
         header: Navbar,
         footer: Footer
-      }
+      },
+      meta: { requiresAuth: true }
     },
     {
       path: "/landing",
@@ -169,12 +171,14 @@ const router = new Router({
     {
       path: "/order/:orderId",
       name: "order",
-      components: { default: Order, header: Navbar, footer: Footer }
+      components: { default: Order, header: Navbar, footer: Footer },
+      meta: { requiresAuth: true }
     },
     {
       path: "/orders",
       name: "orders",
-      components: { default: Orders, header: Navbar, footer: Footer }
+      components: { default: Orders, header: Navbar, footer: Footer },
+      meta: { requiresAuth: true }
     },
     {
       path: "/artworks/:artworkId",
@@ -183,7 +187,7 @@ const router = new Router({
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
-      }
+      },
     },
     {
       path: "/my-artwork/update/:artworkId",
@@ -242,7 +246,8 @@ const router = new Router({
         default: RegisterForSale,
         header: Navbar,
         footer: Footer
-      }
+      },
+      meta: { requiresAuth: true }
     },
     {
       path:
@@ -253,7 +258,8 @@ const router = new Router({
         default: RegisterForAuction,
         header: Navbar,
         footer: Footer
-      }
+      },
+      meta: { requiresAuth: true }
     },
     {
       path: "/online-auction/:username/:auctionId",
@@ -262,7 +268,8 @@ const router = new Router({
         default: OnlineAuction,
         header: Navbar,
         footer: Footer
-      }
+      },
+      meta: { requiresAuth: true }
     },
     {
       path: "/online-auctions",
@@ -276,40 +283,40 @@ const router = new Router({
     },
     {
       path: "/my-auctions/manage/:auctionId",
-      meta: { requiresAuth: true },
       components: {
         default: MyAuctionManage,
         header: Navbar,
         footer: Footer
-      }
+      },
+      meta: { requiresAuth: true }
     },
     {
       path: "/my-auctions/update/:auctionId",
-      meta: { requiresAuth: true },
       components: {
         default: MyAuctionUpdate,
         header: Navbar,
         footer: Footer
-      }
+      },
+      meta: { requiresAuth: true }
     },
     {
       path: "/my-auctions/upload",
-      meta: { requiresAuth: true },
       components: {
         default: MyAuctionUpload,
         header: Navbar,
         footer: Footer
-      }
+      },
+      meta: { requiresAuth: true }
     },
     {
       path: "/my-auctions",
       name: "myAuctions",
-      meta: { requiresAuth: true },
       components: {
         default: MyAuctions,
         header: Navbar,
         footer: Footer
-      }
+      },
+      meta: { requiresAuth: true }
     },
     {
       path: "/admin",

@@ -72,21 +72,43 @@ const invoiceStore = {
         });
       });
     },
+    checkPayment({ commit, state, getters}, invoiceId) {
+      let invoice = getters.getInvoiceById(invoiceId);
+      return new Promise(resolve => {
+        bitcoinService.checkTransaction({txid: invoice.buyerTransaction.txid}, function(transaction) {
+          if (transaction) {
+            invoice.buyerTransaction.confirmations = transaction.result.confirmations;
+            invoiceService.saveInvoiceClaim(invoice, function(res) {
+              resolve(invoice);
+            });
+          }
+        });
+      });
+    },
+    checkSettlement({ commit, state, getters}, invoiceId) {
+      let invoice = getters.getInvoiceById(invoiceId);
+      return new Promise(resolve => {
+        bitcoinService.checkTransaction({txid: invoice.sellerTransaction.txid}, function(transaction) {
+          if (transaction) {
+            invoice.sellerTransaction.confirmations = transaction.result.confirmations;
+            invoiceService.saveInvoiceClaim(invoice, function(res) {
+              resolve(invoice);
+            });
+          }
+        });
+      });
+    },
     fetchInvoice({ commit, state, getters}, invoiceId) {
       return new Promise(resolve => {
         // invoices are fetched on page load - see main.js
         invoiceService.initInvoiceData(function(invoicesRootFile) {
           commit("invoicesRootFile", invoicesRootFile);
           let invoiceClaim = getters.getInvoiceById(invoiceId);
-          if (invoiceClaim && !invoiceClaim.confirmed) {
-            invoiceService.watchForPayment(invoiceClaim, function(invoiceClaim) {
-              if (invoiceClaim) {
-                commit("addInvoice", invoiceClaim);
-                resolve(invoiceClaim);
-              }
-            });
+          if (invoiceClaim) {
+            resolve(invoiceClaim);
+            if (!invoiceClaim.state === "unpaid") {
+            }
           } else {
-            commit("addInvoice", invoiceClaim);
             resolve(invoiceClaim);
           }
         });

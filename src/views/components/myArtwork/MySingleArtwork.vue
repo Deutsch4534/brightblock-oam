@@ -5,7 +5,7 @@
       <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
     </mdb-view>
     <mdb-card-body class="px-0 pb-2 mb-0">
-      <mdb-card-title class="subtitle"><mdb-icon title="Digital work" far icon="dot-circle" v-if="artwork.itemType === 'digiart'"/> {{artwork.title}}</mdb-card-title>
+      <mdb-card-title class="subtitle">{{artwork.title}}</mdb-card-title>
       <mdb-card-text>
         <p>{{artwork.description}}</p>
         <selling-options :artwork="artwork" v-if="sellingStatus === 'unsold'"/>
