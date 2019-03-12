@@ -138,6 +138,7 @@ export default {
     },
     watchChainForPayment() {
       let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
+      let $self = this;
       invoiceService.watchForPayment(invoice, function(invoice) {
         if (invoice && invoice.buyerTransaction) {
           $self.showPaymentDetails = false;
