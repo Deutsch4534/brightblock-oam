@@ -42,6 +42,8 @@ const myAccountService = {
         uname === "mike.personal.id" ||
         uname.indexOf("brightblock") > -1 ||
         uname.indexOf("sybellaio") > -1 ||
+        uname.indexOf("head") > -1 ||
+        uname.indexOf("feek") > -1 ||
         uname.indexOf("rosemarry") > -1 ||
         uname.indexOf("anton") > -1;
       let avatarUrl = person.avatarUrl();
