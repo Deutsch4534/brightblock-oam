@@ -1,11 +1,25 @@
 <template>
+<div class="article-figure overlay view">
+  <router-link class="" :to="buyNowUrl">
+    <img :src="artwork.image" alt="help me" class="article-figure">
+    <div class="mask flex-center bg-dark">
+      <p class="white-text">{{artwork.title}} <br/>
+      <span class="small">by: {{shortName(artwork.artist)}}</span>
+      <selling-options-for-search :artwork="artwork"/>
+      </p>
+    </div>
+  </router-link>
+</div>
+
+
+<!--
+<router-link class="grid-item" :to="buyNowUrl">
+  <mdb-view>
+    <mdb-card-image :src="artwork.image" :alt="artwork.title" style="height: auto;"></mdb-card-image>
+    <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+  </mdb-view>
+</router-link>
   <mdb-card class="bg-transparent mb-4 w-100">
-    <router-link class="grid-item" :to="buyNowUrl">
-      <mdb-view hover>
-        <mdb-card-image :src="artwork.image" :alt="artwork.title" style="height: auto;"></mdb-card-image>
-        <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
-      </mdb-view>
-    </router-link>
     <mdb-card-body class="px-0">
       <router-link :to="buyNowUrl">
         <mdb-card-title class="h2-responsive subtitle">{{artwork.title}}</mdb-card-title>
@@ -17,6 +31,7 @@
       <mdb-card-text v-if="debugMode">of: {{shortName(artwork.owner)}}</mdb-card-text>
     </mdb-card-body>
   </mdb-card>
+-->
 </template>
 
 <script>
@@ -71,7 +86,14 @@ export default {
 };
 </script>
 <style scoped>
-  .subtitle {
+.article-figure {
+  display: flex;
+  height: 25vh;
+  width: auto;
+  margin: 0 5px 30px 5px
+}
+
+.subtitle {
     font-size: 1rem;
     margin-bottom: 0.25rem;
   }

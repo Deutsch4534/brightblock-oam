@@ -8,8 +8,8 @@
         <filters @update="updateFilters($event)" class="text-white mb-5"/>-->
       </div>
     </div>
-      <div class="row">
-        <single-result v-for="(artwork, index) of searchResults" :key="index" :artwork="artwork" class="result-item col-sm-6 col-md-4 col-lg-3"/>
+      <div class="row article">
+        <single-result v-for="(artwork, index) of searchResults" :key="index" :artwork="artwork" class="result-item"/>
        </div>
   </mdb-container>
 </mdb-container>
@@ -60,3 +60,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.article {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  justify-content: center;
+}
+</style>

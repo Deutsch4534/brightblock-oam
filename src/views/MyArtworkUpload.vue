@@ -29,7 +29,7 @@ export default {
       if (!myProfile.publicKeyData || !myProfile.publicKeyData.bitcoinAddress) {
         this.$router.push("/profile/upload?from=upload-artwork");
       } else {
-        this.enabled = myProfile.showAdmin;
+        this.enabled = true; // myProfile.showAdmin;
       }
     }
   },

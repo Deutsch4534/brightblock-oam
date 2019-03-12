@@ -7,10 +7,6 @@
   <span class="d-inline-block mr-3">
     <router-link to="/" class="navbar-brand d-inline-block" ><img :src="logo" height="20px" alt="radicle logo"></router-link>
   </span>
-  <form class="md-form search-form ml-2" @submit.prevent="">
-    <a type="button" @click.prevent="doSearch"><mdb-icon class="" icon="search" /></a>
-    <input label="Search" type="text" class="mt-0 mb-0 ml-1" v-model="query" placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
-  </form>
   <button @click.prevent="toggleNav" class="navbar-toggler toggler-example black darken-3" type="button"
       data-toggle="collapse"
       data-target="#navbarSupportedContent"
@@ -21,7 +17,11 @@
   </button>
 
   <div class="collapse navbar-collapse" :class="toggleClass" id="navbarSupportedContent">
-  <!--  <span class="dark-blue-text"><i class="fas fa-bars fa-1x"></i></span> -->
+    <!--  <span class="dark-blue-text"><i class="fas fa-bars fa-1x"></i></span> -->
+    <form class="md-form search-form ml-2" @submit.prevent="">
+      <a type="button" @click.prevent="doSearch"><mdb-icon class="" icon="search" /></a>
+      <input label="Search" type="text" class="mt-0 mb-0 ml-1" v-model="query" placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
+    </form>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/gallery">Gallery</router-link></li>
       <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/artists">Artists</router-link></li>
@@ -176,8 +176,9 @@ export default {
   color: white;
   font-weight: bold;
   z-index: 10;
-  margin: 50px;
-  padding: 30px;
+  margin: 10px;
+  padding: 10px 0 10px 30px;
+
 }
 
 .navbar .md-form {

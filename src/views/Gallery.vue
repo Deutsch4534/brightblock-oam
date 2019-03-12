@@ -1,8 +1,8 @@
 <template>
   <mdb-container fluid class="bg-dark flex-1 py-5">
     <mdb-container class="py-3 py-md-4">
-        <mdb-row>
-          <single-result v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item col-sm-6 col-md-4 col-lg-3"/>
+        <mdb-row class="article">
+          <single-result v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item"/>
          </mdb-row>
     </mdb-container>
   </mdb-container>
@@ -75,7 +75,13 @@ export default {
   mounted() {}
 };
 </script>
-<style>
+<style scoped>
+.article {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  justify-content: center;
+}
 
 @media all and (min-width: 991px) {
   .btn-container {
