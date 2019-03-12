@@ -71,7 +71,6 @@ export default {
       title: "title",
       taglink2: '',
       toggleClass: '',
-      // logo: require("@/assets/img/logo/logo-black-256x256.png"),
       logo: require("@/assets/img/logo/Radicle_logo-test.png")
     };
   },

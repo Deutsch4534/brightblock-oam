@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      missing: require("@/assets/img/logo/logo-black-256x256.png")
+      missing: require("@/assets/img/missing/artwork-missing.jpg")
     };
   },
   mounted() {},

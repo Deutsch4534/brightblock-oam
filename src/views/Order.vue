@@ -97,7 +97,7 @@ export default {
     },
     artwork() {
       let defArtwork = {
-        image: require("@/assets/img/logo/logo-black-256x256.png"),
+        image: require("@/assets/img/missing/artwork-missing.jpg"),
         saleData: {}
       };
       let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);

@@ -85,7 +85,7 @@ export default {
     artwork() {
       let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
       if (!a.image) {
-        a.image = require("@/assets/img/logo/logo-black-256x256.png");
+        a.image = require("@/assets/img/missing/artwork-missing.jpg");
       }
       return a ? a : {};
     },

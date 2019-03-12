@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       artwork: {
-        image: require("@/assets/img/logo/logo-black-256x256.png"),
+        image: require("@/assets/img/missing/artwork-missing.jpg"),
         bcitem: {},
         saleData: {},
       },
