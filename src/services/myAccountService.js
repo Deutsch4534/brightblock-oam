@@ -35,6 +35,9 @@ const myAccountService = {
       if (!uname && name) {
         uname = name;
       }
+      if (!uname) {
+        uname = "";
+      }
       let showAdmin =
         uname === "mike.personal.id" ||
         uname.indexOf("brightblock") > -1 ||
