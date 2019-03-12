@@ -1,5 +1,5 @@
 <template>
-  <mdb-container fluid class="bg-light flex-1 py-5">
+  <mdb-container fluid class="bg-dark flex-1 py-5">
     <mdb-container class="py-3 py-md-4">
       <mdb-row>
         <mdb-col col="12">

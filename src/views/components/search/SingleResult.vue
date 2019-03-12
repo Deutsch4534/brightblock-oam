@@ -2,7 +2,7 @@
   <mdb-card class="bg-transparent mb-4 w-100">
     <router-link class="grid-item" :to="buyNowUrl">
       <mdb-view hover>
-        <mdb-card-image :src="artwork.image" :alt="artwork.title" style="height: 200px;"></mdb-card-image>
+        <mdb-card-image :src="artwork.image" :alt="artwork.title" style="height: auto;"></mdb-card-image>
         <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
       </mdb-view>
     </router-link>
