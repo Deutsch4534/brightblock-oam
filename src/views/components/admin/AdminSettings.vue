@@ -30,25 +30,25 @@
   <h3>Debug Settings</h3>
   <div class="row">
     <div class="col-md-2">Debug Mode:</div>
-    <div class="col-md-10"><mdb-btn class="primary" @click="toggleDebugMode">{{debugModeLabel}}</mdb-btn></div>
+    <div class="col-md-10"><mdb-btn class="btn teal lighten-1" @click="toggleDebugMode">{{debugModeLabel}}</mdb-btn></div>
   </div>
   <div class="row">
     <div class="col-md-2">Power User:</div>
-    <div class="col-md-10"><mdb-btn class="primary" @click="togglePowerUser">{{powerUserLabel}}</mdb-btn></div>
+    <div class="col-md-10"><mdb-btn class="btn teal lighten-1" @click="togglePowerUser">{{powerUserLabel}}</mdb-btn></div>
   </div>
 
   <h3>Feature Settings</h3>
   <div class="row">
     <div class="col-md-2">Bitcoin:</div>
-    <div class="col-md-10"><mdb-btn class="primary" @click="toggleBtcFeature">{{btcModeLabel}}</mdb-btn></div>
+    <div class="col-md-10"><mdb-btn class="btn teal lighten-1" @click="toggleBtcFeature">{{btcModeLabel}}</mdb-btn></div>
   </div>
   <div class="row">
     <div class="col-md-2">Ethereum:</div>
-    <div class="col-md-10"><mdb-btn class="primary" @click="toggleEthFeature">{{ethModeLabel}}</mdb-btn></div>
+    <div class="col-md-10"><mdb-btn class="btn teal lighten-1" @click="toggleEthFeature">{{ethModeLabel}}</mdb-btn></div>
   </div>
   <div class="row">
     <div class="col-md-2">Auctions:</div>
-    <div class="col-md-10"><mdb-btn class="primary" @click="toggleAuctionsFeature">{{auctionsModeLabel}}</mdb-btn></div>
+    <div class="col-md-10"><mdb-btn class="btn teal lighten-1" @click="toggleAuctionsFeature">{{auctionsModeLabel}}</mdb-btn></div>
   </div>
 
   <h3>Gaia Test Settings</h3>
@@ -56,9 +56,9 @@
     <div class="col-sm-12">Only works on localhost and mike.personal.id as the oauth token.</div>
     <div class="col-md-2"></div>
     <div class="col-md-10">
-      <mdb-btn class="primary" @click="gaiaHubInfoCheck">Check Hub Info</mdb-btn>
-      <mdb-btn class="primary" @click="gaiaListFilesCheck">Check List Files</mdb-btn>
-      <mdb-btn class="primary" @click="gaiaStoreCheck">Store Random File</mdb-btn>
+      <mdb-btn class="btn teal lighten-1" @click="gaiaHubInfoCheck">Check Hub Info</mdb-btn>
+      <mdb-btn class="btn teal lighten-1" @click="gaiaListFilesCheck">Check List Files</mdb-btn>
+      <mdb-btn class="btn teal lighten-1" @click="gaiaStoreCheck">Store Random File</mdb-btn>
     </div>
   </div>
   <div class="row" v-if="gaiaResult">

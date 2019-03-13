@@ -10,11 +10,11 @@
         <mdb-card-body style="display: none">
           <mdb-card-text>
             <div class="row">
-              <div class="col-md-12 text-center" style="font-size: 1.5em; color: indigo;">
+              <div class="col-md-12 text-center teal lighten-1" style="font-size: 1.5em;>
                 <span style="line-height: 5em; text-align: top">Register</span>
-                <i class="fas fa-arrow-right fa-1x indigo-text pr-3" aria-hidden="true"></i>
+                <i class="fas fa-arrow-right fa-1x teal lighten-1 pr-3" aria-hidden="true"></i>
                 Certify
-                <i class="fas fa-arrow-right fa-1x indigo-text pr-3" aria-hidden="true"></i>
+                <i class="fas fa-arrow-right fa-1x teal lighten-1 pr-3" aria-hidden="true"></i>
                 Sell
               </div>
             </div>
@@ -28,7 +28,7 @@
           <mdb-card-title>Ethereum Blockchain ({{networkName}} network)</mdb-card-title>
           <mdb-card-text>
           Register on ethereum if you use meta mask or another ethereum wallet.</mdb-card-text>
-          <a class="black-text d-flex justify-content-end"><mdb-btn v-if="featureEthereum" color="primary" size="md" :disabled="registered" @click="registerArtworkEthereum()">Register Ethereum ({{networkName}})</mdb-btn></a>
+          <a class="black-text d-flex justify-content-end"><mdb-btn v-if="featureEthereum" class="btn teal lighten-1" size="md" :disabled="registered" @click="registerArtworkEthereum()">Register Ethereum ({{networkName}})</mdb-btn></a>
         </mdb-card-body>
         <mdb-view hover>
           <img class="img-fluid" width="100%" :src="artwork.image" :alt="artwork.title"></img>

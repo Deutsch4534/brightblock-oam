@@ -12,7 +12,7 @@
   <h3>Bitcoin Maintenance</h3>
   <div class="row">
     <div class="col-md-4">Consolidate Unspent Outputs:</div>
-    <div class="col-md-8"><mdb-btn class="primary" @click="consolidate">consolidate</mdb-btn></div>
+    <div class="col-md-8"><mdb-btn class="btn teal lighten-1" @click="consolidate">consolidate</mdb-btn></div>
   </div>
 
 </div>

@@ -63,7 +63,7 @@ export default {
   .page-footer { min-height: 56px; }
 
   .page-footer {
-    font-size: 20px;
+    font-size: 1.2em;
     color: #ECEFF1;
     font-weight: 300;
     letter-spacing: 0.5px;

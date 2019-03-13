@@ -13,7 +13,7 @@
     </div>
     <div class="row">
       <div class="col-12 mt-3">
-        <mdb-btn @click="buyArtwork()" :disabled="!purchaseState.canBuy" type="submit" size="md" class="btn-main btn-block">Buy Artwork</mdb-btn>
+        <mdb-btn @click="buyArtwork()" :disabled="!purchaseState.canBuy" type="submit" size="md" class="btn teal lighten-1">Buy Artwork</mdb-btn>
       </div>
     </div>
     <div class="w-100"></div>

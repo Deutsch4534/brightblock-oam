@@ -10,27 +10,27 @@
 
         <!-- i am owner - send this user to my artwork / my artworks -->
         <router-link v-if="iamowner" to="/my-artworks">
-          <mdb-btn class="btn btn-green" size="sm" waves-light>manage artwork</mdb-btn>
+          <mdb-btn class="btn teal lighten-1" size="sm" waves-light>manage artwork</mdb-btn>
         </router-link>
 
         <!-- order placed / purchase in progress - user has placed an order for this artwork or some other user? -->
         <div v-else-if="purchaseBegun">
 
           <router-link v-if="iambuyer" :to="invoiceUrl">
-            <mdb-btn class="btn btn-green" size="sm" waves-light>proceed to checkout</mdb-btn>
+            <mdb-btn class="btn teal lighten-1" size="sm" waves-light>proceed to checkout</mdb-btn>
           </router-link>
 
-          <mdb-btn v-else class="btn btn-green " size="sm" waves-light :disabled="true">sold</mdb-btn>
+          <mdb-btn v-else class="btn teal lighten-1" size="sm" waves-light :disabled="true">sold</mdb-btn>
 
           <router-link to="/gallery">
-            <mdb-btn class="btn btn-green" size="sm">continue browsing</mdb-btn>
+            <mdb-btn class="btn teal lighten-1" size="sm">continue browsing</mdb-btn>
           </router-link>
 
         </div>
 
         <!-- purchase not in progress - user is free to place order? -->
         <div v-else>
-          <mdb-btn class="btn btn-green" size="sm" @click="buyArtwork()">buy</mdb-btn>
+          <mdb-btn class="btn teal lighten-1" size="sm" @click="buyArtwork()">buy</mdb-btn>
         </div>
 
       </div>

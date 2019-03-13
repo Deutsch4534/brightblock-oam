@@ -164,7 +164,7 @@ export default {
 }
 .navbar-link {
   text-transform: uppercase;
-  font-size: 0.8em;
+  font-size: 1.0em;
 }
 .navbar-toggler-icon {
   background-color: blue;
@@ -187,30 +187,30 @@ export default {
 i.fa-search {
   color: gray;
   transform: rotate(90deg);
-  font-size: 14px;
+  font-size: 1.0em;
 }
-.search-form input, .login-link, .nav-cta { font-size: 16px; font-weight: normal; }
+.search-form input, .login-link, .nav-cta { font-size: 1.0em; font-weight: normal; }
 .search-form input { border-bottom: none; }
 .search-form input:focus { box-shadow: none!important; border-bottom: 1pt solid gray!important; }
 
 .search-form input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: grey;
-  font-size: 0.7em;
+  font-size: 1.0em;
   text-transform: uppercase;
 }
 .search-form input::-moz-placeholder { /* Firefox 19+ */
   color: grey;
-  font-size: 0.7em;
+  font-size: 1.0em;
   text-transform: uppercase;
 }
 .search-form input:-ms-input-placeholder { /* IE 10+ */
   color: grey;
-  font-size: 0.7em;
+  font-size: 1.0em;
   text-transform: uppercase;
 }
 .search-form input:-moz-placeholder { /* Firefox 18- */
   color: grey;
-  font-size: 0.7em;
+  font-size: 1.0em;
   text-transform: uppercase;
 }
 .search-form button.transparent { border: none; background: transparent; color: black; }

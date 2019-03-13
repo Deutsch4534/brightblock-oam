@@ -26,7 +26,7 @@
   <mdb-card-text v-if="showArtworkHash">
     {{artworkHash}}
   </mdb-card-text>
-  <a class="black-text d-flex justify-content-end" v-if="!bitcoinTx"><mdb-btn color="primary" size="md" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
+  <a class="black-text d-flex justify-content-end" v-if="!bitcoinTx"><mdb-btn class="btn teal lighten-1" size="md" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
   <hr/>
 </mdb-card-body>
 </template>

@@ -15,7 +15,7 @@
       <div class="col-12">
         <div class="row">
           <mdb-tbl responsive>
-            <mdb-tbl-head color="primary-color" textWhite>
+            <mdb-tbl-head color="teal lighten-1" textWhite>
               <tr>
                 <th>#</th>
                 <th>Payee</th>

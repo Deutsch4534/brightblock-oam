@@ -9,10 +9,10 @@
         </mdb-view>
       </mdb-col>
       <mdb-col col="12" md="5" class="pl-md-3">
-        <h1 class="h5-responsive">{{artwork.title}}</h1>
-        <p class="h5-responsive">by <router-link :to="artistUrl()"><u>{{artist.name}}</u></router-link>, {{created}}</p>
+        <h2>{{artwork.title}}</h2>
+        <p>by <router-link :to="artistUrl()"><u>{{artist.name}}</u></router-link>, {{created}}</p>
         <p class="mb-1">{{artwork.description}}</p>
-        <p><b><small>{{keywords}}</small></b></p>
+        <p><b>{{keywords}}</b></p>
         <buy-artwork-form-btc v-if="isRegisteredAndPriceSet" :artwork="artwork"/>
         <div v-else>
           <button :disabled="true" class="btn btn-green waves-light">not for sale</button>

@@ -11,11 +11,11 @@
       <div class="col-12">
         <div class="row">
           <div class="col-6 custom-control custom-radio mb-0">
-            <input type="radio" class="custom-control-input" id="customControlValidation2" name="artwork.itemType" v-model="artwork.itemType" value="digiart" required>
+            <input type="radio" class="custom-control-input teal lighten-1" id="customControlValidation2" name="artwork.itemType" v-model="artwork.itemType" value="digiart" required>
             <label class="custom-control-label" for="customControlValidation2">Digital Artwork</label>
           </div>
           <div class="col-6 custom-control custom-radio mb-0">
-            <input type="radio" class="custom-control-input" id="customControlValidation3" name="artwork.itemType" v-model="artwork.itemType" value="physart" required>
+            <input type="radio" class="custom-control-input teal lighten-1" id="customControlValidation3" name="artwork.itemType" v-model="artwork.itemType" value="physart" required>
             <label class="custom-control-label" for="customControlValidation3">Physical Artwork</label>
           </div>
         </div>
@@ -113,7 +113,7 @@
     <!-- Submit button row -->
     <div class="row">
       <div class="col-12 mt-3">
-        <mdb-btn type="submit" size="lg" class="btn-main btn-block">Submit Artwork</mdb-btn>
+        <mdb-btn type="submit" size="sm" class="btn-block teal lighten-1">Submit Changes</mdb-btn>
       </div>
     </div>
     <div class="w-100"></div>

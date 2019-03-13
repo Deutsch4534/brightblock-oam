@@ -19,8 +19,8 @@
         <router-link :to="onlineAuctionUrl"><mdb-btn color="white">View</mdb-btn></router-link>
         <mdb-btn color="danger" @click.prevent="deleteAuction()">Delete</mdb-btn>
         <!--
-        <button v-if="auction.privacy === 'private'" class="btn btn-primary" @click.prevent="makePublic()">make public</button>
-        <button v-else class="btn btn-primary" @click.prevent="makePrivate()">make private</button>
+        <button v-if="auction.privacy === 'private'" class="btn teal lighten-1" @click.prevent="makePublic()">make public</button>
+        <button v-else class="btn teal lighten-1" @click.prevent="makePrivate()">make private</button>
         -->
       </p>
     </div>

@@ -7,11 +7,11 @@
       <p><span class="text-danger" v-if="errorMessage">{{errorMessage}}</span></p>
     </div>
   </div>
-  <p><a href="https://search.brightblock.org/index/dapps/radicle.art/artwork/title?q=*" class="primary">e.g. {{searchUrl}}/index/dapps/radicle.art/artwork/title?q=*</a></p>
+  <p><a href="https://search.brightblock.org/index/dapps/radicle.art/artwork/title?q=*">e.g. {{searchUrl}}/index/dapps/radicle.art/artwork/title?q=*</a></p>
   <div class="row">
     <div class="col-md-12">
       <h2>Search Names</h2>
-      <p><a href="#" class="primary" @click.prevent="fetchAllNamesIndex">fetch all user records</a></p>
+      <p><a href="#" @click.prevent="fetchAllNamesIndex">fetch all user records</a></p>
     </div>
     <form class="form-inline">
       <div class="form-group mb-2 pr-2">
@@ -25,17 +25,17 @@
       <div class="form-group mb-2 pr-2">
         <input class="form-control" placeholder="enter query" v-model="queryStringNames"></input>
       </div>
-      <button class="btn btn-primary" @click="searchNamesIndex">Search</button>
+      <button class="btn teal lighten-1" @click="searchNamesIndex">Search</button>
     </form>
     <div class="col-md-12">
-      <p><a href="#" class="primary">{{searchUrl}}/index/names/query/{{queryNamesTerm}}?q={{queryStringNames}}</a></p>
+      <p><a href="#">{{searchUrl}}/index/names/query/{{queryNamesTerm}}?q={{queryStringNames}}</a></p>
     </div>
   </div>
   <h2>Search Dapps</h2>
   <form class="form-inline">
     <div class="col-md-12">
-      <p><a href="#" class="primary" @click.prevent="fetchAllDappsIndex">Fetch all app records</a></p>
-      <p><a href="#" class="primary">{{searchUrl}}/index/dapps/{{queryDomain}}/{{objType}}/{{queryDappsTerm}}?q={{queryStringDapps}}</a></p>
+      <p><a href="#" @click.prevent="fetchAllDappsIndex">Fetch all app records</a></p>
+      <p><a href="#">{{searchUrl}}/index/dapps/{{queryDomain}}/{{objType}}/{{queryDappsTerm}}?q={{queryStringDapps}}</a></p>
     </div>
     <div class="form-group mb-2 pr-2">
       <input class="form-control" placeholder="domain" v-model="queryDomain"></input>
@@ -58,7 +58,7 @@
     <div class="form-group mb-2 pr-2">
       <input class="form-control" placeholder="enter query" v-model="queryStringDapps"></input>
     </div>
-    <button class="btn btn-primary" @click.prevent="searchDappsIndex"><mdb-icon far icon="thumbs-up" /></button>
+    <button class="btn teal lighten-1" @click.prevent="searchDappsIndex"><mdb-icon far icon="thumbs-up" /></button>
   </form>
 
   <div class="row" v-if="namesResults.length > 0">

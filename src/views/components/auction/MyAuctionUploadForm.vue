@@ -127,7 +127,7 @@
     <!-- Submit button row -->
     <div class="row">
       <div class="col-12 col-md-5 mt-4">
-        <mdb-btn type="submit" size="lg" class="btn-main btn-block">Submit</mdb-btn>
+        <mdb-btn type="submit" size="lg" class="btn teal lighten-1">Submit</mdb-btn>
       </div>
     </div>
     <div class="w-100"></div>

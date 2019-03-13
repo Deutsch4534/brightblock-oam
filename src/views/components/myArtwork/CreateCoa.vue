@@ -2,7 +2,7 @@
 <mdb-card-body>
   <mdb-card-text v-if="artwork.bitcoinTx && artwork.coa">
     <div class="rounded-bottom lighten-3 text-right p-3">
-      <a class="black-text" @click.prevent="openCoa()"><mdb-btn color="primary" size="md">Open COA</mdb-btn></a>
+      <a class="black-text" @click.prevent="openCoa()"><mdb-btn class="btn teal lighten-1" size="md">Open COA</mdb-btn></a>
     </div>
   </mdb-card-text>
   <mdb-card-text v-else>
@@ -12,10 +12,10 @@
     </mdb-card-text>
     <bitcoin-address-entry v-if="showBitcoinAddress" @bitcoinAddressUpdate="updateBitcoinAddress"/>
     <div class="rounded-bottom lighten-3 text-right p-3" v-if="validBitcoinAdress">
-      <a v-if="artwork.coa" class="black-text" @click.prevent="openCoa()"><mdb-btn color="primary" size="md">Open COA</mdb-btn></a>
-      <a v-else class="black-text" @click.prevent="generateCoa()"><mdb-btn color="primary" size="md">Generate COA</mdb-btn></a>
+      <a v-if="artwork.coa" class="black-text" @click.prevent="openCoa()"><mdb-btn class="btn teal lighten-1" size="md">Open COA</mdb-btn></a>
+      <a v-else class="black-text" @click.prevent="generateCoa()"><mdb-btn class="btn teal lighten-1" size="md">Generate COA</mdb-btn></a>
       <!--
-      <a v-if="downloadLink" :href="downloadLink" _target="blank" class="black-text"><mdb-btn color="primary" size="md">Download PDF</mdb-btn></a>
+      <a v-if="downloadLink" :href="downloadLink" _target="blank" class="black-text"><mdb-btn class="btn teal lighten-1" size="md">Download PDF</mdb-btn></a>
       <router-link :to="registerForSaleUrl()" class="inline-block" v-if="artwork.coa">
         <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Sell</mdb-btn>
       </router-link>

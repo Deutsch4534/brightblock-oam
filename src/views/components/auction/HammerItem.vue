@@ -15,12 +15,12 @@
         <p class="font-small mb-3">Current Bid: {{currentBidder}} {{currencySymbol}} {{currentBid}} {{item.fiatCurrency}}</p>
         <!-- <a class="white-text d-flex justify-content-end"><h5>Read more <mdb-icon icon="angle-double-right" class="pl-1" /></h5></a> -->
         <button
-              class="btn btn-primary" :class="bidStatusClass"
+              class="btn teal lighten-1" :class="bidStatusClass"
               :disabled="paused || item.paused || item.sellingStatus === 'selling'"
               @click.prevent="bid(nextBid)">Bid {{currencySymbol}} {{nextBid}} {{item.fiatCurrency}}</button>
         <button
               v-if="showSetFinalPriceButton"
-              class="btn btn-primary"
+              class="btn teal lighten-1"
               v-bind:data-artwork="artwork.id"
               data-toggle="modal"
               data-target="#setFinalBidPriceModal">Sell ({{currentBid}})</button>

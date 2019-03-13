@@ -83,7 +83,7 @@
 
         <div class="form-row">
           <div class="col-md-12">
-            <mdb-btn size="lg" type="submit" class="btn-main btn-block"><a @click="checkForm($event)">Submit</a></mdb-btn>
+            <mdb-btn size="lg" type="submit" class="btn-block teal lighten-1"><a @click="checkForm($event)">Submit</a></mdb-btn>
           </div>
         </div>
       </form>

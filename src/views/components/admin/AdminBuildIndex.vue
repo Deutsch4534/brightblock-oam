@@ -10,8 +10,8 @@
   <div class="row">
     <div class="col-md-12">
       <ul>
-        <li><a href="#" class="primary" @click.prevent="clearNamesIndex">Clear names index</a></li>
-        <li><a href="#" class="primary" @click.prevent="clearDappsIndex">Clear dapps index</a></li>
+        <li><a href="#" @click.prevent="clearNamesIndex">Clear names index</a></li>
+        <li><a href="#" @click.prevent="clearDappsIndex">Clear dapps index</a></li>
       </ul>
     </div>
   </div>
@@ -25,7 +25,7 @@
         <div class="form-group mb-2">
           <input class="form-control" type="number" v-model="toPage" placeholder="to page"></input>
         </div>
-        <button class="btn btn-primary" @click.prevent="indexPages">go</button>
+        <button class="btn-block teal lighten-1" @click.prevent="indexPages">go</button>
         <p class="text-warning" v-html="indexPagesResult"></p>
       </form>
     </div>
@@ -37,7 +37,7 @@
         <div class="form-group mb-2">
           <input class="form-control" v-model="users" placeholder="comma separated user names"></input>
         </div>
-        <button class="btn btn-primary" @click="indexUsers">go</button>
+        <button class="btn teal lighten-1" @click="indexUsers">go</button>
         <p class="text-warning" v-html="indexUsersResult"></p>
       </form>
     </div>
