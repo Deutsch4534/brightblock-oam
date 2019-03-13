@@ -28,6 +28,7 @@ const invoiceService = {
       } else {
         let invoicesRootFile = JSON.parse(file);
         invoiceService.subscribeInvoiceNews();
+        store.commit("invoiceStore/invoicesRootFile", invoicesRootFile);
         if (success) success(invoicesRootFile);
       }
     });

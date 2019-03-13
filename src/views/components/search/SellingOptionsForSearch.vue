@@ -6,12 +6,12 @@
   <div v-else-if="sellingBuyNow">
     <p style="font-size: 0.8em">{{artwork.saleData.amount}} EUR
     <br/>{{btcMessage}} BTC</p>
-  <!--  <button class="btn btn-green" @click="routeToBuyNow">Buy Now</button> -->
+  <!--  <button class="btn teal lighten-1" @click="routeToBuyNow">Buy Now</button> -->
   </div>
   <div v-else-if="sellingAuction">
   <!--
-    <button class="btn btn-green" @click="routeToPublicAuction">Open Auction</button>
-    <button class="btn btn-green" @click="routeToManageAuction">Manage Auction</button>
+    <button class="btn teal lighten-1" @click="routeToPublicAuction">Open Auction</button>
+    <button class="btn teal lighten-1" @click="routeToManageAuction">Manage Auction</button>
   -->
   </div>
   <div v-else>

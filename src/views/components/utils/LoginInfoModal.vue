@@ -15,7 +15,7 @@ import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, 
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: "ConfirmationModal",
+  name: "LoginInfoModal",
   components: {
     mdbModal,
     mdbModalHeader,
@@ -24,22 +24,18 @@ export default {
     mdbModalFooter,
     mdbBtn
   },
-  props: ["modal", "title", "content", "modalLoginWarning"],
+  props: ["modal"],
   data() {
     return {
-      modalLoginTitle: "Please Log In",
-      modalLoginContent: "<p>You'll need to login to use this feature.</p>",
+      title: "Please Log In",
+      content: "<p>You'll need to login to use this feature.</p>",
     };
   },
   mounted() {
-    if (this.modalLoginWarning) {
-      this.title = this.modalLoginTitle;
-      this.content = this.modalLoginContent;
-    }
   },
   methods: {
     closeMe: function() {
-      this.$emit("closeModal");
+      this.$emit("closeLoginInfoModal");
     }
   }
 };

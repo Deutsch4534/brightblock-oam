@@ -9,8 +9,8 @@
         </mdb-view>
       </mdb-col>
       <mdb-col col="12" md="7" class="pl-md-5">
-        <h1 class="h5-responsive">{{artwork.title}}</h1>
-        <p class="h5-responsive">by <a><u>{{artist.name}}</u></a>, {{created}}</p>
+        <h2>{{artwork.title}}</h2>
+        <p>by <router-link :to="artistUrl()"><u>{{artist.name}}</u></router-link>, {{created}}</p>
         <payment-details v-if="showPaymentDetails" :bitcoinUri="bitcoinUri" :invoiceClaim="invoice" @paymentSent="paymentSent"/>
         <confirmation-details v-if="showConfirmationDetails" :invoiceClaim="invoice" :registerTx="artwork.bitcoinTx" @paySeller="paySeller"/>
       </mdb-col>
@@ -122,6 +122,10 @@ export default {
     }
   },
   methods: {
+    artistUrl () {
+      let artwork = this.artwork;
+      return '/artists/' + artwork.artist;
+    },
     buyNow() {
       this.showPaymentDetails = true;
       this.showConfirmationDetails = false;

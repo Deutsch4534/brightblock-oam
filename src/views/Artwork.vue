@@ -13,11 +13,11 @@
         <p>by <router-link :to="artistUrl()"><u>{{artist.name}}</u></router-link>, {{created}}</p>
         <p class="mb-1">{{artwork.description}}</p>
         <p><b>{{keywords}}</b></p>
-        <buy-artwork-form-btc v-if="isRegisteredAndPriceSet" :artwork="artwork"/>
+        <buy-artwork-form-btc v-if="showBuyOptions && isRegisteredAndPriceSet" :artwork="artwork" :myProfile="myProfile"/>
         <div v-else>
-          <button :disabled="true" class="btn btn-green waves-light">not for sale</button>
+          <button :disabled="true" class="btn teal darken-1">not for sale</button>
           <router-link to="/gallery">
-            <button class="btn btn-green">continue browsing</button>
+            <button class="btn teal lighten-1">continue browsing</button>
           </router-link>
         </div>
       </mdb-col>
@@ -70,15 +70,18 @@ export default {
         image: require("@/assets/img/missing/artwork-missing.jpg"),
         saleData: {},
       },
+      myProfile: {},
+      showBuyOptions: false
     };
   },
   mounted() {
     this.artworkId = Number(this.$route.params.artworkId);
-    this.$store.getters["myAccountStore/getMyProfile"];
+    this.myProfile = this.$store.getters["myAccountStore/getMyProfile"];
     let $self = this;
     artworkSearchService.newQuery({field: "id", query: this.artworkId}, function(artwork) {
       $self.artwork = artwork;
       if (artwork) {
+        $self.showBuyOptions = true;
         // check for redirect to auctions...
         if ($self.artwork.saleData.auctionId) {
           $self.$router.push("/online-auction/" + artwork.owner + "/" + artwork.saleData.auctionId);

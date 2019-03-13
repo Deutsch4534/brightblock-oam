@@ -24,7 +24,7 @@
         <div>Order Number: {{invoiceClaim.invoiceId}}</div>
         <div>Order created: {{timeReceived}}</div>
         <div v-if="unpaid">Payment not yet received</div>
-        <div v-else-if="confirming">Payment received (confirming - {{buyerConfirmations}} / 6)</div>
+        <div v-else-if="confirming">Payment received (confirming - {{buyerConfirmations}} / 6) <!-- <mdb-icon icon="sync-alt" @click="sendRefreshRequest"/> --></div>
         <div v-else-if="confirmed">
           Payment has been confirmed (with {{buyerConfirmations}} confirmations)
           <div v-if="digiArt">{{paySeller()}}</div>
@@ -152,6 +152,9 @@ export default {
     },
     sendBuyNow() {
       this.$emit("buyNow");
+    },
+    sendRefreshRequest() {
+      // this.$emit("buyNow");
     },
     paySeller() {
       if (!this.invoiceClaim.sellerTransaction) {

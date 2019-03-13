@@ -1,5 +1,7 @@
 <template>
 <mdb-row class="pt-1">
+  <confirmation-modal v-if="showModal" :modal="showModal" :modalLoginWarning="showModalLoginWarning" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
+  <login-info-modal v-if="showLoginInfoModal" :modal="showLoginInfoModal" @closeLoginInfoModal="closeLoginInfoModal"/>
   <mdb-col col="12">
     <p class="h5-responsive serif-italic">{{registerMessageBtc}}</p>
     <div>
@@ -44,17 +46,22 @@
 import { mdbIcon, mdbBtn } from 'mdbvue';
 import moneyUtils from "@/services/moneyUtils";
 import { mdbContainer, mdbCol, mdbRow } from 'mdbvue';
+import ConfirmationModal from "@/views/components/utils/ConfirmationModal";
+import LoginInfoModal from "@/views/components/utils/LoginInfoModal";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "BuyArtworkFormBtc",
   components: {
+    ConfirmationModal,
+    LoginInfoModal,
     mdbIcon,
     mdbBtn,
     mdbContainer, mdbCol, mdbRow
   },
   props: {
     purchaseState: {},
+    myProfile: {},
     artwork: {
       type: Object,
       default() {
@@ -65,17 +72,29 @@ export default {
   },
   data() {
     return {
-      orderPlaced: false
+      orderPlaced: false,
+      showModal: false,
+      showLoginInfoModal: false,
+      modalTitle: "Transferring..",
+      modalContent: "<p>Redirecting to payment department.</p>",
     };
   },
   methods: {
     buyArtwork() {
-      this.$store.dispatch("invoiceStore/prepareNewInvoice", {artwork: this.artwork, saveInvoice: true}).then(invoice => {
-        this.$router.push("/order/" + invoice.invoiceId);
-      })
+      if (this.myProfile.loggedIn) {
+        this.showModal = true;
+        this.$store.dispatch("invoiceStore/prepareNewInvoice", {artwork: this.artwork, saveInvoice: true}).then(invoice => {
+          this.$router.push("/order/" + invoice.invoiceId);
+        })
+      } else {
+        this.showLoginInfoModal = true;
+      }
     },
-    addToCart() {
-      this.$store.dispatch("invoiceStore/prepareNewInvoice", {artwork: this.artwork, saveInvoice: true});
+    closeModal: function() {
+      this.showModal = false;
+    },
+    closeLoginInfoModal: function() {
+      this.showLoginInfoModal = false;
     }
   },
   computed: {
