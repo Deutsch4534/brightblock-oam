@@ -9,10 +9,12 @@
           <mdb-col sm="6" md="8">
             <p class="h4-responsive mb-5">{{description}}</p>
             <p class="h3-responsive text-uppercase my-4">{{btcAddress}}:</p>
+            <!--
             <div>
               <p class="h5-responsive mb-0"><em><strong>Target on {{chain}} chain:</strong> {{target}}</em></p>
               <p class="h5-responsive"><em><strong>Currently:</strong> {{balance}}</em></p>
             </div>
+            -->
           </mdb-col>
           <mdb-col sm="6" md="4" class="d-flex">
             <form class="contact-form text-right d-flex w-100 align-items-end justify-content-end">
