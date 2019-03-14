@@ -69,5 +69,11 @@ export default {
 }
 </script>
 <style scoped>
+.article {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  justify-content: flex-start;
+}
 
 </style>

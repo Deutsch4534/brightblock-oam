@@ -1,71 +1,28 @@
 <template>
-<div class="container">
-  <mdb-card-body  v-if="invoiceClaim.buyerTransaction">
-    <mdb-card-text>
-      <div class="row">Payment has been received with thanks - you can check the status of the order in the confirmation tab.</div>
-    </mdb-card-text>
-  </mdb-card-body>
-  <mdb-card-body v-else>
-    <mdb-card-title>
-      <mdb-popover trigger="click" :options="{placement: 'top'}">
-        <div class="popover">
-          <div class="popover-header">
-            Ra.Pay
-          </div>
-          <div class="popover-body">
-          Payments are held in an escrow until confirmed on the bitcoin network - this usually takes about an hour.
-          If shipping is involved we will hold your payment and pay to the seller once you confirmed
-          receipt of the goods.
-          </div>
-        </div>
-        <a @click.prevent="" slot="reference">
-          Payment -
-          <a @click.prevent="showOrderDetails = !showOrderDetails">click here for details</a>
-        </a>
-      </mdb-popover>
-    </mdb-card-title>
-    <mdb-card-text>
-      Please pay using your bitcoin wallet. <!-- and then <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" @click="sentPayment">click here.</mdb-btn> -->
-    </mdb-card-text>
-    <mdb-card-text>
-    <div class="w-100"></div>
-      <div class="row text-center">
-        <div class="col-md-12">
-          <div class="row text-center">
-            <div class="col-md-12">
-              <canvas id="qrcode1" max-width="150px"></canvas>
-            </div>
-            <div class="col-md-12"><a :href="bitcoinUri">open bitcoin wallet</a></div>
-          </div>
-        </div>
-      </div>
-    </mdb-card-text>
-    <mdb-card-text>
-      <a @click.prevent="showOrderDetails = !showOrderDetails"><small>Order details</small></a>
-    </mdb-card-text>
-  </mdb-card-body>
-  <order-details :invoiceClaim="invoiceClaim" v-if="showOrderDetails"/>
+<div class="row text-center">
+  <div class="col-md-12 pt-3">
+    <a :href="bitcoinUri" class="btn btn-block btn-sm text-white teal lighten-1">OPEN IN WALLET</a>
+  </div>
+  <div class="col-md-12">
+    <img class="img-fluid" :src="qrImage" alt="artwork.title" style="width: 90%;">
+    <canvas id="qrcode1"></canvas>
+  </div>
+  <div class="col-md-12 text-left pl-5 muted">
+    Pay with QR code or
+    <br/><a :href="bitcoinUri" class="teal-text darken-3 muted">Click payment link</a>
+  </div>
 </div>
 </template>
 
 <script>
 import xhrService from "@/services/xhrService";
-import { mdbPopover, mdbIcon, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
 import QRCode from "qrcode";
 import moneyUtils from "@/services/moneyUtils";
-import OrderDetails from "./OrderDetails";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "PaymentDetails",
   components: {
-    OrderDetails,
-    mdbCardBody,
-    mdbPopover,
-    mdbIcon,
-    mdbCardTitle,
-    mdbCardText,
-    mdbBtn
   },
   props: {
     bitcoinUri: null,
@@ -73,7 +30,7 @@ export default {
   },
   data() {
     return {
-      showOrderDetails: false,
+      qrImage: require("@/assets/img/missing/artwork-missing.jpg")
     };
   },
   mounted() {
@@ -82,15 +39,28 @@ export default {
     }
   },
   computed: {
+    image() {
+      let $qrCode = document.getElementById("qrcode1");
+      let qrImage = $qrCode.toDataURL();
+      qrImage = $self.qrImage.substring(22);
+      if (qrImage) {
+        return qrImage;
+      }
+      return image1;
+    },
   },
   methods: {
     addQrCode(qrc, bitcoinUri) {
       let $qrCode = document.getElementById(qrc);
-      QRCode.toCanvas(
+      let $self = this;
+      let qrCanvas = QRCode.toCanvas(
         $qrCode, bitcoinUri, { errorCorrectionLevel: "H" },
         function(error) {
           if (error) console.error(error);
           console.log("success!");
+          $self.qrImage = $qrCode.toDataURL();
+          $qrCode.style.display = "none";
+          //$self.qrImage = $self.qrImage.substring(22);
         }
       );
     },

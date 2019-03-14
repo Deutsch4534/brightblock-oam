@@ -65,6 +65,6 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: no-wrap;
-  justify-content: center;
+  justify-content: flex-start;
 }
 </style>

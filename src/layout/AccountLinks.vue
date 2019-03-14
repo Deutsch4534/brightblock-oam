@@ -1,7 +1,7 @@
 <template>
   <mdb-dropdown>
     <mdb-dropdown-toggle tag="a" navLink color="" slot="toggle"  waves-fixed>
-      <img style="width: 35px; height: 25px; border-radius: 15px;" :src="avatarUrl"/>
+      <img class="avatar" :src="avatarUrl"/>
       <!--<mdb-icon icon="user-circle" />-->
     </mdb-dropdown-toggle>
 
@@ -70,7 +70,7 @@ export default {
       let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
       if (myProfile.loggedIn) {
         return (
-          '<img style="width: 40px; height: 40px; border-radius: 20px;" src="' +
+          '<img style="width: 30px; height: 30px; border-radius: 30px;" src="' +
           myProfile.avatarUrl +
           '"/>'
         );
@@ -99,6 +99,11 @@ export default {
 
 </script>
 <style scoped>
+.avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 25px;
+}
 .nav-link {
   text-transform: uppercase;
   font-size: 0.8em;

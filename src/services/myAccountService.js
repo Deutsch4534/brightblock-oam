@@ -48,7 +48,7 @@ const myAccountService = {
         uname.indexOf("anton") > -1;
       let avatarUrl = person.avatarUrl();
       if (!avatarUrl) {
-        avatarUrl =  require("@/assets/img/missing/anonuser3.png");
+        avatarUrl =  require("@/assets/img/missing/avater-small-missing.jpg");
       }
       let privateKey = account.appPrivateKey + "01";
       privateKey = hexStringToECPair(privateKey).toWIF();

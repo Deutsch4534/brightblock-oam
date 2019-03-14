@@ -80,7 +80,7 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: no-wrap;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 @media all and (min-width: 991px) {

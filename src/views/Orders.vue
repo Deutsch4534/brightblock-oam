@@ -1,44 +1,25 @@
 <template>
-  <mdb-container class="mt-5" v-if="!hasInvoices">
+  <div class="container mt-5">
     <mdb-row>
+      <div class="col-12 mb-3">
+        <h2>Checkout</h2>
+      </div>
+    </mdb-row>
+    <mdb-row v-if="!hasOrders">
       <div class="col-12 mb-5">
-        <p class="h1-responsive mb-5">No invoices found!</p>
+        <p class="h1-responsive mb-5">No orders found!</p>
         <p><router-link to="/my-artwork/upload" class="btn btn-white btn-sm btn-rounded ripple-parent">Upload Artwork</router-link> to get started...</p>
       </div>
     </mdb-row>
-  </mdb-container>
-  <mdb-container class="mt-5" v-else>
-    <mdb-row>
-      <div class="col-12">
-        <h1 class="h1-responsive mb-5">Purchase Orders</h1>
-      </div>
-      <div class="col-12">
-        <div class="row">
-          <mdb-tbl responsive>
-            <mdb-tbl-head color="teal lighten-1" textWhite>
-              <tr>
-                <th>#</th>
-                <th>Payee</th>
-                <th>Title</th>
-                <th>Total fiat</th>
-                <th>Total btc</th>
-                <th>Status</th>
-              </tr>
-            </mdb-tbl-head>
-            <mdb-tbl-body>
-              <order-item v-for="invoice in invoices" :key="invoice.artworkId" :invoice="invoice" class="col-sm-6 col-md-4 col-lg-4"/>
-            </mdb-tbl-body>
-          </mdb-tbl>
-        </div>
-      </div>
-    </mdb-row>
-  </mdb-container>
+    <ul class="list-unstyled" v-else>
+      <order-item v-for="invoice in orders" :key="invoice.artworkId" :orderId="invoice.invoiceId" :artworkId="invoice.artworkId"/>
+    </ul>
+  </div>
 </template>
 
 <script>
 import OrderItem from "./components/orders/OrderItem";
 import { mdbContainer, mdbCol, mdbRow } from 'mdbvue';
-import { mdbTbl, mdbTblHead, mdbTblBody } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -47,29 +28,31 @@ export default {
   components: {
     OrderItem,
     mdbContainer,
-    mdbRow,
     mdbCol,
-    mdbTbl,
-    mdbTblHead,
-    mdbTblBody
+    mdbRow,
   },
   data() {
-    return {};
+    return {
+      orderId: null
+    };
   },
-  mounted() {},
+  mounted() {
+    this.orderId = this.$route.query.orderId;
+  },
   computed: {
-    invoices() {
-      let invoices = this.$store.getters["invoiceStore/getInvoices"];
-      if (invoices && invoices.records) {
-        return invoices.records;
+    orders() {
+      let orders = this.$store.getters["invoiceStore/getInvoices"];
+      if (orders && orders.records) {
+        return orders.records;
       }
+      return [];
     },
-    hasInvoices() {
-      let invoices = this.$store.getters["invoiceStore/getInvoices"];
-      if (!invoices || !invoices.records) {
+    hasOrders() {
+      let orders = this.$store.getters["invoiceStore/getInvoices"];
+      if (!orders || !orders.records) {
         return 0;
       }
-      return invoices.records.length;
+      return orders.records.length;
     }
   }
 };

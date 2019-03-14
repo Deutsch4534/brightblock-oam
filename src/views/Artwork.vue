@@ -13,7 +13,7 @@
         <p>by <router-link :to="artistUrl()"><u>{{artist.name}}</u></router-link>, {{created}}</p>
         <p class="mb-1">{{artwork.description}}</p>
         <p><b>{{keywords}}</b></p>
-        <buy-artwork-form-btc v-if="showBuyOptions && isRegisteredAndPriceSet" :artwork="artwork" :myProfile="myProfile"/>
+        <buy-artwork-form-btc v-if="isNotBeingBought && showBuyOptions && isRegisteredAndPriceSet" :artwork="artwork" :myProfile="myProfile"/>
         <div v-else>
           <button :disabled="true" class="btn teal darken-1">not for sale</button>
           <router-link to="/gallery">
@@ -96,6 +96,9 @@ export default {
         return this.$store.getters["userProfilesStore/getProfile"](artwork.artist);
       }
       return {name: ""};
+    },
+    isNotBeingBought() {
+      return this.artwork.status !== this.$store.state.constants.statuses.artwork.PURCHASE_BEGUN;
     },
     created() {
       if (this.artwork.created) {

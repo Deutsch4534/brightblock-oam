@@ -81,65 +81,75 @@ const invoiceService = {
         });
       });
   },
+  watchForPaymentInternal: function(invoice, success, failure) {
+    bitcoinService.lookupTransaction({timestamp: invoice.timestamp, amount: invoice.invoiceAmounts.totalBitcoin}, function(transaction) {
+      if (!transaction) {
+        if (success) success(invoice);
+        return;
+      }
+
+      if (invoice.confirmed) {
+        // clearInterval(invoiceService.watchForPaymentInterval);
+        if (success) success(invoice);
+        return;
+      }
+      invoice.state = "confirming";
+      if (invoice.buyerTransaction) {
+        if (transaction.confirmations > 5) {
+          invoice.confirmed = true;
+          invoice.state = "confirmed";
+        }
+        if (invoice.buyerTransaction.confirmations === transaction.confirmations) {
+          // return;
+        }
+      } else {
+        // here indicates the first instance of the buyers transaction being detected.
+        // i.e. blockchain transaction exits but its not yet been saved on invoice.
+      }
+      invoice.buyerTransaction = transaction;
+      invoiceService.saveInvoiceClaim(invoice);
+      // lookup artwork in buyers gaia - indicates the artwork has already been transferred..
+      artworkSearchService.userArtwork(invoice.artworkId, invoice.buyer.blockstackId,
+        function(artwork) {
+          if (!artwork) {
+            // artwork not in buyers storage - transfer it now...
+            invoiceService.transferArtworkToBuyer(invoice, false, success);
+          } else {
+            try {
+              if (invoice.state === "confirmed") {
+                // clearInterval(invoiceService.watchForPaymentInterval);
+              }
+              if (success) success(invoice);
+            } catch (err) {
+              // console.log("Error");
+            }
+          }
+        },
+        function() {
+          // artwork not in buyers storage - transfer it now...
+          invoiceService.transferArtworkToBuyer(invoice, false, success);
+        }
+      );
+    });
+  },
 
   watchForPayment: function(invoice, success, failure) {
-    if (invoiceService.watchForPaymentInterval) {
-      clearInterval(invoiceService.watchForPaymentInterval);
+    if (!invoiceService.watchForPaymentInterval) {
+      // clearInterval(invoiceService.watchForPaymentInterval);
+      invoiceService.watchForPaymentInterval = [];
     }
+    let index = invoiceService.watchForPaymentInterval.length;
     if (invoice.buyerTransaction && invoice.confirmed) {
       if (success) success(invoice);
+      return;
     }
     // check this os the buyer initiating the watch..
     let myProfile = store.getters["myAccountStore/getMyProfile"];
     if (myProfile.username !== invoice.buyer.blockstackId) {
       if (failure) failure("Current user is not the buyer");
     }
-    invoiceService.watchForPaymentInterval = setInterval(function() {
-      bitcoinService.lookupTransaction({timestamp: invoice.timestamp, amount: invoice.invoiceAmounts.totalBitcoin}, function(transaction) {
-        if (!transaction) {
-          if (success) success(invoice);
-          return;
-        }
-        if (invoice.confirmed) {
-          clearInterval(invoiceService.watchForPaymentInterval);
-          if (success) success(invoice);
-          return;
-        }
-        invoice.state = "confirming";
-        if (invoice.buyerTransaction) {
-          if (transaction.confirmations > 5) {
-            invoice.confirmed = true;
-            invoice.state = "confirmed";
-          }
-        } else {
-          // here indicates the first instance of the buyers transaction being detected.
-          // i.e. blockchain transaction exits but its not yet been saved on invoice.
-        }
-        invoice.buyerTransaction = transaction;
-        invoiceService.saveInvoiceClaim(invoice);
-        // lookup artwork in buyers gaia - indicates the artwork has already been transferred..
-        artworkSearchService.userArtwork(invoice.artworkId, invoice.buyer.blockstackId,
-          function(artwork) {
-            if (!artwork) {
-              // artwork not in buyers storage - transfer it now...
-              invoiceService.transferArtworkToBuyer(invoice, false, success);
-            } else {
-              try {
-                if (invoice.state === "confirmed") {
-                  clearInterval(invoiceService.watchForPaymentInterval);
-                }
-                if (success) success(invoice);
-              } catch (err) {
-                // console.log("Error");
-              }
-            }
-          },
-          function() {
-            // artwork not in buyers storage - transfer it now...
-            invoiceService.transferArtworkToBuyer(invoice, false, success);
-          }
-        );
-      });
+    invoiceService.watchForPaymentInterval[index] = setInterval(function() {
+      invoiceService.watchForPaymentInternal(invoice, success, failure);
     }, 5000);
   },
   transferArtworkToBuyer: function(invoice, settled, success) {
@@ -289,7 +299,7 @@ const invoiceService = {
     let invoiceRows = [];
     invoiceRows.push({
       counter: count++,
-      party: (sellerIsArtist) ? "Owner/Artist" : "Owner",
+      party: "Seller",
       notes: owner,
       rate: "",
       fiatAmount: invoiceAmounts.fiatAmount,
@@ -309,7 +319,7 @@ const invoiceService = {
       counter: count++,
       party: "Gallery",
       notes: gallerist,
-      rate: (gallerist) ? invoiceRates.galleryResidualFee + " %" : "n/a",
+      rate: (gallerist) ? invoiceRates.galleryResidualFee + " %" : "",
       fiatAmount: invoiceAmounts.fiatGalleryAmount,
       bitcoinAmount: invoiceAmounts.bitcoinGalleryAmount
     });

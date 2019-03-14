@@ -1,7 +1,7 @@
 <template>
   <mdb-dropdown>
     <mdb-dropdown-toggle tag="a" navLink color="" slot="toggle"  waves-fixed>
-      Upload
+      <span style="color: teal">Upload</span>
     </mdb-dropdown-toggle>
 
     <mdb-dropdown-menu class="dropdown-menu-right" id="userMainMenu" >

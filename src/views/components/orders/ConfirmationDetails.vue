@@ -2,7 +2,7 @@
 <div class="container mt-4">
     <div class="row">
       <div class="col-12">
-        <p><a href="#" @click.prevent="showBlockchainInfo = !showBlockchainInfo">Open full details</a></p>
+        <!-- <p><a href="#" @click.prevent="showBlockchainInfo = !showBlockchainInfo">Open full details</a></p> -->
         <div class="mb-4" v-if="showBlockchainInfo">
           <div class="row">
             <div class="col-3">Network</div>
@@ -21,17 +21,17 @@
             <div class="col-6"><a :href="sellerBlockchainUrl()" target="_blank">Settlement</a></div>
           </div>
         </div>
-        <div>Order Number: {{invoiceClaim.invoiceId}}</div>
-        <div>Order created: {{timeReceived}}</div>
+        <div class="mt-4 pt-2">Order: {{invoiceClaim.invoiceId}}</div>
+        <div>Created: {{timeReceived}}</div>
         <div v-if="unpaid">Payment not yet received</div>
-        <div v-else-if="confirming">Payment received (confirming - {{buyerConfirmations}} / 6) <!-- <mdb-icon icon="sync-alt" @click="sendRefreshRequest"/> --></div>
+        <div v-else-if="confirming"><a :href="buyerBlockchainUrl()" target="_blank">Payment received</a><br/>(confirming - {{buyerConfirmations}} / 6) <!-- <mdb-icon icon="sync-alt" @click="sendRefreshRequest"/> --></div>
         <div v-else-if="confirmed">
-          Payment has been confirmed (with {{buyerConfirmations}} confirmations)
+          <a :href="buyerBlockchainUrl()" target="_blank">Payment has been confirmed</a><br/>(with {{buyerConfirmations}} confirmations)
           <div v-if="digiArt">{{paySeller()}}</div>
           <div v-else><mdb-btn @click="paySeller" rounded color="white" size="sm" class="mx-0 waves-light">pay seller</mdb-btn></div>
         </div>
-        <div v-else-if="settling">Owner / artist are being paid ({{sellerConfirmations}} / 6 confirmations)</div>
-        <div v-else-if="settled">Owner / artist have been paid (with {{sellerConfirmations}} confirmations)</div>
+        <div v-else-if="settling">Transferring artwork<br/>(<a :href="sellerBlockchainUrl()" target="_blank">{{sellerConfirmations}} / 6 confirmations</a>)</div>
+        <div v-else-if="settled">Transferred artwork<br/>(<a :href="sellerBlockchainUrl()" target="_blank">{{sellerConfirmations}} confirmations</a>)</div>
         <div v-else>
           <div>status in between</div>
         </div>

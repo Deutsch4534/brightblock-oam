@@ -1,50 +1,23 @@
 <template>
 <div class="container mb-5">
-<mdb-tbl responsive>
-  <mdb-tbl-head color="stylish-color" textWhite>
-    <tr>
-      <th @click="showDetails = !showDetails"><a><mdb-icon far icon="caret-square-down" /></a></th>
-      <th><span v-if="showDetails">Party</span></th>
-      <th><span v-if="showDetails">Notes</span></th>
-      <th><span v-if="showDetails">Rate</span></th>
-      <th>{{invoiceClaim.invoiceAmounts.fiatCurrency}}</th>
-      <th>
-        <mdb-popover trigger="click" :options="{placement: 'top'}">
-          <div class="popover">
-            <div class="popover-header">
-              BTC
-            </div>
-            <div class="popover-body">
-              Amounts in Bitcoin (BTC) are calculated in real time from the amount
-              listed in the fiat currency chosen by the seller.
-            </div>
-          </div>
-          <a @click.prevent="" slot="reference">
-            BTC <mdb-icon far icon="question-circle" />
-          </a>
-        </mdb-popover>
-      </th>
-    </tr>
-  </mdb-tbl-head>
-  <mdb-tbl-body>
-    <tr v-for="(row, index) in invoiceRows" :key="index" :class="row.rowClass" v-if="showDetails">
-      <th>{{row.counter}}</th>
-      <td>{{row.party}}</td>
-      <td>{{row.notes}}</td>
-      <td>{{row.rate}}</td>
-      <td>{{row.fiatAmount}}</td>
-      <td>{{row.bitcoinAmount}}</td>
-    </tr>
-    <tr class="white">
-      <th></th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>{{invoicePayRow.fiatAmount}}</td>
-      <td>{{invoicePayRow.bitcoinAmount}}</td>
-    </tr>
-  </mdb-tbl-body>
-</mdb-tbl>
+  <div class="row py-3">
+    <div class="col-6"><b>{{seller}}</b></div>
+    <div class="col-2"></div>
+    <div class="col-2"><b>{{invoiceClaim.invoiceAmounts.fiatCurrency}}</b></div>
+    <div class="col-2"><b>BTC</b></div>
+  </div>
+  <div class="row" v-for="(row, index) in invoiceRows" :key="index" v-if="showDetails">
+    <div class="col-3">{{row.party}}</div>
+    <div class="col-3"></div>
+    <div class="col-2">{{row.rate}}</div>
+    <div class="col-2">{{row.fiatAmount}}</div>
+    <div class="col-2">{{row.bitcoinAmount}}</div>
+  </div>
+  <div class="row">
+    <div class="col-8"><a class="teal-text darken-3" @click.prevent="showDetails = !showDetails"><span v-if="!showDetails">show more details</span><span v-else>show less</span></a></div>
+    <div class="col-2">{{invoicePayRow.fiatAmount}}</div>
+    <div class="col-2">{{invoicePayRow.bitcoinAmount}}</div>
+  </div>
 </div>
 </template>
 
@@ -74,7 +47,7 @@ export default {
     invoiceClaim: {
       invoiceAmounts: {},
       invoiceRates: {}
-    }
+    },
   },
   data() {
     return {
@@ -84,8 +57,8 @@ export default {
       invoiceRows: [],
       showInstructions: false,
       showPaymentDetails: false,
+      showDetails: false,
       order: null,
-      showDetails: true
     };
   },
   mounted() {
@@ -97,6 +70,11 @@ export default {
     }
   },
   computed: {
+    seller() {
+      if (this.invoiceClaim && this.invoiceClaim.seller) {
+        return this.invoiceClaim.seller.blockstackId;
+      }
+    },
     paymentReceived() {
       return this.invoiceClaim.buyerTransaction;
     }

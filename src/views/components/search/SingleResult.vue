@@ -2,7 +2,7 @@
 <div class="article-figure overlay view">
   <router-link class="" :to="buyNowUrl">
     <img :src="artwork.image" alt="help me" class="article-figure">
-    <div class="mask flex-center bg-dark">
+    <div class="mask bg-dark">
       <p class="white-text">{{artwork.title}} <br/>
       <span class="small">by: {{shortName(artwork.artist)}}</span>
       <selling-options-for-search :artwork="artwork"/>
@@ -91,6 +91,14 @@ export default {
   height: 25vh;
   width: auto;
   margin: 0 5px 30px 5px
+}
+
+.mask {
+  padding: 20px;
+}
+
+.mask:hover {
+  opacity: 0.75;
 }
 
 .subtitle {

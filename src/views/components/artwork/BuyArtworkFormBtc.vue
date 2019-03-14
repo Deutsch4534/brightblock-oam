@@ -1,6 +1,6 @@
 <template>
 <mdb-row class="pt-1">
-  <confirmation-modal v-if="showModal" :modal="showModal" :modalLoginWarning="showModalLoginWarning" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
+  <confirmation-modal v-if="showModal" :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
   <login-info-modal v-if="showLoginInfoModal" :modal="showLoginInfoModal" @closeLoginInfoModal="closeLoginInfoModal"/>
   <mdb-col col="12">
     <p class="h5-responsive serif-italic">{{registerMessageBtc}}</p>
@@ -8,7 +8,7 @@
       {{moneySymbol}} <strong>{{artwork.saleData.amount}}</strong> EUR = <strong>{{btcMessage}}</strong> BTC
     </div>
     <div class="row">
-      <div class="col-12 mt-3">
+      <div class="col-12 mt-3" v-if="!showModal">
 
         <!-- i am owner - send this user to my artwork / my artworks -->
         <router-link v-if="iamowner" to="/my-artworks">
@@ -35,6 +35,9 @@
           <mdb-btn class="btn teal lighten-1" size="sm" @click="buyArtwork()">buy</mdb-btn>
         </div>
 
+      </div>
+      <div class="col-12 mt-3" v-else>
+        <p>please wait - transferring to payment..</p>
       </div>
     </div>
     <div class="w-100"></div>
@@ -84,7 +87,7 @@ export default {
       if (this.myProfile.loggedIn) {
         this.showModal = true;
         this.$store.dispatch("invoiceStore/prepareNewInvoice", {artwork: this.artwork, saveInvoice: true}).then(invoice => {
-          this.$router.push("/order/" + invoice.invoiceId);
+          this.$router.push("/orders?orderId=" + invoice.invoiceId);
         })
       } else {
         this.showLoginInfoModal = true;

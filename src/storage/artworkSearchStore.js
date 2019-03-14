@@ -78,7 +78,9 @@ const artworkSearchStore = {
       if (artworks && artworks.length > 0) {
         return artworks[0];
       } else {
-        return {};
+        return {
+          image: require("@/assets/img/missing/artwork-missing.jpg"),
+        };
       }
     },
     getArtistsPage: state => {

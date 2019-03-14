@@ -28,7 +28,7 @@
       <li v-if="featureAuctions" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/online-auctions">Auctions</router-link></li>
       <li v-if="loggedIn" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/my-artworks">My Artwork</router-link></li>
       <upload-links v-if="loggedIn"/>
-      <li v-if="loggedIn && hasInvoices" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/orders"><i class="fas fa-shopping-bag"></i><sup><mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge></sup></router-link></li>
+      <li v-if="loggedIn && hasInvoices" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/orders">Cart</i><sup><mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge></sup></router-link></li>
       <account-links v-if="loggedIn"/>
       <li class="nav-item" @click="closeMenu"><router-link v-if="!loggedIn" class="nav-link navbar-link" to="/login">Login</router-link></li>
     </ul>
