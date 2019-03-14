@@ -1,34 +1,37 @@
 <template>
-<mdb-card-body>
-  <mdb-card-title>
-    <mdb-popover trigger="click" :options="{placement: 'top'}">
-      <div class="popover">
-        <div class="popover-header">
-          Bitcoin Blockchain
+<div class="row">
+  <div class="col-md-8">
+    <mdb-card-title>
+      <mdb-popover trigger="click" :options="{placement: 'top'}">
+        <div class="popover">
+          <div class="popover-header">
+            Bitcoin Blockchain
+          </div>
+          <div class="popover-body">
+            The bitcoin address of the artist can be displayed in the certificate of authenticity
+            of the artwork.
+          </div>
         </div>
-        <div class="popover-body">
-          The bitcoin address of the artist can be displayed in the certificate of authenticity
-          of the artwork.
-        </div>
-      </div>
-      <a @click.prevent="" slot="reference">
-        Bitcoin Registration <span v-if="bitcoinState">({{bitcoinState.chain}} chain)</span>
-      </a>
-    </mdb-popover>
-  </mdb-card-title>
-  <mdb-card-text>
-    We will create a piece of data that is unique to you and this piece of artwork
-    and store it the bitcoin blockchain where it can be used to prove your
-    ownership. You'll then be able to generate a Certificate of Ownership.
-    <br/><br/>
-    <a @click.prevent="showArtworkHash = !showArtworkHash">Show this data!</a>
-  </mdb-card-text>
-  <mdb-card-text v-if="showArtworkHash">
-    {{artworkHash}}
-  </mdb-card-text>
-  <a class="black-text d-flex justify-content-end" v-if="!bitcoinTx"><mdb-btn class="btn teal lighten-1" size="md" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
-  <hr/>
-</mdb-card-body>
+        <a @click.prevent="" slot="reference">
+          Artwork Registration <span v-if="bitcoinState">({{bitcoinState.chain}} chain)</span>
+        </a>
+      </mdb-popover>
+    </mdb-card-title>
+    <mdb-card-text>
+      We will create a piece of data that is unique to you and this piece of artwork
+      and store it the bitcoin blockchain where it can be used to prove your
+      ownership. You'll then be able to generate a Certificate of Ownership.
+      <br/><br/>
+      <a @click.prevent="showArtworkHash = !showArtworkHash">Show this data!</a>
+    </mdb-card-text>
+    <mdb-card-text v-if="showArtworkHash">
+      {{artworkHash}}
+    </mdb-card-text>
+  </div>
+  <div class="col-md-4">
+    <a class="black-text d-flex justify-content-end" v-if="!bitcoinTx"><mdb-btn class="btn teal lighten-1" size="md" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
+  </div>
+</div>
 </template>
 
 <script>
@@ -118,15 +121,19 @@ export default {
         let $self = this;
         bitcoinService.registerTx(regData,
           function(result) {
-            $self.artwork.bitcoinTx = result.sentTx;
-            $self.$store.dispatch("myArtworksStore/updateArtwork", artwork);
-            $self.$emit("registerStatusUpdate", result.sentTx);
+            if (!result || !result.sentTx) {
+              $self.$emit("registerStatusUpdate", {error: true, message: "transaction failed - please try again later."});
+            } else {
+              $self.artwork.bitcoinTx = result.sentTx;
+              $self.$store.dispatch("myArtworksStore/updateArtwork", artwork);
+              $self.$emit("registerStatusUpdate", result.sentTx);
+            }
           }, function(error) {
             $self.$emit("registerStatusUpdate", error);
             console.log(error);
           });
       } catch (err) {
-        $self.$emit("registerStatusUpdate", error);
+        $self.$emit("registerStatusUpdate", {error: true, message: "transaction failed - please try again later."});
         console.log(err);
       }
     },

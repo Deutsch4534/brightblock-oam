@@ -7,7 +7,6 @@
     <mdb-card-body class="px-0 pb-2 mb-0">
       <mdb-card-title class="subtitle">{{artwork.title}}</mdb-card-title>
       <mdb-card-text>
-        <p>{{artwork.description}}</p>
         <selling-options :artwork="artwork" v-if="sellingStatus === 'unsold'"/>
         <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
         <p>by {{artistProfile.name}}, 11/08/2018</p>

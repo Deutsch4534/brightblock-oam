@@ -23,7 +23,7 @@ Vue.use(Vuex);
 Vue.use(Notifications);
 Vue.use(Datetime);
 Vue.use(PrismicVue, {
-  endpoint: "https://transit8.prismic.io/api/v2",
+  endpoint: "https://radicle.prismic.io/api/v2",
   linkResolver
 });
 Vue.use(VueMasonryPlugin);

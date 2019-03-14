@@ -352,7 +352,7 @@ const router = new Router({
       ]
     },
     {
-      path: '/about',
+      path: '/about/:pageid',
       name: "about",
       components: {
         default: About,

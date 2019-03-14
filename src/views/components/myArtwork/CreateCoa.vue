@@ -1,19 +1,16 @@
 <template>
 <mdb-card-body>
-  <mdb-card-text v-if="artwork.bitcoinTx && artwork.coa">
-    <div class="rounded-bottom lighten-3 text-right p-3">
-      <a class="black-text" @click.prevent="openCoa()"><mdb-btn class="btn teal lighten-1" size="md">Open COA</mdb-btn></a>
-    </div>
-  </mdb-card-text>
-  <mdb-card-text v-else>
+  <mdb-card-text>
     <mdb-card-title>Certificate of Authenticity</mdb-card-title>
     <mdb-card-text>
       <p>Your artwork has been <a :href="blockchainInfoUrl()" target="_blank">registered</a> with the Bitcoin blockchain.</p>
     </mdb-card-text>
-    <bitcoin-address-entry v-if="showBitcoinAddress" @bitcoinAddressUpdate="updateBitcoinAddress"/>
-    <div class="rounded-bottom lighten-3 text-right p-3" v-if="validBitcoinAdress">
+    <bitcoin-address-entry v-if="showBitcoinAddress && !artwork.coa" @bitcoinAddressUpdate="updateBitcoinAddress"/>
+    <div class="rounded-bottom lighten-3 text-right p-3">
+
       <a v-if="artwork.coa" class="black-text" @click.prevent="openCoa()"><mdb-btn class="btn teal lighten-1" size="md">Open COA</mdb-btn></a>
       <a v-else class="black-text" @click.prevent="generateCoa()"><mdb-btn class="btn teal lighten-1" size="md">Generate COA</mdb-btn></a>
+
       <!--
       <a v-if="downloadLink" :href="downloadLink" _target="blank" class="black-text"><mdb-btn class="btn teal lighten-1" size="md">Download PDF</mdb-btn></a>
       <router-link :to="registerForSaleUrl()" class="inline-block" v-if="artwork.coa">

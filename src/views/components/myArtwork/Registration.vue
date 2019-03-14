@@ -1,35 +1,24 @@
 <template>
-<mdb-container>
+<mdb-container fluid class="bg-light flex-1 pt-5">
   <confirmation-modal :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
-  <mdb-row class="mt-5">
-    <mdb-col sm="10" class="mx-auto">
-    <h1>Artwork Registration</h1>
-    <hr/>
-    </mdb-col>
-    <mdb-col sm="10" class="mx-auto">
-      <mdb-card>
-        <mdb-card-title>{{artwork.title}}</mdb-card-title>
-        <mdb-card-title class="text-right"><small>{{myArtist.name}}</small></mdb-card-title>
-          <mdb-card-text>
-            <p>A <a @click.prevent="showArtworkHash = !showArtworkHash">hash of your artwork</a> has been
-            <a :href="blockchainInfoUrl()" target="_blank">registered</a> with the Bitcoin blockchain.</p>
-          </mdb-card-text>
-          <mdb-card-text v-if="showArtworkHash">
-            {{artworkHash}}
-          </mdb-card-text>
-
-        <create-coa v-if="artwork.bitcoinTx"/>
-
-        <register-bitcoin v-if="!artwork.bitcoinTx" @registerStatusUpdate="updateRegisterStatus"/>
-
-
+  <mdb-container class="bg-white mt-5 p-3">
+    <mdb-row>
+      <mdb-col col="8"><h1>{{artwork.title}}</h1></mdb-col>
+      <mdb-col col="4" class="text-right"><small class="teal-text">{{bitcoinTx}}</small></mdb-col>
+    </mdb-row>
+    <mdb-row>
+      <mdb-col col="4">
         <mdb-view hover>
-          <img class="img-fluid" width="100%" :src="artwork.image" :alt="artwork.title"></img>
+          <img class="inplay-image img-fluid mb-4" width="100%" :src="artwork.image" :alt="artwork.title">
           <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
         </mdb-view>
-      </mdb-card>
-    </mdb-col>
-  </mdb-row>
+      </mdb-col>
+      <mdb-col col="8">
+        <register-bitcoin v-if="!artwork.bitcoinTx" @registerStatusUpdate="updateRegisterStatus"/>
+        <create-coa v-if="artwork.bitcoinTx"/>
+      </mdb-col>
+    </mdb-row>
+  </mdb-container>
 </mdb-container>
 </template>
 
@@ -97,7 +86,10 @@ export default {
       }
       return `https://www.blockchain.com/btc/tx/${artwork.bitcoinTx}`;
     },
-    updateRegisterStatus(transaction) {
+    updateRegisterStatus(result) {
+      if (result.error) {
+        this.modalContent = result.message;
+      }
       this.showModal = true;
     },
   },
@@ -113,9 +105,11 @@ export default {
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
       return utils.buildBitcoinHash(artwork);
     },
-    showCoa() {
-      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
-      return artwork.bitcoinTx;
+    bitcoinTx() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      if (myProfile.publicKeyData) {
+        return myProfile.publicKeyData.bitcoinAddress;
+      }
     },
     myArtist() {
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);

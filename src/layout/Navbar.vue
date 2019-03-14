@@ -111,6 +111,7 @@ export default {
   },
   methods: {
     getContent() {
+      /**
       this.$prismic.client.getSingle("navbar").then(document => {
         this.link1 = document.data.link1[0].text;
         this.link2 = document.data.link2[0].text;
@@ -119,6 +120,7 @@ export default {
         this.title = document.data.title[0].text;
         this.taglink2 = document.data.taglink2[0].text;
       });
+      **/
     },
     closeMenu() {
       this.toggleClass = "";

@@ -5,7 +5,7 @@
       <mdb-col col="12">
         <h2 class="large-title text-left mb-5">{{title}}</h2>
       </mdb-col>
-      <mdb-card class="bg-transparent w-100 col-sm-6 col-md-4 col-lg-3 mb-3 d-flex" v-for="(profile, index) in profiles"
+      <mdb-card v-if="profiles" class="bg-transparent w-100 col-sm-6 col-md-4 col-lg-3 mb-3 d-flex" v-for="(profile, index) in profiles"
                 :key="index">
           <router-link :to="profileUrl(profile)">
             <mdb-view hover>
@@ -20,14 +20,6 @@
             </router-link>
             <p class="mb-1">{{profile.data.jobtitle[0].text}}</p>
           </mdb-card-title>
-          <mdb-card-text>
-            <p v-html="profile.data.jobdescription[0].text" class="description mb-0"></p>
-            <!--  <ul class="list-unstyled mb-0">
-                    <a :href="social.url" class="p-2 fa-lg" v-for="(social, index1) in profile.socials" :key="index1">
-                      <mdb-icon :icon="social.smedia" class="blue-text"/>
-                    </a>
-                  </ul> -->
-          </mdb-card-text>
         </mdb-card-body>
       </mdb-card>
     </mdb-row>
@@ -58,7 +50,8 @@ export default {
     return {
       profiles: [],
       title: null,
-      description: ''
+      description: '',
+      showContent: false
     };
   },
   created() {
@@ -73,25 +66,9 @@ export default {
         })
         .then(function(response) {
           $self.profiles = response.results;
+          $self.showContent = true;
           _.forEach($self.profiles, function(prof) {
             $self.$store.commit("userProfilesStore/addTeamProfile", prof);
-            try {
-              let socAll = prof.data.sociallinks[0].text;
-              let socPairs = socAll.split(",");
-              prof.socials = [];
-              _.forEach(socPairs, function(socPair) {
-                if (socPair && socPair.indexOf("=") > 0) {
-                  let smedia = socPair.split("=")[0];
-                  prof.socials.push({
-                    smedia: smedia,
-                    url: socPair.split("=")[1]
-                  });
-                }
-              });
-            } catch (e) {
-              // try again..
-              console.log(e);
-            }
           });
           // "twitter=https://twitter.com/mjoecohen,github=https://github.com/mjoecohen,facebook=https://www.facebook.com/mjoecohen"
         });

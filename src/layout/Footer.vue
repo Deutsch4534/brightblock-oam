@@ -5,17 +5,14 @@
       <mdb-row class="d-flex flex-row align-items-center">
         <mdb-col col="4">
           <span class="serif">Independent Art Market</span>
-          <!--
-          <span class="d-inline-block">
-            <router-link to="/" class="navbar-brand d-inline-block" ><img :src="logo" height="46px" alt="radicle logo"></router-link>
-          </span>
-          -->
         </mdb-col>
         <mdb-col col="8" class="footer-right text-right">
           <div class="d-inline-block">
-            <mdb-icon class="mx-3" icon="heart"/>
+            <span class="font-weight-normal mx-3">
+              <router-link to="/about/help-list">FAQ</router-link>
+            </span>
             <span class="font-weight-normal">
-              <router-link to="/index" name="sectionUrl('DonateSection')">HOW IT WORKS</router-link>
+              <router-link to="/index">HOW IT WORKS</router-link>
             </span>
           </div>
         </mdb-col>

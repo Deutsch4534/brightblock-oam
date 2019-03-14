@@ -73,12 +73,12 @@ export default {
   props: ["featureMessage"],
   data() {
     return {
-      title: "",
+      title: "Contact Us",
       name: "",
       subject: "",
       email: "",
       message: "",
-      description: "",
+      description: "Please get in touch with any questions you have about the platform.",
       fields: [],
       buttonText: null,
       logo: require("@/assets/img/logo/logo-black-256x256.png")
@@ -89,11 +89,13 @@ export default {
   },
   methods: {
     getContent() {
+    /**
       this.$prismic.client.getSingle("contact").then(document => {
         this.title = document.data.title[0].text;
         this.description = document.data.description[0].text;
         this.form = document.data.form[0].text;
       });
+      **/
     },
     submit() {
       let data = {

@@ -119,7 +119,7 @@ export default {
     },
     addQrCode(bitcoinAddress) {
       let $qrCode = document.getElementById("qrcode");
-      if (bitcoinAddress) {
+      if (bitcoinAddress && $qrCode) {
         $qrCode.style.display = "block";;
         this.changeBtcAddress = false;
         QRCode.toCanvas(
@@ -130,7 +130,7 @@ export default {
           }
         );
       } else {
-        $qrCode.style.display = "none";
+        // $qrCode.style.display = "none";
       }
     },
   }
