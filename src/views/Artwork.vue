@@ -10,16 +10,21 @@
       </mdb-col>
       <mdb-col col="12" md="5" class="pl-md-3">
         <h2>{{artwork.title}}</h2>
-        <p>by <router-link :to="artistUrl()"><u>{{artist.name}}</u></router-link>, {{created}}</p>
-        <p class="mb-1">{{artwork.description}}</p>
-        <p><b>{{keywords}}</b></p>
+        <p><router-link :to="artistUrl()"><u>{{artist.name}}</u></router-link></p>
+        <p class="mb-1">
+        {{artwork.dimensions}}
+        <br/>
+        {{artwork.description}}
+        </p>
+        <p>
         <buy-artwork-form-btc v-if="isNotBeingBought && showBuyOptions && isRegisteredAndPriceSet" :artwork="artwork" :myProfile="myProfile"/>
-        <div v-else>
+        <div v-if="!isNotBeingBought || !isRegisteredAndPriceSet">
           <button :disabled="true" class="btn teal darken-1">not for sale</button>
           <router-link to="/gallery">
             <button class="btn teal lighten-1">continue browsing</button>
           </router-link>
         </div>
+        </p>
       </mdb-col>
     </mdb-row>
   </mdb-container>

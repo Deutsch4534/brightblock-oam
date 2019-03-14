@@ -3,9 +3,9 @@
   <confirmation-modal v-if="showModal" :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
   <login-info-modal v-if="showLoginInfoModal" :modal="showLoginInfoModal" @closeLoginInfoModal="closeLoginInfoModal"/>
   <mdb-col col="12">
-    <p class="h5-responsive serif-italic">{{registerMessageBtc}}</p>
     <div>
-      {{moneySymbol}} <strong>{{artwork.saleData.amount}}</strong> EUR = <strong>{{btcMessage}}</strong> BTC
+      {{artwork.saleData.amount}} EUR
+      <br/><strong>{{btcMessage}} BTC</strong>
     </div>
     <div class="row">
       <div class="col-12 mt-3" v-if="!showModal">
@@ -19,22 +19,23 @@
         <div v-else-if="purchaseBegun">
 
           <router-link v-if="iambuyer" :to="invoiceUrl">
-            <mdb-btn class="btn teal lighten-1" size="sm" waves-light>proceed to checkout</mdb-btn>
+            <mdb-btn class="btn teal lighten-1 btn-lg">proceed to checkout</mdb-btn>
           </router-link>
 
-          <mdb-btn v-else class="btn teal lighten-1" size="sm" waves-light :disabled="true">sold</mdb-btn>
+          <mdb-btn v-else class="btn teal lighten-1 btn-lg" size="sm" waves-light :disabled="true">sold</mdb-btn>
 
           <router-link to="/gallery">
-            <mdb-btn class="btn teal lighten-1" size="sm">continue browsing</mdb-btn>
+            <mdb-btn class="btn teal lighten-1 btn-lg">continue browsing</mdb-btn>
           </router-link>
 
         </div>
 
         <!-- purchase not in progress - user is free to place order? -->
         <div v-else>
-          <mdb-btn class="btn teal lighten-1" size="sm" @click="buyArtwork()">buy</mdb-btn>
+          <mdb-btn class="btn teal lighten-1 btn-lg" @click="buyArtwork()">buy</mdb-btn>
         </div>
 
+        <p class="text-muted"><small class="text-muted">{{registerMessageBtc}}</small></p>
       </div>
       <div class="col-12 mt-3" v-else>
         <p>please wait - transferring to payment..</p>
@@ -131,7 +132,7 @@ export default {
       return invoice || profile.username === this.artwork.buyer;
     },
     invoiceUrl() {
-      return `/order/${this.artwork.id}`;
+      return `/orders?orderId=${this.artwork.id}`;
     },
     purchaseBegun() {
       let purchaseBegun = this.artwork.status === this.$store.state.constants.statuses.artwork.PURCHASE_BEGUN;

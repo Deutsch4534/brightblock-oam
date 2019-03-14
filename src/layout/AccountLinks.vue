@@ -100,8 +100,8 @@ export default {
 </script>
 <style scoped>
 .avatar {
-  width: 35px;
-  height: 35px;
+  width: 25px;
+  height: 25px;
   border-radius: 25px;
 }
 .nav-link {

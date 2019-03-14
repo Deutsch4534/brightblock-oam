@@ -54,8 +54,8 @@ export default {
 }
 </script>
 <style scoped>
-.single-artist >>> .h2-responsive.artist-name {
-  font-size: 1rem;
+h1 {
   margin-bottom: 0.25rem;
+  color: white;
 }
 </style>

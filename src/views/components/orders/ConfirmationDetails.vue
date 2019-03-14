@@ -30,8 +30,8 @@
           <div v-if="digiArt">{{paySeller()}}</div>
           <div v-else><mdb-btn @click="paySeller" rounded color="white" size="sm" class="mx-0 waves-light">pay seller</mdb-btn></div>
         </div>
-        <div v-else-if="settling">Transferring artwork<br/>(<a :href="sellerBlockchainUrl()" target="_blank">{{sellerConfirmations}} / 6 confirmations</a>)</div>
-        <div v-else-if="settled">Transferred artwork<br/>(<a :href="sellerBlockchainUrl()" target="_blank">{{sellerConfirmations}} confirmations</a>)</div>
+        <div v-else-if="settling">Transferring artwork <a v-if="debugMode" :href="sellerBlockchainUrl()" target="_blank">{{sellerConfirmations}} / 6 confirmations</a></div>
+        <div v-else-if="settled">Transferred artwork <a v-if="debugMode" :href="sellerBlockchainUrl()" target="_blank">{{sellerConfirmations}} confirmations</a></div>
         <div v-else>
           <div>status in between</div>
         </div>
@@ -67,7 +67,8 @@ export default {
       invoiceAmounts: {},
       invoiceRates: {}
     },
-    registerTx: null
+    registerTx: null,
+    debugMode: false
   },
   data() {
     return {

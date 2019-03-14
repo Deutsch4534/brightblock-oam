@@ -12,7 +12,7 @@
       </div>
     </mdb-row>
     <ul class="list-unstyled" v-else>
-      <order-item v-for="invoice in orders" :key="invoice.artworkId" :orderId="invoice.invoiceId" :artworkId="invoice.artworkId"/>
+      <order-item v-for="invoice in orders" :key="invoice.artworkId" :debugMode="debugMode" :orderId="invoice.invoiceId" :artworkId="invoice.artworkId"/>
     </ul>
   </div>
 </template>
@@ -46,6 +46,9 @@ export default {
         return orders.records;
       }
       return [];
+    },
+    debugMode() {
+      return this.$store.getters["isDebugMode"];
     },
     hasOrders() {
       let orders = this.$store.getters["invoiceStore/getInvoices"];

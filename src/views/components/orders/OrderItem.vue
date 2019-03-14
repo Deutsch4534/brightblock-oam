@@ -17,7 +17,7 @@
       </div>
       <div class="col-md-3 col-sm-6">
         <payment-details v-if="showPaymentDetails" :bitcoinUri="bitcoinUri" :invoiceClaim="invoice" @paymentSent="paymentSent"/>
-        <confirmation-details v-if="showConfirmationDetails" :invoiceClaim="invoice" :registerTx="artwork.bitcoinTx" @paySeller="paySeller"/>
+        <confirmation-details v-if="showConfirmationDetails" :debugMode="debugMode" :invoiceClaim="invoice" :registerTx="artwork.bitcoinTx" @paySeller="paySeller"/>
       </div>
     </div>
   </div>
@@ -44,7 +44,8 @@ export default {
   },
   props: {
     orderId: null,
-    artworkId: null
+    artworkId: null,
+    debugMode: false
   },
   data() {
     return {
@@ -172,16 +173,6 @@ export default {
     artwork() {
       let artwork = this.$store.getters["artworkSearchStore/getArtwork"](this.artworkId);
       return artwork;
-    },
-    openOrderUrl() {
-      this.$router.push("/order/" + this.orderId);
-    },
-    invoiceUrl() {
-      let theId = this.orderId;
-      if (!theId) {
-        theId = this.artworkId;
-      }
-      return `/order/${theId}`;
     },
     artist() {
       let artwork = this.$store.getters["artworkSearchStore/getArtwork"](this.orderId);
