@@ -18,7 +18,7 @@
         <h4 class="my-5" v-else-if="item.type === 'heading4'" v-html="item.text"></h4>
         <h4 class="my-5" v-else-if="item.type === 'heading5'" v-html="item.text"></h4>
         <img class="my-5" v-else-if="item.type === 'image'" :src="item.url"/>
-        <div class="ml-5" v-else-if="item.type === 'o-list-item'"><b class="pb-2">{{index - counter}}.</b> {{item.text}}</div>
+        <div class="ml-5" v-else-if="item.type === 'o-list-item'"><b class="pb-2">-</b> {{item.text}}</div>
       </div>
 
       <mdb-row v-for="(topic, index) of topics" :key="index">

@@ -115,7 +115,7 @@ export default {
       let wfpInt = setInterval(function() {
         invoiceService.watchForPaymentInternal(invoice, function(newInvoice) {
           if (newInvoice && newInvoice.buyerTransaction) {
-            this.$store.commit("invoiceStore/addInvoice", newInvoice);
+            $self.$store.commit("invoiceStore/addInvoice", newInvoice);
             clearInterval(wfpInt);
             $self.showPaymentDetails = false;
             $self.showConfirmationDetails = true;

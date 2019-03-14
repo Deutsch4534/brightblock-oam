@@ -8,11 +8,11 @@
         </mdb-col>
         <mdb-col col="8" class="footer-right text-right">
           <div class="d-inline-block">
-            <span class="font-weight-normal mx-3">
-              <router-link to="/about/help-list">FAQ</router-link>
-            </span>
             <span class="font-weight-normal">
               <router-link to="/index">HOW IT WORKS</router-link>
+            </span>
+            <span class="font-weight-normal mx-3">
+              <router-link to="/about/help-list">FAQ</router-link>
             </span>
           </div>
         </mdb-col>
