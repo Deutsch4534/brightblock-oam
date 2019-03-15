@@ -8,10 +8,10 @@
         </mdb-col>
         <mdb-col col="8" class="footer-right text-right">
           <div class="d-inline-block">
-            <span class="font-weight-normal">
+            <span>
               <router-link to="/index">HOW IT WORKS</router-link>
             </span>
-            <span class="font-weight-normal mx-3">
+            <span class="mx-3">
               <router-link to="/about/help-list">FAQ</router-link>
             </span>
           </div>
@@ -60,9 +60,9 @@ export default {
   .page-footer { min-height: 56px; }
 
   .page-footer {
-    font-size: 1.2em;
+    font-size: 1.3em;
     color: #ECEFF1;
-    font-weight: 300;
+    font-weight: 400;
     letter-spacing: 0.5px;
   }
 

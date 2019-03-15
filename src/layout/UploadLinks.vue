@@ -103,7 +103,9 @@ export default {
 <style scoped>
 .nav-link {
   text-transform: uppercase;
-  font-size: 1.0em;
+  font-size: 1.3em;
+  font-weight: 400;
+  text-transform: capitalize;
 }
 .dropdown-menu {
   min-width: 200px;

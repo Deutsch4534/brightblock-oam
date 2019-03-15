@@ -1,21 +1,14 @@
 <template>
 <mdb-container>
-  <!-- modal trigger button -->
   <mdb-modal v-if="login" @close="closeLogin">
-  <!-- simple login modal  -->
-
     <mdb-modal-header class="text-center">
       <mdb-modal-title tag="h4" bold class="w-100">Sign in</mdb-modal-title>
     </mdb-modal-header>
-    <mdb-modal-body class="mx-3 grey-text">
-    <!--
-      <mdb-input label="Your email" icon="envelope" type="email" class="mb-5" v-modal="email"/>
-      <mdb-input label="Your password" icon="lock" type="password" v-model="password"/>
-    -->
-      <p>Login in with your decentralised (<a href="https://blockstack.org/install/" traget="_blank">Blockstack</a>) identity.</p>
+    <mdb-modal-body class="mx-3 grey-text text-center">
+      <mdb-btn v-on:click="loginMultiPlayer">Sign in with Blockstack</mdb-btn>
     </mdb-modal-body>
-    <mdb-modal-footer center>
-      <mdb-btn v-on:click="loginMultiPlayer">Login</mdb-btn>
+    <mdb-modal-footer right>
+      <p><small class="text-muted"><a href="https://blockstack.org/install/" target="_blank">whats this?</a></small></p>
     </mdb-modal-footer>
   </mdb-modal>
 </mdb-container>

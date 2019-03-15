@@ -1,8 +1,8 @@
 <template>
 <mdb-container fluid class="bg-light flex-1 px-5">
   <mdb-container class="mt-5">
-    <mdb-row>
-      <mdb-col col="12" md="7">
+    <mdb-row class="mdb-lightbox ">
+      <mdb-col col="12" md="7" @click.native="show(0)">
         <mdb-view hover>
           <img class="inplay-image img-fluid mb-4" width="100%" :src="artwork.image" :alt="artwork.title">
           <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
@@ -28,6 +28,11 @@
       </mdb-col>
     </mdb-row>
   </mdb-container>
+  <mdb-lightbox
+  :visible="visible"
+  :imgs="images"
+  :index="index"
+  @hide="handleHide"></mdb-lightbox>
 </mdb-container>
 </template>
 
@@ -42,7 +47,7 @@ import moneyUtils from "@/services/moneyUtils";
 import utils from "@/services/utils";
 import { Sticky } from 'mdbvue';
 import { mdbIcon, mdbMask, mdbView, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
-import { mdbContainer, mdbCol, mdbRow } from 'mdbvue';
+import { mdbLightbox, mdbContainer, mdbCol, mdbRow } from 'mdbvue';
 import moment from "moment";
 
 // noinspection JSUnusedGlobalSymbols
@@ -56,6 +61,7 @@ export default {
     OrderDetails,
     BuyArtworkFormBtc,
     AboutArtwork,
+    mdbLightbox,
     mdbContainer,
     mdbRow,
     mdbCol,
@@ -76,7 +82,20 @@ export default {
         saleData: {},
       },
       myProfile: {},
-      showBuyOptions: false
+      showBuyOptions: false,
+      imgs: [
+        'https://mdbootstrap.com/img/Photos/Horizontal/Nature/12-col/img%20(117).jpg',
+        'https://mdbootstrap.com/img/Photos/Horizontal/Nature/12-col/img%20(98).jpg',
+        'https://mdbootstrap.com/img/Photos/Horizontal/Nature/12-col/img%20(131).jpg',
+        'https://mdbootstrap.com/img/Photos/Horizontal/Nature/12-col/img%20(123).jpg',
+        'https://mdbootstrap.com/img/Photos/Horizontal/Nature/12-col/img%20(118).jpg',
+        'https://mdbootstrap.com/img/Photos/Horizontal/Nature/12-col/img%20(128).jpg',
+        'https://mdbootstrap.com/img/Photos/Horizontal/Nature/12-col/img%20(132).jpg',
+        'https://mdbootstrap.com/img/Photos/Horizontal/Nature/12-col/img%20(115).jpg',
+        'https://mdbootstrap.com/img/Photos/Horizontal/Nature/12-col/img%20(133).jpg'
+      ],
+      visible: false,
+      index: 0
     };
   },
   mounted() {
@@ -101,6 +120,11 @@ export default {
         return this.$store.getters["userProfilesStore/getProfile"](artwork.artist);
       }
       return {name: ""};
+    },
+    images() {
+      let images = [];
+      images.push(this.artwork.image);
+      return images;
     },
     isNotBeingBought() {
       return this.artwork.status !== this.$store.state.constants.statuses.artwork.PURCHASE_BEGUN;
@@ -149,6 +173,13 @@ export default {
     artistUrl () {
       let artwork = this.artwork;
       return '/artists/' + artwork.artist;
+    },
+    show(index) {
+      this.index = index;
+      this.visible = true;
+    },
+    handleHide() {
+      this.visible = false;
     }
   }
 };

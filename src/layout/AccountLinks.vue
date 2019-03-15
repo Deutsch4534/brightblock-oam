@@ -105,8 +105,9 @@ export default {
   border-radius: 25px;
 }
 .nav-link {
-  text-transform: uppercase;
-  font-size: 0.8em;
+  text-transform: capitalize;
+  font-size: 1.3em;
+  font-weight: 400;
 }
 .dropdown-menu {
   min-width: 200px;

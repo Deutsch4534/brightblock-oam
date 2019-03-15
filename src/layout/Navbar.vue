@@ -30,7 +30,8 @@
       <upload-links v-if="loggedIn"/>
       <li v-if="loggedIn && hasInvoices" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/orders">Cart</i><sup><mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge></sup></router-link></li>
       <account-links v-if="loggedIn"/>
-      <li class="nav-item" @click="closeMenu"><router-link v-if="!loggedIn" class="nav-link navbar-link" to="/login">Login</router-link></li>
+      <!-- <li class="nav-item" @click="closeMenu"><router-link v-if="!loggedIn" class="nav-link navbar-link" to="/login">Login</router-link></li> -->
+      <li class="nav-item" @click="closeMenu"><a v-on:click.prevent="loginMultiPlayer" v-if="!loggedIn" class="nav-link navbar-link">Login with Blockstack</a></li>
     </ul>
   </div>
 
@@ -122,6 +123,11 @@ export default {
       });
       **/
     },
+    loginMultiPlayer: function () {
+      let res = myAccountService.loginMultiPlayer();
+      this.$router.push({ path: "/" });
+      return res;
+    },
     closeMenu() {
       this.toggleClass = "";
     },
@@ -163,10 +169,12 @@ export default {
 .navbar {
   box-shadow: none;
   min-height: 60px;
+  font-weight: 400;
 }
 .navbar-link {
-  text-transform: uppercase;
-  font-size: 1.0em;
+  text-transform: capitalize;
+  font-size: 1.3em;
+  font-weight: 400;
 }
 .navbar-toggler-icon {
   background-color: blue;
@@ -189,7 +197,7 @@ export default {
 i.fa-search {
   color: gray;
   transform: rotate(90deg);
-  font-size: 1.0em;
+  font-size: 1.3em;
 }
 .search-form input, .login-link, .nav-cta { font-size: 1.0em; font-weight: normal; }
 .search-form input { border-bottom: none; }
@@ -197,23 +205,23 @@ i.fa-search {
 
 .search-form input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: grey;
-  font-size: 1.0em;
-  text-transform: uppercase;
+  font-size: 1.3em;
+  text-transform: capitalize;
 }
 .search-form input::-moz-placeholder { /* Firefox 19+ */
   color: grey;
-  font-size: 1.0em;
-  text-transform: uppercase;
+  font-size: 1.3em;
+  text-transform: capitalize;
 }
 .search-form input:-ms-input-placeholder { /* IE 10+ */
   color: grey;
-  font-size: 1.0em;
-  text-transform: uppercase;
+  font-size: 1.3em;
+  text-transform: capitalize;
 }
 .search-form input:-moz-placeholder { /* Firefox 18- */
   color: grey;
-  font-size: 1.0em;
-  text-transform: uppercase;
+  font-size: 1.3em;
+  text-transform: capitalize;
 }
 .search-form button.transparent { border: none; background: transparent; color: black; }
 
