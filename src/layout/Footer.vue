@@ -12,7 +12,7 @@
               <router-link to="/index">HOW IT WORKS</router-link>
             </span>
             <span class="mx-3">
-              <router-link to="/about/help-list">FAQ</router-link>
+              <router-link to="/about/faq">FAQ</router-link>
             </span>
           </div>
         </mdb-col>
