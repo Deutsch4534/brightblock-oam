@@ -20,6 +20,7 @@
       if (routeName === "brightBlock" || routeName === "profile") {
         this.showLeafs = true;
       }
+      document.dispatchEvent(new Event('custom-render-trigger'));
     }
   };
 </script>

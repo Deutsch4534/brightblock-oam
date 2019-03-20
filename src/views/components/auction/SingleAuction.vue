@@ -61,7 +61,7 @@ export default {
       if (this.auction.logo && this.auction.logo.dataUrl) {
         return this.auction.logo.dataUrl;
       }
-      return require("@/assets/img/missing/auction4.jpg");
+      return require("@/assets/img/missing/artwork-missing.jpg");
     },
     manageUrl() {
       return `/my-auctions/manage/${this.auction.auctionId}`;

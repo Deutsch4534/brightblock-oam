@@ -84,8 +84,10 @@ export default {
       artwork.coa = coa;
       this.$store.dispatch("myArtworksStore/updateArtwork", artwork);
     },
-    updateBitcoinAddress(newAddress) {
-      this.validBitcoinAdress = newAddress;
+    updateBitcoinAddress(bitcoinAddress) {
+      this.validBitcoinAdress = bitcoinAddress;
+      this.$store.dispatch("myAccountStore/updateBitcoinAddress", bitcoinAddress);
+      this.modal = true;
     },
     blockchainInfoUrl() {
 

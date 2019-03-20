@@ -87,7 +87,7 @@ export default {
     saveBitcoinAddress: function(event) {
       if (event) event.preventDefault();
       let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      this.checkBitcoinAddress(myProfile.publicKeyData.bitcoinAddress);
+      this.checkBitcoinAddress(myProfile.publicKeyData.bitcoinAddress, true)
     },
     toggleAddressInput: function() {
       this.changeBtcAddress = !this.changeBtcAddress;
@@ -99,9 +99,9 @@ export default {
       document.getElementById("qrcode").style.display = "none";
       this.$store.commit("myAccountStore/myProfile", myProfile);
       this.removedAddress = true;
-      this.$store.dispatch("myAccountStore/updatePublicKeyData", myProfile.publicKeyData);
+      $self.$emit("bitcoinAddressUpdate", null);
     },
-    checkBitcoinAddress(bitcoinAddress) {
+    checkBitcoinAddress(bitcoinAddress, emit) {
       let $self = this;
       bitcoinService.checkAddress({address: bitcoinAddress}, function(result) {
         if (result) {
@@ -109,11 +109,13 @@ export default {
           let blockstackProfile = $self.$store.getters["myAccountStore/getMyProfile"];
           blockstackProfile.publicKeyData.bitcoinAddress = bitcoinAddress;
           $self.addQrCode(bitcoinAddress);
-          $self.$emit("bitcoinAddressUpdate", true);
-          $self.$store.dispatch("myAccountStore/updatePublicKeyData", blockstackProfile.publicKeyData);
           $self.message = null;
+          if (emit) {
+            $self.$emit("bitcoinAddressUpdate", bitcoinAddress);
+          }
         } else {
           $self.message = "Invalid address - is it the right key for the current bitcoin network?";
+          return false;
         }
       });
     },

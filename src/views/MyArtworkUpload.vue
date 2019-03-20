@@ -27,7 +27,7 @@ export default {
     let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
     if (myProfile) {
       if (!myProfile.publicKeyData || !myProfile.publicKeyData.bitcoinAddress) {
-        this.$router.push("/profile/upload?from=upload-artwork");
+        this.$router.push("/profile/update?from=upload-artwork");
       } else {
         this.enabled = true; // myProfile.showAdmin;
       }

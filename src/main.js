@@ -4,6 +4,7 @@ import './assets/styles.css';
 import Vue from "vue";
 import App from "./App.vue";
 import Vuex from "vuex";
+// import injectInitialState from "@/utils/injectInitialState";
 import router from "./router";
 import store from "@/storage/store";
 import Notifications from "vue-notification";
@@ -30,43 +31,21 @@ Vue.use(VueMasonryPlugin);
 
 Vue.config.productionTip = false;
 
-const NavbarStore = {
-  showNavbar: false
-};
-
-Vue.mixin({
-  data() {
-    return {
-      NavbarStore
-    };
-  },
-  methods: {
-    /**
-    toggleMenu(){
-      const toggler = document.querySelector('.navbar-toggler');
-      toggler.click();
-    },
-    closeMenu() {
-      const nav = document.querySelector('.navbar-collapse');
-      if (nav.classList.contains('show-navbar')){
-        this.toggleMenu();
-      }
-    }
-    **/
-  }
-});
-
-store.commit("constants", CONSTANTS);
-store.dispatch("fetchServerTime");
-store.dispatch("bitcoinStore/fetchBalance");
-store.dispatch("bitcoinStore/fetchBitcoinState");
-store.dispatch("myAccountStore/fetchMyAccount").then(profile => {
-  store.dispatch("invoiceStore/fetchInvoices");
-});
-store.dispatch("conversionStore/fetchConversionData");
-
-new Vue({
+const app = new Vue({
   router,
   store,
-  render: h => h(App)
-}).$mount("#app");
+  render: h => h(App),
+  beforeCreate () {
+    store.commit("constants", CONSTANTS);
+    store.dispatch("fetchServerTime");
+    store.dispatch("bitcoinStore/fetchBalance");
+    store.dispatch("bitcoinStore/fetchBitcoinState");
+    store.dispatch("myAccountStore/fetchMyAccount").then(profile => {
+      if (profile.loggedIn) {
+        store.dispatch("invoiceStore/fetchInvoices");
+      }
+    });
+    store.dispatch("conversionStore/fetchConversionData");
+  }
+});
+app.$mount("#app");

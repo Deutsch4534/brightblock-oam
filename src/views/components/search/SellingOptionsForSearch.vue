@@ -1,11 +1,11 @@
 <template>
 <div class="">
   <div v-if="purchaseBegun">
-    <p style="font-size: 0.8em">Offer Made</p>
+    Offer Made
   </div>
   <div v-else-if="sellingBuyNow">
-    <p style="font-size: 0.8em">{{artwork.saleData.amount}} EUR
-    <br/>{{btcMessage}} BTC</p>
+    {{artwork.saleData.amount}} EUR
+    <br/>{{btcMessage}} BTC
   <!--  <button class="btn teal lighten-1" @click="routeToBuyNow">Buy Now</button> -->
   </div>
   <div v-else-if="sellingAuction">
@@ -15,7 +15,7 @@
   -->
   </div>
   <div v-else>
-    <p style="font-size: 0.8em">Not Selling</p>
+    Not Selling
   </div>
 </div>
 </template>

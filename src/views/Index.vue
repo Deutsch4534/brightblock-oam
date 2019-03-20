@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="my-app-element" v-if="loaded">
   <div id="introSection">
     <intro-section />
   </div>
@@ -76,13 +76,17 @@
 <script>
 import { mdbContainer, mdbRow, mdbCol } from 'mdbvue';
 import ContactSection from "./components/splash/ContactSection";
-import MissionSection from "./components/splash/MissionSection";
 import TeamSection from "./components/splash/TeamSection";
 import DonateSection from "./components/splash/DonateSection";
 import AudienceSection from "./components/splash/AudienceSection";
 import FeaturesSection from "./components/splash/FeaturesSection";
 import AuctionSection from './components/splash/AuctionSection';
 import IntroSection from './components/splash/IntroSection';
+import { GET_LANDING_PAGE } from '../storage/action-types';
+import store from '../storage/store';
+import Vue from "vue";
+
+const STORE_NAMESPACE = 'landingPage/home';
 
 export default {
   components: {
@@ -92,15 +96,29 @@ export default {
     mdbRow,
     mdbCol,
     ContactSection,
-    MissionSection,
     TeamSection,
     DonateSection,
     AudienceSection,
     FeaturesSection,
   },
   name: "index",
+  /**
+  fetch({ store }) {
+    // Dynamically register the store module
+    // for our landing page data.
+    //registerStoreModule({ module: landingPage, name: STORE_NAMESPACE, store });
+
+    // Do not load data again if already in store.
+    if (store.state[STORE_NAMESPACE].id) return;
+
+    // Trigger the action for fetching all
+    // the necessary data from the API.
+    return store.dispatch(`${STORE_NAMESPACE}/${GET_LANDING_PAGE}`, HOME);
+  },
+  **/
   data() {
     return {
+      loaded: false,
       title1: "Empowering the art community with tools to break free and solve current status quo",
       description1: "Artists require the tools to take the heroic quest of art into their own hands. By sidestepping the gatekeepers, artist will participate in creating their own platform and, in consequence, their own destiny.",
       title2: "Art ecosystem for artists and collectors",
@@ -117,6 +135,10 @@ export default {
   },
   beforeMount() {
     document.querySelector('body').classList.add('index');
+    this.$prismic.client.getSingle("index-page").then(document => {
+      this.$store.commit("contentStore/indexPage", document.data);
+      this.loaded = true;
+    });
   },
   beforeDestroy() {
     document.querySelector('body').classList.remove('index');

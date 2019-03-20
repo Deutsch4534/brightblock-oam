@@ -1,5 +1,5 @@
 <template>
-  <mdb-container fluid class="bg-dark flex-1 py-5">
+  <mdb-container fluid class="bg-dark flex-1 py-5" data-view>
     <mdb-container class="py-3 py-md-4">
         <mdb-row class="article">
           <single-result v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item"/>
@@ -33,11 +33,11 @@ export default {
   props: {
     image: {
       type: String,
-      default: require("@/assets/img/city.jpg")
+      default: require("@/assets/img/missing/artwork-missing.jpg")
     },
     signup: {
       type: String,
-      default: require("@/assets/img/city.jpg")
+      default: require("@/assets/img/missing/artwork-missing.jpg")
     }
   },
   data() {

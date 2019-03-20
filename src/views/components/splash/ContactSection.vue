@@ -85,18 +85,8 @@ export default {
     };
   },
   created() {
-    this.getContent();
   },
   methods: {
-    getContent() {
-    /**
-      this.$prismic.client.getSingle("contact").then(document => {
-        this.title = document.data.title[0].text;
-        this.description = document.data.description[0].text;
-        this.form = document.data.form[0].text;
-      });
-      **/
-    },
     submit() {
       let data = {
         text: this.message,

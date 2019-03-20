@@ -25,11 +25,11 @@ export default {
   props: {
     image: {
       type: String,
-      default: require("@/assets/img/city.jpg")
+      default: require("@/assets/img/faces/avatar.jpg")
     },
     signup: {
       type: String,
-      default: require("@/assets/img/city.jpg")
+      default: require("@/assets/img/missing/artwork-missing.jpg")
     }
   },
   data() {

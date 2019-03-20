@@ -11,7 +11,6 @@ const artworkSearchService = {
   queryById(artworkId, success) {
     searchIndexService.searchDappsIndex(location.hostname, "artwork", "id", artworkId).then(searchResult => {
       if (!searchResult || searchResult.error) {
-        console.log(searchResult.error);
         return;
       }
       success(searchResult[0]);
@@ -20,17 +19,15 @@ const artworkSearchService = {
   queryByOwner(owner, success) {
     searchIndexService.searchDappsIndex(location.hostname, "artwork", "owner", owner).then(searchResults => {
       if (!searchResults || searchResults.error) {
-        console.log(searchResults.error);
         searchResults = [];
       }
       success(searchResults);
     });
   },
-  newQuery(q, success) {
+  newQuery(q, success, failure) {
     store.commit("artworkSearchStore/clearSearchResults");
     searchIndexService.searchDappsIndex(location.hostname, "artwork", q.field, q.query).then(searchResults => {
       if (!searchResults || searchResults.error) {
-        console.log(searchResults.error);
         return;
       }
       let usersToFetch = [];
@@ -53,7 +50,7 @@ const artworkSearchService = {
           }
         })
           .catch(function() {
-            console.log({
+            if (failure) failure({
               ERR_CODE: 101,
               message: "Error fetching root artworkfile for user=" + username
             });

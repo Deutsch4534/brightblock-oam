@@ -83,6 +83,23 @@ const myAccountStore = {
         );
       });
     },
+    updateBitcoinAddress({ state, commit }, bitcoinAddress) {
+      return new Promise(resolve => {
+        let myProfile = state.myProfile;
+        myProfile.publicKeyData.bitcoinAddress = bitcoinAddress;
+        myAccountService.updatePublicKeyData(myProfile.publicKeyData,
+          function(publicKeyData) {
+            myProfile.publicKeyData = publicKeyData;
+            commit("myProfile", myProfile);
+            resolve(myProfile);
+          },
+          function(error) {
+            console.log("Error updating profile: ", error);
+            resolve(error);
+          }
+        );
+      });
+    },
     addRelationship({ state, commit }, username) {
       return new Promise(resolve => {
         let myProfile = state.myProfile;

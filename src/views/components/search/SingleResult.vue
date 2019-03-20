@@ -3,10 +3,12 @@
   <router-link class="" :to="buyNowUrl">
     <img :src="artwork.image" alt="help me" class="article-figure">
     <div class="mask bg-dark">
-      <p class="white-text">{{artwork.title}} <br/>
-      <span class="small">by: {{shortName(artwork.artist)}}</span>
-      <selling-options-for-search :artwork="artwork"/>
-      </p>
+      <div class="white-text" style="font-weight: 400">
+        {{artwork.title}}
+        <br/><span class="small">by: {{shortName(artwork.artist)}}</span>
+        <selling-options-for-search :artwork="artwork"/>
+        <a @click.prevent="heartThis" :class="hearted ? 'text-danger' : ''"><mdb-icon far icon="heart"/></a>
+      </div>
     </div>
   </router-link>
 </div>
@@ -36,7 +38,7 @@
 
 <script>
 import SellingOptionsForSearch from "./SellingOptionsForSearch";
-import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbView, mdbMask } from 'mdbvue';
+import { mdbIcon, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbView, mdbMask } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -49,7 +51,8 @@ export default {
     mdbCardTitle,
     mdbCardText,
     mdbView,
-    mdbMask
+    mdbMask,
+    mdbIcon
   },
   props: {
     artwork: {
@@ -63,6 +66,11 @@ export default {
       default: 4
     }
   },
+  data() {
+    return {
+      hearted: false
+    };
+  },
   methods: {
     shortName(bsname) {
       if (!bsname) {
@@ -73,6 +81,10 @@ export default {
         return user.name;
       }
       return bsname.split(".")[0];
+    },
+    heartThis() {
+      this.hearted = !this.hearted;
+      console.log("how social?");
     }
   },
   computed: {
@@ -90,7 +102,8 @@ export default {
   display: flex;
   height: 25vh;
   width: auto;
-  margin: 0 5px 30px 5px
+  margin: 0 5px 30px 5px;
+  font-size: 0.8rem;
 }
 
 .mask {
@@ -102,11 +115,12 @@ export default {
 }
 
 .subtitle {
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
-  }
-  .subtitle,
-  .card-body p {
-    color: white!important;
-  }
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.subtitle,
+.card-body p {
+  color: white!important;
+}
 </style>

@@ -41,9 +41,9 @@
     name: 'IntroSection',
     data() {
       return {
-        tagline: "tagline",
-        taglink1: '',
-        bgImage: null,
+        tagline: null,
+        taglink: null,
+        backgroundUrl: null,
       };
     },
     components: {
@@ -54,32 +54,29 @@
       mdbMask,
       Navbar
     },
-    created() {
-      this.getContent();
+    mounted() {
+      let content = this.$store.state.contentStore.content["index-page"];
+      this.tagline = content["navbar-tagline"][0].text;
+      this.taglink = content["navbar-taglink"][0].text;
+      this.backgroundUrl = content["navbar-background"].url;
     },
     computed: {
       headerStyle() {
+        let content = this.$store.state.contentStore.content["index-page"];
         return {
           "margin-top": "0px",
-          "background-image": `url(${this.bgImage})`,
+          "background-image": `url(${content["navbar-background"].url})`,
           "background-repeat": "no-repeat",
           "background-size": "cover",
           "background-position": "center center"
         };
       },
       getAuctionLink() {
-        return this.taglink1;
+        let content = this.$store.state.contentStore.content["index-page"];
+        return content["navbar-taglink"][0].text;
       }
     },
-    methods: {
-      getContent() {
-        this.$prismic.client.getSingle("navbar").then(document => {
-          this.tagline = document.data.tagline[0].text;
-          this.taglink1 = document.data.taglink1[0].text;
-          this.bgImage = document.data.background.url;
-        });
-      }
-    }
+    methods: {}
   }
 </script>
 <style scoped>

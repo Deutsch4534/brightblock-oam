@@ -9,12 +9,6 @@
           <mdb-col sm="6" md="8">
             <p class="h4-responsive mb-5">{{description}}</p>
             <p class="h3-responsive text-uppercase my-4">{{btcAddress}}:</p>
-            <!--
-            <div>
-              <p class="h5-responsive mb-0"><em><strong>Target on {{chain}} chain:</strong> {{target}}</em></p>
-              <p class="h5-responsive"><em><strong>Currently:</strong> {{balance}}</em></p>
-            </div>
-            -->
           </mdb-col>
           <mdb-col sm="6" md="4" class="d-flex">
             <form class="contact-form text-right d-flex w-100 align-items-end justify-content-end">
@@ -43,48 +37,34 @@ export default {
   },
   data() {
     return {
-      title: "",
-      description: "",
-      btcAddress: null
+      content: null,
+      btcAddress: null,
+      title: null,
+      description: null,
     };
   },
   mounted() {
-    this.getContent();
     this.$store.dispatch("bitcoinStore/fetchBalance");
     this.$store.dispatch("bitcoinStore/fetchBitcoinState");
+    let content = this.$store.state.contentStore.content["index-page"];
+    this.btcAddress = content["donate-btc-address"][0].text;
+    this.title = content["donate-title"][0].text;
+    this.description = content["donate-description"][0].text;
   },
-  computed: {
-    chain() {
-      let s = this.$store.getters["bitcoinStore/getBitcoinState"];
-      if (s) {
-        return s.chain;
-      }
-    },
-    balance() {
-      return this.$store.getters["bitcoinStore/getBalance"];
-    },
-    target() {
-      return this.$store.getters["bitcoinStore/getTarget"];
-    }
-  },
+  computed: {},
   methods: {
     getContent() {
       let $self = this;
       let $qrCode = document.getElementById("qrcode");
-      this.$prismic.client.getSingle("donate").then(document => {
-        this.title = document.data.title[0].text;
-        this.description = document.data.description[0].text;
-        this.btcAddress = document.data.btc_address[0].text;
-        QRCode.toCanvas(
-          $qrCode,
-          $self.btcAddress,
-          { errorCorrectionLevel: "H" },
-          function(error) {
-            if (error) console.error(error);
-            console.log("success!");
-          }
-        );
-      });
+      QRCode.toCanvas(
+        $qrCode,
+        $self.btcAddress,
+        { errorCorrectionLevel: "H" },
+        function(error) {
+          if (error) console.error(error);
+          console.log("success!");
+        }
+      );
     }
   }
 };

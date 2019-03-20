@@ -120,6 +120,7 @@
             <!--<p class="muted mt-2" v-if="auction.logo && auction.logo.dataUrl"><small>{{auction.logo.name}}</small></p>-->
           </div>
         </div>
+
       </div>
     </div>
     <!-- /Input fields section -->

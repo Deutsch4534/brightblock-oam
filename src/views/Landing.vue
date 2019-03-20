@@ -193,7 +193,7 @@ export default {
   props: {
     header: {
       type: String,
-      default: require("@/assets/img/bg7.jpg")
+      default: require("@/assets/img/missing/artwork-missing.jpg")
     },
     teamImg1: {
       type: String,

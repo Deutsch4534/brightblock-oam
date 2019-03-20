@@ -5,26 +5,26 @@
       <confirmation-modal :modal="modal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
       <mdb-navbar class="blue lighten-5 py-4">
         <mdb-navbar-nav nav vertical>
-          <mdb-nav-item><h5>RA User Profile</h5></mdb-nav-item>
-          <mdb-nav-item href="#" active><a @click.prevent="showNav = 1">Blockstack Profile</a></mdb-nav-item>
-          <mdb-nav-item href="#"><a @click.prevent="showNav = 2">Email Address</a></mdb-nav-item>
-          <mdb-nav-item href="#"><a @click.prevent="showNav = 3">Bitcoin Info</a></mdb-nav-item>
-          <mdb-nav-item href="#"><a @click.prevent="showNav = 4">Shipping Details</a></mdb-nav-item>
-          <mdb-nav-item href="#"><a @click.prevent="showNav = 5">Trusted Users</a></mdb-nav-item>
+          <mdb-nav-item><h5>RA Gallery</h5></mdb-nav-item>
+          <mdb-nav-item href="#" active><a @click.prevent="showNav = 1">Main Info</a></mdb-nav-item>
+          <mdb-nav-item href="#"><a @click.prevent="showNav = 2">Email</a></mdb-nav-item>
+          <mdb-nav-item href="#"><a @click.prevent="showNav = 3">Bitcoin</a></mdb-nav-item>
+          <mdb-nav-item href="#"><a @click.prevent="showNav = 4">Address</a></mdb-nav-item>
+          <mdb-nav-item href="#"><a @click.prevent="showNav = 5">Administrators</a></mdb-nav-item>
         </mdb-navbar-nav>
       </mdb-navbar>
     </div>
     <div class="col-md-9 py-4" v-if="showNav > 0">
 
-      <h4 class="h4-responsive">{{myProfile.name}}</h4>
+      <h4 class="h4-responsive">{{myProfile.gallery.name}}</h4>
       <p class="text-muted small">Note: Your profile data is encrypted and stored in your storage - it is only ever
       decrypted to display to another user to complete a transaction.</p>
 
-      <blockstack-section v-if="showNav === 1" :myProfile="myProfile"/>
-      <email-address-entry v-if="showNav === 2" :emailAddress="myProfile.auxiliaryProfile.emailAddress" @saveEmail="saveEmail"/>
+      <gallery-upload-form v-if="showNav === 1" :myProfile="myProfile"/>
+      <email-address-entry v-if="showNav === 2" :emailAddress="myProfile.galleryProfile.emailAddress" @saveEmail="saveEmail"/>
       <bitcoin-address-entry v-if="showNav === 3" @bitcoinAddressUpdate="updateBitcoinAddress"/>
-      <address-form v-if="showNav === 4" :addressTitle="'Shipping Address'" :addressBlurb="addressBlurb" :address="myProfile.auxiliaryProfile.shippingAddress" @saveAddress="saveAddress"/>
-      <trusted-users-section v-if="showNav === 5" :trustedIds="myProfile.auxiliaryProfile.trustedIds" @saveTrustedUsers="saveTrustedUsers"/>
+      <address-form v-if="showNav === 4" :addressTitle="'Shipping Address'" :addressBlurb="addressBlurb" :address="myProfile.galleryProfile.shippingAddress" @saveAddress="saveAddress"/>
+      <trusted-users-section v-if="showNav === 5" :trustedIds="myProfile.galleryProfile.trustedIds" @saveTrustedUsers="saveTrustedUsers"/>
 
     </div>
   </div>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mdbIcon, mdbPopover, mdbCol, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
+import { mdbContainer } from "mdbvue";
 import { mdbNavbar, mdbNavbarNav, mdbNavItem } from "mdbvue";
 import MyArtworkManageImage from "../myArtwork/MyArtworkManageImage";
 import ConfirmationModal from "../utils/ConfirmationModal";
@@ -43,11 +43,13 @@ import BlockstackSection from "../utils/BlockstackSection";
 import BitcoinAddressEntry from "../utils/BitcoinAddressEntry";
 import EmailAddressEntry from "../utils/EmailAddressEntry";
 import AddressForm from "../utils/AddressForm";
+import GalleryUploadForm from "./GalleryUploadForm";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: "AuxiliaryProfileForm",
+  name: "GalleryProfileForm",
   components: {
+    GalleryUploadForm,
     BitcoinAddressEntry,
     TrustedUsersSection,
     BlockstackSection,
@@ -56,21 +58,11 @@ export default {
     ConfirmationModal,
     AddressForm,
     mdbContainer,
-    mdbIcon,
-    mdbPopover,
-    mdbCol,
-    mdbRow,
-    mdbCard,
-    mdbCardImage,
-    mdbCardBody,
-    mdbCardTitle,
-    mdbCardText,
-    mdbBtn,
     mdbNavbar,
     mdbNavbarNav,
     mdbNavItem
   },
-  props: ["formTitle"],
+  props: ["formTitle", "myProfile"],
   data() {
     return {
       showNav: 0,
@@ -81,31 +73,18 @@ export default {
         "<li class='mb-3'><a href='#/my-artwork/upload'>Upload Artwork</a></li>" +
         "<li><a href='#/gallery'>Gallery</a></li></ul>",
       addressBlurb: "Your shipping address is encrypted and stored in your gaia bucket. It will only ever be decrypted in case where this is necessary - such as when you have bought some artwork and the seller needs your shipping information",
-      myProfile: {
-        publicKeyData: {}
-      }
     };
   },
   mounted() {
-    this.$store.dispatch("myAccountStore/fetchMyAccount").then((profile) => {
-      if (!profile.auxiliaryProfile) {
-        profile.auxiliaryProfile = {};
-        profile.auxiliaryProfile.shippingAddress = {};
-      }
-      if (!profile.auxiliaryProfile.shippingAddress) {
-        profile.auxiliaryProfile.shippingAddress = {};
-      }
-      this.myProfile = profile;
-      this.showNav = 1;
-    });
+    this.showNav = 1;
   },
   computed: {
   },
   methods: {
     upload: function() {
       let $self = this;
-      this.$store.dispatch("myAccountStore/updateAuxiliaryProfile", this.myProfile.auxiliaryProfile)
-        .then(auxiliaryProfile => {
+      this.$store.dispatch("myAccountStore/updateGalleryProfile", this.myProfile.galleryProfile)
+        .then(galleryProfile => {
           $self.modal = true;
         })
         .catch(() => {
@@ -115,15 +94,15 @@ export default {
         });
     },
     saveEmail: function(email) {
-      this.myProfile.auxiliaryProfile.emailAddress = email;
+      this.myProfile.galleryProfile.emailAddress = email;
       this.upload();
     },
     saveAddress: function(address) {
-      this.myProfile.auxiliaryProfile.shippingAddress = address;
+      this.myProfile.galleryProfile.shippingAddress = address;
       this.upload();
     },
     saveTrustedUsers: function(trustedIds) {
-      this.myProfile.auxiliaryProfile.trustedIds = trustedIds;
+      this.myProfile.galleryProfile.trustedIds = trustedIds;
       this.upload();
     },
     closeModal: function() {

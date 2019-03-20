@@ -11,12 +11,13 @@ import AdminQueryIndex from "./views/components/admin/AdminQueryIndex";
 import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
 import Gallery from "./views/Gallery.vue";
+import GalleryUpload from "./views/GalleryUpload.vue";
+
 import Artist from "./views/Artist.vue";
 import Artists from "./views/Artists.vue";
 import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
 import ProfileUpdate from "./views/ProfileUpdate.vue";
-import ProfileUpload from "./views/ProfileUpload.vue";
 import TeamProfile from "./views/TeamProfile.vue";
 import Navbar from "./layout/Navbar.vue";
 import Footer from "./layout/Footer.vue";
@@ -75,8 +76,18 @@ const router = new Router({
     },
     {
       path: "/gallery",
-      name: "gallery",
+      name: "gallery1",
       components: { default: Gallery, header: Navbar, footer: Footer },
+    },
+    {
+      path: "/gallery/upload",
+      name: "galleryUpload",
+      components: {
+        default: GalleryUpload,
+        header: Navbar,
+        footer: Footer
+      },
+      meta: { requiresAuth: true }
     },
     {
       path: "/login",
@@ -121,16 +132,6 @@ const router = new Router({
         header: Navbar,
         footer: Footer
       }
-    },
-    {
-      path: "/profile/upload",
-      name: "profileUpload",
-      components: {
-        default: ProfileUpload,
-        header: Navbar,
-        footer: Footer
-      },
-      meta: { requiresAuth: true }
     },
     {
       path: "/landing",

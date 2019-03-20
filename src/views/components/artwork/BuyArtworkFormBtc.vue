@@ -1,14 +1,14 @@
 <template>
-<mdb-row class="pt-1">
+<div class="pt-1">
   <confirmation-modal v-if="showModal" :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
   <login-info-modal v-if="showLoginInfoModal" :modal="showLoginInfoModal" @closeLoginInfoModal="closeLoginInfoModal"/>
-  <mdb-col col="12">
+  <div>
     <div>
       {{artwork.saleData.amount}} EUR
       <br/><strong>{{btcMessage}} BTC</strong>
     </div>
-    <div class="row">
-      <div class="col-12 mt-3" v-if="!showModal">
+    <div class="">
+      <div class="my-3" v-if="!showModal">
 
         <!-- i am owner - send this user to my artwork / my artworks -->
         <router-link v-if="iamowner" to="/my-artworks">
@@ -31,9 +31,7 @@
         </div>
 
         <!-- purchase not in progress - user is free to place order? -->
-        <div v-else>
-          <mdb-btn class="btn teal lighten-1 btn-lg" @click="buyArtwork()">buy</mdb-btn>
-        </div>
+        <mdb-btn v-else class="btn teal lighten-1 btn-lg m-0" @click="buyArtwork()">buy</mdb-btn>
 
         <p class="text-muted"><small class="text-muted">{{registerMessageBtc}}</small></p>
       </div>
@@ -42,8 +40,8 @@
       </div>
     </div>
     <div class="w-100"></div>
-  </mdb-col>
-</mdb-row>
+  </div>
+</div>
 </template>
 
 <script>
