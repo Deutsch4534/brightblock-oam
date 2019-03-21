@@ -1,5 +1,5 @@
 <template>
-  <mdb-container fluid class="bg-dark flex-1 py-5" data-view>
+  <mdb-container fluid class="bg-dark flex-1 py-5" id="my-app-element">
     <mdb-container class="py-3 py-md-4">
         <mdb-row class="article">
           <single-result v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item"/>
@@ -51,16 +51,9 @@ export default {
      // this.$store.dispatch("onlineAuctionsStore/fetchOnlineAuctions").then(() => {
        // loading online auctions
      // });
-     if (this.$store.state.constants.featureBitcoin) {
-       artworkSearchService.newQuery({field: "title", query: "*"});
-     } else {
-       this.$store.dispatch("ethStore/fetchClientState").then(clientState => {
-         ethereumService.connectToBlockChain(clientState);
-         this.$store.dispatch("ethStore/fetchBlockchainItems").then(blockchainItems => {
-           store.dispatch("artworkSearchStore/fetchRegisteredArtworks", blockchainItems);
-         });
-       });
-     }
+     artworkSearchService.newQuery({field: "title", query: "*"});
+     this.$store.fetchGalleries();
+     this.$store.fetchMyGalleries();
    },
   methods: {},
   computed: {
