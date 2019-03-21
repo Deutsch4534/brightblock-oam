@@ -50,10 +50,11 @@ export default {
     this.btcAddress = content["donate-btc-address"][0].text;
     this.title = content["donate-title"][0].text;
     this.description = content["donate-description"][0].text;
+    this.renderQrCode();
   },
   computed: {},
   methods: {
-    getContent() {
+    renderQrCode() {
       let $self = this;
       let $qrCode = document.getElementById("qrcode");
       QRCode.toCanvas(

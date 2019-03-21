@@ -1,7 +1,7 @@
 <template>
 <!-- Footer -->
   <footer class="page-footer font-small black fixed-bottom py-3">
-    <mdb-container fluid>
+    <mdb-container class="" fluid>
       <mdb-row class="d-flex flex-row align-items-center">
         <mdb-col col="4">
           <span class="serif">Independent Art Market</span>
@@ -64,6 +64,7 @@ export default {
     color: #ECEFF1;
     font-weight: 400;
     letter-spacing: 0.5px;
+    margin-top: 50px;
   }
 
   @media (max-width: 576px) {

@@ -127,15 +127,23 @@ export default {
     watchForConfirmations() {
       let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
       let $self = this;
-      setInterval(function() {
-        $self.$store.dispatch("invoiceStore/checkPayment", $self.orderId);
+      let wfconfsInt = setInterval(function() {
+        $self.$store.dispatch("invoiceStore/checkPayment", $self.orderId).then((invoice) => {
+          if (invoice.buyerTransaction.confirmations > 7) {
+            clearInterval(wfconfsInt);
+          }
+        });
       }, 60000);
     },
     watchForSettlement() {
       let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
       let $self = this;
-      setInterval(function() {
-        $self.$store.dispatch("invoiceStore/checkSettlement", $self.orderId);
+      let wfsetInt = setInterval(function() {
+        $self.$store.dispatch("invoiceStore/checkSettlement", $self.orderId).then((invoice) => {
+          if (invoice.sellerTransaction.confirmations > 7) {
+            clearInterval(wfsetInt);
+          }
+        });
       }, 60000);
     },
     paySeller() {

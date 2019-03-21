@@ -1,5 +1,6 @@
 <template>
 <mdb-container id="ContactSection" class="py-5">
+  <confirmation-modal class="text-dark" v-if="showModal" :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
     <section class="px-0">
       <mdb-row>
         <mdb-col col="12" lg="10">
@@ -55,11 +56,13 @@
 
 <script>
 import { mdbContainer, mdbRow, mdbCol, mdbBtn, mdbIcon, mdbInput, mdbTextarea, mdbCard, mdbCardBody } from 'mdbvue';
+import ConfirmationModal from "@/views/components/utils/ConfirmationModal";
 import axios from "axios";
 
 export default {
   name: 'ContactSection',
   components: {
+    ConfirmationModal,
     mdbContainer,
     mdbRow,
     mdbCol,
@@ -81,7 +84,10 @@ export default {
       description: "Please get in touch with any questions you have about the platform.",
       fields: [],
       buttonText: null,
-      logo: require("@/assets/img/logo/logo-black-256x256.png")
+      logo: require("@/assets/img/logo/logo-black-256x256.png"),
+      showModal: false,
+      modalTitle: "Sent Message",
+      modalContent: "<p>Thanks for your interest - your message has been sent.</p>",
     };
   },
   created() {
@@ -109,11 +115,15 @@ export default {
               reject(new Error(response.message));
             }
             resolve(response.data.details);
+            this.showModal = true;
           })
           .catch(e => {
             reject(new Error(e.message));
           });
       });
+    },
+    closeModal: function() {
+      this.showModal = false;
     }
   },
   computed: {

@@ -88,13 +88,13 @@ const webpackConfig = merge(baseWebpackConfig, {
 
       // Optional - The path your rendered app should be output to.
       // (Defaults to staticDir.)
-      outputDir: path.join(__dirname, '../dist/prerendered'),
+      //outputDir: path.join(__dirname, '../dist/spa'),
 
       // Optional - The location of index.html
       indexPath: path.join(__dirname, '../dist', 'index.html'),
 
       // Required - Routes to render.
-      routes: [ '/about/faq', '/index' ],
+      routes: [ '/', '/home', '/about/faq' ],
 
       // Optional - Allows you to customize the HTML and output path before
       // writing the rendered contents to a file.
@@ -125,6 +125,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       // Optional - Uses html-minifier (https://github.com/kangax/html-minifier)
       // To minify the resulting HTML.
       // Option reference: https://github.com/kangax/html-minifier#options-quick-reference
+      /**
       minify: {
         collapseBooleanAttributes: true,
         collapseWhitespace: true,
@@ -132,6 +133,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         keepClosingSlash: true,
         sortAttributes: true
       },
+      **/
 
       // Server configuration options.
       /**
@@ -161,11 +163,11 @@ const webpackConfig = merge(baseWebpackConfig, {
         renderAfterDocumentEvent: 'custom-render-trigger',
 
         // Optional - Wait to render until the specified element is detected using `document.querySelector`
-        //renderAfterElementExists: 'my-app-element',
+        // renderAfterElementExists: 'my-app-element',
 
         // Optional - Wait to render until a certain amount of time has passed.
         // NOT RECOMMENDED
-        // renderAfterTime: 90000, // Wait 5 seconds.
+        //renderAfterTime: 10000, // Wait 5 seconds.
 
         // Other puppeteer options.
         // (See here: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions)

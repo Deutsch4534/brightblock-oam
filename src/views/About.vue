@@ -1,6 +1,6 @@
 <template>
   <!-- TODO: connect template with Prismic cms -->
-  <mdb-container fluid class="bg-light flex-1">
+  <mdb-container id="my-app-element" fluid class="bg-light flex-1">
     <help-article v-if="showArticles" :pageid="pageid"/>
     <help-faq v-if="showFAQ" :pageid="pageid"/>
 </mdb-container>

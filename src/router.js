@@ -1,4 +1,3 @@
-import Vue from "vue";
 import Router from "vue-router";
 
 import Admin from "./views/Admin.vue";
@@ -48,9 +47,8 @@ import About from "./views/About";
 
 import myAccountService from "@/services/myAccountService";
 
-Vue.use(Router);
-
 const router = new Router({
+  mode: 'history',
   routes: [
     {
       path: "/index",
@@ -60,24 +58,33 @@ const router = new Router({
         header: Navbar,
         footer: Footer
       },
-      props: {
-        header: { colorOnScroll: 400 },
-        footer: { backgroundColor: "black" }
-      }
+      meta: { requiresAuth: false }
+    },
+    {
+      path: "/home",
+      name: "home",
+      components: {
+        default: Index,
+        header: Navbar,
+        footer: Footer
+      },
+      meta: { requiresAuth: false }
     },
     {
       path: "/",
-      name: "gallery",
+      name: "index",
       components: {
-        default: Gallery,
+        default: Index,
         header: Navbar,
         footer: Footer
-      }
+      },
+      meta: { requiresAuth: false }
     },
     {
       path: "/gallery",
       name: "gallery1",
       components: { default: Gallery, header: Navbar, footer: Footer },
+      meta: { requiresAuth: false }
     },
     {
       path: "/gallery/upload",
@@ -95,7 +102,8 @@ const router = new Router({
       components: { default: Login, header: Navbar, footer: Footer },
       props: {
         header: { colorOnScroll: 400 }
-      }
+      },
+      meta: { requiresAuth: false }
     },
     {
       path: "/profile/team/:profileId",
@@ -362,22 +370,17 @@ const router = new Router({
       }
     }
   ],
-  scrollBehavior: to => {
-    if (to.hash) {
-      return { selector: to.hash };
-    }
-    return { x: 0, y: 0 };
-  }
 });
+
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
-    if (myAccountService.myProfile().loggedIn) {
+    if (myAccountService.myProfile() && myAccountService.myProfile().loggedIn) {
       return next();
     } else {
       return next({
-        path: "/",
+        path: "/index",
         query: { redirect: to.fullPath }
       });
     }

@@ -26,6 +26,7 @@ export const CONSTANTS = {
   publicKeyDataRootFileName: "public_key_data_v01.json",
   artworkRootFileName: "records_v01.json",
   auctionsRootFileName: "auctions_v01.json",
+  galleriesRootFileName: "galleries_v01.json",
   gaiaFileName: "record_",
   statuses: {
     artwork: {

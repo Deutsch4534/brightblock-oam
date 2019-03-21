@@ -24,9 +24,7 @@
     <mdb-container fluid>
       <mdb-row class="py-2 d-flex align-items-center intro-title">
         <mdb-col md="9">
-          <p class="mb-0">
-            A fully decentralised platform for buying selling and auctioning art. <router-link :to="getAuctionLink">Read more</router-link>
-          </p>
+          <p class="mb-3" v-html="strapline"></p>
         </mdb-col>
       </mdb-row>
     </mdb-container>
@@ -44,6 +42,7 @@
         tagline: null,
         taglink: null,
         backgroundUrl: null,
+        strapline: null
       };
     },
     components: {
@@ -57,6 +56,7 @@
     mounted() {
       let content = this.$store.state.contentStore.content["index-page"];
       this.tagline = content["navbar-tagline"][0].text;
+      this.strapline = content["navbar-strapline"][0].text;
       this.taglink = content["navbar-taglink"][0].text;
       this.backgroundUrl = content["navbar-background"].url;
     },

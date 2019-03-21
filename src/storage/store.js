@@ -13,6 +13,7 @@ import bitcoinStore from "./bitcoinStore";
 import onlineAuctionsStore from "./onlineAuctionsStore";
 import myAuctionsStore from "./myAuctionsStore";
 import contentStore from "./contentStore";
+import galleryStore from "./galleryStore";
 import xhrService from "@/services/xhrService";
 
 Vue.use(Vuex);
@@ -29,7 +30,8 @@ const store = new Vuex.Store({
     myAuctionsStore: myAuctionsStore,
     onlineAuctionsStore: onlineAuctionsStore,
     invoiceStore: invoiceStore,
-    contentStore: contentStore
+    contentStore: contentStore,
+    galleryStore: galleryStore
   },
   state: {
     constants: {},

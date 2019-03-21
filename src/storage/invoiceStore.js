@@ -87,6 +87,9 @@ const invoiceStore = {
     },
     checkSettlement({ commit, state, getters}, invoiceId) {
       let invoice = getters.getInvoiceById(invoiceId);
+      if (!invoice) {
+        return;
+      }
       return new Promise(resolve => {
         bitcoinService.checkTransaction({txid: invoice.sellerTransaction.txid}, function(transaction) {
           if (transaction) {

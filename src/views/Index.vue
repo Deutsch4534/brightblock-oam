@@ -82,7 +82,6 @@ import AudienceSection from "./components/splash/AudienceSection";
 import FeaturesSection from "./components/splash/FeaturesSection";
 import AuctionSection from './components/splash/AuctionSection';
 import IntroSection from './components/splash/IntroSection';
-import { GET_LANDING_PAGE } from '../storage/action-types';
 import store from '../storage/store';
 import Vue from "vue";
 
@@ -102,20 +101,6 @@ export default {
     FeaturesSection,
   },
   name: "index",
-  /**
-  fetch({ store }) {
-    // Dynamically register the store module
-    // for our landing page data.
-    //registerStoreModule({ module: landingPage, name: STORE_NAMESPACE, store });
-
-    // Do not load data again if already in store.
-    if (store.state[STORE_NAMESPACE].id) return;
-
-    // Trigger the action for fetching all
-    // the necessary data from the API.
-    return store.dispatch(`${STORE_NAMESPACE}/${GET_LANDING_PAGE}`, HOME);
-  },
-  **/
   data() {
     return {
       loaded: false,

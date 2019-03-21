@@ -5,6 +5,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import Vuex from "vuex";
 // import injectInitialState from "@/utils/injectInitialState";
+import Router from "vue-router";
 import router from "./router";
 import store from "@/storage/store";
 import Notifications from "vue-notification";
@@ -20,6 +21,7 @@ import {VueMasonryPlugin} from 'vue-masonry';
 
 Vue.config.productionTip = false;
 
+Vue.use(Router);
 Vue.use(Vuex);
 Vue.use(Notifications);
 Vue.use(Datetime);
