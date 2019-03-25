@@ -37,17 +37,23 @@ const app = new Vue({
   router,
   store,
   render: h => h(App),
-  beforeCreate () {
-    store.commit("constants", CONSTANTS);
-    store.dispatch("fetchServerTime");
-    store.dispatch("bitcoinStore/fetchBalance");
-    store.dispatch("bitcoinStore/fetchBitcoinState");
-    store.dispatch("myAccountStore/fetchMyAccount").then(profile => {
+  mounted () {
+    this.$nextTick(function () {
+      // Code that will run only after the
+      // entire view has been rendered
+      store.dispatch("bitcoinStore/fetchBalance");
+      store.dispatch("bitcoinStore/fetchBitcoinState");
+      let profile = this.$store.getters["myAccountStore/getMyProfile"];
       if (profile.loggedIn) {
         store.dispatch("invoiceStore/fetchInvoices");
+        store.dispatch("fetchServerTime");
       }
+      store.dispatch("conversionStore/fetchConversionData");
     });
-    store.dispatch("conversionStore/fetchConversionData");
+  },
+  beforeCreate () {
+    store.commit("constants", CONSTANTS);
+    store.dispatch("myAccountStore/fetchMyAccount");
   }
 });
 app.$mount("#app");
