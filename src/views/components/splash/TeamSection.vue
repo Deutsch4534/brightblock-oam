@@ -65,11 +65,19 @@ export default {
           orderings: "[my.mini_profile.name desc]"
         })
         .then(function(response) {
-          $self.profiles = response.results;
+          let tmpProfiles = response.results;
           $self.showContent = true;
-          _.forEach($self.profiles, function(prof) {
+          $self.profiles = [{},{},{}];
+          _.forEach(tmpProfiles, function(prof) {
             $self.$store.commit("userProfilesStore/addTeamProfile", prof);
-          });
+            if (prof.data.name[0].text.indexOf("Cohen") > -1) {
+              $self.profiles.splice(2, 1, prof);
+            } else if (prof.data.name[0].text.indexOf("Meic") > -1) {
+              $self.profiles.splice(0, 1, prof);
+            } else {
+              $self.profiles.splice(1, 1, prof);
+            }
+        });
           // "twitter=https://twitter.com/mjoecohen,github=https://github.com/mjoecohen,facebook=https://www.facebook.com/mjoecohen"
         });
       this.$prismic.client.getSingle("profile").then(document => {

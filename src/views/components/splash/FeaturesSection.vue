@@ -7,16 +7,16 @@
       <div class="w-100"></div>
       <mdb-col md="12" lg="10" class="border-list">
         <div class="list-item">
-          <h3 class="h2-responsive"><a><mdb-icon icon="exchange-alt" class="mr-4" />{{cardDescription1}}</a></h3>
+          <h3 class="h2-responsive"><a><mdb-icon icon="exchange-alt" class="mr-4" />{{feature1}}</a></h3>
         </div>
         <div class="list-item">
-          <h3 class="h2-responsive"><a><mdb-icon icon="boxes" class="mr-4" />{{cardDescription2}}</a></h3>
+          <h3 class="h2-responsive"><a><mdb-icon icon="boxes" class="mr-4" />{{feature2}}</a></h3>
         </div>
         <div class="list-item">
-          <h3 class="h2-responsive"><a><mdb-icon icon="bullseye" class="mr-4" />{{cardDescription3}}</a></h3>
+          <h3 class="h2-responsive"><a><mdb-icon icon="bullseye" class="mr-4" />{{feature3}}</a></h3>
         </div>
         <div class="list-item">
-          <h3 class="h2-responsive"><a><mdb-icon icon="campground" class="mr-4" />{{cardDescription4}}</a></h3>
+          <h3 class="h2-responsive"><a><mdb-icon icon="campground" class="mr-4" />{{feature4}}</a></h3>
         </div>
       </mdb-col>
     </mdb-row>
@@ -42,16 +42,20 @@ export default {
   data() {
     return {
       title: "FEATURES DESIGNED TO MAKE YOU TRULY INDEPENDENT",
-      cardTitle1: "ARTISTS",
-      cardDescription1: "Buying and selling of digital artworks",
-      cardTitle2: "COLLECTORS",
-      cardDescription2: "Offering items on the marketplace",
-      cardTitle3: "GALLERIES",
-      cardDescription3: "Bidding the highest bidder subject",
-      cardTitle4: "GALLERIES",
-      cardDescription4: "Commissioning and Funding Art projects",
+      feature1: null,
+      feature2: null,
+      feature3: null,
+      feature4: null,
     };
-  }
+  },
+  created() {
+    let content = this.$store.state.contentStore.content["index-page"];
+    this.title = content["section-features-title"][0].text;
+    this.feature1 = content["section-features1"][0].text;
+    this.feature2 = content["section-features2"][0].text;
+    this.feature3 = content["section-features3"][0].text;
+    this.feature4 = content["section-features4"][0].text;
+  },
 };
 </script>
 

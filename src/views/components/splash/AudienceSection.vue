@@ -13,7 +13,7 @@
             </h3>
           </mdb-col>
           <mdb-col col="12" lg="10" xl="9" class="pl-0">
-            <p class="card-text">{{cardDescription1}}</p>
+            <p class="card-text" v-html="cardDescription1"></p>
           </mdb-col>
         </div>
         <div class="list-item">
@@ -24,7 +24,7 @@
             </h3>
           </mdb-col>
           <mdb-col col="12" lg="10" xl="9" class="pl-0">
-            <p class="card-text">{{cardDescription2}}</p>
+            <p class="card-text" v-html="cardDescription2"></p>
           </mdb-col>
         </div>
         <div class="list-item">
@@ -35,7 +35,7 @@
             </h3>
           </mdb-col>
           <mdb-col col="12" lg="10" xl="9" class="pl-0">
-            <p class="card-text">{{cardDescription3}}</p>
+            <p class="card-text" v-html="cardDescription3"></p>
           </mdb-col>
         </div>
       </mdb-col>
@@ -63,12 +63,19 @@ export default {
     return {
       title: "WHO IS IT FOR?",
       cardTitle1: "ARTISTS",
-      cardDescription1: "Upload to your own storage, create certificates of ownership and sell artwork on our marketplace. Provenance is tracked and secured automatically on the blockchain.",
+      cardDescription1: "",
       cardTitle2: "COLLECTORS",
-      cardDescription2: "Collect artworks from up and coming artists. Digital and physical art can be purchased with provenance registered on the blockchain making you the sole owner of the artwork.",
+      cardDescription2: "",
       cardTitle3: "GALLERIES",
-      cardDescription3: "Be part of our art movement by providing artworks and artists. Earn residuals on secondary sales of artwork and use radicle tools to run competitions and auction events on our platform.",
+      cardDescription3: "",
     };
+  },
+  created() {
+    let content = this.$store.state.contentStore.content["index-page"];
+    this.title = content["section-whofor-title"][0].text;
+    this.cardDescription1 = content["section-whofor1"][0].text;
+    this.cardDescription2 = content["section-whofor2"][0].text;
+    this.cardDescription3 = content["section-whofor3"][0].text;
   }
 };
 </script>

@@ -1,60 +1,45 @@
 <template>
 <div id="my-app-element" v-if="loaded">
+
   <div id="introSection">
     <intro-section />
   </div>
+
   <!-- About section  -->
   <div class="border-top border-dark"></div>
-  <mdb-container>
+  <mdb-container v-if="empower">
     <section id="AboutSection" class="py-5">
       <mdb-row class="py-3 py-md-5">
-        <mdb-col col="12" md="10" lg="8" >
-          <h2 class="h1-responsive mb-0">{{title1}}</h2>
-          <hr class="hr-light my-4">
-          <p class="mb-4" v-html="description1"></p>
+        <mdb-col col="12" md="10" lg="8" v-html="empower">
         </mdb-col>
       </mdb-row>
     </section>
   </mdb-container>
 
-  <!-- About section 2  -->
+  <!-- Features section  -->
   <div class="border-top border-dark"></div>
-    <mdb-container>
-      <section id="AboutSection2" class="py-5">
-        <mdb-row class="py-3 py-md-5">
-          <mdb-col col="12" md="10" lg="8">
-            <h2 class="h1-responsive mb-0">{{title2}}</h2>
-            <hr class="hr-light my-4">
-            <p class="mb-4" v-html="description2"></p>
-          </mdb-col>
-        </mdb-row>
-      </section>
-    </mdb-container>
+  <mdb-container>
+    <features-section/>
+  </mdb-container>
 
   <!-- Audience section  -->
   <div class="border-top border-dark"></div>
-    <mdb-container>
-      <audience-section/>
-    </mdb-container>
-
-  <!-- Features section  -->
-  <div class="border-top border-dark"></div>
-    <mdb-container>
-      <features-section/>
-    </mdb-container>
+  <mdb-container>
+    <audience-section/>
+  </mdb-container>
 
   <!-- Team section  -->
   <div class="border-top border-dark"></div>
-    <mdb-container>
-      <team-section/>
-    </mdb-container>
+  <mdb-container>
+    <team-section/>
+  </mdb-container>
 
   <!-- Auction section  -->
   <!--
   <div class="border-top border-dark"></div>
-    <mdb-container>
-      <auction-section/>
-    </mdb-container> -->
+  <mdb-container>
+    <auction-section/>
+  </mdb-container> -->
 
   <!-- Donate section  -->
   <div class="border-top border-dark"></div>
@@ -70,6 +55,7 @@
       <contact-section class="text-light"/>
     </mdb-container>
   </mdb-container>
+
 </div>
 </template>
 
@@ -104,25 +90,19 @@ export default {
   data() {
     return {
       loaded: false,
-      title1: "Empowering the art community with tools to break free and solve current status quo",
-      description1: "Artists require the tools to take the heroic quest of art into their own hands. By sidestepping the gatekeepers, artist will participate in creating their own platform and, in consequence, their own destiny.",
-      title2: "Art ecosystem for artists and collectors",
-      description2: "Using Radicle contemporary artists showcase and sell their artworks to collectors and investors.<br/><br/>Artworks traded on Radicle can both be created traditionally or digitally. We use blockchain technology to secure originality and ownership of digital artworks, as well as to enable running real-time auction events.",
-      title3: "Art ecosystem for artists and collectors",
-      description3: "",
-      title4: "Art ecosystem for artists and collectors",
-      description4: "",
-      title5: "Art ecosystem for artists and collectors",
-      description5: "",
-      title6: "Art ecosystem for artists and collectors",
-      description6: "",
+      empower: null,
+      ecosystem: null
     };
   },
   beforeMount() {
     document.querySelector('body').classList.add('index');
+    let $self = this;
     this.$prismic.client.getSingle("index-page").then(document => {
       this.$store.commit("contentStore/indexPage", document.data);
-      this.loaded = true;
+      let content = this.$store.state.contentStore.content["index-page"];
+      $self.empower = content["section-empower"][0].text;
+      $self.ecosystem = content["section-eco"][0].text;
+      $self.loaded = true;
     });
   },
   beforeDestroy() {
