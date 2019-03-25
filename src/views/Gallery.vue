@@ -47,14 +47,11 @@ export default {
       password: null
     };
   },
-   created() {
-     // this.$store.dispatch("onlineAuctionsStore/fetchOnlineAuctions").then(() => {
-       // loading online auctions
-     // });
+  created() {
      artworkSearchService.newQuery({field: "title", query: "*"});
-     this.$store.fetchGalleries();
-     this.$store.fetchMyGalleries();
-   },
+     this.$store.dispatch("galleryStore/fetchGalleriesFromSearch", {field: "title", query: "*"});
+     this.$store.dispatch("galleryStore/fetchMyGalleries");
+  },
   methods: {},
   computed: {
     artworks() {

@@ -3,7 +3,14 @@
   <confirmation-modal :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
   <mdb-container class="bg-white mt-5 p-3">
     <mdb-row>
-      <mdb-col col="8"><h1>{{artwork.title}}</h1></mdb-col>
+      <mdb-col col="8">
+        <h1>
+          <router-link :to="myArtworkUrl" class="inline-block">
+            <mdb-icon far icon="arrow-alt-circle-left" />
+          </router-link>
+          {{artwork.title}}
+        </h1>
+        </mdb-col>
       <mdb-col col="4" class="text-right"><small class="teal-text">{{bitcoinTx}}</small></mdb-col>
     </mdb-row>
     <mdb-row>
@@ -30,7 +37,7 @@ import notify from "@/services/notify";
 import ethereumService from "@/services/ethereumService";
 import bitcoinService from "@/services/bitcoinService";
 // import OpenTimestamps from "javascript-opentimestamps";
-import { mdbPopover, mdbCol, mdbView, mdbMask, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
+import { mdbPopover, mdbIcon, mdbCol, mdbView, mdbMask, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
 import ConfirmationModal from "../utils/ConfirmationModal";
 
 // noinspection JSUnusedGlobalSymbols
@@ -51,7 +58,8 @@ export default {
     mdbCardBody,
     mdbCardTitle,
     mdbCardText,
-    mdbBtn
+    mdbBtn,
+    mdbIcon
   },
   data() {
     return {
@@ -100,6 +108,9 @@ export default {
         a.image = require("@/assets/img/missing/artwork-missing.jpg");
       }
       return a ? a : {};
+    },
+    myArtworkUrl() {
+      return `/my-artworks/${this.artwork.id}`;
     },
     artworkHash() {
       let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);

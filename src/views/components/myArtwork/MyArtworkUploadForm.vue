@@ -3,291 +3,143 @@
     <!-- Supported elements -->
     <h1 class="h1-responsive">{{formTitle}}</h1>
     <form class="needs-validation py-5 form-transparent" novalidate @submit.prevent="checkForm" id="artworkForm">
-  <!-- item type -->
-  <div class="row justify-content-between">
-
-  <div class="col-md-5 mb-4">
-    <div class="row ml-1 mb-4">
-      <div class="col-12">
+      <!-- item type -->
+      <div class="row ">
+      <div class="col-md-6 mb-4">
+        <div class="row ml-1 mb-4">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-6 custom-control custom-radio mb-0">
+                <input type="radio" class="custom-control-input teal lighten-1" id="customControlValidation2" name="artwork.itemType" v-model="artwork.itemType" value="digiart" required>
+                <label class="custom-control-label" for="customControlValidation2">Digital Artwork</label>
+              </div>
+              <div class="col-6 custom-control custom-radio mb-0">
+                <input type="radio" class="custom-control-input teal lighten-1" id="customControlValidation3" name="artwork.itemType" v-model="artwork.itemType" value="physart" required>
+                <label class="custom-control-label" for="customControlValidation3">Physical Artwork</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+            <!--<label for="validationCustom01">Artwork Title</label>-->
+            <input type="text" class="form-control" id="validationCustom01" placeholder="Artwork Title" v-model="artwork.title" required>
+            <div class="invalid-feedback">
+              Please enter a title!
+            </div>
+        </div>
+        <div class="form-row">
+            <!--<label for="validationCustom02">Description of Artwork</label>-->
+            <textarea type="text" class="form-control" id="validationCustom02" placeholder="Description of the Artwork" v-model="artwork.description" required></textarea>
+            <div class="invalid-feedback">
+              Please enter a description!
+            </div>
+        </div>
+        <div class="form-row">
+            <!--<label for="validationCustom03">Keywords or tags</label>-->
+            <textarea type="text" class="form-control" id="validationCustom03" placeholder="Keywords" v-model="artwork.keywords" required></textarea>
+            <div class="invalid-feedback">
+              Please enter some keywords!
+            </div>
+        </div>
+        <div class="form-row">
+          <div class="col-6 form-row">
+            <div class="col-4">
+              <label for="validationCustom040" class="col-form-label">Edition</label>
+            </div>
+            <div class="col-8">
+              <input class="form-control" id="validationCustom040" type="number" v-model="artwork.edition" required>
+              <div class="invalid-feedback">
+              Please enter number of editions!
+            </div>
+            </div>
+          </div>
+          <div class="col-6 form-row">
+            <div class="col-4 col-form-label text-center">
+              <label for="validationCustom041">of</label>
+            </div>
+           <div class="col-8">
+            <input class="form-control" id="validationCustom041" type="number" v-model="artwork.editions" required>
+            <div class="invalid-feedback">
+              Please enter total number of editions!
+            </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-4">
+            <input type="text" class="form-control" id="validationCustom06-1" placeholder="Medium / materials" v-model="artwork.medium" required>
+            <div class="invalid-feedback">
+              Please enter the Medium / Materials!
+            </div>
+          </div>
+          <div class="col-4">
+            <input type="text" class="form-control" id="validationCustom05-1" placeholder="Dimensions" v-model="artwork.dimensions" required>
+            <div class="invalid-feedback">
+              Please enter the Dimensions!
+            </div>
+          </div>
+          <div class="col-4">
+            <input type="text" class="form-control" id="validationCustom05-2" placeholder="Year created" v-model="artwork.yearCreated" required>
+            <div class="invalid-feedback">
+              Please enter the year created!
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-6">
+            <input type="text" class="form-control" id="validationCustom05" placeholder="Owner" v-model="artwork.owner" required>
+            <div class="invalid-feedback">
+              Please enter the blockstack id of the owner!
+            </div>
+          </div>
+          <div class="col-6">
+            <input type="text" class="form-control" id="validationCustom06" placeholder="Artist" v-model="artwork.artist" required>
+            <div class="invalid-feedback">
+              Please enter the blockstack id of the artist!
+            </div>
+          </div>
+        </div>
+        <div class="form-row mb-2">
+          <div class="text-danger" v-if="dateError">
+            The creation date must be before now!
+          </div>
+          <label for="created" slot="before" class="col-4 col-form-label">Created</label>
+          <datetime type="date" v-model="created" input-id="created" class="col-8" input-class="form-control bg-transparent">
+            <input id="created">
+          </datetime>
+        </div>
+        <!-- Submit button row -->
         <div class="row">
-          <div class="col-6 custom-control custom-radio mb-0">
-            <input type="radio" class="custom-control-input teal lighten-1" id="customControlValidation2" name="artwork.itemType" v-model="artwork.itemType" value="digiart" required>
-            <label class="custom-control-label" for="customControlValidation2">Digital Artwork</label>
-          </div>
-          <div class="col-6 custom-control custom-radio mb-0">
-            <input type="radio" class="custom-control-input teal lighten-1" id="customControlValidation3" name="artwork.itemType" v-model="artwork.itemType" value="physart" required>
-            <label class="custom-control-label" for="customControlValidation3">Physical Artwork</label>
+          <div class="col-12 mt-3">
+            <mdb-btn type="submit" size="sm" class="btn-block teal lighten-1">Submit Changes</mdb-btn>
           </div>
         </div>
       </div>
-    </div>
-    <div class="form-row">
-        <!--<label for="validationCustom01">Artwork Title</label>-->
-        <input type="text" class="form-control" id="validationCustom01" placeholder="Artwork Title" v-model="artwork.title" required>
-        <div class="invalid-feedback">
-          Please enter a title!
-        </div>
-    </div>
-    <div class="form-row">
-        <!--<label for="validationCustom02">Description of Artwork</label>-->
-        <textarea type="text" class="form-control" id="validationCustom02" placeholder="Description of the Artwork" v-model="artwork.description" required></textarea>
-        <div class="invalid-feedback">
-          Please enter a description!
-        </div>
-    </div>
-    <div class="form-row">
-        <!--<label for="validationCustom03">Keywords or tags</label>-->
-        <textarea type="text" class="form-control" id="validationCustom03" placeholder="Keywords" v-model="artwork.keywords" required></textarea>
-        <div class="invalid-feedback">
-          Please enter some keywords!
-        </div>
-    </div>
-    <div class="form-row">
-      <div class="col-6 form-row">
-        <div class="col-4">
-          <label for="validationCustom040" class="col-form-label">Edition</label>
-        </div>
-        <div class="col-8">
-          <input class="form-control" id="validationCustom040" type="number" v-model="artwork.edition" required>
-          <div class="invalid-feedback">
-          Please enter number of editions!
-        </div>
-        </div>
-      </div>
-      <div class="col-6 form-row">
-        <div class="col-4 col-form-label text-center">
-          <label for="validationCustom041">of</label>
-        </div>
-       <div class="col-8">
-        <input class="form-control" id="validationCustom041" type="number" v-model="artwork.editions" required>
-        <div class="invalid-feedback">
-          Please enter total number of editions!
-        </div>
-        </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-4">
-        <input type="text" class="form-control" id="validationCustom06-1" placeholder="Medium / materials" v-model="artwork.medium" required>
-        <div class="invalid-feedback">
-          Please enter the Medium / Materials!
-        </div>
-      </div>
-      <div class="col-4">
-        <input type="text" class="form-control" id="validationCustom05-1" placeholder="Dimensions" v-model="artwork.dimensions" required>
-        <div class="invalid-feedback">
-          Please enter the Dimensions!
-        </div>
-      </div>
-      <div class="col-4">
-        <input type="text" class="form-control" id="validationCustom05-2" placeholder="Year created" v-model="artwork.yearCreated" required>
-        <div class="invalid-feedback">
-          Please enter the year created!
-        </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-6">
-        <input type="text" class="form-control" id="validationCustom05" placeholder="Owner" v-model="artwork.owner" required>
-        <div class="invalid-feedback">
-          Please enter the blockstack id of the owner!
-        </div>
-      </div>
-      <div class="col-6">
-        <input type="text" class="form-control" id="validationCustom06" placeholder="Artist" v-model="artwork.artist" required>
-        <div class="invalid-feedback">
-          Please enter the blockstack id of the artist!
-        </div>
-      </div>
-    </div>
-    <div class="form-row mb-2">
-      <div class="text-danger" v-if="dateError">
-        The creation date must be before now!
-      </div>
-      <label for="created" slot="before" class="col-4 col-form-label">Created</label>
-      <datetime type="date" v-model="created" input-id="created" class="col-8" input-class="form-control bg-transparent">
-        <input id="created">
-      </datetime>
-    </div>
-
-    <!-- Submit button row -->
-    <div class="row">
-      <div class="col-12 mt-3">
-        <mdb-btn type="submit" size="sm" class="btn-block teal lighten-1">Submit Changes</mdb-btn>
-      </div>
-    </div>
-    <div class="w-100"></div>
-
-  </div>
-
-        <!-- Left column
-        =======
-              <div class="row justify-content-between">
-        <div class="col-md-5 mb-4">
-        >>>>>>> feature/design
-        -->
 
         <!-- Right column - image drop -->
-        <div class="col-md-6">
-          <h2 class="h3-responsive mb-5">
-            Documents and Images
-          </h2>
-          <mdb-row>
-            <!-- droppable area 1 -->
-            <mdb-col md="12" class="mb-4">
-              <mdb-popover trigger="click" :options="{placement: 'top'}">
-                <div class="popover">
-                  <div class="popover-header">
-                    Artwork
-                  </div>
-                  <div class="popover-body">
-                    Your original digital image or a high res image of your artwork.
-                  </div>
-                  <div class="popover-body">
-                    A single hi-res image up to 2M.
-                  </div>
-                </div>
-                <a @click.prevent="" slot="reference">
-                  The Cover
-                  <mdb-icon far icon="question-circle"/>
-                </a>
-              </mdb-popover>
-              <div class="mt-2">
-                <div class="invalid-feedback d-block" v-if="showAttachArt">
-                  Main artwork image is required.
-                </div>
-                <div class="load-artwork" v-if="artwork.artwork.length === 0">
-                  <div class="drop-area" @drop.prevent="loadArtwork" @dragover.prevent>
-                    <p class="drop-label">Drop image here</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <my-artwork-manage-image v-for="(file, index) in artwork.artwork" :key="index" :file="file" :size="12" class="col-12"/>
-              </div>
-              <div class="row text-right">
-                <div class="col-12 text-right">
-                  <a class="remove-link text-danger text-sm" v-on:click.prevent="deleteArtwork"
-                     v-if="artwork.artwork.length > 0">
-                    <mdb-btn size="sm" color="white">Clear</mdb-btn>
-                  </a>
-                </div>
-              </div>
-              <p class="grey-text small mt-2">Size limit: 500Kb</p>
-            </mdb-col>
-            <!--/droppable area 1 -->
-
-            <!-- droppable area 2 -->
-            <mdb-col md="12" class="mb-4">
-              <mdb-popover trigger="click" :options="{placement: 'top'}">
-                <div class="popover">
-                  <div class="popover-header">
-                    Provenance Files
-                  </div>
-                  <div class="popover-body">
-                    Upload files which support the provenance claim for this artwork.
-                  </div>
-                  <div class="popover-body">
-                    E.g. bills of sale, reciepts, images of signatures, short video clips of the artists at work etc.
-                  </div>
-                  <div class="popover-body">
-                    Up to 5 images / documents.
-                  </div>
-                </div>
-                <a @click.prevent="" slot="reference">
-                  Provenance Files
-                  <mdb-icon far icon="question-circle"/>
-                </a>
-              </mdb-popover>
-              <div class="mt-2">
-                <div class="text-danger" v-if="showAttachDocs">
-                  Attach provenance files.
-                </div>
-                <div class="load-artwork">
-                  <div class="drop-area" @drop.prevent="loadSupportingFiles" @dragover.prevent>
-                    <p class="drop-label">Drop image here</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <my-artwork-manage-image v-for="(file, index) in artwork.supportingDocuments" :key="index" :file="file"
-                                         :size="4"/>
-              </div>
-              <div class="row">
-                <div class="col-md-12 text-right">
-                  <a class="remove-link text-danger text-sm" v-on:click.prevent="deleteDocuments"
-                     v-if="artwork.supportingDocuments.length > 0">
-                    <mdb-btn size="sm" color="white">Clear</mdb-btn>
-                    <!--<mdb-icon icon="minus"/>-->
-                  </a>
-                </div>
-              </div>
-              <p class="grey-text small mt-2">Size limit: 500Kb</p>
-            </mdb-col>
-            <!-- /droppable area 2 -->
-
-            <!-- droppable area 3 -->
-            <mdb-col md="12" class="mb-4">
-              <mdb-popover trigger="click" :options="{placement: 'top'}">
-                <div class="popover">
-                  <div class="popover-header">
-                    Artwork Images
-                  </div>
-                  <div class="popover-body">
-                    Images for potential buyers to see your artwork from different angles.
-                  </div>
-                  <div class="popover-body">
-                    Up to 5 (100kb or less) images.
-                  </div>
-                </div>
-                <a @click.prevent="" slot="reference">
-                  Artwork Images
-                  <mdb-icon far icon="question-circle"/>
-                </a>
-              </mdb-popover>
-              <div class="mt-2">
-                <div class="load-artwork">
-                  <div class="drop-area" @drop.prevent="loadImageFiles" @dragover.prevent>
-                    <p class="drop-label">Drop image here</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <my-artwork-manage-image v-for="(file, index) in artwork.images" :key="index" :file="file" :size="4"/>
-              </div>
-              <div class="row">
-                <div class="col-md-12 text-right">
-                  <a class="remove-link text-danger text-sm" v-on:click.prevent="deleteImages"
-                     v-if="artwork.images.length > 0">
-                    <mdb-btn size="sm" color="white">Clear</mdb-btn>
-                    <!--<mdb-icon icon="minus"/>-->
-                  </a>
-                </div>
-              </div>
-              <p class="grey-text small mt-2">Size limit: 500Kb</p>
-            </mdb-col>
-            <!-- /droppable area 3 -->
-
-          </mdb-row>
+        <div class="form-row col-md-6" v-if="showMedia">
+          <media-files-upload :contentModel="contentModel1" :parentalError="parentalError" :mediaFiles="mediaFiles1" :limit="1" :sizeLimit="5000" :mediaTypes="'images'" @updateMedia="setByEventLogo1($event)"/>
+          <media-files-upload :contentModel="contentModel2" :mediaFiles="mediaFiles2" :limit="5" :sizeLimit="2500" :mediaTypes="'all'" @updateMedia="setByEventLogo2($event)"/>
+          <media-files-upload :contentModel="contentModel3" :mediaFiles="mediaFiles3" :limit="5" :sizeLimit="2500" :mediaTypes="'images'" @updateMedia="setByEventLogo3($event)"/>
         </div>
-        <!-- / image drop -->
       </div>
-
     </form>
   </mdb-container>
 </template>
+<div class="form-row col-md-6" v-if="showMedia">
+  <media-files-upload :contentModel="contentModel" :mediaFiles="mediaFiles" :limit="1" :sizeLimit="500" :mediaTypes="'images'" @updateMedia="setByEventLogo($event)"/>
+</div>
 
 <script>
-  import {
-    mdbIcon, mdbPopover, mdbCol, mdbRow, mdbContainer, mdbBtn} from "mdbvue";
-    import MyArtworkManageImage from "./MyArtworkManageImage";
-    import moment from "moment";
+import MediaFilesUpload from "../utils/MediaFilesUpload";
+import { mdbIcon, mdbPopover, mdbCol, mdbRow, mdbContainer, mdbBtn } from "mdbvue";
+import moment from "moment";
 
   // noinspection JSUnusedGlobalSymbols
   export default {
     name: "MyArtworkUploadForm",
     components: {
-      MyArtworkManageImage,
+      MediaFilesUpload,
       mdbContainer,
       mdbIcon,
       mdbPopover,
@@ -299,7 +151,23 @@
     data() {
       return {
         errors: [],
-        showAttachArt: false,
+        showMedia: false,
+        contentModel1: {
+          title: "Cover Image",
+          errorMessage: "Cover image is required.",
+          popoverBody: "Your original digital image or a high res image of your artwork.<br/><br/>A single hi-res image up to 2M.",
+        },
+        contentModel2: {
+          title: "Provenance Files",
+          errorMessage: "",
+          popoverBody: "E.g. bills of sale, reciepts, images of signatures, short video clips of the artists at work etc.<br/><br/>Up to 5 images / documents.",
+        },
+        contentModel3: {
+          title: "Gallery Images",
+          errorMessage: "",
+          popoverBody: "Images for potential buyers to see your artwork from different angles.<br/><br/>Up to 5 (100kb or less) images.",
+        },
+        parentalError: null,
         showAttachDocs: false,
         showAlert: false,
         alertMessage: null,
@@ -322,25 +190,52 @@
       };
     },
     mounted() {
-      this.artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-        this.artworkId
-      );
-      if (this.artwork) {
-        this.created = moment(this.artwork.created).format();
+      if (this.artworkId) {
+        this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId).then((artwork) => {
+          this.artwork = artwork;
+          if (this.artwork) {
+            this.created = moment(this.artwork.created).format();
+          }
+          this.showMedia = true;
+        })
+      } else {
+        this.artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
+        this.showMedia = true;
       }
     },
     computed: {
-      headerStyle() {
-        return {
-          "margin-top": "0px",
-          "background-image": `url(/assets/img/upload-icon-3.png)`,
-          "background-repeat": "no-repeat",
-          "background-size": "cover",
-          "background-position": "center center"
-        };
+      mediaFiles1() {
+        let files = [];
+        if (this.artwork.artwork && this.artwork.artwork.length  > 0) {
+          files = this.artwork.artwork;
+        }
+        return files;
+      },
+      mediaFiles2() {
+        let files = [];
+        if (this.artwork.supportingDocuments && this.artwork.supportingDocuments.length  > 0) {
+          files = this.artwork.supportingDocuments;
+        }
+        return files;
+      },
+      mediaFiles3() {
+        let files = [];
+        if (this.artwork.images && this.artwork.images.length  > 0) {
+          files = this.artwork.images;
+        }
+        return files;
       }
     },
     methods: {
+      setByEventLogo1 (mediaObjects) {
+        this.artwork.artwork = mediaObjects;
+      },
+      setByEventLogo2 (mediaObjects) {
+        this.artwork.supportingDocuments = mediaObjects;
+      },
+      setByEventLogo3 (mediaObjects) {
+        this.artwork.images = mediaObjects;
+      },
       upload: function () {
         if (!this.artwork.status) {
           this.artwork.status = this.$store.state.constants.statuses.artwork.NOT_REGISTERED;
@@ -369,7 +264,7 @@
       checkForm(event) {
         event.preventDefault();
         event.target.classList.add('was-validated');
-        this.showAttachArt = false;
+        this.parentalError = null;
         this.showAttachDocs = false;
         this.errors = [];
         if (!this.artwork.title) {
@@ -411,12 +306,11 @@
           this.errors.push("Created date is after now?");
         }
         if (
-          this.artwork.itemType !== "physart" &&
           this.artwork.artwork &&
           this.artwork.artwork.length === 0
         ) {
-          this.showAttachArt = true;
-          this.errors.push("Please attach an artwork.");
+          this.parentalError = "Please attach your digital artwork or an image of your physical artwork.";
+          this.errors.push(this.parentalError);
         }
         if (
           this.artwork.itemType === "physart" &&
@@ -432,49 +326,6 @@
           this.upload();
         }
       },
-      deleteImages: function () {
-        this.artwork.images = [];
-      },
-      deleteArtwork: function () {
-        this.artwork.artwork = [];
-      },
-      deleteDocuments: function () {
-        this.artwork.supportingDocuments = [];
-      },
-      loadArtwork: function (e) {
-        this.load(e, this.artwork.artwork, 1);
-      },
-      loadSupportingFiles: function (e) {
-        this.load(e, this.artwork.supportingDocuments, 5);
-      },
-      loadImageFiles: function (e) {
-        this.load(e, this.artwork.images, 3);
-      },
-      load: function (e, arrayToLoad, limit) {
-        this.showAttachArt = false;
-        this.showAttachDocs = false;
-        let userFiles = e.dataTransfer.files;
-        let fileObject = null;
-        for (let i = 0; i < userFiles.length; i++) {
-          if (i === limit) {
-            break;
-          }
-          fileObject = userFiles[i];
-          let thisFile = {
-            lastModified: fileObject.lastModified,
-            lastModifiedDate: fileObject.lastModifiedDate,
-            name: fileObject.name,
-            size: fileObject.size,
-            type: fileObject.type
-          };
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            thisFile.dataUrl = e.target.result;
-            arrayToLoad.push(thisFile);
-          };
-          reader.readAsDataURL(fileObject);
-        }
-      }
     }
   };
 </script>

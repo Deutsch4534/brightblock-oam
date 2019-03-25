@@ -27,6 +27,7 @@ export const CONSTANTS = {
   artworkRootFileName: "records_v01.json",
   auctionsRootFileName: "auctions_v01.json",
   galleriesRootFileName: "galleries_v01.json",
+  gIndexDataPrefix: "gallery_",
   gaiaFileName: "record_",
   statuses: {
     artwork: {

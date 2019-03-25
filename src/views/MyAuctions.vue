@@ -26,13 +26,13 @@
 <script>
 import utils from "@/services/utils";
 import SingleAuction from "./components/auction/SingleAuction";
-import { mdbContainer, mdbRow } from 'mdbvue';
+import { mdbContainer, mdbRow, mdbCol } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyAuctions",
   bodyClass: "index-page",
-  components: { SingleAuction, mdbContainer, mdbRow },
+  components: { SingleAuction, mdbContainer, mdbRow, mdbCol },
   data() {
     return {};
   },

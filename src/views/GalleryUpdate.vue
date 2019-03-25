@@ -4,7 +4,7 @@
     <p v-html="loadingMessage"></p>
   </div>
   <div v-else>
-    <gallery-upload-form v-if="enabled" :myProfile="myProfile" :formTitle="'Radicle Galleries'"/>
+    <gallery-upload-form v-if="enabled" :myProfile="myProfile" :formTitle="'Radicle Galleries'" :galleryId="galleryId"/>
     <contact-section v-else :featureMessage="featureMessage" v-else class="black-text"/>
   </div>
 </div>
@@ -24,6 +24,7 @@ export default {
   },
   data() {
     return {
+      galleryId: null,
       myProfile: null,
       loading: true,
       enabled: false,
@@ -32,16 +33,11 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("galleryStore/fetchMyGalleries").then((galleries) => {
-      if (galleries && galleries.length > 0) {
-        this.$router.push("/gallery/update/" + galleries[0].galleryId);
-      } else {
-        this.$store.dispatch("myAccountStore/fetchMyAccount").then((profile) => {
-          this.myProfile = profile;
-          this.enabled = true;
-          this.loading = false;
-        });
-      }
+    this.galleryId = Number(this.$route.params.galleryId);
+    this.$store.dispatch("myAccountStore/fetchMyAccount").then((profile) => {
+      this.myProfile = profile;
+      this.enabled = true;
+      this.loading = false;
     });
   },
   computed: {},

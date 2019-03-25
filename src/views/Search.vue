@@ -2,21 +2,31 @@
 <mdb-container fluid class="bg-dark flex-1 py-5">
   <mdb-container class="py-3 py-md-4">
     <div class="row">
-      <div class="col-12">
-        <h1 class="h1-responsive mb-5 text-white">Search results ({{numberArtworks}})</h1>
-        <!--<h2 class="h2-responsive mb-3 text-white">Refine search</h2>
-        <filters @update="updateFilters($event)" class="text-white mb-5"/>-->
+      <div class="col-4">
+        <h1 class="h1-responsive mb-5 text-white">{{numberArtworks}} Results</h1>
+        <h2 class="h2-responsive mb-3 text-white">Refine search</h2>
+        <filters @doSearch="doSearch($event)" class="text-white mb-5"/>
+      </div>
+      <div class="col-8">
+        <div class="row article" v-if="objectType === 'artwork'">
+          <single-result v-for="(artwork, index) of searchResults" :key="index" :artwork="artwork" class="result-item"/>
+        </div>
+        <div class="row article" v-if="objectType === 'gallery'">
+          <single-result-gallery v-for="(gallery, index) of searchResults" :key="index" :gallery="gallery" class="result-item"/>
+        </div>
+        <div class="row article" v-if="objectType === 'auction'">
+          <single-result-auction v-for="(auction, index) of searchResults" :key="index" :auction="auction" class="result-item"/>
+      </div>
       </div>
     </div>
-      <div class="row article">
-        <single-result v-for="(artwork, index) of searchResults" :key="index" :artwork="artwork" class="result-item"/>
-       </div>
   </mdb-container>
 </mdb-container>
 </template>
 
 <script>
 import SingleResult from "./components/search/SingleResult";
+import SingleResultGallery from "./components/search/SingleResultGallery";
+import SingleResultAuction from "./components/search/SingleResultAuction";
 import Filters from "./components/search/Filters";
 import searchIndexService from "../services/searchIndexService";
 import artworkSearchService from "@/services/artworkSearchService";
@@ -27,7 +37,7 @@ export default {
   name: "Search",
   bodyClass: "index-page",
   components: {
-    SingleResult,
+    SingleResult, SingleResultGallery, SingleResultAuction,
     Filters,
     mdbContainer,
     mdbRow,
@@ -35,6 +45,7 @@ export default {
   data() {
     return {
       results: [],
+      objectType: "artwork",
       queryString:
         this.$route && this.$route.params.query
           ? parseInt(this.$route.params.query)
@@ -49,13 +60,42 @@ export default {
     artworkSearchService.newQuery({field: "title", query: this.queryString});
   },
   methods: {
+    doSearch(criteria) {
+      let qString = this.query;
+      if (!this.query || this.query.length === 0) {
+        qString = "*";
+      }
+      if (!criteria.objectType) {
+        criteria.objectType = "artwork";
+      }
+      this.objectType = criteria.objectType;
+      if (criteria.objectType === "artwork") {
+        artworkSearchService.newQuery({field: "title", query: qString});
+      } else if (criteria.objectType === "auction") {
+      } else if (criteria.objectType === "gallery") {
+        this.$store.dispatch("galleryStore/fetchGalleriesFromSearch", {field: "title", query: qString});
+      }
+      this.$router.push("/search?query=" + qString);
+    },
   },
   computed: {
     numberArtworks() {
-      return this.$store.getters["artworkSearchStore/numberSearchResults"];
+      if (this.objectType === "artwork") {
+        return this.$store.getters["artworkSearchStore/numberSearchResults"];
+      } else if (this.objectType === "auction") {
+        //return this.$store.getters["artworkSearchStore/getSearchResults"].length;
+      } else if (this.objectType === "gallery") {
+        return this.$store.getters["galleryStore/getSearchResults"].length;
+      }
     },
     searchResults() {
-      return this.$store.getters["artworkSearchStore/getSearchResults"];
+      if (this.objectType === "artwork") {
+        return this.$store.getters["artworkSearchStore/getSearchResults"];
+      } else if (this.objectType === "auction") {
+        //return this.$store.getters["artworkSearchStore/getSearchResults"];
+      } else if (this.objectType === "gallery") {
+        return this.$store.getters["galleryStore/getSearchResults"];
+      }
     }
   }
 };

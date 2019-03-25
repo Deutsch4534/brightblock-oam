@@ -11,7 +11,7 @@
       <div class="my-3" v-if="!showModal">
 
         <!-- i am owner - send this user to my artwork / my artworks -->
-        <router-link v-if="iamowner" to="/my-artworks">
+        <router-link v-if="iamowner" :to="myArtworkUrl" class="inline-block">
           <mdb-btn class="btn teal lighten-1" size="sm" waves-light>manage artwork</mdb-btn>
         </router-link>
 
@@ -119,6 +119,9 @@ export default {
           message = "Unregistered.";
       }
       return message;
+    },
+    myArtworkUrl() {
+      return `/my-artworks/${this.artwork.id}`;
     },
     iamowner() {
       let profile = this.$store.getters["myAccountStore/getMyProfile"];

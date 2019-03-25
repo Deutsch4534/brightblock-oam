@@ -1,11 +1,19 @@
 <template>
   <mdb-card class="bg-transparent mb-5">
     <mdb-view hover>
-      <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
-      <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+      <router-link :to="myArtworkUrl" class="inline-block">
+        <mdb-card-image :src="artwork.image" :alt="artwork.title"></mdb-card-image>
+        <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
+      </router-link>
     </mdb-view>
     <mdb-card-body class="px-0 pb-2 mb-0">
-      <mdb-card-title class="subtitle">{{artwork.title}}</mdb-card-title>
+      <mdb-card-title class="subtitle">
+        <a href="#" class="btn btn-small teal lighten-3 text-grey waves-light p-1" style="display:none" @click.prevent><mdb-icon icon="ellipsis-v" /></a>
+        {{artwork.title}}
+        <router-link :to="myArtworkUrl" class="inline-block">
+          {{artwork.title}}
+        </router-link>
+      </mdb-card-title>
       <mdb-card-text>
         <selling-options :artwork="artwork" v-if="sellingStatus === 'unsold'"/>
         <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
@@ -13,6 +21,7 @@
       </mdb-card-text>
     </mdb-card-body>
     <div class="card-buttons d-flex align-items-end justify-content-start flex-nowrap">
+      <!--
       <router-link :to="registerUrl" class="inline-block" v-if="canRegister">
         <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Register</mdb-btn>
       </router-link>
@@ -28,9 +37,10 @@
       <router-link :to="editUrl" class="inline-block">
         <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="editable">Edit</mdb-btn>
       </router-link>
-      <router-link :to="buyNowUrl" class="inline-block">
+      <router-link :to="myArtworkUrl" class="inline-block">
         <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Open</mdb-btn>
       </router-link>
+      -->
     </div>
   </mdb-card>
 </template>
@@ -116,7 +126,7 @@ export default {
     editUrl() {
       return `/my-artwork/update/${this.artwork.id}`;
     },
-    buyNowUrl() {
+    myArtworkUrl() {
       return `/my-artworks/${this.artwork.id}`;
     },
     registerUrl() {

@@ -11,6 +11,7 @@ import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
 import Gallery from "./views/Gallery.vue";
 import GalleryUpload from "./views/GalleryUpload.vue";
+import GalleryUpdate from "./views/GalleryUpdate.vue";
 
 import Artist from "./views/Artist.vue";
 import Artists from "./views/Artists.vue";
@@ -91,6 +92,16 @@ const router = new Router({
       name: "galleryUpload",
       components: {
         default: GalleryUpload,
+        header: Navbar,
+        footer: Footer
+      },
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/gallery/update/:galleryId",
+      name: "galleryUpdate",
+      components: {
+        default: GalleryUpdate,
         header: Navbar,
         footer: Footer
       },

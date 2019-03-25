@@ -34,7 +34,6 @@
 <script>
 import { mdbIcon, mdbPopover, mdbCol, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
 import { mdbNavbar, mdbNavbarNav, mdbNavItem } from "mdbvue";
-import MyArtworkManageImage from "../myArtwork/MyArtworkManageImage";
 import ConfirmationModal from "../utils/ConfirmationModal";
 import moment from "moment";
 import myAccountService from "@/services/myAccountService";
@@ -52,7 +51,6 @@ export default {
     TrustedUsersSection,
     BlockstackSection,
     EmailAddressEntry,
-    MyArtworkManageImage,
     ConfirmationModal,
     AddressForm,
     mdbContainer,

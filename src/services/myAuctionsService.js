@@ -143,12 +143,10 @@ const myAuctionsService = {
       function(rootFile) {
         rootFile.records.splice(0, 0, auction);
         myAuctionsService.setAuctionsRootFile(rootFile).then(function() {
-          searchIndexService.addRecord("auction", auction).then(() => {
-            if (auction.privacy === "public") {
-              searchIndexService.addRecord("auction", auction);
-            }
-            success(auction);
-          });
+          if (auction.privacy === "public") {
+            searchIndexService.addRecord("auction", auction);
+          }
+          success(auction);
         });
       },
       function(error) {

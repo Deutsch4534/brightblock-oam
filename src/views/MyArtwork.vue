@@ -1,13 +1,11 @@
 <template>
-  <mdb-container fluid class="bg-light flex-1 py-5">
-    <mdb-row class="">
-      <my-single-artwork :artwork="artwork" class="offset-3 col-sm-6" />
-    </mdb-row>
-  </mdb-container>
+<mdb-container fluid class="bg-light flex-1 pt-5">
+  <my-artwork-manage :artwork="artwork" />
+</mdb-container>
 </template>
 
 <script>
-import MySingleArtwork from "./components/myArtwork/MySingleArtwork";
+import MyArtworkManage from "./components/myArtwork/MyArtworkManage";
 import { mdbContainer, mdbRow,  mdbCard, mdbCardBody, mdbCardTitle, mdbCardText, mdbCardImage, mdbMask, mdbIcon, mdbView, mdbBtn } from 'mdbvue';
 
 // noinspection JSUnusedGlobalSymbols
@@ -15,7 +13,7 @@ export default {
   name: "MyArtwork",
   bodyClass: "index-page",
   components: {
-    MySingleArtwork,
+    MyArtworkManage,
     mdbContainer,
     mdbRow,
     mdbCard,

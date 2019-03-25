@@ -1,5 +1,6 @@
 // myArtworksStore.js
 import galleryService from "@/services/galleryService";
+import searchIndexService from "@/services/searchIndexService";
 import _ from "lodash";
 
 const galleryStore = {
@@ -19,15 +20,21 @@ const galleryStore = {
       return gallery;
     },
     getMyGallery: state => galleryId => {
-      let gallery = _.find(state.myGalleries, function(o) {
+      let gallery = _.find(state.myGalleries.records, function(o) {
         return o.galleryId === galleryId;
       });
       return gallery;
+    },
+    getSearchResults: state => {
+      return state.userGalleries;
     }
   },
   mutations: {
     pushUserGalleries(state, userGalleries) {
-      state.userGalleries.push(userGalleries);
+      state.userGalleries = userGalleries;
+    },
+    pushUserGallery(state, userGallery) {
+      state.userGalleries.push(userGallery);
     },
     pushMyGalleries(state, myGalleries) {
       state.myGalleries = myGalleries;
@@ -38,9 +45,37 @@ const galleryStore = {
   },
   actions: {
 
-    fetchGalleries({ commit }, data) {
+    fetchGallery({ commit, getters, dispatch }, galleryId) {
       return new Promise(resolve => {
-        galleryService.fetchGalleriesFromGaia(data.username).then(galleries => {
+        let gallery = getters.getMyGallery(galleryId);
+        if (gallery) {
+          resolve(gallery);
+        } else {
+          dispatch("fetchMyGalleries").then(galleries => {
+            gallery = getters.getMyGallery(galleryId);
+            resolve(gallery);
+          });
+        }
+      });
+    },
+
+    fetchGalleriesFromSearch({ commit, dispatch }, criteria) {
+      return new Promise(resolve => {
+        let domain = location.hostname;
+        searchIndexService.searchDappsIndex(domain, "gallery", criteria.field, criteria.query).then(galleries => {
+          _.each(galleries, function(gid) {
+            galleryService.fetchGalleryUserDataFromGaia(gid).then(gallery => {
+              commit("pushUserGallery", gallery);
+              //resolve(gallery);
+            });
+          });
+        });
+      });
+    },
+
+    fetchGalleriesFromUserStorage({ commit }, username) {
+      return new Promise(resolve => {
+        galleryService.fetchGalleriesFromGaia(username).then(galleries => {
           commit("pushUserGalleries", galleries);
           resolve(galleries);
         });
@@ -51,14 +86,17 @@ const galleryStore = {
       return new Promise(resolve => {
         galleryService.initGalleryData().then(galleries => {
           commit("pushMyGalleries", galleries);
-          resolve(galleries);
+          if (galleries) {
+            resolve(galleries.records);
+          }
+          resolve();
         });
       });
     },
 
-    uploadGallery({ commit }, gallery) {
+    uploadOrUpdateGallery({ state, commit }, gallery) {
       return new Promise(resolve => {
-        galleryService.uploadGallery(gallery).then(gallery => {
+        galleryService.uploadOrUpdateGallery(state.myGalleries, gallery).then(gallery => {
           commit("pushMyGallery", gallery);
           resolve(gallery);
         });

@@ -1,42 +1,49 @@
 <template>
   <mdb-container fluid class="bg-light flex-1 py-5">
     <mdb-container class="py-3 py-md-4">
-      <mdb-row v-if="noartworks">
-        <div class="col-12 mb-5">
-          <p class="h1-responsive mb-5">No artworks found in your portfolio!</p>
-          <p><router-link to="/my-artwork/upload" class="btn btn-white btn-sm btn-rounded ripple-parent">Upload Artwork</router-link> to get started...</p>
-        </div>
-      </mdb-row>
-      <mdb-row v-else>
-      <router-view/>
-        <div class="col-12 mb-5" v-if="numberArtworksSelling">
-          <h1 class="h1-responsive mb-5">Artworks Selling <span>({{numberArtworksSelling}})</span></h1>
-        </div>
-        <div class="col-12">
-          <my-artworks-list :artworks="selling"/>
-        </div>
+    <mdb-row v-if="noartworks">
+      <div class="col-8 offset-4 mb-5">
+        <p class="h1-responsive mb-5">No artworks found in your portfolio!</p>
+        <p><router-link to="/my-artwork/upload" class="btn btn-white btn-sm btn-rounded ripple-parent">Upload Artwork</router-link> to get started...</p>
+      </div>
+    </mdb-row>
+    <div class="row" v-else>
+      <div class="col-md-3">
+        <mdb-navbar class="blue lighten-5">
+          <mdb-navbar-nav nav vertical>
+            <mdb-nav-item><h5>My Artworks</h5></mdb-nav-item>
+            <mdb-nav-item href="#" :class="(showNav === 1) ? 'active' : ''" v-if="numberArtworksUnsold > 0"><span @click.prevent="showNav = 1">{{numberArtworksUnsold}} Unsold</span></mdb-nav-item>
+            <mdb-nav-item href="#" :class="(showNav === 2) ? 'active' : ''" v-if="numberArtworksSold > 0"><span @click.prevent="showNav = 2">{{numberArtworksSold}} Sold</span></mdb-nav-item>
+            <mdb-nav-item href="#" :class="(showNav === 3) ? 'active' : ''" v-if="numberArtworksSelling > 0"><span @click.prevent="showNav = 3">{{numberArtworksSelling}} Selling</span></mdb-nav-item>
+            <mdb-nav-item href="#" :class="(showNav === 4) ? 'active' : ''" v-if="numberArtworksBuying > 0"><span @click.prevent="showNav = 4">{{numberArtworksBuying}} Buying</span></mdb-nav-item>
+          </mdb-navbar-nav>
+        </mdb-navbar>
+      </div>
+      <div class="col-md-9">
+        <mdb-row>
 
-        <div class="col-12 mb-5" v-if="numberArtworksBuying">
-          <h1 class="h1-responsive mb-5">Artworks Buying <span>({{numberArtworksBuying}})</span></h1>
-        </div>
-        <div class="col-12">
-          <my-artworks-list :artworks="buying"/>
-        </div>
+          <div class="col-12" v-if="showNav === 1">
+            <h2 class="h2-responsive mb-5">Unsold</span></h2>
+            <my-artworks-list :artworks="unsold" />
+          </div>
 
-        <div class="col-12 mb-5">
-          <h1 class="h1-responsive mb-5">Artworks <span>({{numberArtworksUnsold}})</span></h1>
-        </div>
-        <div class="col-12">
-          <my-artworks-list :artworks="unsold" />
-        </div>
+          <div class="col-12" v-if="showNav === 2">
+            <h2 class="h2-responsive mb-5">Sold</span></h2>
+            <my-artworks-list :artworks="sold"/>
+          </div>
 
-        <div class="col-12 mb-5">
-          <h2 class="h1-responsive mb-5">Sold Artworks <span>({{numberArtworksSold}})</span></h2>
-        </div>
-        <div class="col-12">
-          <my-artworks-list :artworks="sold"/>
-        </div>
-      </mdb-row>
+          <div class="col-12" v-if="showNav === 3">
+            <h2 class="h2-responsive mb-5">Selling</h2>
+            <my-artworks-list :artworks="selling"/>
+          </div>
+
+          <div class="col-12" v-if="showNav === 4">
+            <h2 class="h2-responsive mb-5">Buying</h2>
+            <my-artworks-list :artworks="buying"/>
+          </div>
+        </mdb-row>
+      </div>
+    </div>
     </mdb-container>
   </mdb-container>
 </template>
@@ -52,6 +59,7 @@ import { mdbContainer, mdbRow,  mdbCard,
     mdbIcon,
     mdbView,
     mdbBtn } from 'mdbvue';
+import { mdbNavbar, mdbNavbarNav, mdbNavItem } from "mdbvue";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -69,10 +77,12 @@ export default {
     mdbMask,
     mdbIcon,
     mdbView,
-    mdbBtn
+    mdbBtn, mdbNavbar, mdbNavbarNav, mdbNavItem
   },
   data() {
-    return {};
+    return {
+      showNav: 1,
+    };
   },
   created() {
     this.$store.dispatch("myArtworksStore/fetchMyArtworks");
@@ -109,3 +119,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+.active {
+  background-color: #fff;
+  font-weight: 300;
+}
+</style>

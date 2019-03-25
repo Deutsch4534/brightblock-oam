@@ -10,12 +10,10 @@
         <router-link to="/my-artwork/upload" class="dropdown-item">Upload Artwork</router-link>
       </mdb-dropdown-item>
 
-      <!--
-      <mdb-dropdown-item>
+      <mdb-dropdown-item v-if="featureAuctions">
         <router-link to="/gallery/upload" class="dropdown-item">Gallery Signup</router-link>
       </mdb-dropdown-item>
-      -->
-      
+
       <mdb-dropdown-item v-if="featureAuctions">
         <router-link to="/my-auctions/upload" class="dropdown-item">Upload Auction</router-link>
       </mdb-dropdown-item>
@@ -93,6 +91,10 @@ export default {
     loggedIn() {
       let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
       return myProfile.loggedIn;
+    },
+    adminUser() {
+      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+      return myProfile.showAdmin;
     }
   },
   methods: {

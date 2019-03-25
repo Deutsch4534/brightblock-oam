@@ -14,7 +14,7 @@
           <mdb-alert color="danger" v-if="errors.length" :key="errors.length" class="w-100">
             <h4 class="alert-heading h6">Please correct the following error(s):</h4>
             <hr>
-            <ul class="list-unstyled small mb-0">
+            <ul class="list-unstyled small">
               <li :key="index" v-bind:error="error">{{ error }}</li>
               <li v-for="(error, index) in errors" :key="index" v-bind:error="error">{{ error }}</li>
             </ul>
@@ -23,17 +23,17 @@
 
         <!-- Radio buttons row -->
         <div class="row mb-3">
-          <div class="col-4 custom-control custom-radio mb-0">
+          <div class="col-4 custom-control custom-radio">
             <input type="radio" class="custom-control-input" id="customControlValidation2" name="auction.auctionType"
                    v-model="auction.auctionType" value="webcast" required>
             <label class="custom-control-label" for="customControlValidation2">Webcast</label>
           </div>
-          <div class="col-4 custom-control custom-radio mb-0">
+          <div class="col-4 custom-control custom-radio">
             <input type="radio" class="custom-control-input" id="customControlValidation1" name="auction.auctionType"
                    v-model="auction.auctionType" value="timed" required>
             <label class="custom-control-label" for="customControlValidation1">Timed</label>
           </div>
-          <div class="col-4 custom-control custom-radio mb-0">
+          <div class="col-4 custom-control custom-radio">
             <input type="radio" class="custom-control-input" id="customControlValidation3" name="auction.auctionType"
                    v-model="auction.auctionType" value="sealed" required>
             <label class="custom-control-label" for="customControlValidation3">Sealed Bid</label>
@@ -70,20 +70,26 @@
         </div>
 
         <!-- Public / private buttons row -->
-          <mdb-btn-group class="row my-3 d-flex">
-            <div class="col-6">
-              <mdb-btn type="button" color="white" size="sm" class="btn-rounded btn-block" id="custom-public"
-                       value="public" v-model="auction.privacy" @click.native="toggleActiveState1" :active="active1" required>
-                Public
-              </mdb-btn>
-            </div>
-            <div class="col-6">
-              <mdb-btn type="button" color="white" size="sm" class="btn-rounded btn-block" id="custom-private"
-                       value="private" v-model="auction.privacy" @click.native="toggleActiveState2" :active="active2" required>
-                Private
-              </mdb-btn>
-            </div>
-          </mdb-btn-group>
+        <mdb-btn-group class="row my-3 d-flex">
+          <div class="col-6">
+            <mdb-btn type="button" color="white" size="sm" class="btn-rounded btn-block" id="custom-public"
+                     value="public" v-model="auction.privacy" @click.native="toggleActiveState1" :active="active1" required>
+              Public
+            </mdb-btn>
+          </div>
+          <div class="col-6">
+            <mdb-btn type="button" color="white" size="sm" class="btn-rounded btn-block" id="custom-private"
+                     value="private" v-model="auction.privacy" @click.native="toggleActiveState2" :active="active2" required>
+              Private
+            </mdb-btn>
+          </div>
+        </mdb-btn-group>
+        <!-- Submit button row -->
+        <div class="row">
+          <div class="col-12">
+            <mdb-btn type="submit" size="sm" class="btn-block teal lighten-1">Save Changes</mdb-btn>
+          </div>
+        </div>
       </div>
 
       <!-- Right column -->
@@ -110,29 +116,14 @@
         </div>
 
         <!-- Drag and drop  -->
-        <div class="row">
-          <div class="col-12">
-            <h2 class="h3-responsive my-4">Set Auction Cover Image</h2>
-          </div>
-          <div class="col-12 col-md-6">
-            <media-upload :logo="auction.logo" @updateMedia="setByEventLogo($event)"/>
-            <p class="grey-text small mt-2">Size limit: 500Kb</p>
-            <!--<p class="muted mt-2" v-if="auction.logo && auction.logo.dataUrl"><small>{{auction.logo.name}}</small></p>-->
-          </div>
+        <div class="row" v-if="loaded">
+          <media-files-upload :contentModel="contentModel" :mediaFiles="mediaFiles" :limit="1" :sizeLimit="500" :mediaTypes="'images'" @updateMedia="setByEventLogo($event)"/>
         </div>
 
       </div>
     </div>
     <!-- /Input fields section -->
 
-    <!-- Submit button row -->
-    <div class="row">
-      <div class="col-12 col-md-5 mt-4">
-        <mdb-btn type="submit" size="lg" class="btn teal lighten-1">Submit</mdb-btn>
-      </div>
-    </div>
-    <div class="w-100"></div>
-    <!-- /Submit button row -->
   </form>
 </mdb-container>
 </template>
@@ -141,7 +132,7 @@
 import moment from "moment";
 import { mdbBtn, mdbBtnGroup, mdbContainer, mdbRow, mdbCol, mdbAlert } from 'mdbvue';
 import { Datetime } from 'vue-datetime'
-import MediaUpload from "../utils/MediaUpload";
+import MediaFilesUpload from "../utils/MediaFilesUpload";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -155,15 +146,21 @@ export default {
     mdbCol,
     mdbAlert,
     datetime: Datetime,
-    MediaUpload
+    MediaFilesUpload
   },
   data () {
     return {
       isModalActive: false,
       errors: [],
+      loaded: false,
       formTitle: "Submit Auction",
       startDate: null,
       endDate: null,
+      contentModel: {
+        title: "Cover image",
+        errorMessage: "Cover image is required.",
+        popoverBody: "Promote your galleries brand by uploading a logo / cover image.<br/><br/>A single square(ish) image up to 500Kb.",
+      },
       auction: {
         title: null,
         description: null,
@@ -172,7 +169,7 @@ export default {
         privacy: 'public',
         auctionType: "webcast",
         sellingList: [],
-        logo: {},
+        logo: null,
       },
       active1: false,
       active2: false,
@@ -184,9 +181,6 @@ export default {
     );
     if (auction) {
       this.auction = auction;
-      if (!auction.logo) {
-        auction.logo = {};
-      }
       this.startDate = moment(auction.startDate).format();
       this.endDate = moment(auction.endDate).format();
     } else {
@@ -197,11 +191,19 @@ export default {
       this.startDate = dd.format();
       this.endDate = dd.add(2, "days").format();
     }
+    this.loaded = true;
   },
   computed: {
     username() {
       let profile = this.$store.getters["myAccountStore/getMyProfile"];
       return profile.username;
+    },
+    mediaFiles() {
+      let files = [];
+      if (this.auction.logo) {
+        files.push(this.auction.logo);
+      }
+      return files;
     },
     convertToMedia() {
       if (this.auction && this.auction.logo && this.auction.logo.dataUrl) {
@@ -243,7 +245,11 @@ export default {
       }
     },
     setByEventLogo (mediaObjects) {
-      this.auction.logo = mediaObjects[0];
+      if (!mediaObjects || mediaObjects.length === 0) {
+        this.auction.logo = null;
+      } else {
+        this.auction.logo = mediaObjects[0];
+      }
     },
     checkForm(event) {
       event.preventDefault();
