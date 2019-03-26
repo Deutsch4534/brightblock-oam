@@ -1,6 +1,7 @@
 <template>
 <mdb-container fluid class="bg-light flex-1 pt-5">
-  <my-artwork-manage :artwork="artwork" />
+  <div v-if="loading">Loading artwork - please wait...</div>
+  <my-artwork-manage :artwork="artwork" v-else/>
 </mdb-container>
 </template>
 
@@ -28,18 +29,17 @@ export default {
   },
   data() {
     return {
-      artworkId: null
+      artwork: null,
+      loading: true
     };
   },
   created() {
-    this.artworkId = Number(this.$route.params.artworkId);
-    this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId);
+    let artworkId = Number(this.$route.params.artworkId);
+    this.$store.dispatch("myArtworksStore/fetchMyArtwork", artworkId).then((artwork) => {
+      this.loading = false;
+      this.artwork = artwork;
+    });
   },
   methods: {},
-  computed: {
-    artwork() {
-      return this.$store.getters["myArtworksStore/myArtwork"](this.artworkId);
-    },
-  }
 };
 </script>

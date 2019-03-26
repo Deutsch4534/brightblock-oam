@@ -39,6 +39,11 @@ const conversionStore = {
             .then(cryptoRate => {
               commit("setCryptoRate", cryptoRate);
               resolve({ fiatRates: state.fiatRates, eth_btc: cryptoRate });
+            })
+            .catch(err => {
+              console.log(err);
+              commit("setCryptoRate", 0);
+              resolve({ fiatRates: state.fiatRates, eth_btc: 0 });
             });
         });
       });

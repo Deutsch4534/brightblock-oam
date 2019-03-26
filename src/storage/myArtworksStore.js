@@ -39,6 +39,9 @@ const myArtworksStore = {
     },
     canRegister: (state, getters) => id => {
       let artwork = getters.myArtwork(id);
+      if (!artwork) {
+        return false;
+      }
       let fb = store.state.constants.featureBitcoin;
       if (fb) {
         return !(artwork.bitcoinTx);
