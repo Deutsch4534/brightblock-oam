@@ -13,6 +13,7 @@ module.exports = {
   context: path.resolve(__dirname, '../'),
   plugins: [
     new CopyWebpackPlugin([
+      path.join(__dirname, '..', 'robots.txt'),
       path.join(__dirname, '..', 'manifest.json')
     ])
   ],

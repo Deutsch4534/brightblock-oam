@@ -1,8 +1,7 @@
 {
   "name": "Radicle Art",
   "short_name": "Radicle",
-  "start_url": "https://radicle.art",
-  "description": "A decentralised art market and auction platform.",
+  "description": "A peer to peer marketplace and auction platform for art",
   "icons": [{
     "src": "https://radicle.art/static/android-chrome-192x192.png",
     "sizes": "192x192",
@@ -17,5 +16,4 @@
   "background_color": "#26a69a",
   "display": "standalone",
   "theme_color": "#26a69a"
-
 }
