@@ -18,10 +18,10 @@ if (workbox) {
   );
 
   workbox.routing.registerRoute(
-    // Cache CSS files.
-    /\/gallery$/,
+    // Cache start_url file.
+    new RegExp('/gallery'),
     // Use cache but update in the background.
-    new workbox.strategies.StaleWhileRevalidate({
+    new workbox.strategies.CacheFirst({
       // Use a custom cache name.
       cacheName: 'page-cache',
     })
