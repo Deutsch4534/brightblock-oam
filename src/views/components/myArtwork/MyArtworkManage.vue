@@ -22,7 +22,7 @@
       </mdb-col>
       <mdb-col col="8">
         <mdb-card-text>
-          <p>{{artwork.description}}</p>
+          <p><description-overflow :text="artwork.description"/></p>
           <selling-options :artwork="artwork" v-if="sellingStatus === 'unsold'"/>
           <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
           <p>{{artistProfile.name}}, 11/08/2018</p>
@@ -78,11 +78,13 @@ import { mdbIcon, mdbPopover, mdbCol, mdbView, mdbMask, mdbRow, mdbContainer, md
 import ConfirmationModal from "../utils/ConfirmationModal";
 import DeleteArtworkModal from "./DeleteArtworkModal";
 import RegisterForSale from "./RegisterForSale";
+import DescriptionOverflow from "@/views/components/utils/DescriptionOverflow";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyArtworkManage",
   components: {
+    DescriptionOverflow,
     CreateCoa,
     ConfirmationModal,
     DeleteArtworkModal,

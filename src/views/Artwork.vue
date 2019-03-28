@@ -17,7 +17,7 @@
         <p class="mb-1">
         {{artwork.dimensions}}
         <br/>
-        {{artwork.description}}
+        <description-overflow :text="artwork.description"/>
         </p>
         <p>
         <buy-artwork-form-btc v-if="isNotBeingBought && showBuyOptions && isRegisteredAndPriceSet" :artwork="artwork" :myProfile="myProfile"/>
@@ -52,6 +52,7 @@ import { Sticky } from 'mdbvue';
 import { mdbIcon, mdbMask, mdbView, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from 'mdbvue';
 import { mdbLightbox, mdbContainer, mdbCol, mdbRow } from 'mdbvue';
 import moment from "moment";
+import DescriptionOverflow from "@/views/components/utils/DescriptionOverflow";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -61,7 +62,7 @@ export default {
   },
   bodyClass: "index-page",
   components: {
-    OrderDetails,
+    OrderDetails,DescriptionOverflow,
     BuyArtworkFormBtc,
     AboutArtwork,
     mdbLightbox,

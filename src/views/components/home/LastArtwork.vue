@@ -6,7 +6,7 @@
     <mdb-card-body class="px-0">
       <mdb-card-title class="h2-responsive subtitle">{{artwork.title}}<br /><span class="small">by: {{artwork.artist}}</span></mdb-card-title>
       <mdb-card-text v-if="debugMode">{{artwork.bcitem.itemIndex}}, Owner: {{artwork.owner}}</mdb-card-text>
-      <mdb-card-text>{{artwork.description}}</mdb-card-text>
+      <mdb-card-text><description-overflow :text="artwork.description"/></mdb-card-text>
     </mdb-card-body>
   </mdb-card>
 </template>
@@ -14,6 +14,7 @@
 <script>
 
 import { mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText } from 'mdbvue';
+import DescriptionOverflow from "@/views/components/utils/DescriptionOverflow";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -23,7 +24,8 @@ export default {
     mdbCardImage,
     mdbCardBody,
     mdbCardTitle,
-    mdbCardText
+    mdbCardText,
+    DescriptionOverflow
   },
   props: {
     artwork: {

@@ -3,14 +3,19 @@
     <img :src="artwork.image" :alt="artwork.title">
     <!-- TO DO: in design, artwork caption is artist name -->
     <p class="art-title">{{artwork.title}}</p>
-    <p class="artwork-caption">{{artwork.description}}</p>
+    <p class="artwork-caption"><description-overflow :text="artwork.description"/></p>
   </router-link>
 </template>
 
 <script>
+import DescriptionOverflow from "@/views/components/utils/DescriptionOverflow";
+
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: 'SingleArtwork',
+  components: {
+    DescriptionOverflow
+  },
   props: {
     artwork: {
       type: Object,

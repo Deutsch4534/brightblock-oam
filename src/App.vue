@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="h-100 d-flex flex-1 flex-column">
+    <notifications position="bottom right"/>
     <router-view name="header"/>
     <router-view class="main pb-5"/>
     <router-view name="footer"/>

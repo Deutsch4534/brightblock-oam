@@ -6,7 +6,7 @@
     </mdb-view>
     <mdb-card-body class="px-0 pb-2 mb-0">
       <mdb-card-title class="subtitle">{{artwork.title}}</mdb-card-title>
-      <mdb-card-text><p>{{artwork.description}}</p>
+      <mdb-card-text><p><description-overflow :text="artwork.description"/></p>
       <selling-options :artwork="artwork" v-if="!sold"/>
       <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
         <p>by {{artistProfile.name}}, 11/08/2018</p>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import DescriptionOverflow from "@/views/components/utils/DescriptionOverflow";
 import SellingOptions from "./SellingOptions";
 import { mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbMask, mdbIcon, mdbView, mdbBtn } from 'mdbvue';
 import moment from "moment";
@@ -44,7 +45,7 @@ import moment from "moment";
 export default {
   name: "MySingleArtwork",
   components: {
-    SellingOptions,
+    SellingOptions,DescriptionOverflow,
     mdbContainer,
     mdbRow,
     mdbCol,

@@ -22,21 +22,21 @@
         </div>
         <div class="form-row">
             <!--<label for="validationCustom01">Artwork Title</label>-->
-            <input type="text" class="form-control" id="validationCustom01" placeholder="Artwork Title" v-model="artwork.title" required>
+            <input type="text" class="form-control" id="validationCustom01" :placeholder="'Artwork Title (' + limits.title + ' chars max)'" v-model="artwork.title" required :maxlength="limits.title">
             <div class="invalid-feedback">
               Please enter a title!
             </div>
         </div>
         <div class="form-row">
             <!--<label for="validationCustom02">Description of Artwork</label>-->
-            <textarea type="text" class="form-control" id="validationCustom02" placeholder="Description of the Artwork" v-model="artwork.description" required></textarea>
+            <textarea type="text" class="form-control" id="validationCustom02" :placeholder="'Description of the Artwork (' + limits.description + ' chars max)'" v-model="artwork.description" required :maxlength="limits.description"></textarea>
             <div class="invalid-feedback">
               Please enter a description!
             </div>
         </div>
         <div class="form-row">
             <!--<label for="validationCustom03">Keywords or tags</label>-->
-            <textarea type="text" class="form-control" id="validationCustom03" placeholder="Keywords" v-model="artwork.keywords" required></textarea>
+            <textarea type="text" class="form-control" id="validationCustom03" :placeholder="'Keywords (' + limits.keywords + ' chars max)'" v-model="artwork.keywords" required :maxlength="limits.keywords"></textarea>
             <div class="invalid-feedback">
               Please enter some keywords!
             </div>
@@ -47,9 +47,9 @@
               <label for="validationCustom040" class="col-form-label">Edition</label>
             </div>
             <div class="col-8">
-              <input class="form-control" id="validationCustom040" type="number" v-model="artwork.edition" required>
-              <div class="invalid-feedback">
-              Please enter number of editions!
+              <input class="form-control" id="validationCustom040" type="number" v-model="artwork.edition" required :maxlength="limits.maxEditions">
+              <div id="vc-040-error" class="invalid-feedback">
+                Please enter number of editions!
             </div>
             </div>
           </div>
@@ -58,8 +58,8 @@
               <label for="validationCustom041">of</label>
             </div>
            <div class="col-8">
-            <input class="form-control" id="validationCustom041" type="number" v-model="artwork.editions" required>
-            <div class="invalid-feedback">
+            <input class="form-control" id="validationCustom041" type="number" v-model="artwork.editions" required :maxlength="limits.maxEditions">
+            <div id="vc-041-error" class="invalid-feedback">
               Please enter total number of editions!
             </div>
             </div>
@@ -134,6 +134,7 @@
 import MediaFilesUpload from "../utils/MediaFilesUpload";
 import { mdbIcon, mdbPopover, mdbCol, mdbRow, mdbContainer, mdbBtn } from "mdbvue";
 import moment from "moment";
+import notify from "@/services/notify";
 
   // noinspection JSUnusedGlobalSymbols
   export default {
@@ -152,6 +153,12 @@ import moment from "moment";
       return {
         errors: [],
         showMedia: false,
+        limits: {
+          title: 50,
+          description: 1000,
+          maxEditions: 10,
+          keywords: 100
+        },
         contentModel1: {
           title: "Cover Image",
           errorMessage: "Cover image is required.",
@@ -230,6 +237,9 @@ import moment from "moment";
       setByEventLogo1 (mediaObjects) {
         this.artwork.artwork = mediaObjects;
       },
+      info() {
+        this.$notify({type: 'success', title: 'Notification 2!', text: 'Hi! I am info message.'});
+      },
       setByEventLogo2 (mediaObjects) {
         this.artwork.supportingDocuments = mediaObjects;
       },
@@ -266,6 +276,8 @@ import moment from "moment";
         event.target.classList.add('was-validated');
         this.parentalError = null;
         this.showAttachDocs = false;
+        document.getElementById("vc-040-error").style.display = "none";
+        document.getElementById("vc-041-error").style.display = "none";
         this.errors = [];
         if (!this.artwork.title) {
           this.errors.push("title required.");
@@ -279,8 +291,15 @@ import moment from "moment";
         if (!this.artwork.keywords) {
           this.errors.push("keywords required.");
         }
-        if (this.artwork.editions < 1 || this.artwork.editions > 10) {
-          this.errors.push("Editions between 1 and 10.");
+        if (this.artwork.edition < 1 || this.artwork.edition > this.limits.maxEditions) {
+          this.errors.push("Edition between 1 and " + this.limits.maxEditions);
+          document.getElementById("vc-040-error").style.display = "block";
+          document.getElementById("vc-040-error").innerHTML = "Editions between 1 and " + this.limits.maxEditions;
+        }
+        if (this.artwork.editions < 1 || this.artwork.editions > this.limits.maxEditions) {
+          this.errors.push("Editions between 1 and " + this.limits.maxEditions);
+          document.getElementById("vc-041-error").style.display = "block";
+          document.getElementById("vc-041-error").innerHTML = "Editions between 1 and " + this.limits.maxEditions;
         }
         if (!this.artwork.yearCreated) {
           this.errors.push("Year created needed.");
@@ -305,10 +324,7 @@ import moment from "moment";
           this.dateError = true;
           this.errors.push("Created date is after now?");
         }
-        if (
-          this.artwork.artwork &&
-          this.artwork.artwork.length === 0
-        ) {
+        if (this.artwork.artwork && this.artwork.artwork.length === 0) {
           this.parentalError = "Please attach your digital artwork or an image of your physical artwork.";
           this.errors.push(this.parentalError);
         }

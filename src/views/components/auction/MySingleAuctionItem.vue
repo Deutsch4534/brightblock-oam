@@ -10,7 +10,7 @@
     <h3 class="font-weight-bold mb-3 p-0">
       <strong>{{artwork.title}}</strong>
     </h3>
-    <p class="dark-grey-text">{{artwork.description}}</p>
+    <p class="dark-grey-text"><description-overflow :text="artwork.description"/></p>
     <p>by
       <a class="font-weight-bold">{{artwork.artist}}</a>, {{created}}</p>
     <br/>
@@ -22,7 +22,7 @@
     <h3 class="font-weight-bold mb-3 p-0">
       <strong>{{artwork.title}}</strong>
     </h3>
-    <p class="dark-grey-text">{{artwork.description}}</p>
+    <p class="dark-grey-text"><description-overflow :text="artwork.description"/></p>
     <p>by
       <a class="font-weight-bold">{{artwork.artist}}</a>, 19/04/2018</p>
     <br/>
@@ -37,11 +37,13 @@
 <script>
 import { mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardBody, mdbMask, mdbIcon, mdbView, mdbBtn } from 'mdbvue';
 import moment from "moment";
+import DescriptionOverflow from "@/views/components/utils/DescriptionOverflow";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MySingleAuctionItem",
   components: {
+    DescriptionOverflow,
     mdbContainer,
     mdbRow,
     mdbCol,
