@@ -1,9 +1,9 @@
 <template>
-<div class="row mb-5">
+<div class="row mb-5" v-if="!loading">
   <div class="col-12">
     <div class="row order-header">
       <div class="col-md-9 col-sm-12">
-        <h2 style="text-transform: capitalize;">{{getArtworkTitle}}</h2>
+        <h2 style="text-transform: capitalize;">{{artwork.title}}</h2>
       </div>
       <div class="col-md-3">
       </div>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mdbBtn } from "mdbvue";
+import { mdbBtn, mdbContainer } from "mdbvue";
 import invoiceService from "@/services/invoiceService";
 import artworkSearchService from "@/services/artworkSearchService";
 import myArtworksService from "@/services/myArtworksService";
@@ -37,7 +37,7 @@ import OrderDetails from "./OrderDetails";
 export default {
   name: "OrderItem",
   components: {
-    mdbBtn,
+    mdbBtn, mdbContainer,
     OrderDetails,
     ConfirmationDetails,
     PaymentDetails
@@ -49,42 +49,45 @@ export default {
   },
   data() {
     return {
+      loading: true,
       showPaymentDetails: false,
       showConfirmationDetails: false,
       showOrderDetails: true,
       bitcoinUri: null,
+      artwork: null,
+      invoice: null
     };
   },
   mounted() {
     let $self = this;
     this.$store.dispatch("invoiceStore/fetchInvoice", this.orderId).then(invoice => {
       if (invoice) {
-        artworkSearchService.newQuery({field: "id", query: invoice.artworkId});
-        if (invoice.state === "unpaid") {
-          $self.bitcoinUri = invoiceService.getBitcoinUri(invoice);
-          $self.showPaymentDetails = true;
-          $self.watchForPayment();
-        } else if (invoice.state === "confirming") {
-          $self.showConfirmationDetails = true;
-          $self.watchForConfirmations();
-        } else {
-          $self.showConfirmationDetails = true;
-          $self.checkPayment();
-          $self.watchForSettlement();
-          if (invoice.state === "settling" || invoice.state === "settled") {
-            $self.checkSettlement();
+        this.invoice = invoice;
+        artworkSearchService.newQuery({field: "id", query: invoice.artworkId}, function(artwork) {
+          $self.artwork = artwork;
+          if (invoice.state === "unpaid") {
+            $self.bitcoinUri = invoiceService.getBitcoinUri(invoice);
+            $self.showPaymentDetails = true;
+            $self.watchForPayment();
+          } else if (invoice.state === "confirming") {
+            $self.showConfirmationDetails = true;
+            $self.watchForConfirmations();
+          } else {
+            $self.showConfirmationDetails = true;
+            $self.checkPayment();
+            $self.watchForSettlement();
+            if (invoice.state === "settling" || invoice.state === "settled") {
+              $self.checkSettlement();
+            }
           }
-        }
+          $self.loading = false;
+        });
       } else {
         console.log("Order id but no order?");
       }
     })
   },
   methods: {
-    artistUrl () {
-      let artwork = this.artwork;
-      return '/artists/' + artwork.artist;
-    },
     buyNow() {
       this.showPaymentDetails = true;
       this.showConfirmationDetails = false;
@@ -163,39 +166,7 @@ export default {
       }
     }
   },
-  computed: {
-    invoice() {
-      let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
-      if (!invoice) {
-        return {
-          invoiceAmounts: {},
-          invoiceRates: {},
-        };
-      }
-      return invoice;
-    },
-    getArtworkTitle() {
-      let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
-      return this.invoice.title;
-    },
-    artwork() {
-      let artwork = this.$store.getters["artworkSearchStore/getArtwork"](this.artworkId);
-      return artwork;
-    },
-    artist() {
-      let artwork = this.$store.getters["artworkSearchStore/getArtwork"](this.orderId);
-      if (artwork.artist) {
-        return this.$store.getters["userProfilesStore/getProfile"](artwork.artist);
-      }
-      return {name: ""};
-    },
-    created() {
-      if (this.artwork.created) {
-        return moment(this.artwork.created).format("DD/MMM/YYYY");
-      }
-      return moment(this.artwork.id).format("DD/MMM/YYYY");
-    }
-  }
+  computed: {}
 };
 </script>
 <style scoped>

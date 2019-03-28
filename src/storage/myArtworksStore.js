@@ -92,12 +92,7 @@ const myArtworksStore = {
     myArtwork: state => id => {
       let artwork;
       if (id) {
-        let artworks = state.myArtworks.filter(
-          myArtwork => myArtwork.id === id
-        );
-        if (artworks && artworks.length > 0) {
-          artwork = artworks[0];
-        }
+        artwork = state.myArtworks.find(myArtwork => myArtwork.id === id);
       }
       return artwork;
     },
@@ -254,8 +249,12 @@ const myArtworksStore = {
         },
       );
     },
-    fetchMyArtwork({ commit }, artworkId) {
+    fetchMyArtwork({ commit, getters }, artworkId) {
       return new Promise(resolve => {
+        let myArtwork = getters["myArtwork"](artworkId);
+        if (myArtwork && myArtwork.id) {
+          resolve(myArtwork);
+        }
         myArtworksService.getMyArtwork(artworkId,
           function(myArtwork) {
             commit("addMyArtwork", myArtwork);

@@ -15,7 +15,7 @@ const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+// var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 
 const env = config.build.env
 console.log('env.NODE_ENV=' + process.env.NODE_ENV)
@@ -84,13 +84,13 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ]),
-    new SWPrecacheWebpackPlugin({
-      cacheId: 'my-vue-app',
-      filename: 'service-worker.js',
-      staticFileGlobs: ['dist/**/*.{js,html,css}'],
-      minify: true,
-      stripPrefix: 'dist/'
-    }),
+    //new SWPrecacheWebpackPlugin({
+    //  cacheId: 'radicle',
+    //  filename: 'service-worker.js',
+    //  staticFileGlobs: ['dist/**/*.{js,html,css}', '/gallery'],
+    //  minify: false,
+    //  stripPrefix: 'dist/'
+    //}),
     new PrerenderSPAPlugin({
       staticDir: path.join(__dirname, '../dist'),
 

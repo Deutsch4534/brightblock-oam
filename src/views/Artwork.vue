@@ -1,6 +1,9 @@
 <template>
 <mdb-container fluid class="bg-light flex-1 px-5">
-  <mdb-container class="mt-5">
+  <mdb-container class="bg-white mt-5 p-3" v-if="loading">
+    <div>Loading artwork - please wait...</div>
+  </mdb-container>
+  <mdb-container class="mt-5" v-else>
     <mdb-row class="mdb-lightbox ">
       <mdb-col col="12" md="7" @click.native="show(0)">
         <mdb-view hover>
@@ -84,7 +87,8 @@ export default {
       myProfile: {},
       showBuyOptions: false,
       visible: false,
-      index: 0
+      index: 0,
+      loading: true
     };
   },
   mounted() {
@@ -95,6 +99,7 @@ export default {
       $self.artwork = artwork;
       if (artwork) {
         $self.showBuyOptions = true;
+        $self.loading = false;
         // check for redirect to auctions...
         if ($self.artwork.saleData.auctionId) {
           $self.$router.push("/online-auction/" + artwork.owner + "/" + artwork.saleData.auctionId);

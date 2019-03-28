@@ -74,9 +74,9 @@ const artworkSearchStore = {
       return registered;
     },
     getArtwork: state => id => {
-      let artworks = state.artworks.filter(artwork => artwork.id === id);
-      if (artworks && artworks.length > 0) {
-        return artworks[0];
+      let artwork = state.artworks.find(artwork => artwork.id === id);
+      if (artwork && artwork.id) {
+        return artwork;
       } else {
         return {
           image: require("@/assets/img/missing/artwork-missing.jpg"),

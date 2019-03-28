@@ -25,6 +25,12 @@ const artworkSearchService = {
     });
   },
   newQuery(q, success, failure) {
+    if (q.field === "id") {
+      let artwork = store.getters["artworkSearchStore/getArtwork"](q.query);
+      if (artwork && artwork.id) {
+        success(artwork);
+      }
+    }
     store.commit("artworkSearchStore/clearSearchResults");
     searchIndexService.searchDappsIndex(location.hostname, "artwork", q.field, q.query).then(searchResults => {
       if (!searchResults || searchResults.error) {

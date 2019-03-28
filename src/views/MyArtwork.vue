@@ -1,7 +1,9 @@
 <template>
 <mdb-container fluid class="bg-light flex-1 pt-5">
-  <div v-if="loading">Loading artwork - please wait...</div>
-  <my-artwork-manage :artwork="artwork" v-else/>
+  <mdb-container class="bg-white mt-5 p-3" v-if="loading">
+    <div>Loading artwork - please wait...</div>
+  </mdb-container>
+  <my-artwork-manage :artwork="artwork" :myProfile="myProfile" @reload="reload" v-else/>
 </mdb-container>
 </template>
 
@@ -30,16 +32,27 @@ export default {
   data() {
     return {
       artwork: null,
+      myProfile: {},
       loading: true
     };
   },
   created() {
     let artworkId = Number(this.$route.params.artworkId);
     this.$store.dispatch("myArtworksStore/fetchMyArtwork", artworkId).then((artwork) => {
-      this.loading = false;
+      if (!artwork.image) {
+        artwork.image = require("@/assets/img/logo/logo-black-256x256.png");
+      }
       this.artwork = artwork;
+      this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
+        this.myProfile = myProfile;
+        this.loading = false;
+      });
     });
   },
-  methods: {},
+  methods: {
+    reload: function() {
+      this.artwork = this.$store.getters["myArtworksStore/myArtwork"](this.artwork.id);
+    }
+  },
 };
 </script>

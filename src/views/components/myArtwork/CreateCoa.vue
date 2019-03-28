@@ -7,16 +7,8 @@
     </mdb-card-text>
     <bitcoin-address-entry v-if="showBitcoinAddress && !artwork.coa" @bitcoinAddressUpdate="updateBitcoinAddress"/>
     <div class="rounded-bottom lighten-3 text-right p-3">
-
       <a v-if="artwork.coa" class="black-text" @click.prevent="openCoa()"><mdb-btn class="btn teal lighten-1" size="md">Open COA</mdb-btn></a>
       <a v-else class="black-text" @click.prevent="generateCoa()"><mdb-btn class="btn teal lighten-1" size="md">Generate COA</mdb-btn></a>
-
-      <!--
-      <a v-if="downloadLink" :href="downloadLink" _target="blank" class="black-text"><mdb-btn class="btn teal lighten-1" size="md">Download PDF</mdb-btn></a>
-      <router-link :to="registerForSaleUrl()" class="inline-block" v-if="artwork.coa">
-        <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Sell</mdb-btn>
-      </router-link>
-      -->
     </div>
   </mdb-card-text>
 
@@ -41,48 +33,45 @@ export default {
     mdbCardText,
     mdbBtn
   },
+  props: {
+    myProfile: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
+    artwork: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
+  },
   data() {
     return {
       result: null,
-      artworkId: null,
       downloadLink: null,
       showBitcoinAddress: false,
       validBitcoinAdress: false,
       message: null,
-      myProfile: {}
     };
   },
   mounted() {
-    this.artworkId = Number(this.$route.params.artworkId);
-    let $self = this;
-    this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
-      this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId);
-      this.myProfile = myProfile;
-      this.showBitcoinAddress = true;
-    });
+    this.showBitcoinAddress = true;
   },
   computed: {
-    artwork() {
-      let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-        this.artworkId
-      );
-      if (!a.image) {
-        a.image = require("@/assets/img/logo/logo-black-256x256.png");
-      }
-      return a ? a : {};
-    },
     hasBitcoinAddress() {
-      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      return myProfile.publicKeyData.bitcoinAddress;
+      return this.myProfile.publicKeyData.bitcoinAddress;
     }
   },
   methods: {
     setByEventCoa (coa) {
-      let artwork = this.$store.getters["myArtworksStore/myArtwork"](
-        this.artworkId
-      );
+      let artwork = this.artwork;
       artwork.coa = coa;
-      this.$store.dispatch("myArtworksStore/updateArtwork", artwork);
+      this.$store.dispatch("myArtworksStore/updateArtwork", artwork)
+        .then((artwork) => {
+          this.$emit("reload");
+        });
     },
     updateBitcoinAddress(bitcoinAddress) {
       this.validBitcoinAdress = bitcoinAddress;
@@ -90,10 +79,7 @@ export default {
       this.modal = true;
     },
     blockchainInfoUrl() {
-
-      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-        this.artworkId
-      );
+      let artwork = this.artwork;
       let state = this.$store.getters["bitcoinStore/getBitcoinState"];
       if (state.chain === "test") {
         return `https://testnet.blockexplorer.com/tx/${artwork.bitcoinTx}`;
@@ -108,9 +94,7 @@ export default {
       } catch (err) {
         // no canvas - ie bitcoin address.
       }
-      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-        this.artworkId
-      );
+      let artwork = this.artwork;
       let $self = this;
       let siteLogo = require("@/assets/img/logo/logo-black-256x256.png");
       let data = {
@@ -124,6 +108,7 @@ export default {
         $self.downloadLink = $self.getPdfLink(artwork);
         // $self.$emit('updateCoa', response.data);
         $self.setByEventCoa(response.data);
+        $self.$emit("reload");
       });
     },
     getPdfLink: function(artwork) {
@@ -136,8 +121,8 @@ export default {
       }
     },
     registerForSaleUrl() {
-      let a = this.$store.getters["myArtworksStore/myArtwork"](this.artworkId);
-      let id = this.artworkId;
+      let a = this.artwork;
+      let id = this.artwork.id;
       if (a.saleData || !a.saleData.soid) {
         let amount = 0;
         let currency = "EUR";
@@ -157,34 +142,9 @@ export default {
         return `/my-artwork/register-for-auction/${id}/${aid}/${r}/${i}/${c}`;
       }
     },
-    /**
-    getPdfLink () {
-      let pdfWindow = window.open("");
-      pdfWindow.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + (this.coa)+"'></iframe>");
-    },
-    **/
     openCoa () {
-      /**
-      var downloadLink      = document.createElement('a');
-      downloadLink.target   = '_blank';
-      downloadLink.download = 'name_to_give_saved_file.pdf';
-      var blob = new Blob([this.coa], {type: "application/pdf"})
-      var URL = window.URL || window.webkitURL;
-      var downloadUrl = URL.createObjectURL(blob);
-      downloadLink.href = downloadUrl;
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-      URL.revokeObjectURL(downloadUrl);
-      **/
-
-      // window.open("data:application/pdf, " + (this.coa));
-
-      let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-        this.artworkId
-      );
       let pdfWindow = window.open("")
-      pdfWindow.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(a.coa)+"'></iframe>")
+      pdfWindow.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(this.artwork.coa)+"'></iframe>")
     },
   }
 };

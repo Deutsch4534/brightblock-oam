@@ -21,7 +21,7 @@ if (workbox) {
     // Cache start_url file.
     new RegExp('/gallery'),
     // Use cache but update in the background.
-    new workbox.strategies.CacheFirst({
+    new workbox.strategies.StaleWhileRevalidate({
       // Use a custom cache name.
       cacheName: 'page-cache',
     })

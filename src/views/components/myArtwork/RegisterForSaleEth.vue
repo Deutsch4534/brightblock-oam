@@ -40,7 +40,10 @@
         </p>
       </form>
     </mdb-card-text>
-    <mdb-btn color="btn btn-block teal lighten-1" @click="setPrice" size="md">Save</mdb-btn>
+    <div class="rounded-bottom lighten-3 p-3">
+      <mdb-btn color="white" @click="closeModal" size="md">Cancel</mdb-btn>
+      <mdb-btn color="white" @click="setPrice" size="md">Save</mdb-btn>
+    </div>
   </mdb-card-body>
 </template>
 
@@ -130,8 +133,7 @@ export default {
     },
 
     closeModal: function() {
-      this.$emit("registerSaleInfo", {operation: "done"});
-      //this.$router.push(this.from);
+      this.$router.push(this.from);
     },
 
     setPrice: function() {
@@ -140,6 +142,7 @@ export default {
       if (this.errors.length > 0) {
         return;
       }
+
       artwork.saleData.soid = 1;
       artwork.status = this.$store.state.constants.statuses.artwork.PURCHASE_ENABLED;
       artwork.saleData.amount = Number(this.amount);
@@ -152,24 +155,69 @@ export default {
       artwork.saleData.fiatCurrency = this.currency;
       let fiatRates = this.$store.getters["conversionStore/getFiatRates"];
       artwork.saleData.initialRateBtc = fiatRates[this.currency]["15m"];
-      let ethToBtc = this.$store.getters["conversionStore/getCryptoRate"]("eth_btc");
+      let ethToBtc = this.$store.getters["conversionStore/getCryptoRate"](
+        "eth_btc"
+      );
       artwork.saleData.initialRateEth = ethToBtc;
       artwork.saleData.amountInEther = moneyUtils.valueInEther(
         this.currency,
         artwork.saleData.amount
       );
-      this.$emit("registerSaleInfo", {operation: "start", amount: this.amount, currency: this.currency});
       artwork.saleData.auctionId = null;
+
       let $self = this;
-      this.message = "Setting Price: Blockchain called - saving data changes...";
-      $self.$store.dispatch("myArtworksStore/updateArtwork", artwork)
-        .then(() => {
-          notify.info({
-            title: "Register Artwork.",
-            text: "Your user storage has been updated."
+      let fb = this.$store.state.constants.featureBitcoin;
+
+      if (fb) {
+        this.message =
+          "Setting Price: Blockchain called - saving data changes...";
+        $self.$store.dispatch("myArtworksStore/updateArtwork", artwork)
+          .then(() => {
+            notify.info({
+              title: "Register Artwork.",
+              text: "Your user storage has been updated."
+            });
+            $self.closeModal();
           });
-          $self.closeModal();
-        });
+      } else {
+        this.setPriceEthereum(artwork);
+      }
+    },
+
+    setPriceEthereum: function(artwork) {
+      this.message =
+        "Setting Price: Please confirm the transaction in your wallet...";
+      let priceData = {
+        itemIndex: artwork.bcitem.itemIndex,
+        amountInWei: moneyUtils.valueInWei(
+          artwork.saleData.fiatCurrency,
+          artwork.saleData.amount
+        )
+      };
+      ethereumService.setPriceOnChain(
+        priceData,
+        function(result) {
+          artwork.bcitem.setPriceTxId = result.txId;
+          artwork.bcitem.status = "price-set";
+          $self.$store.commit("myArtworksStore/addMyArtwork", artwork);
+          $self.message =
+            "Setting Price: Blockchain called - saving data changes...";
+          $self.$store.dispatch("myArtworksStore/updateArtwork", artwork)
+            .then(() => {
+              notify.info({
+                title: "Register Artwork.",
+                text: "Your user storage has been updated."
+              });
+              $self.closeModal();
+            });
+        },
+        function(error) {
+          notify.error({
+            title: "Register Artwork.",
+            text: "Error setting price for your item. <br>" + error.message
+          });
+        }
+      );
     },
     registerForAuctionUrl() {
       let a = this.$store.getters["myArtworksStore/myArtwork"](this.artwork.id);

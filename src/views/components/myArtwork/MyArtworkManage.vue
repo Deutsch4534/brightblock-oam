@@ -1,6 +1,7 @@
 <template>
   <mdb-container class="bg-white mt-5 p-3">
     <confirmation-modal :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
+    <delete-artwork-modal :modal="showDeleteModal" :title="modalTitle" :content="modalContent" @deleteArtworkConfirmed="deleteArtworkConfirmed"/>
     <mdb-row>
       <mdb-col col="8">
         <h1>
@@ -12,7 +13,7 @@
       </mdb-col>
       <mdb-col col="4" class="text-right"><small class="teal-text">{{bitcoinTx}}</small></mdb-col>
     </mdb-row>
-    <mdb-row>
+    <mdb-row v-if="!loading">
       <mdb-col col="4">
         <mdb-view hover>
           <img class="inplay-image img-fluid mb-4" width="100%" :src="artwork.image" :alt="artwork.title">
@@ -27,17 +28,23 @@
           <p>{{artistProfile.name}}, 11/08/2018</p>
         </mdb-card-text>
         <div class="card-buttons d-flex align-items-end justify-content-start flex-nowrap">
+
           <router-link :to="registerUrl" class="inline-block" v-if="canRegister">
             <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Register</mdb-btn>
           </router-link>
-          <router-link :to="registerUrl" class="inline-block" v-else>
-            <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light" v-if="artwork.bitcoinTx">CoA</mdb-btn>
-          </router-link>
-          <router-link :to="registerForSaleUrl" class="inline-block">
-            <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="canSell">Sell</mdb-btn>
-          </router-link>
-          <a @click="deleteArtwork(artwork.id)" class="inline-block">
-            <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="debugMode">Delete</mdb-btn>
+
+          <a  @click.prevent="openCoa()" class="inline-block" v-if="artwork.coa">
+            <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Open CoA</mdb-btn>
+          </a>
+          <a @click.prevent="removeCoa()" class="inline-block" v-if="artwork.coa">
+            <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Remove CoA</mdb-btn>
+          </a>
+          <a class="inline-block" v-if="artwork.bitcoinTx && !artwork.coa" @click.prevent="showGenerateCoA = !showGenerateCoA">
+            <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Generate CoA</mdb-btn>
+          </a>
+
+          <a to="#" class="inline-block" @click.prevent="showRegisterForSale = !showRegisterForSale">
+            <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="canSell" >Sell</mdb-btn>
           </a>
           <router-link :to="editUrl" class="inline-block">
             <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="editable">Edit</mdb-btn>
@@ -45,7 +52,16 @@
           <router-link :to="artworkUrl" class="inline-block">
             <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Open</mdb-btn>
           </router-link>
+          <a @click="deleteArtwork" class="inline-block">
+            <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="deletable">Delete</mdb-btn>
+          </a>
         </div>
+        <mdb-row v-if="showRegisterForSale">
+          <register-for-sale :artwork="artwork" :fiatRates="fiatRates" @registerSaleInfo="registerSaleInfo"/>
+        </mdb-row>
+        <mdb-row v-if="showGenerateCoA">
+          <create-coa v-if="artwork.bitcoinTx" :artwork="artwork" :myProfile="myProfile" @reload="reload"/>
+        </mdb-row>
       </mdb-col>
     </mdb-row>
 </mdb-container>
@@ -58,9 +74,10 @@ import utils from "@/services/utils";
 import notify from "@/services/notify";
 import ethereumService from "@/services/ethereumService";
 import bitcoinService from "@/services/bitcoinService";
-// import OpenTimestamps from "javascript-opentimestamps";
 import { mdbIcon, mdbPopover, mdbCol, mdbView, mdbMask, mdbRow, mdbContainer, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbBtn } from "mdbvue";
 import ConfirmationModal from "../utils/ConfirmationModal";
+import DeleteArtworkModal from "./DeleteArtworkModal";
+import RegisterForSale from "./RegisterForSale";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -68,7 +85,9 @@ export default {
   components: {
     CreateCoa,
     ConfirmationModal,
+    DeleteArtworkModal,
     RegisterBitcoin,
+    RegisterForSale,
     mdbPopover, mdbIcon,
     mdbContainer,
     mdbCol,
@@ -90,6 +109,12 @@ export default {
         return {};
       }
     },
+    myProfile: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     width: {
       type: Number,
       default: 4
@@ -98,28 +123,89 @@ export default {
   data() {
     return {
       showModal: false,
+      showDeleteModal: false,
+      loading: true,
+      showRegisterForSale: false,
+      showGenerateCoA: false,
       modalTitle: "Registering Ownership",
       modalContent: "<p>Transaction sent - confirmation takes ~ 6 blocks which is about an hour..</p>" +
             "<p>Once confirmed you'll be able to generate Certificate of Authenticity.</p>",
+      modalTitle1: "Updating Info",
+      modalContent1: "<p>Please wait - updating information for your artwork.</p>",
+      modalTitleDelete: "Please Confirm Delete",
+      modalContentDelete: "<p class='text-center'>This can't be undone.</p>",
     };
   },
-  mounted() {},
+  mounted() {
+    // this.artwork.saleData.fiatCurrency = "GBP";
+    this.loading = false;
+  },
   methods: {
-    deleteArtwork(id) {
-      this.$store.dispatch("myArtworksStore/deleteMyArtwork", id);
+    deleteArtwork() {
+      this.modalTitle = this.modalTitleDelete;
+      this.modalContent = this.modalContentDelete;
+      this.showDeleteModal = true;
+    },
+    deleteArtworkConfirmed(data) {
+      if (data.proceed) {
+        this.$store.dispatch("myArtworksStore/deleteMyArtwork", this.artwork.id).then((artwork) => {
+          this.$router.push("/my-artworks");
+          this.showDeleteModal = false;
+        });
+      } else {
+        this.showDeleteModal = false;
+      }
+    },
+    reload: function() {
+      this.$emit("reload");
+      this.showGenerateCoA = false;
     },
     closeModal: function() {
       this.showModal = false;
-    }
+    },
+    registerSaleInfo: function(data) {
+      if (data.operation === "start") {
+        this.modalTitle = this.modalTitle1;
+        this.modalContent = this.modalContent1;
+        this.showModal = true;
+      } else {
+        this.showModal = false;
+      }
+    },
+    removeCoa: function() {
+      this.artwork.coa = null;
+      this.modalTitle = this.modalTitle1;
+      this.modalContent = this.modalContent1;
+      this.showModal = true;
+      this.$store.dispatch("myArtworksStore/updateArtwork", this.artwork)
+        .then((artwork) => {
+          this.$emit("reload");
+          this.showModal = false;
+          this.showGenerateCoA = false;
+          notify.info({
+            title: "Register Artwork.",
+            text: "Your user storage has been updated."
+          });
+        });
+    },
+    openCoa: function() {
+      let pdfWindow = window.open("", "CertificateAuthenticity");
+      pdfWindow.document.write("<html><head></head><body><iframe width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(this.artwork.coa)+"'></iframe></body></html>");
+    },
   },
   computed: {
     editable() {
       return this.$store.getters["myArtworksStore/editable"](this.artwork.id);
     },
+    deletable() {
+      return this.$store.getters["myArtworksStore/editable"](this.artwork.id);
+    },
+    fiatRates() {
+      return this.$store.getters["conversionStore/getFiatRates"];
+    },
     bitcoinTx() {
-      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      if (myProfile.publicKeyData) {
-        return myProfile.publicKeyData.bitcoinAddress;
+      if (this.myProfile.publicKeyData) {
+        return this.myProfile.publicKeyData.bitcoinAddress;
       }
     },
     created() {
