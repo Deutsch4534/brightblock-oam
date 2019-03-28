@@ -96,10 +96,24 @@ const myArtworksStore = {
       }
       return artwork;
     },
+    myArtworkByTimestamp: state => timestamp => {
+      if (!timestamp) {
+        return;
+      }
+      let artwork = state.myArtworks.find(myArtwork => myArtwork.timestamp === timestamp);
+      return artwork;
+    },
     unsold: state => {
       let username = store.getters["myAccountStore/getMyProfile"].username;
       let status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
       return state.myArtworks.filter(artwork => username === artwork.owner && artwork.status !== status);
+    },
+    registered: state => registered => {
+      if (registered) {
+        return state.myArtworks.filter(artwork => artwork.bitcoinTx);
+      } else {
+        return state.myArtworks.filter(artwork => !artwork.bitcoinTx);
+      }
     },
     selling: state => {
       let username = store.getters["myAccountStore/getMyProfile"].username;
@@ -143,6 +157,13 @@ const myArtworksStore = {
       let index = _.findIndex(state.myArtworks, function(o) {
         return o.id === myArtwork.id;
       });
+      let imageIndex = _.findIndex(state.myArtworks, function(o) {
+        return o.timestamp === myArtwork.timestamp;
+      });
+      if (imageIndex > -1) {
+        // return quietly - an artwork duplication error has occurred?
+        return;
+      }
       if (index === -1) {
         state.myArtworks.splice(0, 0, myArtwork);
       } else {

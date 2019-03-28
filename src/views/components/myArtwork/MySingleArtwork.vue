@@ -8,16 +8,17 @@
     </mdb-view>
     <mdb-card-body class="px-0 pb-2 mb-0">
       <mdb-card-title class="subtitle">
-        <a href="#" class="btn btn-small teal lighten-3 text-grey waves-light p-1" style="display:none" @click.prevent><mdb-icon icon="ellipsis-v" /></a>
-        {{artwork.title}}
-        <router-link :to="myArtworkUrl" class="inline-block">
+        <h5><router-link :to="myArtworkUrl" class="inline-block">
           {{artwork.title}}
-        </router-link>
+        </router-link></h5>
       </mdb-card-title>
       <mdb-card-text>
         <selling-options :artwork="artwork" v-if="sellingStatus === 'unsold'"/>
         <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
-        <p>by {{artistProfile.name}}, 11/08/2018</p>
+        <p>by {{artistProfile.name}}, 11/08/2018 <br/>
+        <span v-if="artwork.bitcoinTx">registered</span>
+        <span v-else>not registered</span>
+        </p>
       </mdb-card-text>
     </mdb-card-body>
     <div class="card-buttons d-flex align-items-end justify-content-start flex-nowrap">
@@ -161,5 +162,6 @@ export default {
   .subtitle,
   .card-body p {
     color: #000!important;
+    font-size: 0.9em;
   }
 </style>

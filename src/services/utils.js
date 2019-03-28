@@ -53,6 +53,14 @@ const utils = {
     }
   },
 
+  buildArtworkHashFromArtwork(artwork) {
+    if (artwork.timestamp) {
+      return artwork.timestamp;
+    } else if (artwork.artwork && artwork.artwork.length > 0) {
+      return utils.buildArtworkHash(artwork.artwork[0].dataUrl);
+    }
+  },
+
   buildBitcoinHash(artwork) {
     let hashBase = artwork.artist + ":" + artwork.image;
     return SHA256(hashBase).toString();

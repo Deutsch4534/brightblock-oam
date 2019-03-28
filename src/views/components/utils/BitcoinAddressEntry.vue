@@ -32,13 +32,15 @@
     <div class="col-md-12" v-if="myProfile.publicKeyData.bitcoinAddress && !removedAddress">
       {{myProfile.publicKeyData.bitcoinAddress}}
        <a @click.prevent="toggleAddressInput"><mdb-icon icon="pen" /></a>
-       <!-- <a @click.prevent="removeAddress"><mdb-icon icon="trash-alt"/></a> -->
     </div>
     <div class="col-md-12 text-danger" v-if="message">
       <p>{{message}}</p>
     </div>
     <div class="col-md-12" v-if="changeBtcAddress || removedAddress">
       <input type="text" width="50%" class="form-control" required id="vc-bitcoin-address" placeholder="Your bitcoin address" v-on:keyup.13="saveBitcoinAddress($event)" v-model="myProfile.publicKeyData.bitcoinAddress">
+    </div>
+    <div class="col-md-12" v-if="allowDelete && myProfile.publicKeyData.bitcoinAddress">
+      <a class="black-text d-flex justify-content-end" @click.prevent="removeAddress"><mdb-btn class="btn teal lighten-1" size="md">Delete Address</mdb-btn></a>
     </div>
   </div>
 </mdb-card-text>
@@ -61,6 +63,7 @@ export default {
     mdbBtn
   },
   props: {
+    allowDelete: false
   },
   data() {
     return {
@@ -99,7 +102,7 @@ export default {
       document.getElementById("qrcode").style.display = "none";
       this.$store.commit("myAccountStore/myProfile", myProfile);
       this.removedAddress = true;
-      $self.$emit("bitcoinAddressUpdate", null);
+      this.$emit("bitcoinAddressUpdate", null);
     },
     checkBitcoinAddress(bitcoinAddress, emit) {
       let $self = this;

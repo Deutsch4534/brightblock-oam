@@ -22,7 +22,7 @@
 
       <blockstack-section v-if="showNav === 1" :myProfile="myProfile"/>
       <email-address-entry v-if="showNav === 2" :emailAddress="myProfile.auxiliaryProfile.emailAddress" @saveEmail="saveEmail"/>
-      <bitcoin-address-entry v-if="showNav === 3" @bitcoinAddressUpdate="updateBitcoinAddress"/>
+      <bitcoin-address-entry v-if="showNav === 3" :allowDelete="true" @bitcoinAddressUpdate="updateBitcoinAddress"/>
       <address-form v-if="showNav === 4" :addressTitle="'Shipping Address'" :addressBlurb="addressBlurb" :address="myProfile.auxiliaryProfile.shippingAddress" @saveAddress="saveAddress"/>
       <trusted-users-section v-if="showNav === 5" :trustedIds="myProfile.auxiliaryProfile.trustedIds" @saveTrustedUsers="saveTrustedUsers"/>
 
@@ -68,13 +68,19 @@ export default {
     mdbNavbarNav,
     mdbNavItem
   },
-  props: ["formTitle"],
+  props: {
+  },
   data() {
     return {
       showNav: 0,
+      fromPage: this.$route.query.from,
       modal: false,
       modalTitle: "Profile updated",
       modalContent: "<p>Profile updated successfully.</p>",
+      modalTitleUpdateArtwork: "Enter Bitcoin Address",
+      modalContentUpdateArtwork: "<p>Before you can upload artwork please provide a bitcoin address.</p>",
+      modalTitleUpdateArtworkConfirm: "Bitcoin Address Saved",
+      modalContentUpdateArtworkConfirm: "<p>Thanks - carry on uploading artwork.</p>",
       modalContent1: "<p>Profile updated successfully: where to next?</p><ul class='m-3'>" +
         "<li class='mb-3'><a href='#/my-artwork/upload'>Upload Artwork</a></li>" +
         "<li><a href='#/gallery'>Gallery</a></li></ul>",
@@ -85,6 +91,16 @@ export default {
     };
   },
   mounted() {
+    this.myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+    if (this.fromPage === "upload-artwork") {
+      this.showNav = 3;
+      this.modalTitle = this.modalTitleUpdateArtwork;
+      this.modalContent = this.modalContentUpdateArtwork;
+      this.modal = true;
+    } else {
+      this.showNav = 1;
+    }
+    /**
     this.$store.dispatch("myAccountStore/fetchMyAccount").then((profile) => {
       if (!profile.auxiliaryProfile) {
         profile.auxiliaryProfile = {};
@@ -94,8 +110,8 @@ export default {
         profile.auxiliaryProfile.shippingAddress = {};
       }
       this.myProfile = profile;
-      this.showNav = 1;
     });
+    **/
   },
   computed: {
   },
@@ -126,10 +142,18 @@ export default {
     },
     closeModal: function() {
       this.modal = false;
+      if (this.fromPage === "upload-artwork" && this.myProfile.publicKeyData.bitcoinAddress) {
+        this.$router.push("/my-artwork/upload");
+      }
     },
     updateBitcoinAddress(bitcoinAddress) {
-      this.$store.dispatch("myAccountStore/updateBitcoinAddress", bitcoinAddress);
-      this.modal = true;
+      this.$store.dispatch("myAccountStore/updateBitcoinAddress", bitcoinAddress).then(() => {
+        if (this.fromPage === "upload-artwork") {
+          this.modalTitle = this.modalTitleUpdateArtworkConfirm;
+          this.modalContent = this.modalContentUpdateArtworkConfirm;
+          this.modal = true;
+        }
+      });
     }
   }
 };

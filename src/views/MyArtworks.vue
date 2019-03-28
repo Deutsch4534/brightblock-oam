@@ -16,6 +16,9 @@
             <mdb-nav-item href="#" :class="(showNav === 2) ? 'active' : ''" v-if="numberArtworksSold > 0"><span @click.prevent="showNav = 2">{{numberArtworksSold}} Sold</span></mdb-nav-item>
             <mdb-nav-item href="#" :class="(showNav === 3) ? 'active' : ''" v-if="numberArtworksSelling > 0"><span @click.prevent="showNav = 3">{{numberArtworksSelling}} Selling</span></mdb-nav-item>
             <mdb-nav-item href="#" :class="(showNav === 4) ? 'active' : ''" v-if="numberArtworksBuying > 0"><span @click.prevent="showNav = 4">{{numberArtworksBuying}} Buying</span></mdb-nav-item>
+            <hr/>
+            <mdb-nav-item href="#" :class="(showNav === 5) ? 'active' : ''" v-if="numberArtworksRegistered > 0"><span @click.prevent="showNav = 5">{{numberArtworksRegistered}} Registered</span></mdb-nav-item>
+            <mdb-nav-item href="#" :class="(showNav === 6) ? 'active' : ''" v-if="numberArtworksUnregistered > 0"><span @click.prevent="showNav = 6">{{numberArtworksUnregistered}} Not Registered</span></mdb-nav-item>
           </mdb-navbar-nav>
         </mdb-navbar>
       </div>
@@ -41,6 +44,17 @@
             <h2 class="h2-responsive mb-5">Buying</h2>
             <my-artworks-list :artworks="buying"/>
           </div>
+
+          <div class="col-12" v-if="showNav === 5">
+            <h2 class="h2-responsive mb-5">Registered</h2>
+            <my-artworks-list :artworks="registered"/>
+          </div>
+
+          <div class="col-12" v-if="showNav === 6">
+            <h2 class="h2-responsive mb-5">Not Registered</h2>
+            <my-artworks-list :artworks="unregistered"/>
+          </div>
+
         </mdb-row>
       </div>
     </div>
@@ -100,6 +114,18 @@ export default {
     },
     buying() {
       return this.$store.getters["myArtworksStore/buying"];
+    },
+    registered() {
+      return this.$store.getters["myArtworksStore/registered"](true);
+    },
+    unregistered() {
+      return this.$store.getters["myArtworksStore/registered"](false);
+    },
+    numberArtworksRegistered() {
+      return this.$store.getters["myArtworksStore/registered"](true).length;
+    },
+    numberArtworksUnregistered() {
+      return this.$store.getters["myArtworksStore/registered"](false).length;
     },
     numberArtworksBuying() {
       return this.$store.getters["myArtworksStore/buying"].length;

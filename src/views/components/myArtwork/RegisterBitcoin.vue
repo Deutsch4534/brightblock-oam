@@ -1,37 +1,33 @@
 <template>
-<div class="row">
-  <div class="col-md-8">
-    <mdb-card-title>
-      <mdb-popover trigger="click" :options="{placement: 'top'}">
-        <div class="popover">
-          <div class="popover-header">
-            Bitcoin Blockchain
-          </div>
-          <div class="popover-body">
-            The bitcoin address of the artist can be displayed in the certificate of authenticity
-            of the artwork.
-          </div>
+<mdb-card-body>
+  <mdb-card-title>
+    <mdb-popover trigger="click" :options="{placement: 'top'}">
+      <div class="popover">
+        <div class="popover-header">
+          Bitcoin Blockchain
         </div>
-        <a @click.prevent="" slot="reference">
-          Artwork Registration <span v-if="bitcoinState">({{bitcoinState.chain}} chain)</span>
-        </a>
-      </mdb-popover>
-    </mdb-card-title>
-    <mdb-card-text>
-      We will create a piece of data that is unique to you and this piece of artwork
-      and store it the bitcoin blockchain where it can be used to prove your
-      ownership. You'll then be able to generate a Certificate of Ownership.
-      <br/><br/>
-      <a @click.prevent="showArtworkHash = !showArtworkHash">Show this data!</a>
-    </mdb-card-text>
-    <mdb-card-text v-if="showArtworkHash">
-      {{artworkHash}}
-    </mdb-card-text>
-  </div>
-  <div class="col-md-4">
-    <a class="black-text d-flex justify-content-end" v-if="!bitcoinTx"><mdb-btn class="btn teal lighten-1" size="md" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
-  </div>
-</div>
+        <div class="popover-body">
+          The bitcoin address of the artist can be displayed in the certificate of authenticity
+          of the artwork.
+        </div>
+      </div>
+      <a @click.prevent="" slot="reference">
+        Artwork Registration <span v-if="bitcoinState">({{bitcoinState.chain}} chain)</span>
+      </a>
+    </mdb-popover>
+  </mdb-card-title>
+  <mdb-card-text>
+    We will create a piece of data that is unique to you and this piece of artwork
+    and store it the bitcoin blockchain where it can be used to prove your
+    ownership. You'll then be able to generate a Certificate of Ownership.
+    <br/><br/>
+    <a @click.prevent="showArtworkHash = !showArtworkHash">Show this data!</a>
+  </mdb-card-text>
+  <mdb-card-text v-if="showArtworkHash">
+    {{artworkHash}}
+  </mdb-card-text>
+  <a class="black-text d-flex justify-content-end" v-if="!artwork.bitcoinTx"><mdb-btn class="btn teal lighten-1" size="md" @click="registerArtworkBitcoin()">Register Bitcoin</mdb-btn></a>
+</mdb-card-body>
 </template>
 
 <script>
@@ -58,50 +54,43 @@ export default {
     mdbCardText,
     mdbBtn
   },
+  props: {
+    artwork: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
+    myProfile: {
+      type: Object,
+      default() {
+        return {};
+      }
+    }
+  },
   data() {
     return {
       message: null,
       artworkId: null,
-      from: "/my-artworks",
-      bitcoinTx: null,
       showArtworkHash: null,
     };
   },
   mounted() {
-    this.artworkId = Number(this.$route.params.artworkId);
-    let $self = this;
-    this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
-      this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId).then(artwork => {
-        this.bitcoinTx = artwork.bitcoinTx;
-      });
-    });
   },
   computed: {
     artworkHash() {
-      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
-      return utils.buildBitcoinHash(artwork);
+      return utils.buildBitcoinHash(this.artwork);
     },
     bitcoinState() {
       let state = this.$store.getters["bitcoinStore/getBitcoinState"];
       return state;
     },
-    artwork() {
-      let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
-      if (!a.image) {
-        a.image = require("@/assets/img/missing/artwork-missing.jpg");
-      }
-      return a ? a : {};
-    },
     myArtist() {
-      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
-      return this.$store.getters["userProfilesStore/getProfile"](
-        artwork.artist
-      );
+      return this.$store.getters["userProfilesStore/getProfile"](this.artwork.artist);
     },
     canRegister() {
       try {
-        let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
-        return artwork.artwork.length > 0;
+        return this.artwork.artwork.length > 0;
       } catch (e) {
         return false;
       }
@@ -109,7 +98,7 @@ export default {
   },
   methods: {
     registerArtworkBitcoin: function() {
-      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
+      let artwork = this.artwork;
       this.modal = true;
       try {
         let regData = {
@@ -119,21 +108,22 @@ export default {
           owner: artwork.owner
         };
         let $self = this;
+        $self.$emit("registerBitcoin", {error: false, message: "Registering please wait.."});
         bitcoinService.registerTx(regData,
           function(result) {
             if (!result || !result.sentTx) {
-              $self.$emit("registerStatusUpdate", {error: true, message: "transaction failed - please try again later."});
+              $self.$emit("registerBitcoin", {error: true, message: "transaction failed - please try again later."});
             } else {
               $self.artwork.bitcoinTx = result.sentTx;
               $self.$store.dispatch("myArtworksStore/updateArtwork", artwork);
-              $self.$emit("registerStatusUpdate", result.sentTx);
+              $self.$emit("registerBitcoin", {error: false, message: "Registered on bitcoin."});
             }
           }, function(error) {
-            $self.$emit("registerStatusUpdate", error);
+            $self.$emit("registerBitcoin", {error: true, message: "transaction failed"});
             console.log(error);
           });
       } catch (err) {
-        $self.$emit("registerStatusUpdate", {error: true, message: "transaction failed - please try again later."});
+        $self.$emit("registerBitcoin", {error: true, message: "transaction failed - please try again later."});
         console.log(err);
       }
     },

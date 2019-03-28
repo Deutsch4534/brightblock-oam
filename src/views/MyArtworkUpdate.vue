@@ -1,5 +1,8 @@
 <template>
-<div class="container-fluid bg-light flex-1 py-5">
+<div class="container-fluid bg-light flex-1 py-5" v-if="loading">
+  <div>Loading artwork - please wait...</div>
+</div>
+<div class="container-fluid bg-light flex-1 py-5" v-else>
   <my-artwork-upload-form :artworkId="artworkId" :mode="'update'" :formTitle="'Update Artwork'"/>
 </div>
 </template>
@@ -15,10 +18,22 @@ export default {
     MyArtworkUploadForm
   },
   data() {
-    return {};
+    return {
+      loading: true,
+    };
   },
   created() {
     this.artworkId = Number(this.$route.params.artworkId);
+    this.$store.dispatch("myAccountStore/fetchMyAccount").then((myProfile) => {
+      if (myProfile) {
+        if (!myProfile.publicKeyData || !myProfile.publicKeyData.bitcoinAddress) {
+          this.$router.push("/profile/update?from=upload-artwork");
+        } else {
+          this.enabled = true; // myProfile.showAdmin;
+        }
+      }
+      this.loading = false;
+    });
   },
   computed: {},
   methods: {}

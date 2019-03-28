@@ -5,6 +5,7 @@ import utils from "./utils";
 import searchIndexService from "@/services/searchIndexService";
 import artworkSearchService from "@/services/artworkSearchService";
 import moment from "moment";
+import Vue from 'vue';
 
 const myArtworksService = {
   addSaleHistory: function(artwork, invoiceId, txid, confirmations) {
@@ -178,7 +179,17 @@ const myArtworksService = {
       status: "new",
       itemIndex: -1
     };
-    myArtworksService.uploadOrTransferArtwork(artwork, success, failure);
+    let timestamp = (artwork.timestamp) ? artwork.timestamp : utils.buildArtworkHashFromArtwork(artwork);
+    let sameArtwork = store.getters["myArtworksStore/myArtworkByTimestamp"](timestamp);
+    if (!sameArtwork) {
+      myArtworksService.uploadOrTransferArtwork(artwork, success, failure);
+    } else {
+      Vue.notify({
+        title: 'Error Uploading Artwork',
+        text: 'Artwork has already been uploaded!',
+        type: 'warn'
+      });
+    }
   },
 
   uploadOrTransferArtwork: function(artwork, success, failure) {

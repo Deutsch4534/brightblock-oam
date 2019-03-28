@@ -1,47 +1,47 @@
 <template>
-  <mdb-card-body>
-    <p v-if="canAuction"><router-link :to="registerForAuctionUrl()" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Sell in auction...</mdb-btn></router-link></p>
-    <mdb-card-text>
-      <form @submit.prevent="setPrice">
-        <p v-if="errors.length" :key="errors.length">
-          <b>Please correct the following error(s):</b>
-          <ul>
-            <li v-for="error in errors" :key="error.id">{{ error.message }}</li>
-          </ul>
-        </p>
-        <mdb-popover trigger="click" :options="{placement: 'top'}">
-          <div class="popover">
-            <div class="popover-header">Currency</div>
-            <div class="popover-body">
-              The artwork will be sold for the amount of bitcoin that is equivalent to the
-              sale value in the Fiat currency you set here.
-            </div>
+<mdb-card-body>
+  <p v-if="canAuction"><router-link :to="registerForAuctionUrl()" class="inline-block"><mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Sell in auction...</mdb-btn></router-link></p>
+  <mdb-card-text>
+    <form @submit.prevent="setPrice">
+      <p v-if="errors.length" :key="errors.length">
+        <b>Please correct the following error(s):</b>
+        <ul>
+          <li v-for="error in errors" :key="error.id">{{ error.message }}</li>
+        </ul>
+      </p>
+      <mdb-popover trigger="click" :options="{placement: 'top'}">
+        <div class="popover">
+          <div class="popover-header">Currency</div>
+          <div class="popover-body">
+            The artwork will be sold for the amount of bitcoin that is equivalent to the
+            sale value in the Fiat currency you set here.
           </div>
-          <a @click.prevent="" slot="reference">Select Currency {{currency}} <mdb-icon far icon="question-circle" /></a>
-        </mdb-popover>
-        <select class="browser-default custom-select" v-model="currency">
-          <option v-for="(value, key) in fiatRates" :key="key" :value="key" v-bind:value="key">{{ key }}</option>
-        </select>
-        <p class="">
-          {{conversionMessage}}
-        </p>
-        <div class="invalid-feedback">
-          Please select the currency!
         </div>
+        <a @click.prevent="" slot="reference">Select Currency {{currency}} <mdb-icon far icon="question-circle" /></a>
+      </mdb-popover>
+      <select class="browser-default custom-select" v-model="currency">
+        <option v-for="(value, key) in fiatRates" :key="key" :value="key" v-bind:value="key">{{ key }}</option>
+      </select>
+      <p class="">
+        {{conversionMessage}}
+      </p>
+      <div class="invalid-feedback">
+        Please select the currency!
+      </div>
 
-        <label for="validationCustom01">Amount {{currencySymbol}}</label>
-        <input type="number" class="form-control" id="validationCustom01" step="1" placeholder="Sale value of artwork" v-model="amount" required>
-        <div class="invalid-feedback">
-          Please enter the amount!
-        </div>
-        <p>Note: set the value to 0 to remove from sale.</p>
-        <p class="hint">
-          {{valueInBitcoin}} Btc / {{valueInEther}} Eth
-        </p>
-      </form>
-    </mdb-card-text>
-    <mdb-btn color="btn btn-block teal lighten-1" @click="setPrice" size="md">Save</mdb-btn>
-  </mdb-card-body>
+      <label for="validationCustom01">Amount {{currencySymbol}}</label>
+      <input type="number" class="form-control" id="validationCustom01" step="1" placeholder="Sale value of artwork" v-model="amount" required>
+      <div class="invalid-feedback">
+        Please enter the amount!
+      </div>
+      <p>Note: set the value to 0 to remove from sale.</p>
+      <p class="hint">
+        {{valueInBitcoin}} Btc / {{valueInEther}} Eth
+      </p>
+    </form>
+  </mdb-card-text>
+  <mdb-btn color="btn btn-block teal lighten-1" @click="setPrice" size="md">Save</mdb-btn>
+</mdb-card-body>
 </template>
 
 <script>

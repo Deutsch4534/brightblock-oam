@@ -1,5 +1,8 @@
 <template>
-<div class="container-fluid bg-light flex-1 py-5">
+<div class="container-fluid bg-light flex-1 py-5" v-if="loading">
+  <div>Loading artwork - please wait...</div>
+</div>
+<div class="container-fluid bg-light flex-1 py-5" v-else>
   <my-artwork-upload-form v-if="enabled" :formTitle="'Upload Artwork'" :mode="'upload'"/>
   <contact-section :featureMessage="featureMessage" v-else class="black-text"/>
 </div>
@@ -20,18 +23,21 @@ export default {
   data() {
     return {
       enabled: false,
-      featureMessage: "Get in touch about how to upload artwork."
+      featureMessage: "Get in touch about how to upload artwork.",
+      loading: true
     };
   },
   mounted() {
-    let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-    if (myProfile) {
-      if (!myProfile.publicKeyData || !myProfile.publicKeyData.bitcoinAddress) {
-        this.$router.push("/profile/update?from=upload-artwork");
-      } else {
-        this.enabled = true; // myProfile.showAdmin;
+    this.$store.dispatch("myAccountStore/fetchMyAccount").then((myProfile) => {
+      if (myProfile) {
+        if (!myProfile.publicKeyData || !myProfile.publicKeyData.bitcoinAddress) {
+          this.$router.push("/profile/update?from=upload-artwork");
+        } else {
+          this.enabled = true; // myProfile.showAdmin;
+        }
       }
-    }
+      this.loading = false;
+    });
   },
   computed: {},
   methods: {}

@@ -27,11 +27,14 @@
           <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
           <p>{{artistProfile.name}}, 11/08/2018</p>
         </mdb-card-text>
-        <div class="card-buttons d-flex align-items-end justify-content-start flex-nowrap">
+        <div class="card-buttons">
 
-          <router-link :to="registerUrl" class="inline-block" v-if="canRegister">
+          <a @click.prevent="showRegisterOnBitcoin = !showRegisterOnBitcoin" class="inline-block" v-if="canRegister">
             <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Register</mdb-btn>
-          </router-link>
+          </a>
+          <a class="inline-block" v-else>
+            <mdb-btn rounded color="white" :disabled="true" size="sm" class="mx-0 waves-light">Registered</mdb-btn>
+          </a>
 
           <a  @click.prevent="openCoa()" class="inline-block" v-if="artwork.coa">
             <mdb-btn rounded color="white" size="sm" class="mx-0 waves-light">Open CoA</mdb-btn>
@@ -56,6 +59,10 @@
             <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="deletable">Delete</mdb-btn>
           </a>
         </div>
+
+        <mdb-row v-if="showRegisterOnBitcoin">
+          <register-bitcoin :artwork="artwork" :myProfile="myProfile" @registerBitcoin="registerBitcoin"/>
+        </mdb-row>
         <mdb-row v-if="showRegisterForSale">
           <register-for-sale :artwork="artwork" :fiatRates="fiatRates" @registerSaleInfo="registerSaleInfo"/>
         </mdb-row>
@@ -128,6 +135,7 @@ export default {
       showDeleteModal: false,
       loading: true,
       showRegisterForSale: false,
+      showRegisterOnBitcoin: false,
       showGenerateCoA: false,
       modalTitle: "Registering Ownership",
       modalContent: "<p>Transaction sent - confirmation takes ~ 6 blocks which is about an hour..</p>" +
@@ -173,6 +181,14 @@ export default {
       } else {
         this.showModal = false;
       }
+    },
+    registerBitcoin: function(result) {
+      if (result.error) {
+        this.modalContent = result.message;
+      } else {
+        this.modalContent = result.message;
+      }
+      this.showModal = true;
     },
     removeCoa: function() {
       this.artwork.coa = null;

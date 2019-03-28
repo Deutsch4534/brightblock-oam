@@ -259,15 +259,15 @@ import notify from "@/services/notify";
             .then(artwork => {
               this.artwork = artwork;
               this.showAlert = false;
-              this.$router.push("/my-artworks");
-            });
+              this.$router.push("/my-artworks/" + artwork.id);
+          });
         } else {
           this.$store
             .dispatch("myArtworksStore/uploadArtwork", this.artwork)
             .then(artwork => {
               this.artwork = artwork;
               this.showAlert = false;
-              this.$router.push("/my-artworks");
+              this.$router.push("/my-artworks/" + artwork.id);
             });
         }
       },
