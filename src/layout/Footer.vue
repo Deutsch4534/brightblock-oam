@@ -1,7 +1,7 @@
 <template>
 <!-- Footer -->
   <footer class="page-footer black fixed-bottom py-3">
-      <mdb-row class="d-flex flex-row align-items-center">
+      <mdb-row class="d-flex flex-row align-items-center px-3">
         <mdb-col col="6">
           <span class="serif"><router-link to="/index">Independent Art Market</router-link></span>
         </mdb-col>

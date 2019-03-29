@@ -36,12 +36,15 @@ const webpackConfig = merge(baseWebpackConfig, {
   optimization: {
     minimize: true,
     minimizer: [
+      /**
       new UglifyJsPlugin({
         test: /\.js(\?.*)?$/i,
         cache: true,
         parallel: true,
         sourceMap: false // set to true if you want JS source maps
       }),
+      **/
+      new UglifyJsPlugin(),
       new OptimizeCSSAssetsPlugin({})
     ]
   },
@@ -57,6 +60,10 @@ const webpackConfig = merge(baseWebpackConfig, {
     new ExtractTextPlugin({
       filename: utils.assetsPath('css/[name].[md5:contenthash:hex:20].css')
     }),
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css"
+    }),
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
     // generate dist index.html with correct asset hash for caching.
@@ -69,9 +76,10 @@ const webpackConfig = merge(baseWebpackConfig, {
       minify: {
         removeComments: true,
         collapseWhitespace: true,
-        removeAttributeQuotes: true
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        useShortDoctype: true
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
@@ -181,10 +189,6 @@ const webpackConfig = merge(baseWebpackConfig, {
         // (See here: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions)
         headless: true // Display the browser window when rendering. Useful for debugging.
       })
-    }),
-    new MiniCssExtractPlugin({
-      filename: "[name].css",
-      chunkFilename: "[id].css"
     })
   ],
   module: {

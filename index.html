@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=497,initial-scale=1">
-    <meta name="theme-color" content="#26a69a"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#5400E8"/>
     <link rel="icon" href="/static/favicon.ico">
     <link rel="manifest" href="/manifest.json">
     <title>Radicle Art</title>
@@ -17,7 +17,7 @@
     if ('serviceWorker' in navigator) {
       // Use the window load event to keep the page load performant
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/static/service-worker.js');
+        navigator.serviceWorker.register('/service-worker.js');
       });
     }
     </script>

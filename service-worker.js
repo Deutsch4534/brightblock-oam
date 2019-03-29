@@ -2,9 +2,10 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.1.1/workbox
 
 if (workbox) {
   console.log(`Yay! Workbox is loaded 🎉`);
+
   workbox.routing.registerRoute(
-    new RegExp('.*\.js'),
-    new workbox.strategies.NetworkFirst()
+    /\.(?:js|css)$/,
+    new workbox.strategies.StaleWhileRevalidate(),
   );
 
   workbox.routing.registerRoute(
@@ -18,18 +19,23 @@ if (workbox) {
   );
 
   workbox.routing.registerRoute(
-    // Cache start_url file.
-    new RegExp('/gallery'),
-    // Use cache but update in the background.
-    new workbox.strategies.StaleWhileRevalidate({
-      // Use a custom cache name.
-      cacheName: 'page-cache',
-    })
+    new RegExp('/^https:\/\/radicle\.art/gallery'),
+    new workbox.strategies.CacheFirst({
+      cacheName: 'radicle-cache',
+      plugins: [
+        new workbox.cacheableResponse.Plugin({
+          statuses: [0, 200],
+        }),
+        new workbox.expiration.Plugin({
+          maxAgeSeconds: 60 * 60 * 24 * 365,
+        }),
+      ],
+    }),
   );
 
   workbox.routing.registerRoute(
     // Cache image files.
-    /\.(?:png|jpg|jpeg|svg|gif)$/,
+    /\.(?:png|jpg|jpeg|svg|gif|woff2|eot|ttf)$/,
     // Use the cache if it's available.
     new workbox.strategies.CacheFirst({
       // Use a custom cache name.
