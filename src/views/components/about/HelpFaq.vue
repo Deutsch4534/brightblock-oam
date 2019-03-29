@@ -1,7 +1,7 @@
 <template>
   <!-- TODO: connect template with Prismic cms -->
-  <mdb-container fluid class="bg-light flex-1">
-    <mdb-container class="mt-5">
+  <mdb-container fluid class="bg-light flex-1 mb-5">
+    <mdb-container class="my-5">
       <mdb-row>
         <mdb-col col="12">
           <h1 class="h1-responsive p-2">{{title}}</h1>

@@ -180,8 +180,8 @@ export default {
   background-color: blue;
 }
 .show {
-  background-color: black;
-  border: 1pt solid white;
+  background-color: teal;
+  border: 1pt solid black;
   color: white;
   font-weight: bold;
   z-index: 10;

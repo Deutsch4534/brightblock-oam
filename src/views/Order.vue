@@ -173,7 +173,4 @@ export default {
 .view img {
   width: 100%;
 }
-.jumbotron {
-  height: 130vh;
-}
 </style>

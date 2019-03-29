@@ -1,23 +1,23 @@
 <template>
 <!-- Footer -->
-  <footer class="page-footer font-small black fixed-bottom py-3">
-    <mdb-container class="" fluid>
+  <footer class="page-footer black fixed-bottom py-3">
       <mdb-row class="d-flex flex-row align-items-center">
-        <mdb-col col="4">
-          <span class="serif">Independent Art Market</span>
+        <mdb-col col="6">
+          <span class="serif"><router-link to="/index">Independent Art Market</router-link></span>
         </mdb-col>
-        <mdb-col col="8" class="footer-right text-right">
+        <mdb-col col="6" class="footer-right text-right">
           <div class="d-inline-block">
+            <!--
             <span>
               <router-link to="/index">HOW IT WORKS</router-link>
             </span>
+            -->
             <span class="mx-3">
               <router-link to="/about/faq">FAQ</router-link>
             </span>
           </div>
         </mdb-col>
       </mdb-row>
-    </mdb-container>
   </footer>
   <!-- Footer -->
 </template>
@@ -60,7 +60,7 @@ export default {
   .page-footer { min-height: 56px; }
 
   .page-footer {
-    font-size: 1.3em;
+    font-size: 1.2em;
     color: #ECEFF1;
     font-weight: 400;
     letter-spacing: 0.5px;
@@ -68,6 +68,6 @@ export default {
   }
 
   @media (max-width: 576px) {
-    .page-footer { font-size: 16px;}
+    .page-footer { font-size: 0.8em; margin-top: 20px; padding: 0px;}
   }
 </style>

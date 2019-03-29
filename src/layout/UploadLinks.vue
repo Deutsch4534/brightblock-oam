@@ -1,7 +1,7 @@
 <template>
   <mdb-dropdown>
     <mdb-dropdown-toggle tag="a" navLink color="" slot="toggle"  waves-fixed>
-      <span style="color: teal">Upload</span>
+      <span class="hi-link">Upload</span>
     </mdb-dropdown-toggle>
 
     <mdb-dropdown-menu class="dropdown-menu-right" id="userMainMenu" >
@@ -123,6 +123,12 @@ export default {
   margin-top: -5px;
 }
 
+.hi-link {
+  color: teal; padding-left: 5px;
+}
+.show .hi-link {
+  color: white;
+}
 .btn.dropdown-toggle { color: black; }
 .dropdown .dropdown-menu .dropdown-item,
 .dropdown .dropdown-menu .dropdown-item:hover {
