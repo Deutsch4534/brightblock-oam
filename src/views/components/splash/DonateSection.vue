@@ -3,11 +3,11 @@
     <mdb-row class="py-3 py-md-5 text-light">
       <mdb-col lg="10">
         <mdb-row>
-          <mdb-col col="12">
+          <mdb-col sm="12" lg="6">
             <h2 class="large-title mt-0">{{title}}</h2>
             <p class="h4-responsive mb-5">{{description}}</p>
           </mdb-col>
-          <mdb-col sm="12" md="12" class="text-center d-flex">
+          <mdb-col sm="12" lg="6" class="text-center d-flex">
             <form class="contact-form text-right d-flex w-100 align-items-end justify-content-end">
               <canvas id="qrcode" width="500px" class="p-2 img-fluid"></canvas>
             </form>
