@@ -36,6 +36,7 @@ export default {
     if (this.$store.state.constants.featureBitcoin) {
       artworkSearchService.newQuery({field: "title", query: "*"});
     }
+    document.title = "All artists at radicle.art";
   },
   computed: {
     artists () {

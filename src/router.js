@@ -12,6 +12,7 @@ import Landing from "./views/Landing.vue";
 import Gallery from "./views/Gallery.vue";
 import GalleryUpload from "./views/GalleryUpload.vue";
 import GalleryUpdate from "./views/GalleryUpdate.vue";
+import MyGalleries from "./views/MyGalleries.vue";
 
 import Artist from "./views/Artist.vue";
 import Artists from "./views/Artists.vue";
@@ -80,6 +81,16 @@ const router = new Router({
         footer: Footer
       },
       meta: { requiresAuth: false }
+    },
+    {
+      path: "/my-galleries",
+      name: "my-galleries",
+      components: {
+        default: MyGalleries,
+        header: Navbar,
+        footer: Footer
+      },
+      meta: { requiresAuth: true },
     },
     {
       path: "/gallery",

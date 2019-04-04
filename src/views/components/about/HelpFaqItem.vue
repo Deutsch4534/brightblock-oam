@@ -1,11 +1,11 @@
 <template>
-<mdb-row>
-  <mdb-col col="12">
-    <h1 class="h1-responsive py-4"></h1>
-  </mdb-col>
-  <mdb-col sm="10" md="8">
-  <h4><a @click="showDescription = !showDescription">{{topic.data.title[0].text}}</a></h4>
-  <p v-if="showDescription" v-html="topic.data.description[0].text"></p>
+<mdb-row class="mb-5">
+  <mdb-col sm="12">
+    <h4 class="mb-5">{{topic.data.title[0].text}}</h4>
+    <div v-for="(item, index) of topic.data.description" :key="index">
+      <img class="img-fluid" v-if="item.type === 'image'" :src="item.url" alt="answer image"/>
+      <div class="" v-else v-html="item.text"></div>
+    </div>
   </mdb-col>
 </mdb-row>
 </template>
@@ -20,14 +20,14 @@
       mdbCol
     },
     name: "about",
-    props: ["topic"],
+    props: ["topic", "displayTopic"],
     data() {
       return {
-        showDescription: false
       };
     },
     mounted() {
       console.log(this.topic);
+      // if (this.topic.data.)
     },
     computed: {
     },

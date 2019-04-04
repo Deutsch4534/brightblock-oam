@@ -9,7 +9,7 @@ const galleryService = {
     return new Promise((resolve, reject) => {
       const galleriesRootFileName = CONSTANTS.galleriesRootFileName;
       getFile(galleriesRootFileName, { decrypt: false }).then(function(file) {
-        if (file) {
+        if (!file) {
           var now = moment({}).valueOf();
           let newRootFile = {
             created: now,
@@ -43,10 +43,13 @@ const galleryService = {
     return {gIndexData: gid, gUserData: gud};
   },
 
-  mergeGidGud: function(gallery) {
-    let gid = _.pick(gallery, ['galleryId', 'title', 'description', 'keywords', 'privacy', 'owner', 'galleryType']);
-    let gud = _.pick(gallery, ['galleryId', 'coverImage', 'emailAddress', 'shippingAddress', 'bitcoinAddress', '', '']);
-    return {gIndexData: gid, gUserData: gud};
+  mergeGidGud: function(gid, gud) {
+    if (Number(gid.id) !== gud.galleryId) {
+      throw new Error("Something wrong with this data.");
+    }
+    let gallery = _.pick(gid, ['title', 'description', 'keywords', 'privacy', 'owner', 'galleryType']);
+    gallery = _.merge(gallery, _.pick(gud, ['galleryId', 'coverImage', 'emailAddress', 'shippingAddress', 'bitcoinAddress', '', '']));
+    return gallery;
   },
 
   fetchGalleriesFromGaia: function(username) {

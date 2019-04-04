@@ -49,8 +49,7 @@ export default {
   },
   created() {
      artworkSearchService.newQuery({field: "title", query: "*"});
-     this.$store.dispatch("galleryStore/fetchGalleriesFromSearch", {field: "title", query: "*"});
-     this.$store.dispatch("galleryStore/fetchMyGalleries");
+     document.title = "Galleries at radicle.art";
   },
   methods: {},
   computed: {

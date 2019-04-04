@@ -4,11 +4,11 @@
     <div class="col-md-2">
       <h5><small>Admin Actions</small></h5>
       <ul class="list-unstyled">
-        <li><a href="/admin/settings">Settings</a></li>
-        <li><a href="/admin/bitcoin">Bitcoin</a></li>
-        <li><a href="/admin/registrations">Ethereum</a></li>
-        <li><a href="/admin/build-index">Build Index</a></li>
-        <li><a href="/admin/query-index">Query Index</a></li>
+        <li><router-link to="/admin/settings">Settings</router-link to></li>
+        <li><router-link to="/admin/bitcoin">Bitcoin</router-link to></li>
+        <li><router-link to="/admin/registrations">Ethereum</router-link to></li>
+        <li><router-link to="/admin/build-index">Build Index</router-link to></li>
+        <li><router-link to="/admin/query-index">Query Index</router-link to></li>
       </ul>
     </div>
     <div class="col-md-10">

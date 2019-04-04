@@ -7,14 +7,14 @@
         </mdb-col>
         <mdb-col col="6" class="footer-right text-right">
           <div class="d-inline-block">
+            <span class="mr-3"><a href="https://twitter.com/radicleart" target="_blank"><mdb-icon fab icon="twitter" /></a></span>
+            <span class="mr-3"><a href="https://github.com/radicleart/brightblock-oam" target="_blank"><mdb-icon fab icon="github" /></a></span>
             <!--
-            <span>
-              <router-link to="/index">HOW IT WORKS</router-link>
-            </span>
+            <span class="mr-3"><a href="https://www.facebook.com/radicleart" target="_blank"><mdb-icon fab icon="facebook" /></a></span>
+            <span class="mr-3"><a href="https://www.instagram.com/radicleart/" target="_blank"><mdb-icon fab icon="instagram" /></a></span>
+            <span><router-link to="/index">HOW IT WORKS</router-link></span>
             -->
-            <span class="mx-3">
-              <router-link to="/about/faq">FAQ</router-link>
-            </span>
+            <span class="mx-3"><router-link to="/about/faq">FAQ</router-link></span>
           </div>
         </mdb-col>
       </mdb-row>

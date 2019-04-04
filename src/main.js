@@ -48,6 +48,8 @@ const app = new Vue({
         store.dispatch("fetchServerTime");
       }
       store.dispatch("conversionStore/fetchConversionData");
+      store.dispatch("galleryStore/fetchMyGalleries");
+      store.dispatch("galleryStore/fetchGalleriesFromSearch", {field: "title", query: "*"});
     });
   },
   beforeCreate () {

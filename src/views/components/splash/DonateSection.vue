@@ -5,15 +5,15 @@
         <mdb-row>
           <mdb-col col="12">
             <h2 class="large-title mt-0">{{title}}</h2>
-          </mdb-col>
-          <mdb-col sm="6" md="8">
             <p class="h4-responsive mb-5">{{description}}</p>
-            <p class="h3-responsive text-uppercase my-4">{{btcAddress}}:</p>
           </mdb-col>
-          <mdb-col sm="6" md="4" class="d-flex">
+          <mdb-col sm="12" md="12" class="text-center d-flex">
             <form class="contact-form text-right d-flex w-100 align-items-end justify-content-end">
               <canvas id="qrcode" width="500px" class="p-2 img-fluid"></canvas>
             </form>
+          </mdb-col>
+          <mdb-col sm="12" md="12">
+            <p class="text-uppercase text-center my-4"><small>{{btcAddress}}</small></p>
           </mdb-col>
         </mdb-row>
       </mdb-col>

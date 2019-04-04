@@ -117,11 +117,11 @@ export default {
       this.upload("Details saved.");
     },
     saveEmail: function(email) {
-      this.gallery.addressInfo.email = email;
+      this.gallery.emailAddress = email;
       this.upload("Email saved.");
     },
     saveAddress: function(address) {
-      this.gallery.addressInfo.shipping = address;
+      this.gallery.shippingAddress = address;
       this.upload("Shipping address saved");
     },
     saveTrustedUsers: function(trustedIds) {
@@ -132,7 +132,7 @@ export default {
       this.modal = false;
     },
     updateBitcoinAddress(bitcoinAddress) {
-      this.gallery.addressInfo.bitcoin = bitcoinAddress;
+      this.gallery.bitcoinAddress = bitcoinAddress;
       this.upload("Saved bitcoin address: " + bitcoinAddress);
     }
   }

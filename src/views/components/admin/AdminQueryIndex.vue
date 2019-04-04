@@ -43,6 +43,7 @@
     <div class="form-group mb-2 pr-2">
       <select class="browser-default custom-select" v-model="objType">
         <option value="artwork">artwork</option>
+        <option value="gallery">gallery</option>
         <option value="auction">auction</option>
       </select>
     </div>

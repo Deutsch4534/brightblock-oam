@@ -11,23 +11,32 @@
           <mdb-mask flex-center waves overlay="white-slight"></mdb-mask>
         </mdb-view>
       </mdb-col>
-      <mdb-col col="12" md="5" class="pl-md-3">
-        <h2>{{artwork.title}}</h2>
-        <p><router-link :to="artistUrl()"><u>{{artist.name}}</u></router-link></p>
-        <p class="mb-1">
-        {{artwork.dimensions}}
-        <br/>
-        <description-overflow :text="artwork.description"/>
-        </p>
-        <p>
-        <buy-artwork-form-btc v-if="isNotBeingBought && showBuyOptions && isRegisteredAndPriceSet" :artwork="artwork" :myProfile="myProfile"/>
-        <div v-if="!isNotBeingBought || !isRegisteredAndPriceSet">
-          <button :disabled="true" class="btn teal darken-1">not for sale</button>
-          <router-link to="/gallery">
-            <button class="btn teal lighten-1">continue browsing</button>
-          </router-link>
+      <mdb-col col="11" md="5" class="pl-md-3">
+        <div class="row pl-md-3">
+          <mdb-col md="11">
+            <h2>{{artwork.title}}</h2>
+          </mdb-col>
+          <mdb-col md="1">
+            <be-social :myPageUrl="myPageUrl" :artist="artist.name"/>
+          </mdb-col>
+          <mdb-col col="12">
+            <p><router-link :to="artistUrl()"><u>{{artist.name}}</u></router-link></p>
+            <p class="mb-1">
+              {{artwork.dimensions}}
+              <br/>
+              <description-overflow :text="artwork.description"/>
+            </p>
+            <p>
+              <buy-artwork-form-btc v-if="isNotBeingBought && showBuyOptions && isRegisteredAndPriceSet" :artwork="artwork" :myProfile="myProfile"/>
+              <div v-if="!isNotBeingBought || !isRegisteredAndPriceSet">
+                <button :disabled="true" class="btn teal darken-1">not for sale</button>
+                <router-link to="/gallery">
+                  <button class="btn teal lighten-1">continue browsing</button>
+                </router-link>
+              </div>
+            </p>
+          </mdb-col>
         </div>
-        </p>
       </mdb-col>
     </mdb-row>
   </mdb-container>
@@ -53,6 +62,7 @@ import { mdbIcon, mdbMask, mdbView, mdbCard, mdbCardImage, mdbCardBody, mdbCardT
 import { mdbLightbox, mdbContainer, mdbCol, mdbRow } from 'mdbvue';
 import moment from "moment";
 import DescriptionOverflow from "@/views/components/utils/DescriptionOverflow";
+import BeSocial from "@/views/components/utils/BeSocial";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -62,7 +72,7 @@ export default {
   },
   bodyClass: "index-page",
   components: {
-    OrderDetails,DescriptionOverflow,
+    OrderDetails,DescriptionOverflow,BeSocial,
     BuyArtworkFormBtc,
     AboutArtwork,
     mdbLightbox,
@@ -99,6 +109,7 @@ export default {
     artworkSearchService.newQuery({field: "id", query: this.artworkId}, function(artwork) {
       $self.artwork = artwork;
       if (artwork) {
+        document.title = "Artwork at Radicle: " + artwork.title;
         $self.showBuyOptions = true;
         $self.loading = false;
         // check for redirect to auctions...
@@ -153,6 +164,10 @@ export default {
         year: artwork.year,
         image: artwork.image
       };
+    },
+    myPageUrl() {
+      let pathname = encodeURI("https://radicle.art" + location.pathname);
+      return pathname;
     },
     isRegisteredAndPriceSet() {
       return this.artwork.bitcoinTx && this.artwork.saleData.amount > 0;

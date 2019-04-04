@@ -6,10 +6,7 @@ import _ from "lodash";
 const galleryStore = {
   namespaced: true,
   state: {
-    myGalleries: {
-      created: null,
-      records: []
-    },
+    myGalleries: [],
     userGalleries: []
   },
   getters: {
@@ -24,6 +21,9 @@ const galleryStore = {
         return o.galleryId === galleryId;
       });
       return gallery;
+    },
+    getMyGalleries: state => {
+      return state.myGalleries;
     },
     getSearchResults: state => {
       return state.userGalleries;
@@ -59,25 +59,21 @@ const galleryStore = {
       });
     },
 
-    fetchGalleriesFromSearch({ commit, dispatch }, criteria) {
+    fetchGalleriesFromSearch({ commit, getters, dispatch }, criteria) {
       return new Promise(resolve => {
         let domain = location.hostname;
         searchIndexService.searchDappsIndex(domain, "gallery", criteria.field, criteria.query).then(galleries => {
           _.each(galleries, function(gid) {
-            galleryService.fetchGalleryUserDataFromGaia(gid).then(gallery => {
-              commit("pushUserGallery", gallery);
-              //resolve(gallery);
-            });
+            let gallery = getters.getGallery(gid.owner, gid.galleryId);
+            if (gallery) {
+              resolve(gallery);
+            } else {
+              galleryService.fetchGalleryUserDataFromGaia(gid).then(gallery => {
+                commit("pushUserGallery", gallery);
+                resolve(gallery);
+              });
+            }
           });
-        });
-      });
-    },
-
-    fetchGalleriesFromUserStorage({ commit }, username) {
-      return new Promise(resolve => {
-        galleryService.fetchGalleriesFromGaia(username).then(galleries => {
-          commit("pushUserGalleries", galleries);
-          resolve(galleries);
         });
       });
     },
