@@ -7,6 +7,7 @@ export const CONSTANTS = {
   ethGatewayUrl: (dev) ? "http://localhost:8191" : "https://api.brightblock.org",
   btcGatewayUrl: (dev) ? "http://localhost:8191" : "https://api.brightblock.org",
   searchUrl: (dev) ? "http://localhost:8193" : "https://search.brightblock.org",
+  commsUrl: (dev) ? "http://localhost:8197" : "https://api.brightblock.org",
   invoiceRates: {
     platformAddress: (dev) ? "2Mxyetr5jqQdE6WDtS9x9re43F9JTCxdeJK" : "2N3rYRQu4h29JreiM8kF6KGKVoLkgVj2pTc",
     platformFee: 4.2,
