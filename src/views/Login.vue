@@ -8,7 +8,7 @@
       <mdb-btn v-on:click="loginMultiPlayer">Sign in with Blockstack</mdb-btn>
     </mdb-modal-body>
     <mdb-modal-footer right>
-      <p><small class="text-muted"><a href="https://blockstack.org/install/" target="_blank">whats this?</a></small></p>
+      <p><small class="text-muted"><a href="https://blockstack.org/install/" target="_blank" rel="noreferrer">whats this?</a></small></p>
     </mdb-modal-footer>
   </mdb-modal>
 </mdb-container>

@@ -5,7 +5,7 @@
   </div>
   <div class="col-md-8">
     <p>Some of your profile data such as the avatar comes from your blockstack profile.</p>
-    <p><a href="http://localhost:8888/profiles" target="_blank">Edit blockstack profile <mdb-icon icon="external-link-square-alt" /></a></p>
+    <p><a href="http://localhost:8888/profiles" target="_blank" rel="noreferrer">Edit blockstack profile <mdb-icon icon="external-link-square-alt" /></a></p>
   </div>
 </div>
 </template>

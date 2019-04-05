@@ -14,8 +14,8 @@
       </div>
       <div class="popover-body">
         You'll need a bitcoin wallet to use radicle. We use the
-        <a href="https://electrum.org" target="_blank">electrum wallet <mdb-icon icon="external-link-alt" /></a>
-        and the <a href="https://bitcoin.org/en/download">bitcoin core <mdb-icon icon="external-link-alt" /></a> wallets to test the site.
+        <a href="https://electrum.org" target="_blank" rel="noreferrer">electrum wallet <mdb-icon icon="external-link-alt" /></a>
+        and the <a href="https://bitcoin.org/en/download" rel="noreferrer">bitcoin core <mdb-icon icon="external-link-alt" /></a> wallets to test the site.
       </div>
     </div>
     <a @click.prevent="" slot="reference">
