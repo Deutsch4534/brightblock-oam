@@ -12,17 +12,10 @@ const invoiceStore = {
     transactions: null
   },
   getters: {
-    getInvoice: state => invoiceId => {
-      if (!invoiceId) {
-        return null;
-      }
-      let matches = state.invoices.records.filter(invoice => invoice.invoiceId === invoiceId);
-      if (matches.length > 0) {
-        return matches[0];
-      }
-      return null;
-    },
     getInvoices: state => {
+      return state.invoices.records;
+    },
+    getInvoicesRaw: state => {
       return state.invoices;
     },
     getInvoiceById: state => invoiceId => {

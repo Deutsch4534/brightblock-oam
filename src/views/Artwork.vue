@@ -50,7 +50,6 @@
 
 <script>
 import AboutArtwork from "./components/artwork/AboutArtwork";
-import OrderDetails from "./components/orders/OrderDetails";
 import BuyArtworkFormBtc from "./components/artwork/BuyArtworkFormBtc";
 import bitcoinService from "@/services/bitcoinService";
 import artworkSearchService from "@/services/artworkSearchService";
@@ -72,7 +71,7 @@ export default {
   },
   bodyClass: "index-page",
   components: {
-    OrderDetails,DescriptionOverflow,BeSocial,
+    DescriptionOverflow,BeSocial,
     BuyArtworkFormBtc,
     AboutArtwork,
     mdbLightbox,

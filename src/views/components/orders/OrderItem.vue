@@ -17,6 +17,7 @@
       </div>
       <div class="col-md-3 col-sm-6">
         <payment-details v-if="showPaymentDetails" :bitcoinUri="bitcoinUri" :invoiceClaim="invoice" @paymentSent="paymentSent"/>
+        <payment-expired v-if="showPaymentExpired"  :invoiceClaim="invoice"/>
         <confirmation-details v-if="showConfirmationDetails" :debugMode="debugMode" :invoiceClaim="invoice" :registerTx="artwork.bitcoinTx" @paySeller="paySeller"/>
       </div>
     </div>
@@ -30,8 +31,10 @@ import invoiceService from "@/services/invoiceService";
 import artworkSearchService from "@/services/artworkSearchService";
 import myArtworksService from "@/services/myArtworksService";
 import PaymentDetails from "./PaymentDetails";
+import PaymentExpired from "./PaymentExpired";
 import ConfirmationDetails from "./ConfirmationDetails";
 import OrderDetails from "./OrderDetails";
+import moment from "moment";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -40,7 +43,7 @@ export default {
     mdbBtn, mdbContainer,
     OrderDetails,
     ConfirmationDetails,
-    PaymentDetails
+    PaymentDetails, PaymentExpired
   },
   props: {
     orderId: null,
@@ -51,12 +54,18 @@ export default {
     return {
       loading: true,
       showPaymentDetails: false,
+      showPaymentExpired: false,
       showConfirmationDetails: false,
       showOrderDetails: true,
       bitcoinUri: null,
       artwork: null,
       invoice: null
     };
+  },
+  beforeDestroy() {
+    if (this.wfpInt) {
+      clearInterval(this.wfpInt);
+    }
   },
   mounted() {
     let $self = this;
@@ -102,33 +111,35 @@ export default {
     checkSettlement() {
       this.$store.dispatch("invoiceStore/checkSettlement", this.orderId);
     },
-    watchChainForPayment() {
-      let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
+    watchForPayment() {
+      let invoice = this.invoice;
       let $self = this;
-      invoiceService.watchForPayment(invoice, function(invoice) {
-        if (invoice && invoice.buyerTransaction) {
+      this.watchForPaymentInternal(this.invoice);
+      this.wfpInt = setInterval(function() {
+        this.watchForPaymentInternal(this.invoice);
+      }, 5000);
+    },
+    watchForPaymentInternal(invoice) {
+      let $self = this;
+      invoiceService.watchForPaymentInternal(invoice, function(newInvoice) {
+        if (newInvoice.buyerTransaction) {
+          $self.$store.commit("invoiceStore/addInvoice", newInvoice);
           $self.showPaymentDetails = false;
           $self.showConfirmationDetails = true;
+          $self.watchForConfirmations();
+        } else {
+          let now = moment({}).valueOf();
+          let interval = (now - newInvoice.timestamp) / 1000;
+          if (interval > 60) {
+            clearInterval($self.wfpInt);
+            $self.showPaymentDetails = false;
+            $self.showPaymentExpired = true;
+          }
         }
       });
     },
-    watchForPayment() {
-      let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
-      let $self = this;
-      let wfpInt = setInterval(function() {
-        invoiceService.watchForPaymentInternal(invoice, function(newInvoice) {
-          if (newInvoice && newInvoice.buyerTransaction) {
-            $self.$store.commit("invoiceStore/addInvoice", newInvoice);
-            clearInterval(wfpInt);
-            $self.showPaymentDetails = false;
-            $self.showConfirmationDetails = true;
-            $self.watchForConfirmations();
-          }
-        });
-      }, 5000);
-    },
     watchForConfirmations() {
-      let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
+      let invoice = this.invoice;
       let $self = this;
       let wfconfsInt = setInterval(function() {
         $self.$store.dispatch("invoiceStore/checkPayment", $self.orderId).then((invoice) => {
@@ -139,7 +150,7 @@ export default {
       }, 60000);
     },
     watchForSettlement() {
-      let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
+      let invoice = this.invoice;
       let $self = this;
       let wfsetInt = setInterval(function() {
         $self.$store.dispatch("invoiceStore/checkSettlement", $self.orderId).then((invoice) => {
@@ -150,7 +161,7 @@ export default {
       }, 60000);
     },
     paySeller() {
-      let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
+      let invoice = this.invoice;
       if (!invoice.sellerTransaction) {
         this.$store.dispatch("invoiceStore/paySeller", invoice).then((invoice) => {
           if (invoice) {

@@ -10,7 +10,7 @@
           </div>
         </mdb-col>
         <mdb-col col="9" v-if="topics" >
-          <help-faq-item :id="'topic' + index" style="display:none" v-for="(topic, index) of topics" :key="index" :topic="topic"/>
+          <help-faq-item :id="'topic' + index" :style="(index === 0) ? 'display:block' : 'display:none'" v-for="(topic, index) of topics" :key="index" :topic="topic"/>
         </mdb-col>
       </mdb-row>
   </mdb-container>
@@ -39,7 +39,7 @@
         counter: -1
       }
     },
-    mounted() {
+    created() {
       let $self = this;
       this.$prismic.client.getSingle("help-list").then(document => {
         $self.title = document.data.title[0].text;
@@ -55,6 +55,8 @@
         });
         $self.$prismic.client.getByIDs($self.topicIds).then(function(response) {
             $self.topics = response.results;
+            let $ele = document.getElementById("topic0");
+            $ele.style.display = "block";
         });
       });
     },
@@ -63,8 +65,7 @@
         for (var key in this.showTopic) {
           document.getElementById("topic" + key).style.display = "none";
         }
-        let ident = "topic" + index;
-        let $ele = document.getElementById(ident);
+        let $ele = document.getElementById("topic" + index);
         $ele.style.display = "block";
       },
       nextIndex() {

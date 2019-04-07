@@ -64,10 +64,10 @@ export default {
     },
     hasInvoices() {
       let invoices = this.$store.getters["invoiceStore/getInvoices"];
-      if (!invoices || !invoices.records) {
+      if (!invoices) {
         return 0;
       }
-      return invoices.records.length;
+      return invoices.length;
     },
     username() {
       return this.$store.state.myAccountStore.myProfile.name;

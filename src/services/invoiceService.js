@@ -67,7 +67,7 @@ const invoiceService = {
   },
   saveInvoiceClaim: function(invoice, success, failure) {
     store.commit("invoiceStore/addInvoice", invoice);
-    let invoices = store.getters["invoiceStore/getInvoices"];
+    let invoices = store.getters["invoiceStore/getInvoicesRaw"];
     const invoicesRootFileName = store.state.constants.invoicesRootFileName;
     putFile(invoicesRootFileName, JSON.stringify(invoices), { encrypt: true }).then(function() {
       if (success) {
@@ -132,7 +132,7 @@ const invoiceService = {
       );
     });
   },
-
+  /**
   watchForPayment: function(invoice, success, failure) {
     if (!invoiceService.watchForPaymentInterval) {
       // clearInterval(invoiceService.watchForPaymentInterval);
@@ -152,6 +152,7 @@ const invoiceService = {
       invoiceService.watchForPaymentInternal(invoice, success, failure);
     }, 5000);
   },
+  **/
   transferArtworkToBuyer: function(invoice, settled, success) {
     artworkSearchService.userArtwork(invoice.artworkId, invoice.seller.blockstackId,
       function(artwork) {

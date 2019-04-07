@@ -37,25 +37,28 @@ export default {
     };
   },
   mounted() {
-    this.orderId = this.$route.query.orderId;
+    this.orderId = Number(this.$route.query.orderId);
   },
   computed: {
     orders() {
-      let orders = this.$store.getters["invoiceStore/getInvoices"];
-      if (orders && orders.records) {
-        return orders.records;
+      let orders = [];
+      if (this.orderId) {
+        let invoice = this.$store.getters["invoiceStore/getInvoiceById"](this.orderId);
+        orders.push(invoice);
+      } else {
+        orders = this.$store.getters["invoiceStore/getInvoices"];
       }
-      return [];
+      return orders;
     },
     debugMode() {
       return this.$store.getters["isDebugMode"];
     },
     hasOrders() {
       let orders = this.$store.getters["invoiceStore/getInvoices"];
-      if (!orders || !orders.records) {
+      if (!orders) {
         return 0;
       }
-      return orders.records.length;
+      return orders.length;
     }
   }
 };

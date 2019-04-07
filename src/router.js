@@ -25,7 +25,6 @@ import Footer from "./layout/Footer.vue";
 
 import Artwork from "./views/Artwork";
 import Orders from "./views/Orders";
-import Order from "./views/Order";
 
 import Search from "./views/Search";
 
@@ -198,12 +197,6 @@ const router = new Router({
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
       }
-    },
-    {
-      path: "/order/:orderId",
-      name: "order",
-      components: { default: Order, header: Navbar, footer: Footer },
-      meta: { requiresAuth: true }
     },
     {
       path: "/orders",
