@@ -116,7 +116,7 @@ export default {
       let $self = this;
       this.watchForPaymentInternal(this.invoice);
       this.wfpInt = setInterval(function() {
-        this.watchForPaymentInternal(this.invoice);
+        $self.watchForPaymentInternal(this.invoice);
       }, 5000);
     },
     watchForPaymentInternal(invoice) {
