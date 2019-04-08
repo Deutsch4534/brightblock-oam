@@ -16,6 +16,13 @@
     </section>
   </mdb-container>
 
+  <mdb-container>
+    <h2>Featured Images</h2>
+    <mdb-row class="article py-5 d-flex">
+      <single-result-index v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item col-12"/>
+    </mdb-row>
+  </mdb-container>
+
   <!-- Features section  -->
   <div class="border-top border-dark"></div>
   <mdb-container>
@@ -70,11 +77,15 @@ import AuctionSection from './components/splash/AuctionSection';
 import IntroSection from './components/splash/IntroSection';
 import store from '../storage/store';
 import Vue from "vue";
+import SingleResultIndex from "./components/search/SingleResultIndex";
+import _ from "lodash";
+import artworkSearchService from "@/services/artworkSearchService";
 
 const STORE_NAMESPACE = 'landingPage/home';
 
 export default {
   components: {
+    SingleResultIndex,
     IntroSection,
     AuctionSection,
     mdbContainer,
@@ -91,7 +102,14 @@ export default {
     return {
       loaded: false,
       empower: null,
-      ecosystem: null
+      ecosystem: null,
+      artworks: [],
+      featuredProd: [
+        1552477645810, 1552424628546, 1552424579103, 1552408014929, 1552407560197, 1552424579103, 1554285566531, 1552424579103, 1550604743317, 1550604524358
+      ],
+      featuredDev: [
+        1545314729978, 1545391942889, 1553779100600, 1551860708115, 1553778477967, 1553778888278, 1552395050543, 1553779020152, 1553780414385
+      ]
     };
   },
   beforeMount() {
@@ -107,12 +125,38 @@ export default {
   },
   beforeDestroy() {
     document.querySelector('body').classList.remove('index');
+  },
+  mounted() {
+    let env = this.$store.state.constants.nodeEnv;
+    let featured = this.featuredProd;
+    if (env === "development") {
+      featured = this.featuredDev;
+    }
+    let $self = this;
+    _.forEach(featured, function(artworkId) {
+      let artwork = $self.$store.getters["artworkSearchStore/getArtwork"](artworkId);
+      if (!artwork || !artwork.id) {
+        artworkSearchService.newQuery({field: "id", query: artworkId}, function(artwork) {
+          $self.artworks.push(artwork);
+        });
+      } else {
+        $self.artworks.push(artwork);
+      }
+    });
+  },
+  computed: {
   }
 };
 </script>
 
 <style>
 .contact-section >>> p { color: #EFF1F2; }
+.article {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  justify-content: center;
+}
 
 .border-list .list-item {
   padding: 1.2rem 0;

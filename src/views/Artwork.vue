@@ -3,8 +3,8 @@
   <mdb-container class="bg-white mt-5 p-3" v-if="loading">
     <div>Loading artwork - please wait...</div>
   </mdb-container>
-  <mdb-container class="mt-5" v-else>
-    <mdb-row class="mdb-lightbox ">
+  <mdb-container class="" v-else>
+    <mdb-row class="mdb-lightbox py-5 ">
       <mdb-col col="12" md="7" @click.native="show(0)">
         <mdb-view hover>
           <img class="inplay-image img-fluid mb-4" width="100%" :src="artwork.image" :alt="artwork.title">
