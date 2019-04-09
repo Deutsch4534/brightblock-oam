@@ -1,21 +1,17 @@
 <template>
   <section id="DonateSection" class="py-5">
-    <mdb-row class="py-3 py-md-5 text-light">
-      <mdb-col lg="10">
-        <mdb-row>
-          <mdb-col sm="12" lg="6">
-            <h2 class="large-title mt-0">{{title}}</h2>
-            <p class="h4-responsive mb-5">{{description}}</p>
-          </mdb-col>
-          <mdb-col sm="12" lg="6" class="text-center d-flex">
-            <form class="contact-form text-right d-flex w-100 align-items-end justify-content-end">
-              <canvas id="qrcode" width="500px" class="p-2 img-fluid"></canvas>
-            </form>
-          </mdb-col>
-          <mdb-col sm="12" md="12">
-            <p class="text-uppercase text-center my-4"><small>{{btcAddress}}</small></p>
-          </mdb-col>
-        </mdb-row>
+    <mdb-row class="text-center">
+      <mdb-col class="col-md-6 offset-3">
+        <h2 class="large-title mt-0">{{title}}</h2>
+        <p class="h4-responsive mb-5">{{description}}</p>
+      </mdb-col>
+      <mdb-col class="col-md-6 offset-3">
+        <form class="contact-form text-right d-flex w-100 align-items-end justify-content-end">
+          <canvas id="qrcode" width="500px" class="p-2 img-fluid"></canvas>
+        </form>
+      </mdb-col>
+      <mdb-col class="col-md-6 col-sm-12 offset-3">
+        <p class="text-uppercase btc-address my-4">{{btcAddress}}</p>
       </mdb-col>
     </mdb-row>
   </section>
@@ -74,5 +70,10 @@ export default {
   form > canvas#qrcode {
     height: 100%!important; width: 100%!important;
     border: 2px solid white;
+  }
+  .btc-address {
+    color: teal;
+    border: 1pt solid teal;
+    padding: 5px 0;
   }
 </style>

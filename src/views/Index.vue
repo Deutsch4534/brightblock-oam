@@ -5,7 +5,14 @@
     <intro-section />
   </div>
 
-  <!-- About section  -->
+  <mdb-container class="bg-dark p-4">
+    <div class="text-center text-white" v-html="imageIdTitle"></div>
+    <mdb-row class="article py-5 d-flex">
+      <single-result-index v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item col-6 text-center"/>
+    </mdb-row>
+  </mdb-container>
+
+  <!-- About section
   <div class="border-top border-dark"></div>
   <mdb-container v-if="empower">
     <section id="AboutSection" class="py-5">
@@ -15,31 +22,27 @@
       </mdb-row>
     </section>
   </mdb-container>
+  -->
 
-  <mdb-container>
-    <h2>Featured Images</h2>
-    <mdb-row class="article py-5 d-flex">
-      <single-result-index v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item col-12"/>
-    </mdb-row>
-  </mdb-container>
-
-  <!-- Features section  -->
+  <!-- Features section -->
   <div class="border-top border-dark"></div>
   <mdb-container>
     <features-section/>
   </mdb-container>
 
-  <!-- Audience section  -->
+  <!-- Audience section
   <div class="border-top border-dark"></div>
   <mdb-container>
     <audience-section/>
   </mdb-container>
+  -->
 
-  <!-- Team section  -->
+  <!-- Team section
   <div class="border-top border-dark"></div>
   <mdb-container>
     <team-section/>
   </mdb-container>
+  -->
 
   <!-- Auction section  -->
   <!--
@@ -56,12 +59,13 @@
     </mdb-container>
   </mdb-container>
 
-  <!-- Contact section  -->
+  <!-- Contact section
   <mdb-container fluid class="bg-main">
     <mdb-container class="text-light contact-section">
       <contact-section class="text-light"/>
     </mdb-container>
   </mdb-container>
+  -->
 
 </div>
 </template>
@@ -103,46 +107,48 @@ export default {
       loaded: false,
       empower: null,
       ecosystem: null,
+      imageIdTitle: null,
+      imageIds: null,
       artworks: [],
       featuredProd: [
-        1552477645810, 1552434828757, 1552408014929, 1552424628546, 1552424579103, 1552407560197, 1554285566531, 1550604743317, 1550604524358
+        1552477645810, 1552408014929, 1552424628546, 1552424579103, 1552407560197, 1554285566531, 1550604743317, 1550604524358
       ],
       featuredDev: [
         1545314729978, 1545391942889, 1553779100600, 1551860708115, 1553778477967, 1553778888278, 1552395050543, 1553779020152, 1553780414385
       ]
     };
   },
-  beforeMount() {
+  mounted() {
     document.querySelector('body').classList.add('index');
-    let $self = this;
     this.$prismic.client.getSingle("index-page").then(document => {
       this.$store.commit("contentStore/indexPage", document.data);
       let content = this.$store.state.contentStore.content["index-page"];
-      $self.empower = content["section-empower"][0].text;
-      $self.ecosystem = content["section-eco"][0].text;
+      this.imageIdTitle = content["section-images-title"][0].text;
+      this.featuredProd = content["section-images-ids"][0].text.split(",");
+      this.empower = content["section-empower"][0].text;
+      this.ecosystem = content["section-eco"][0].text;
+      let env = this.$store.state.constants.nodeEnv;
+      let featured = this.featuredProd;
+      if (env === "development") {
+        featured = this.featuredDev;
+      }
+      let $self = this;
+      _.forEach(featured, function(featuredId) {
+        let artworkId = Number(featuredId);
+        let artwork = $self.$store.getters["artworkSearchStore/getArtwork"](artworkId);
+        if (!artwork || !artwork.id) {
+          artworkSearchService.newQuery({field: "id", query: artworkId}, function(artwork) {
+            $self.artworks.push(artwork);
+          });
+        } else {
+          $self.artworks.push(artwork);
+        }
+      });
       $self.loaded = true;
     });
   },
   beforeDestroy() {
     document.querySelector('body').classList.remove('index');
-  },
-  mounted() {
-    let env = this.$store.state.constants.nodeEnv;
-    let featured = this.featuredProd;
-    if (env === "development") {
-      featured = this.featuredDev;
-    }
-    let $self = this;
-    _.forEach(featured, function(artworkId) {
-      let artwork = $self.$store.getters["artworkSearchStore/getArtwork"](artworkId);
-      if (!artwork || !artwork.id) {
-        artworkSearchService.newQuery({field: "id", query: artworkId}, function(artwork) {
-          $self.artworks.push(artwork);
-        });
-      } else {
-        $self.artworks.push(artwork);
-      }
-    });
   },
   computed: {
   }

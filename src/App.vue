@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="h-100 d-flex flex-1 flex-column">
+  <div id="app" class="container h-100 d-flex flex-1 flex-column">
     <div id="fb-root"></div>
     <notifications position="bottom right"/>
     <router-view name="header"/>

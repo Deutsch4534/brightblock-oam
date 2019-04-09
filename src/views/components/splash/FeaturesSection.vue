@@ -1,11 +1,15 @@
 <template>
   <section id="FeaturesSection" class="py-5">
-    <mdb-row class="py-5 d-flex">
-      <mdb-col col="12" lg="8">
-        <h2 class="large-title mb-5">{{title}}</h2>
+    <mdb-row class="py-5 d-flex text-center">
+      <mdb-col class="col-md-12 feature-text"  v-html="title">
       </mdb-col>
-      <div class="w-100"></div>
-      <mdb-col md="12" lg="10" class="border-list">
+      <mdb-col md="4" class="border-list" v-html="feature1">
+      </mdb-col>
+      <mdb-col md="4" class="border-list" v-html="feature2">
+      </mdb-col>
+      <mdb-col md="4" class="border-list" v-html="feature3">
+      </mdb-col>
+      <!--
         <div class="list-item">
           <h3 class="h2-responsive"><a><mdb-icon icon="exchange-alt" class="mr-4" />{{feature1}}</a></h3>
         </div>
@@ -18,7 +22,7 @@
         <div class="list-item">
           <h3 class="h2-responsive"><a><mdb-icon icon="campground" class="mr-4" />{{feature4}}</a></h3>
         </div>
-      </mdb-col>
+      -->
     </mdb-row>
   </section>
 </template>
@@ -63,6 +67,12 @@ export default {
 
  .border-list .list-item h3 {
   margin-bottom: 0;
+}
+.feature-text {
+  color: teal;
+  font-weight: 500;
+  font-size: 3.0em;
+  text-transform: capitalise;
 }
 
 </style>
