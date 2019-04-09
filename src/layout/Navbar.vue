@@ -16,7 +16,7 @@
       <span class="white-text"><i class="fas fa-bars fa-1x"></i></span>
   </button>
 
-  <div class="collapse navbar-collapse" :class="toggleClass" id="navbarSupportedContent">
+  <div :class="toggleClass" class="navbar-collapse collapse" id="navbarSupportedContent">
     <!--  <span class="dark-blue-text"><i class="fas fa-bars fa-1x"></i></span> -->
     <form class="md-form search-form ml-2" @submit.prevent="">
       <a type="button" @click.prevent="doSearch"><mdb-icon class="" icon="search" /></a>
@@ -94,6 +94,10 @@ export default {
   },
   created() {
     this.getContent();
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.handleResize)
   },
   computed: {
     featureAuctions() {
@@ -131,6 +135,16 @@ export default {
       });
       **/
     },
+    handleResize (event) {
+      this.fullWidth = document.documentElement.clientWidth;
+      if (this.fullWidth > 1200) {
+        this.toggleClass = "";
+        document.getElementById("navbarSupportedContent").style.display = "block";
+      } else {
+        document.getElementById("navbarSupportedContent").style.display = "none";
+      }
+      console.log("width: " + this.fullWidth);
+    },
     loginMultiPlayer: function () {
       let res = myAccountService.loginMultiPlayer();
       this.$router.push({ path: "/" });
@@ -140,10 +154,15 @@ export default {
       this.toggleClass = "";
     },
     toggleNav() {
+      let togglee = document.getElementById("navbarSupportedContent");
       if (this.toggleClass === "show") {
         this.toggleClass = "";
+        togglee.style.display = "none";
       } else {
         this.toggleClass = "show";
+        togglee.style.display = "";
+        togglee.style.display = "block";
+        //document.getElementById("navbarSupportedContent").attr("style", "display: block !important");
       }
     },
     doSearch() {
@@ -187,15 +206,52 @@ export default {
 .navbar-toggler-icon {
   background-color: blue;
 }
+@media (max-width: 1200px) {
+    .navbar {
+      justify-content: space-between;
+    }
+    .navbar-expand-lg .navbar-toggler {
+        display: block;
+    }
+    .navbar-header {
+        float: none;
+    }
+    .navbar-toggler {
+        display: block;
+        float: right;
+    }
+    .navbar-collapse {
+        border-top: 1px solid transparent;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .navbar-collapse.collapse {
+      display: none;
+    }
+    .navbar-nav {
+        float: none!important;
+        margin: 7.5px -15px;
+    }
+    .navbar-nav>li {
+        float: none;
+    }
+    .navbar-nav>li>a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+}
+
 .show {
-  background-color: teal;
-  border: 1pt solid black;
+  display: block;
+  position: absolute;
+  right: 0px;
+  left: 0px;
+  top: 50px;
+  background-color: #4EAC9A;
   color: white;
   font-weight: bold;
   z-index: 10;
-  margin: 10px;
   padding: 10px 0 10px 30px;
-
+  min-height: calc(100vh);
 }
 
 .navbar .md-form {

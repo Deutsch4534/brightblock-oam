@@ -1,20 +1,32 @@
 <template>
 <!-- Footer -->
-  <footer class="page-footer black fixed-bottom py-3">
-      <mdb-row class="d-flex flex-row align-items-center px-3">
-        <mdb-col col="6">
-          <span class="serif"><router-link to="/index">Independent Art Market</router-link></span>
+  <footer class="container text-black page-footer py-1 pb-5 mb-5">
+      <mdb-row class="d-flex flex-row text-center align-items-center px-3">
+        <mdb-col col="12" class="mb-3">
+          <span class=""><router-link to="/about/faq">About</router-link></span>
+          <br/>
+          <span class=""><router-link to="/about/faq">How It Works</router-link></span>
+          <br/>
+          <span class=""><router-link to="/about/faq">Contact</router-link></span>
+          <br/>
+          <span class=""><router-link to="/about/faq">Jobs</router-link></span>
         </mdb-col>
-        <mdb-col col="6" class="footer-right text-right">
-          <div class="d-inline-block">
-            <span class="mr-3"><a href="https://twitter.com/radicleart" target="_blank" rel="noreferrer"><mdb-icon fab icon="twitter" /></a></span>
-            <span class="mr-3"><a href="https://github.com/radicleart/brightblock-oam" target="_blank" rel="noreferrer"><mdb-icon fab icon="github" /></a></span>
+        <mdb-col col="12" class="my-5">
+          <span class=""><router-link to="/about/faq">Terms of Service</router-link></span>
+          <br/>
+          <span class=""><router-link to="/about/faq">Privacy Policy</router-link></span>
+        </mdb-col>
+        <mdb-col col="12">
+          <span class="">Connect</span>
+          <br/>
+          <span class="mr-3"><a href="https://medium.com/@radicleart" target="_blank" rel="noreferrer"><mdb-icon fab icon="medium" /></a></span>
+          <span class="mx-5"><a href="https://twitter.com/radicleart" target="_blank" rel="noreferrer"><mdb-icon fab icon="twitter" /></a></span>
+          <span class="mr-3"><a href="https://github.com/radicleart/brightblock-oam" target="_blank" rel="noreferrer"><mdb-icon fab icon="github" /></a></span>
             <!--
             <span class="mr-3"><a href="https://www.facebook.com/radicleart" target="_blank" rel="noreferrer"><mdb-icon fab icon="facebook" /></a></span>
             <span class="mr-3"><a href="https://www.instagram.com/radicleart/" target="_blank" rel="noreferrer"><mdb-icon fab icon="instagram" /></a></span>
             <span><router-link to="/index">HOW IT WORKS</router-link></span>
             -->
-            <span class="mx-3"><router-link to="/about/faq">FAQ</router-link></span>
           </div>
         </mdb-col>
       </mdb-row>
@@ -60,11 +72,11 @@ export default {
   .page-footer { min-height: 56px; }
 
   .page-footer {
-    font-size: 1.2em;
-    color: #ECEFF1;
+    font-size: 2.0em;
     font-weight: 400;
     letter-spacing: 0.5px;
     margin-top: 50px;
+    color: black;
   }
 
   @media (max-width: 576px) {

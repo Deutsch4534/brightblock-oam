@@ -1,17 +1,17 @@
 <template>
   <section id="DonateSection" class="py-5">
     <mdb-row class="text-center">
-      <mdb-col class="col-md-6 offset-3">
+      <mdb-col class="col-md-6 col-sm-12 offset-md-3">
         <h2 class="large-title mt-0">{{title}}</h2>
         <p class="h4-responsive mb-5">{{description}}</p>
       </mdb-col>
-      <mdb-col class="col-md-6 offset-3">
+      <mdb-col class="col-md-6 col-sm-12 offset-md-3">
         <form class="contact-form text-right d-flex w-100 align-items-end justify-content-end">
           <canvas id="qrcode" width="500px" class="p-2 img-fluid"></canvas>
         </form>
       </mdb-col>
-      <mdb-col class="col-md-6 col-sm-12 offset-3">
-        <p class="text-uppercase btc-address my-4">{{btcAddress}}</p>
+      <mdb-col class="col-md-6 col-sm-12 offset-md-3">
+        <p class="text-uppercase btc-address my-4"><small>{{btcAddress}}</small></p>
       </mdb-col>
     </mdb-row>
   </section>

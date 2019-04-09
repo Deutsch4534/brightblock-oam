@@ -2,7 +2,7 @@
 <div class="article-figure overlay view mb-5">
   <router-link class="" :to="buyNowUrl">
     <img :src="artwork.image" alt="help me" class="img-fluid article-figure">
-    <div class="mask bg-dark">
+    <div class="mask bg-dark text-left">
       <div class="white-text" style="font-weight: 400">
         {{artwork.title}}
         <br/><span class="small">by: {{shortName(artwork.artist)}}</span>

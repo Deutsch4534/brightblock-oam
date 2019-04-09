@@ -89,12 +89,13 @@
 
   h1.tagline {
     /* font-family: 'Noto Serif Disp ExtCond'; */
-    font-size: 2.0em;
+    font-size: 3.0em;
     font-weight: 400;
+    padding-top: 50px;
   }
   @media (max-width: 576px) {
-    .h1.tagline {
-      font-size: 1.0em;
+    h1.tagline {
+      font-size: 2.0em;
     }
   }
 
@@ -123,7 +124,7 @@
   }
 
   .jarallax {
-    min-height: calc(100vh - 400px);
+    min-height: calc(100vh - 630px);
   }
 
   @media (max-width: 576px) {
