@@ -5,7 +5,7 @@
     <intro-section />
   </div>
 
-  <mdb-container class="bg-dark p-4">
+  <mdb-container fluid class="bg-dark p-4">
     <div class="text-center text-white" v-html="imageIdTitle"></div>
     <mdb-row class="article py-5 d-flex">
       <single-result-index v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item col-6 text-center"/>

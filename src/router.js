@@ -8,6 +8,8 @@ import AdminBuildIndex from "./views/components/admin/AdminBuildIndex";
 import AdminQueryIndex from "./views/components/admin/AdminQueryIndex";
 
 import Index from "./views/Index.vue";
+import Contact from "./views/Contact.vue";
+import NewsSignup from "./views/NewsSignup.vue";
 import Landing from "./views/Landing.vue";
 import Gallery from "./views/Gallery.vue";
 import GalleryUpload from "./views/GalleryUpload.vue";
@@ -56,6 +58,26 @@ const router = new Router({
       name: "index",
       components: {
         default: Index,
+        header: Navbar,
+        footer: Footer
+      },
+      meta: { requiresAuth: false }
+    },
+    {
+      path: "/news-signup",
+      name: "newsSignup",
+      components: {
+        default: NewsSignup,
+        header: Navbar,
+        footer: Footer
+      },
+      meta: { requiresAuth: false }
+    },
+    {
+      path: "/contact",
+      name: "contact",
+      components: {
+        default: Contact,
         header: Navbar,
         footer: Footer
       },

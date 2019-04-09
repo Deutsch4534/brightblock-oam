@@ -1,6 +1,6 @@
 <template>
   <!-- TODO: connect template with Prismic cms -->
-  <mdb-container fluid class="bg-light flex-1">
+  <mdb-container fluid class="">
     <mdb-container class="py-5">
       <mdb-row>
         <mdb-col col="12">

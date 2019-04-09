@@ -17,6 +17,9 @@ const contentStore = {
     indexPage(state, o) {
       state.content["index-page"] = o;
     },
+    helpList(state, o) {
+      state.content["help-list"] = o;
+    },
   },
   actions: {
     fetchIndexPage({ commit, state, getters}) {

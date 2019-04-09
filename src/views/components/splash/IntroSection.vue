@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Full Page Intro https://mdbootstrap.com/img/Photos/Others/img%20%2848%29.jpg -->
-    <div class="view jarallax" :style="headerStyle">
+    <div class="view" :style="headerStyle">
       <!-- Mask & flexbox options-->
       <!--  <div class="mask d-flex justify-content-center align-items-center"> -->
       <div class="mask d-flex justify-content-center">
@@ -18,11 +18,11 @@
     <!-- Full Page Intro -->
     <mdb-container fluid class="px-5" :style="headerStyle">
       <mdb-row class="py-2 d-flex align-items-center intro-title">
-        <mdb-col md="4" v-html="cardDescription1">
+        <mdb-col md="4"  class="px-5" v-html="cardDescription1">
         </mdb-col>
-        <mdb-col md="4" v-html="cardDescription2">
+        <mdb-col md="4" class="px-5" v-html="cardDescription2">
         </mdb-col>
-        <mdb-col md="4" v-html="cardDescription3">
+        <mdb-col md="4" class="px-5" v-html="cardDescription3">
         </mdb-col>
       </mdb-row>
     </mdb-container>
@@ -74,7 +74,7 @@
           "background-repeat": "no-repeat",
           "background-size": "cover",
           "background-color": "#4EAC9A",
-          "background-position": "center center"
+          "background-position": "center center",
         };
       },
       getAuctionLink() {
@@ -123,13 +123,12 @@
     background-position: center center;
   }
 
-  .jarallax {
-    min-height: calc(100vh - 630px);
+  .view {
+    min-height: 400px;
   }
 
   @media (max-width: 576px) {
     .jarallax {
-      min-height: 380px;
     }
   }
 </style>

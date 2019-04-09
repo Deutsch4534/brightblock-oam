@@ -1,6 +1,6 @@
 <template>
   <!-- TODO: connect template with Prismic cms -->
-  <mdb-container fluid class="bg-light flex-1 py-5">
+  <mdb-container fluid class=" ">
     <mdb-container class="bg-white mt-5 p-3">
       <h3 class="h3-responsive mb-5">{{title}}</h3>
       <mdb-row>
@@ -41,11 +41,11 @@
     },
     created() {
       let $self = this;
-      this.$prismic.client.getSingle("help-list").then(document => {
-        $self.title = document.data.title[0].text;
+      this.$prismic.client.getSingle("help-list").then(prisdoc => {
+        $self.title = prisdoc.data.title[0].text;
         let counter = 0;
-        $self.description = document.data.description[0].text;
-        _.forEach(document.data["help-items"], function(item) {
+        $self.description = prisdoc.data.description[0].text;
+        _.forEach(prisdoc.data["help-items"], function(item) {
           let topic = item["help-item"];
           $self.showTopic[counter] = (counter < 1);
           counter++;
@@ -56,7 +56,7 @@
         $self.$prismic.client.getByIDs($self.topicIds).then(function(response) {
             $self.topics = response.results;
             let $ele = document.getElementById("topic0");
-            $ele.style.display = "block";
+            if ($ele) $ele.style.display = "block";
         });
       });
     },
