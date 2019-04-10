@@ -1,5 +1,6 @@
 <template>
 <mdb-container>
+  <login-tab-modal v-if="showModal" :modal="showModal" @closeModal="closeModal"/>
   <mdb-modal v-if="login" @close="closeLogin">
     <mdb-modal-header class="text-center">
       <mdb-modal-title tag="h4" bold class="w-100">Sign in</mdb-modal-title>
@@ -17,10 +18,12 @@
 <script>
 import { mdbContainer, mdbBtn, mdbModal, mdbModalHeader, mdbModalBody, mdbModalTitle, mdbModalFooter } from 'mdbvue';
 import myAccountService from "@/services/myAccountService";
+import LoginTabModal from "@/views/components/utils/LoginTabModal";
 
 export default {
   bodyClass: "login-page",
   components: {
+    LoginTabModal,
     mdbContainer,
     mdbBtn,
     mdbModal,
@@ -34,6 +37,7 @@ export default {
       firstname: null,
       email: null,
       password: null,
+      showModal: false,
       login: true
     };
   },
@@ -52,7 +56,11 @@ export default {
     loginMultiPlayer: function () {
       let res = myAccountService.loginMultiPlayer();
       this.$router.push({ path: "/" });
+      this.showModal = true;
       return res;
+    },
+    closeModal: function() {
+      this.showModal = false;
     },
     closeLogin: function () {
       this.$router.push({ path: "/" });

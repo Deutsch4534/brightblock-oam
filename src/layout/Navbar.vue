@@ -1,6 +1,7 @@
 <template>
 <!-- Main navigation 424f95 -->
 <header>
+<login-tab-modal v-if="showModal" :modal="showModal" @closeModal="closeModal"/>
 <nav class="navbar navbar-expand-lg">
 
   <!-- mdbNavbar brand -->
@@ -60,6 +61,7 @@ import AccountLinks from "@/layout/AccountLinks";
 import UploadLinks from "@/layout/UploadLinks";
 import artworkSearchService from "@/services/artworkSearchService";
 import myAccountService from '../services/myAccountService';
+import LoginTabModal from "@/views/components/utils/LoginTabModal";
 
 export default {
   name: 'Navbar',
@@ -73,10 +75,12 @@ export default {
       title: "title",
       taglink2: '',
       toggleClass: '',
+      showModal: false,
       logo: require("@/assets/img/logo/Radicle_logo-test.png")
     };
   },
   components: {
+    LoginTabModal,
     UploadLinks,
     AccountLinks,
     mdbContainer,
@@ -148,10 +152,14 @@ export default {
     loginMultiPlayer: function () {
       let res = myAccountService.loginMultiPlayer();
       this.$router.push({ path: "/" });
+      this.showModal = true;
       return res;
     },
     closeMenu() {
       this.toggleClass = "";
+    },
+    closeModal: function() {
+      this.showModal = false;
     },
     toggleNav() {
       let togglee = document.getElementById("navbarSupportedContent");

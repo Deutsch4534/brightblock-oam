@@ -5,7 +5,7 @@
   </mdb-modal-header>
   <mdb-modal-body v-html="content"></mdb-modal-body>
   <mdb-modal-footer>
-    <mdb-btn class="btn default" @click.native="closeMe">Close</mdb-btn>
+    <mdb-btn class="btn btn-teal text-white" @click.native="reloadMe">Reload</mdb-btn>
   </mdb-modal-footer>
 </mdb-modal>
 </template>
@@ -15,7 +15,7 @@ import { mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, 
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  name: "LoginInfoModal",
+  name: "LoginTabModal",
   components: {
     mdbModal,
     mdbModalHeader,
@@ -27,15 +27,18 @@ export default {
   props: ["modal"],
   data() {
     return {
-      title: "Please Log In",
-      content: "<p>You need to login to use this feature.</p>",
+      title: "Blockstack Login",
+      content: "<p>Log in opened another browser tab - please reload this tab to continue.</p>",
     };
   },
   mounted() {
   },
   methods: {
     closeMe: function() {
-      this.$emit("closeLoginInfoModal");
+      this.$emit("closeModal");
+    },
+    reloadMe: function() {
+      location.reload();
     }
   }
 };

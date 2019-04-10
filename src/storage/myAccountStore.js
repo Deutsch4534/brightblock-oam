@@ -31,6 +31,8 @@ const myAccountStore = {
             myProfile = {
               loggedIn: false
             };
+            resolve(myProfile);
+            return;
           }
         }
         myAccountService.getAuxiliaryProfile(function(auxiliaryProfile) {
