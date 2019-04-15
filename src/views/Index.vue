@@ -4,12 +4,23 @@
   <div id="introSection">
     <intro-section />
   </div>
-
   <mdb-container fluid class="bg-dark p-4">
     <div class="text-center text-white" v-html="imageIdTitle"></div>
     <mdb-row class="article py-5 d-flex">
       <single-result-index v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item col-6 text-center"/>
     </mdb-row>
+  </mdb-container>
+  <!-- Features section -->
+  <div class="border-top border-dark"></div>
+  <mdb-container>
+    <features-section/>
+  </mdb-container>
+  <!-- Donate section  -->
+  <div class="border-top border-dark"></div>
+  <mdb-container fluid class="bg-dark text-white">
+    <mdb-container>
+      <donate-section/>
+    </mdb-container>
   </mdb-container>
 
   <!-- About section
@@ -23,12 +34,6 @@
     </section>
   </mdb-container>
   -->
-
-  <!-- Features section -->
-  <div class="border-top border-dark"></div>
-  <mdb-container>
-    <features-section/>
-  </mdb-container>
 
   <!-- Audience section
   <div class="border-top border-dark"></div>
@@ -50,14 +55,6 @@
   <mdb-container>
     <auction-section/>
   </mdb-container> -->
-
-  <!-- Donate section  -->
-  <div class="border-top border-dark"></div>
-  <mdb-container fluid class="bg-dark text-white">
-    <mdb-container>
-      <donate-section/>
-    </mdb-container>
-  </mdb-container>
 
   <!-- Contact section
   <mdb-container fluid class="bg-main">

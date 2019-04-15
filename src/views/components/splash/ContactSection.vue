@@ -13,8 +13,8 @@
             </div>
             <div class="col-md-12">
               <h5 class="my-4"><strong>Contact Info</strong></h5>
-              <p>Brighton, BN1 1AL UK</p>
-              <p>Phone: +49 6579 3 456<br />
+              <p>The Fusebox, Brighton, BN1 4GH, UK</p>
+              <p>Phone: +44 77 37 0848 12<br />
               Email: contact@radicle.art</p>
             </div>
           </mdb-col>

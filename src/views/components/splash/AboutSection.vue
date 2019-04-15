@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="view" :style="headerStyle">
-      <div class="mask d-flex justify-content-center">
+      <div class="mask d-flex  text-center">
         <div class="container">
           <div class="row">
-            <div class="col-md-10 offset-1 mb-4 mt-5 white-text text-center">
+            <div class="col-md-12 mb-4 mt-5 px-5 mx-5 white-text text-center">
               <h3 class="about1" v-html="about1"></h3>
             </div>
           </div>
@@ -12,12 +12,12 @@
       </div>
     </div>
     <!-- Full Page Intro -->
-    <mdb-container fluid class="pt-5" style="font-size: 0.9em;">
-      <mdb-row class="py-2 d-flex align-items-center text-center intro-title">
-        <mdb-col md="12"  class="about2 px-5">
+    <mdb-container fluid class="pt-5" v-if="showAll">
+      <div class="row text-center">
+        <div class="col-md-6 offset-md-3 col-sm-12 ">
           <h4 class="about2" v-html="about2"></h4>
-        </mdb-col>
-      </mdb-row>
+        </div>
+      </div>
     </mdb-container>
   </div>
 </template>
@@ -28,6 +28,7 @@
 
   export default {
     name: 'AboutSection',
+    props: ["aboutContent", "showAll"],
     data() {
       return {
         about1: "Since this is a paradigm shift in how the internet of the future will work it takes some time to understand what is going on here. Learn more...",
@@ -43,21 +44,18 @@
       Navbar
     },
     mounted() {
-      let content = this.$store.state.contentStore.content["help-list"];
-      if (content) {
-        this.about1 = content["about1"][0].text;
-        this.about2 = content["about2"][0].text;
-      }
+      this.about1 = this.aboutContent["about1"][0].text;
+      this.about2 = this.aboutContent["about2"][0].text;
     },
     computed: {
       headerStyle() {
-        //           "background-image": `url(${content["navbar-background"].url})`,
-        let content = this.$store.state.contentStore.content["index-page"];
+        let aboutContent = this.$store.state.contentStore.content["help-list"];
         return {
           "margin-top": "0px",
           "background-repeat": "no-repeat",
           "background-size": "cover",
           "background-color": "#4EAC9A",
+          "background-image": `url(${aboutContent["help-background"].url})`,
           "background-position": "center center",
         };
       },
@@ -71,15 +69,19 @@
 </script>
 <style scoped>
 
-h3.about1 {
+.about1 {
   /* font-family: 'Noto Serif Disp ExtCond'; */
-  font-size: 1.6em;
+  font-size: 2.5rem;
   font-weight: 900;
-  margin: 5px 50px;
 }
-h4.about2 {
+@media (max-width: 990px) {
+  .about1 {
+    font-size: 1.5rem;
+  }
+}
+.about2 {
   /* font-family: 'Noto Serif Disp ExtCond'; */
-  font-size: 0.9em;
+  font-size: 1.1rem;
   font-weight: 900;
 }
 
@@ -93,10 +95,15 @@ h4.about2 {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
+    min-height: 40vh;
+
   }
 
-  .view {
-    min-height: 200px;
+  .mask {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
   }
 
 </style>

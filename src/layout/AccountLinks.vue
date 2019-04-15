@@ -14,6 +14,10 @@
         <router-link class="dropdown-item" to="/profile/update">Settings</router-link>
       </mdb-dropdown-item>
 
+      <mdb-dropdown-item v-if="hasGalleries">
+        <router-link class="dropdown-item" to="/my-galleries">My Galleries<sup><mdb-badge color="danger-color" class="ml-2">{{hasGalleries}}</mdb-badge></sup></router-link>
+      </mdb-dropdown-item>
+
       <mdb-dropdown-item>
         <router-link class="dropdown-item" to="/admin/settings" v-if="showAdmin">Admin</router-link>
       </mdb-dropdown-item>
@@ -63,6 +67,13 @@ export default {
     showAdmin() {
       return this.$store.state.myAccountStore.myProfile.showAdmin;
     },
+    hasGalleries() {
+      let galleries = this.$store.getters["galleryStore/getMyGalleries"];
+      if (!galleries || !galleries.records) {
+        return 0;
+      }
+      return galleries.records.length;
+    },
     username() {
       return this.$store.state.myAccountStore.myProfile.name;
     },
@@ -107,7 +118,7 @@ export default {
 .nav-link {
   text-transform: capitalize;
   font-size: 1.3em;
-  font-weight: 400;
+  font-weight: 900;
 }
 .dropdown-menu {
   min-width: 200px;
@@ -136,7 +147,10 @@ export default {
 
 .dropdown-item {
   font-size: 0.9375rem;
-  font-weight: 300;
+  font-weight: 900;
+}
+.navbar .dropdown-menu a {
+  font-weight: 900;
 }
 
 .dropdown-item > a {

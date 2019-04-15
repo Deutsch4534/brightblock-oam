@@ -47,6 +47,7 @@ import OnlineAuction from "./views/OnlineAuction";
 import OnlineAuctions from "./views/OnlineAuctions";
 
 import About from "./views/About";
+import AboutAnswer from "./views/components/splash/AboutAnswer";
 
 import myAccountService from "@/services/myAccountService";
 
@@ -398,13 +399,20 @@ const router = new Router({
       ]
     },
     {
-      path: '/about/:pageid',
-      name: "about",
+      path: "/topic/:topicId",
+      name: "topic",
       components: {
-        default: About,
+        default: AboutAnswer,
         header: Navbar,
         footer: Footer
-      }
+      },
+      meta: { requiresAuth: false },
+    },
+    {
+      path: "/about",
+      name: "about",
+      meta: { requiresAuth: false },
+      components: { default: About, header: Navbar, footer: Footer },
     }
   ],
 });

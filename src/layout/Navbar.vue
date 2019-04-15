@@ -2,13 +2,13 @@
 <!-- Main navigation 424f95 -->
 <header>
 <login-tab-modal v-if="showModal" :modal="showModal" @closeModal="closeModal"/>
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg py-0">
 
   <!-- mdbNavbar brand -->
   <span class="d-inline-block mr-3">
-    <router-link to="/" class="navbar-brand d-inline-block" ><img :src="logo" height="20px" alt="radicle logo"></router-link>
+    <router-link to="/" class="navbar-brand d-inline-block" ><img :src="logo" height="40px" alt="radicle logo"></router-link>
   </span>
-  <button @click.prevent="toggleNav" class="navbar-toggler toggler-example black darken-3" type="button"
+  <button id="btn-toggle" @click.prevent="toggleNav" class="navbar-toggler toggler-example black darken-3" type="button"
       data-toggle="collapse"
       data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent"
@@ -18,19 +18,20 @@
   </button>
 
   <div :class="toggleClass" class="navbar-collapse collapse" id="navbarSupportedContent">
-    <!--  <span class="dark-blue-text"><i class="fas fa-bars fa-1x"></i></span> -->
+    <!--  <span class="dark-blue-text"><i class="fas fa-bars fa-1x"></i></span>
     <form class="md-form search-form ml-2" @submit.prevent="">
       <a type="button" @click.prevent="doSearch"><mdb-icon class="" icon="search" /></a>
       <input label="Search" type="text" class="mt-0 mb-0 ml-1" v-model="query" placeholder="Search" aria-label="Search" v-on:keyup.13="doSearch"/>
     </form>
+    -->
     <ul class="navbar-nav ml-auto">
       <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/gallery">Gallery</router-link></li>
       <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/artists">Artists</router-link></li>
       <li v-if="featureAuctions" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/online-auctions">Auctions</router-link></li>
       <li v-if="loggedIn" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/my-artworks">My Artwork</router-link></li>
       <upload-links v-if="loggedIn"/>
-      <li v-if="loggedIn && hasGalleries" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/my-galleries">My Galleries</i><sup><mdb-badge color="danger-color" class="ml-2">{{hasGalleries}}</mdb-badge></sup></router-link></li>
       <li v-if="loggedIn && hasInvoices" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/orders">Cart</i><sup><mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge></sup></router-link></li>
+      <li class="nav-item" @click="closeMenu"><router-link to="/search"><mdb-icon icon="search" class="teal-text mt-3 mx-2" style="line-height: 10px;" aria-hidden="true" size="2x"/></router-link></li>
       <account-links v-if="loggedIn"/>
       <!-- <li class="nav-item" @click="closeMenu"><router-link v-if="!loggedIn" class="nav-link navbar-link" to="/login">Login</router-link></li> -->
       <li class="nav-item" @click="closeMenu"><a v-on:click.prevent="loginMultiPlayer" v-if="!loggedIn" class="nav-link navbar-link">Login with Blockstack</a></li>
@@ -117,13 +118,6 @@ export default {
         return 0;
       }
       return invoices.length;
-    },
-    hasGalleries() {
-      let galleries = this.$store.getters["galleryStore/getMyGalleries"];
-      if (!galleries || !galleries.records) {
-        return 0;
-      }
-      return galleries.records.length;
     }
   },
   methods: {
@@ -204,15 +198,17 @@ export default {
 .navbar {
   box-shadow: none;
   min-height: 60px;
-  font-weight: 400;
 }
 .navbar-link {
   text-transform: capitalize;
   font-size: 1.3em;
-  font-weight: 400;
+  font-weight: 900;
 }
 .navbar-toggler-icon {
   background-color: blue;
+}
+.navbar .dropdown-menu a {
+  font-weight: 900;
 }
 @media (max-width: 1200px) {
     .navbar {
@@ -253,10 +249,11 @@ export default {
   position: absolute;
   right: 0px;
   left: 0px;
-  top: 50px;
+  top: 60px;
+  bottom: 0px;
   background-color: #4EAC9A;
   color: white;
-  font-weight: bold;
+  font-weight: 900;
   z-index: 10;
   padding: 10px 0 10px 30px;
   min-height: calc(100vh);

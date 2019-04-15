@@ -112,7 +112,7 @@ export default {
 .nav-link {
   text-transform: uppercase;
   font-size: 1.3em;
-  font-weight: 400;
+  font-weight: 900;
   text-transform: capitalize;
 }
 .dropdown-menu {
@@ -145,10 +145,13 @@ export default {
   top:0;
   left:100%;
 }
+.navbar .dropdown-menu a {
+  font-weight: 900;
+}
 
 .dropdown-item {
-  font-size: 0.9375rem;
-  font-weight: 300;
+  font-size: 1.9375rem;
+  font-weight: 900;
 }
 
 .dropdown-item > a {

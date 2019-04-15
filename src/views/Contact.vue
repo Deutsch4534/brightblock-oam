@@ -22,7 +22,7 @@ export default {
     mdbCol,
     ContactSection
   },
-  name: "index",
+  name: "Contact",
   data() {
     return {
       loaded: false

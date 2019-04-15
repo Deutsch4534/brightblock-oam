@@ -3,16 +3,16 @@
   <footer class="container text-black page-footer pb-5 mb-5">
       <mdb-row class="d-flex flex-row text-center align-items-center px-3">
         <mdb-col col="12" class="mb-3">
-          <span class=""><router-link to="/about/faq">How It Works</router-link></span>
+          <span class=""><router-link to="/about">How It Works</router-link></span>
           <br/>
           <span class=""><router-link to="/contact">Contact</router-link></span>
           <br/>
           <span class=""><router-link to="/news-signup">News</router-link></span>
         </mdb-col>
         <mdb-col col="12" class="my-5">
-          <span class=""><router-link to="/about/terms">Terms of Service</router-link></span>
+          <span class=""><router-link to="/topic/terms">Terms of Service</router-link></span>
           <br/>
-          <span class=""><router-link to="/about/privacy">Privacy Policy</router-link></span>
+          <span class=""><router-link to="/topic/privacy">Privacy Policy</router-link></span>
         </mdb-col>
         <mdb-col col="12">
           <span class="">Connect</span>
@@ -76,7 +76,6 @@ export default {
     margin-top: 20px;
     padding-top: 20px;
     color: black;
-    border-top: 1pt solid black;
   }
 
   @media (max-width: 576px) {

@@ -1,29 +1,13 @@
 <template>
-  <section id="FeaturesSection" class="py-5">
+  <section id="FeaturesSection" class="py-5 f-section">
     <mdb-row class="py-5 d-flex text-center">
-      <mdb-col class="col-md-12 feature-text"  v-html="title">
-      <p class="my-5"><router-link to="/about/faq"><button class="btn btn-large teal" style="font-size: 2.0em; border-radius: 5px">find out more</button></router-link></p>
+      <mdb-col class="col-md-12 feature-text"  v-html="title"></mdb-col>
+      <mdb-col class="col-md-12 feature-text" >
+        <p class="my-5"><router-link to="/about"><button class="btn btn-large teal" style="font-size: 2.0em; border-radius: 5px">find out more</button></router-link></p>
       </mdb-col>
-      <mdb-col md="4" class="border-list" v-html="feature1">
-      </mdb-col>
-      <mdb-col md="4" class="border-list" v-html="feature2">
-      </mdb-col>
-      <mdb-col md="4" class="border-list" v-html="feature3">
-      </mdb-col>
-      <!--
-        <div class="list-item">
-          <h3 class="h2-responsive"><a><mdb-icon icon="exchange-alt" class="mr-4" />{{feature1}}</a></h3>
-        </div>
-        <div class="list-item">
-          <h3 class="h2-responsive"><a><mdb-icon icon="boxes" class="mr-4" />{{feature2}}</a></h3>
-        </div>
-        <div class="list-item">
-          <h3 class="h2-responsive"><a><mdb-icon icon="bullseye" class="mr-4" />{{feature3}}</a></h3>
-        </div>
-        <div class="list-item">
-          <h3 class="h2-responsive"><a><mdb-icon icon="campground" class="mr-4" />{{feature4}}</a></h3>
-        </div>
-      -->
+      <mdb-col md="4" class="border-list" v-html="feature1"></mdb-col>
+      <mdb-col md="4" class="border-list" v-html="feature2"></mdb-col>
+      <mdb-col md="4" class="border-list" v-html="feature3"></mdb-col>
     </mdb-row>
   </section>
 </template>
@@ -65,14 +49,15 @@ export default {
 </script>
 
 <style scoped>
-
+.f-section {
+  font-weight: 900;
+  font-size: 3.0em;
+}
  .border-list .list-item h3 {
   margin-bottom: 0;
 }
 .feature-text {
   color: teal;
-  font-weight: 500;
-  font-size: 3.0em;
   text-transform: capitalise;
 }
 

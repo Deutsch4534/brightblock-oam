@@ -9,6 +9,10 @@ const contentStore = {
       let matches = state.content.filter(content => content.pages.id === pageId);
       return matches;
     },
+    getAnswers: state => questionId => {
+      let matches = state.content["answers"];
+      return matches;
+    },
     getIndex: state => {
       return state.content.index;
     },
@@ -19,6 +23,9 @@ const contentStore = {
     },
     helpList(state, o) {
       state.content["help-list"] = o;
+    },
+    answers(state, o) {
+      state.content["answers"] = o;
     },
   },
   actions: {

@@ -1,19 +1,20 @@
 <template>
   <section id="DonateSection" class="py-5">
-    <mdb-row class="text-center">
-      <mdb-col class="col-md-6 col-sm-12 offset-md-3">
+    <div class="row text-center">
+      <div class="col-md-6 col-xs-12 offset-md-3">
         <h2 class="large-title mt-0">{{title}}</h2>
         <p class="h4-responsive mb-5">{{description}}</p>
-      </mdb-col>
-      <mdb-col class="col-md-6 col-sm-12 offset-md-3">
+      </div>
+      <div class="col-md-4 col-xs-12 offset-md-4">
         <form class="contact-form text-right d-flex w-100 align-items-end justify-content-end">
           <canvas id="qrcode" width="500px" class="p-2 img-fluid"></canvas>
         </form>
-      </mdb-col>
-      <mdb-col class="col-md-6 col-sm-12 offset-md-3">
-        <p class="text-uppercase btc-address my-4"><small>{{btcAddress}}</small></p>
-      </mdb-col>
-    </mdb-row>
+      </div>
+      <div class="col-md-6 col-sm-12 offset-md-3">
+        <p class="text-uppercase btc-address my-4"><small><a href="#" @click.prevent="copyAddress">COPY ADDRESS</a></small></p>
+        <input id="donate-address" type="hidden" :value="btcAddress"/>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -62,6 +63,12 @@ export default {
           console.log("success!");
         }
       );
+    },
+    copyAddress() {
+      var copyText = document.getElementById("donate-address");
+      copyText.select();
+      document.execCommand("copy");
+      this.$notify({type: 'success', title: 'Copied Address', text: 'Copied the address to clipboard: ' + copyText.value});
     }
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container-fluid">
+  <div id="app" class="container-fluid m-0 p-0">
     <div id="fb-root"></div>
     <notifications position="bottom right"/>
     <router-view name="header"/>
@@ -28,3 +28,8 @@
     }
   };
 </script>
+<style scoped>
+.main {
+  min-height: 100vh;
+}
+</style>
