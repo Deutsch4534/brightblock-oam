@@ -1,5 +1,13 @@
 <template>
-<div class="container">
+<div class="container" v-if="loading">
+  <div class="row m-5">
+    <div class="col-md-12">
+      <p>Loading auction - please wait...</p>
+    </div>
+  </div>
+</div>
+<div class="container" v-else>
+  <confirmation-modal :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
   <div class="row">
     <div class="col-md-12">
       <h1>Auction Management</h1>
@@ -8,7 +16,7 @@
       <h3>{{auction.title}} <span v-if="auction.items">({{auction.items.length}} items)</span></h3>
       <p>{{auction.description}}</p>
       <p>
-        <a v-if="auction.privacy === 'private'" @click.prevent="makePublic()"><mdb-icon icon="lock"/> Hidden</a>
+        <a v-if="auction.privacy === 'private'" @click.prevent="makePublic()"><mdb-icon icon="lock"/> Draft</a>
         <a v-else @click.prevent="makePrivate()"><mdb-icon icon="unlock"/> Published.</a>
       </p>
       <p>{{countdown}}</p>
@@ -18,10 +26,6 @@
         <router-link :to="updateUrl"><mdb-btn color="white">Edit</mdb-btn></router-link>
         <router-link :to="onlineAuctionUrl"><mdb-btn color="white">View</mdb-btn></router-link>
         <mdb-btn color="danger" @click.prevent="deleteAuction()">Delete</mdb-btn>
-        <!--
-        <button v-if="auction.privacy === 'private'" class="btn teal lighten-1" @click.prevent="makePublic()">make public</button>
-        <button v-else class="btn teal lighten-1" @click.prevent="makePrivate()">make private</button>
-        -->
       </p>
     </div>
   </div>
@@ -46,19 +50,16 @@
   </div>
   <hr class="my-5">
   <div class="row">
-    <div class="col-md-12">
-      <h4>Items ({{sellingItemsSize}})</h4>
-      <ul class="list-unstyled">
-        <my-single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="true"/>
-      </ul>
-    </div>
-  </div>
-  <hr class="my-5"/>
-  <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
       <h4>Available Items</h4>
       <ul class="list-unstyled mt-5">
-        <my-single-auction-item class="auction-item-container" v-for="(item, index) of availableItems" :key="index" :item="item" :auctionId="auctionId" :sellingItem="false"/>
+        <my-single-auction-item class="auction-item-container" v-for="(item, index) of availableItems" :key="index" :itemId="item.itemId" :auctionId="auctionId" :profile="profile" :sellingItem="false"/>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <h4>Items in Auction <a @click.prevent="showItems = !showItems" v-if="sellingItems.length > 0"><u>(<span v-if="showItems">hide</span><span v-else>show</span> {{sellingItemsSize}} items)</u></a></h4>
+      <ul class="list-unstyled mt-5" v-if="showItems">
+        <my-single-auction-item class="auction-item-container" v-for="(item, index) of sellingItems" :key="index" :itemId="item.itemId" :auctionId="auctionId" :profile="profile" :sellingItem="true" @stateChange="stateChange"/>
       </ul>
     </div>
   </div>
@@ -71,10 +72,12 @@ import MessageStream from "./components/rtc/MessageStream";
 import VideoStream from "./components/rtc/VideoStream";
 import MySingleAuctionItem from "./components/auction/MySingleAuctionItem";
 import HammerItem from "./components/auction/HammerItem";
+import ConfirmationModal from "./components/utils/ConfirmationModal";
+import biddingUtils from "@/services/biddingUtils";
+import peerToPeerService from "@/services/peerToPeerService";
 
 import utils from "@/services/utils";
 import notify from "@/services/notify";
-import peerToPeerService from "@/services/peerToPeerService";
 import eventBus from "@/services/eventBus";
 import { mdbBtn, mdbIcon } from 'mdbvue';
 
@@ -83,6 +86,7 @@ export default {
   name: "MyAuctionManage",
   bodyClass: "index-page",
   components: {
+    ConfirmationModal,
     mdbBtn,
     mdbIcon,
     WatchersStream,
@@ -93,27 +97,33 @@ export default {
   },
   data() {
     return {
-      auctionId: null
+      auctionId: null,
+      profile: null,
+      loading: true,
+      showItems: true,
+      showModal: false,
+      modalTitle: "Updating Info",
+      modalContent: "<p>Please wait - updating information...</p>",
     };
   },
   beforeDestroy() {
     peerToPeerService.disconnect();
     eventBus.$off("signal-in-message");
   },
-  created() {
+  mounted() {
     this.auctionId = Number(this.$route.params.auctionId);
-    this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
-      this.$store
-        .dispatch("myAuctionsStore/fetchMyAuction", this.auctionId)
-        .then(auction => {
-          // this.auction = auction
-          try {
-            this.$store.commit("onlineAuctionsStore/onlineAuction", auction);
-            peerToPeerService.startSession(myProfile.username, this.auctionId);
-          } catch (e) {
-            console.log(e);
-          }
-        });
+    this.$store.dispatch("myArtworksStore/fetchMyArtworks");
+    this.$store.dispatch("myAuctionsStore/fetchMyAuction", this.auctionId).then(auction => {
+      this.$store.dispatch("myAccountStore/fetchMyAccount").then(myProfile => {
+        this.profile = myProfile;
+        try {
+          this.$store.commit("onlineAuctionsStore/onlineAuction", auction);
+          peerToPeerService.startSession(myProfile.username, this.auctionId);
+          this.loading = false;
+        } catch (e) {
+          console.log(e);
+        }
+      });
     });
   },
   methods: {
@@ -125,37 +135,101 @@ export default {
       this.$router.push("/my-artworks");
     },
     makePublic() {
-      let auction = this.$store.getters["myAuctionsStore/myAuction"](
-        this.auctionId
-      );
+      let auction = this.$store.getters["myAuctionsStore/myAuction"](this.auctionId);
+      if (!auction.items || auction.items.length < 1) {
+        this.$notify({type: 'warn', title: 'Manage Auction', text: auction.title + " can't be published until it includes some sale items."});
+        return;
+      }
       auction.privacy = "public";
       this.$store.dispatch("myAuctionsStore/makePublic", auction);
-      notify.info({
-        title: "Manage Auction",
-        text:
-          auction.title +
-          " is now public and can be found by others via search results."
-      });
+      this.$notify({type: 'info', title: 'Manage Auction', text: auction.title + " has been published."});
     },
     makePrivate() {
-      let auction = this.$store.getters["myAuctionsStore/myAuction"](
-        this.auctionId
-      );
+      let auction = this.$store.getters["myAuctionsStore/myAuction"](this.auctionId);
       auction.privacy = "private";
       this.$store.dispatch("myAuctionsStore/makePrivate", auction);
-      notify.info({
-        title: "Manage Auction",
-        text:
-          auction.title + " is now private and can not be found by other users."
+      this.$notify({type: 'info', title: 'Manage Auction', text: auction.title + " is now private and cannot be found in searches etc."});
+    },
+    closeModal: function() {
+      this.showModal = false;
+    },
+    stateChange(data) {
+      this.showModal = true;
+      if (data.opcode === "activate") {
+        this.activateBidding(data.itemId);
+      } else if (data.opcode === "deactivate") {
+        this.deactivateBidding(data.itemId);
+      } else if (data.opcode === "removeFromAuction") {
+        this.removeFromAuction(data.itemId);
+      } else if (data.opcode === "addToAuction") {
+        this.addToAuction(data.itemId);
+      }
+    },
+    deactivateBidding() {
+      this.modalContent = "Removing item from ring...";
+      let auction = this.$store.getters["myAuctionsStore/myAuction"](this.auctionId);
+      biddingUtils.makeItemActive(auction, null);
+      this.$store.dispatch("myAuctionsStore/updateAuction", auction).then(() => {
+        let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+        peerToPeerService.sendPeerSignal({
+          type: "wa-item-activate",
+          data: {
+            username: myProfile.username,
+            itemId: null
+          }
+        });
+        this.showModal = false;
       });
-    }
+    },
+    activateBidding(itemId) {
+      this.modalContent = "Putting this item into the ring...";
+      let auction = this.$store.getters["myAuctionsStore/myAuction"](this.auctionId);
+      biddingUtils.makeItemActive(auction, itemId);
+      this.$store.dispatch("myAuctionsStore/updateAuction", auction).then(() => {
+        let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
+        peerToPeerService.sendPeerSignal({
+          type: "wa-item-activate",
+          data: {
+            username: myProfile.username,
+            itemId: itemId
+          }
+        });
+        this.showModal = false;
+      });
+    },
   },
   computed: {
     sellingItemsSize() {
-      let sellingItems = this.$store.getters["myArtworksStore/auctioning"](
-        this.auctionId
-      );
-      return sellingItems.length;
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](this.auctionId);
+      return auction.items.length;
+    },
+    sellingItems() {
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](this.auctionId);
+      if (auction && auction.items) {
+        let following = auction.items; // .filter(item => !item.inplay);
+        return following;
+      } else {
+        return [];
+      }
+    },
+    availableItems() {
+      let available = this.$store.getters["myArtworksStore/unsold"]; // (this.auctionId);
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](this.auctionId);
+      if (available && available.length > 0) {
+        let items = [];
+        for (let key in available) {
+          let artworkId = available[key].id;
+          let index = _.findIndex(auction.items, function(o) {
+            return o.itemId === artworkId;
+          });
+          if (index === -1) {
+            items.push({itemId: available[key].id});
+          }
+        }
+        return items;
+      } else {
+        return [];
+      }
     },
     winning() {
       let winning = this.$store.getters["onlineAuctionsStore/getWinning"]({
@@ -165,16 +239,12 @@ export default {
       return winning;
     },
     countdown() {
-      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
-        this.auctionId
-      );
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](this.auctionId);
       let serverTime = this.$store.getters["serverTime"];
       return auction ? utils.dt_Offset(serverTime, auction.startDate) : "?";
     },
     auction() {
-      let auction = this.$store.getters["myAuctionsStore/myAuction"](
-        this.auctionId
-      );
+      let auction = this.$store.getters["myAuctionsStore/myAuction"](this.auctionId);
       if (!auction || !auction.auctionId) {
         auction = {
           items: []
@@ -190,42 +260,12 @@ export default {
     },
     hammerItem() {
       let hammerItem;
-      let auction = this.$store.getters["myAuctionsStore/myAuction"](
-        this.auctionId
-      );
+      let auction = this.$store.getters["myAuctionsStore/myAuction"](this.auctionId);
       if (auction && auction.items) {
-        let hammerItems = auction.items.filter(item => item.inplay);
-        if (hammerItems && hammerItems.length === 1) {
-          hammerItem = hammerItems[0];
-        }
+        hammerItem = auction.items.find(item => item.inplay);
       }
-      return hammerItem;
-    },
-    availableItems() {
-      let available = this.$store.getters["myArtworksStore/available"](
-        this.auctionId
-      );
-      if (available && available.length > 0) {
-        let items = [];
-        for (let key in available) {
-          items.push({
-            itemId: available[key].id
-          });
-        }
-        return items;
-      } else {
-        return [];
-      }
-    },
-    sellingItems() {
-      let auction = this.$store.getters["myAuctionsStore/myAuction"](
-        this.auctionId
-      );
-      if (auction && auction.items) {
-        let following = auction.items.filter(item => !item.inplay);
-        return following;
-      } else {
-        return [];
+      if (hammerItem) {
+        return hammerItem;
       }
     },
     onlineAuctionUrl() {

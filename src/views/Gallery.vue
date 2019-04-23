@@ -1,9 +1,12 @@
 <template>
   <mdb-container fluid class="bg-dark flex-1 py-5" id="my-app-element">
     <mdb-container class="py-3 py-md-4">
-        <mdb-row class="article">
-          <single-result v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item"/>
-         </mdb-row>
+      <mdb-row class="article">
+        <h2 class="h2-responsive text-white">Radicle Marketplace</h2>
+       </mdb-row>
+       <mdb-row class="article">
+         <single-result v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item"/>
+       </mdb-row>
     </mdb-container>
   </mdb-container>
 </template>

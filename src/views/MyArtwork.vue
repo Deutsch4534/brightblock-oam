@@ -1,5 +1,5 @@
 <template>
-<mdb-container fluid class="bg-light flex-1 pt-5">
+<mdb-container fluid class=" flex-1 pt-5">
   <mdb-container class="bg-white mt-5 p-3" v-if="loading">
     <div>Loading artwork - please wait...</div>
   </mdb-container>

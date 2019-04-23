@@ -19,7 +19,7 @@ export const CONSTANTS = {
 
   featureEthereum: false,
   featureBitcoin: true,
-  featureAuctions: false,
+  featureAuctions: true,
   debugMode: false,
   domain: location.origin,
   invoicesRootFileName: "invoices_v01.json",

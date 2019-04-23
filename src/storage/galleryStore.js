@@ -39,8 +39,15 @@ const galleryStore = {
     pushMyGalleries(state, myGalleries) {
       state.myGalleries = myGalleries;
     },
-    pushMyGallery(state, myGallery) {
-      state.myGalleries.records.push(myGallery);
+    pushMyGallery(state, gallery) {
+      let index = _.findIndex(state.myGalleries.records, function(o) {
+        return o.galleryId === gallery.galleryId;
+      });
+      if (index === -1) {
+        state.myGalleries.records.splice(0, 0, gallery);
+      } else {
+        state.myGalleries.records.splice(index, 1, gallery);
+      }
     },
   },
   actions: {
@@ -48,12 +55,17 @@ const galleryStore = {
     fetchGallery({ commit, getters, dispatch }, galleryId) {
       return new Promise(resolve => {
         let gallery = getters.getMyGallery(galleryId);
-        if (gallery) {
+        if (gallery && gallery.shippingAddress) {
           resolve(gallery);
         } else {
           dispatch("fetchMyGalleries").then(galleries => {
-            gallery = getters.getMyGallery(galleryId);
-            resolve(gallery);
+            let index = _.findIndex(galleries, function(o) {
+              return o.galleryId === galleryId;
+            });
+            galleryService.fetchGalleryUserDataFromGaia(galleries[index]).then(gallery => {
+              commit("pushMyGallery", gallery);
+              resolve(gallery);
+            });
           });
         }
       });
@@ -78,14 +90,23 @@ const galleryStore = {
       });
     },
 
-    fetchMyGalleries({ commit }) {
+    fetchMyGalleries({ state, commit }) {
       return new Promise(resolve => {
+        if (state.myGalleries.records && state.myGalleries.records.length > 0) {
+          resolve(state.myGalleries.records);
+        }
         galleryService.initGalleryData().then(galleries => {
           commit("pushMyGalleries", galleries);
           if (galleries) {
+            _.forEach(galleries.records, function(galleryIndexData) {
+              galleryService.fetchGalleryUserDataFromGaia(galleryIndexData).then(gallery => {
+                commit("pushMyGallery", gallery);
+              });
+            });
             resolve(galleries.records);
+          } else {
+            resolve();
           }
-          resolve();
         });
       });
     },

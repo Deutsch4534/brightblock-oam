@@ -1,5 +1,6 @@
 <template>
-<mdb-container id="ContactSection" class="py-5">
+<mdb-container fluid class="bg-main">
+<mdb-container id="ContactSection" class="py-5 text-light contact-section">
   <confirmation-modal class="text-dark" v-if="showModal" :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
     <section class="px-0">
       <mdb-row>
@@ -19,27 +20,30 @@
             </div>
           </mdb-col>
           <mdb-col md="6">
-            <form class="contact-form">
+            <form class="contact-form needs-validation py-5 form-transparent" novalidate @submit.prevent="checkForm" id="contact-form">
               <mdb-row>
                 <mdb-col md="12">
-                  <mdb-input type="text" id="contact-name" label="Your name" v-model="name"/>
+                  <mdb-input type="text" id="contact-name" label="Your name" v-model="name" required/>
                   </div>
                 </mdb-col>
                 <mdb-col md="12">
-                  <mdb-input type="text" id="contact-email" label="Your email" v-model="email"/>
+                  <mdb-input type="text" id="contact-email" label="Your email" v-model="email" required/>
                 </mdb-col>
               </mdb-row>
               <mdb-row>
                 <mdb-col md="12">
-                  <mdb-input type="text" id="contact-subject" label="Subject" v-model="subject"/>
+                  <mdb-input type="text" id="contact-subject" label="Subject" v-model="subject" required/>
                 </mdb-col>
                 <mdb-col col="12">
-                  <mdb-textarea id="contact-message" label="Your message" v-model="message"/>
+                  <div class="md-form">
+                    <textarea class="form-control md-textarea" v-model="message" required></textarea>
+                    <label for="contact-message" class="">Enter message</label>
+                  </div>
                 </mdb-col>
               </mdb-row>
               <div class="text-md-left mt-5 submit">
-                <span type="button" class="h1-responsive" @click="submit">SUBMIT</span>
-              </div>
+                <button class="submit text-white bg-transparent h1-responsive">SUBMIT</button>
+            </div>
             </form>
           </mdb-col>
         </mdb-row>
@@ -51,7 +55,8 @@
         </mdb-col>
       </mdb-row>
     </section>
-  </mdb-container>
+    </mdb-container>
+    </mdb-container>
 </template>
 
 <script>
@@ -93,7 +98,7 @@ export default {
   created() {
   },
   methods: {
-    submit() {
+    upload() {
       let data = {
         text: this.message,
         subject: this.subject,
@@ -107,6 +112,7 @@ export default {
           "Content-Type": "application/json"
         }
       };
+      this.showModal = true;
       return new Promise((resolve, reject) => {
         axios
           .post(callInfo.url, data)
@@ -121,6 +127,28 @@ export default {
             reject(new Error(e.message));
           });
       });
+    },
+    checkForm(event) {
+      event.preventDefault();
+      event.target.classList.add('was-validated');
+      this.errors = [];
+      if (!this.name) {
+        this.errors.push("Please enter a name.");
+      }
+      if (!this.subject) {
+        this.errors.push("Please enter a subject.");
+      }
+      if (!this.email) {
+        this.errors.push("Please enter a email.");
+      }
+      if (!this.message) {
+        this.errors.push("Please enter a message.");
+      }
+      if (this.errors.length > 0) {
+        return false;
+      } else {
+        this.upload();
+      }
     },
     closeModal: function() {
       this.showModal = false;
@@ -146,7 +174,9 @@ export default {
   letter-spacing: 0.5px;
 
 }
-
+.submit {
+  border: none;
+}
 .contact-form .form-control {
   color: inherit;
   font-weight: normal;

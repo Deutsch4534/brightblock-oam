@@ -33,7 +33,7 @@
     <mdb-media-body>
       <h5 class="mt-0 mb-2 font-weight-bold">{{auction.title}}</h5>
       <p>{{auction.description}}</p>
-      <p class="text-warning">The auction has finished - thanks for your interest.</p>
+      <p class="text-warning">{{countdown}}</p>
     </mdb-media-body>
   </mdb-media>
   <hr class="my-5">
@@ -210,19 +210,20 @@ export default {
       return auction && auction.items ? auction.items.length : 0;
     },
     finished() {
-      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](
-        this.auctionId
-      );
-      if (!auction || !auction.items) {
+      let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](this.auctionId);
+      if (!auction) {
         return true;
       }
-      let over = true;
-      auction.items.forEach(function(item) {
-        if (!item.finished) {
-          over = false;
-        }
-      });
-      return over;
+      let serverTime = this.$store.getters["serverTime"];
+      return serverTime > auction.startDate;
+
+      //let over = true;
+      //auction.items.forEach(function(item) {
+      //  if (!item.finished) {
+      //    over = false;
+      //  }
+      //});
+      //return over;
     },
     countdown() {
       let auction = this.$store.getters["onlineAuctionsStore/onlineAuction"](

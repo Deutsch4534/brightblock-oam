@@ -130,11 +130,6 @@ const myArtworksStore = {
       let status = store.state.constants.statuses.artwork.PURCHASE_BEGUN;
       return state.myArtworks.filter(artwork => username !== artwork.owner && artwork.status !== status);
     },
-    auctioning: state => auctionId => {
-      return state.myArtworks.filter(
-        artwork => auctionId === artwork.saleData.auctionId
-      );
-    },
     available: state => auctionId => {
       // let available = state.myArtworks.filter(artwork => typeof (artwork.saleData.auctionId) === 'undefined')
       let zerro = state.myArtworks.filter(
@@ -216,7 +211,8 @@ const myArtworksStore = {
               text: "Item info removed from auction."
             });
             if (artwork) {
-              artwork.saleData = moneyUtils.buildInitialSaleData();
+              // artwork.saleData = moneyUtils.buildInitialSaleData();
+              artwork.saleData.soid = 0;
               store
                 .dispatch("myArtworksStore/updateArtwork", artwork)
                 .then(artwork => {

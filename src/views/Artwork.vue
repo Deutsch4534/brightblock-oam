@@ -112,7 +112,7 @@ export default {
         $self.showBuyOptions = true;
         $self.loading = false;
         // check for redirect to auctions...
-        if ($self.artwork.saleData.auctionId) {
+        if ($self.artwork.saleData.auctionId && $self.artwork.saleData.auctionId > -1) {
           $self.$router.push("/online-auction/" + artwork.owner + "/" + artwork.saleData.auctionId);
         }
       }

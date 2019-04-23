@@ -1,16 +1,21 @@
 <template>
-<div class="container-fluid bg-light flex-1 py-5" v-if="loading">
-  <div>Loading artwork - please wait...</div>
-</div>
-<div class="container-fluid bg-light flex-1 py-5" v-else>
-  <my-artwork-upload-form v-if="enabled" :formTitle="'Upload Artwork'" :mode="'upload'"/>
-  <contact-section :featureMessage="featureMessage" v-else class="black-text"/>
+<loading-view v-if="loading" :loadingMessage="loadingMessage"/>
+<div v-else>
+  <contact-section :featureMessage="featureMessage" v-if="!enabled"/>
+  <mdb-container fluid class="" v-else>
+    <mdb-container class="py-3 py-md-4">
+      <my-auction-upload-form v-if="enabled" :mode="'upload'"/>
+      <my-artwork-upload-form :formTitle="'Upload Artwork'" :mode="'upload'"/>
+    </mdb-container>
+  </mdb-container>
 </div>
 </template>
 
 <script>
 import MyArtworkUploadForm from "./components/myArtwork/MyArtworkUploadForm";
-import ContactSection from "./components/splash/ContactSection";
+import { mdbContainer, mdbRow, mdbCol } from 'mdbvue';
+import ContactSection from "@/views/components/splash/ContactSection";
+import LoadingView from "@/views/components/utils/LoadingView";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -18,12 +23,15 @@ export default {
   bodyClass: "index-page",
   components: {
     MyArtworkUploadForm,
-    ContactSection
+    ContactSection,
+    LoadingView,
+    mdbContainer, mdbRow, mdbCol
   },
   data() {
     return {
       enabled: false,
-      featureMessage: "Get in touch about how to upload artwork.",
+      featureMessage: "Please drop us a note about registering as an artist.",
+      loadingMessage: "Loading Radicle upload art form please wait...",
       loading: true
     };
   },
@@ -33,10 +41,10 @@ export default {
         if (!myProfile.publicKeyData || !myProfile.publicKeyData.bitcoinAddress) {
           this.$router.push("/profile/update?from=upload-artwork");
         } else {
-          this.enabled = true; // myProfile.showAdmin;
+          this.enabled = myProfile.showAdmin;
         }
+        this.loading = false;
       }
-      this.loading = false;
     });
   },
   computed: {},

@@ -1,13 +1,19 @@
 <template>
-<div class="container-fluid bg-light flex-1">
-  <my-auction-upload-form v-if="enabled" :mode="'upload'"/>
-  <contact-section :featureMessage="featureMessage" v-else class="black-text"/>
+<loading-view v-if="loading" :loadingMessage="loadingMessage"/>
+<div v-else>
+  <contact-section :featureMessage="featureMessage" v-if="!enabled"/>
+  <mdb-container fluid class="" v-else>
+    <mdb-container class="py-3 py-md-4">
+      <my-auction-upload-form v-if="enabled" :mode="'upload'"/>
+    </mdb-container>
+  </mdb-container>
 </div>
 </template>
 
 <script>
 import MyAuctionUploadForm from "./components/auction/MyAuctionUploadForm";
-import ContactSection from "./components/splash/ContactSection";
+import ContactSection from "@/views/components/splash/ContactSection";
+import LoadingView from "@/views/components/utils/LoadingView";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -15,17 +21,25 @@ export default {
   bodyClass: "index-page",
   components: {
     MyAuctionUploadForm,
-    ContactSection
+    LoadingView,
+    ContactSection,
   },
   data() {
     return {
       enabled: false,
-      featureMessage: 'Get in touch about running <a href="mailto:mijoco@radicle.art">auctions</a>.'
+      auctionId: null,
+      featureMessage: "Please drop us a note about registering as an artist.",
+      loadingMessage: "Loading Radicle upload art form please wait...",
+      loading: true
     };
   },
   created() {
-    let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-    this.enabled = myProfile.showAdmin;
+    this.$store.dispatch("myAccountStore/fetchMyAccount").then((myProfile) => {
+      if (myProfile) {
+        this.enabled = myProfile.showAdmin;
+      }
+      this.loading = false;
+    });
   },
   computed: {},
   methods: {}

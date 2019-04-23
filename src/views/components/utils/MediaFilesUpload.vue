@@ -34,7 +34,7 @@
 
   <div class="row">
     <div v-for="(file, index) in mediaObjects" :key="index" :file="file" class="col-md-6">
-      <img :src="missing" alt="Card image cap" class="img-fluid" style="max-height: 250px;" v-if="ispdf(file)">
+      <img :src="missing" alt="Card image cap" class="img-fluid" v-if="ispdf(file)">
       <img :src="file.dataUrl" alt="Card image cap" class="img-fluid mb-2" style="max-height: 250px;" v-else>
       <div v-if="ispdf(file)">
         <p class="mb-0 small">{{ file.type }}</p>

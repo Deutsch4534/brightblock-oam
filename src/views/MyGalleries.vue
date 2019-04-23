@@ -1,26 +1,34 @@
 <template>
-  <mdb-container fluid class="bg-light flex-1 py-5">
-    <mdb-container class="py-3 py-md-4">
-    <div class="row">
-      <div class="col-md-3">
-        <mdb-navbar class="blue lighten-5">
-          <mdb-navbar-nav nav vertical>
-            <mdb-nav-item><h5>My Galleries</h5></mdb-nav-item>
-          </mdb-navbar-nav>
-        </mdb-navbar>
+<loading-view v-if="loading" :loadingMessage="loadingMessage"/>
+<div v-else>
+<contact-section :featureMessage="featureMessage" v-if="!enabled"/>
+<mdb-container fluid class="bg-light flex-1 py-5" v-else>
+  <mdb-container class="py-3 py-md-4" v-if="!enabled">
+    <mdb-row>
+      <div class="col-12 bg-main">
+        <contact-section :featureMessage="featureMessage"/>
       </div>
-      <div class="col-md-9">
+    </mdb-row>
+  </mdb-container>
+  <mdb-container class="py-3 py-md-4" v-else>
+    <div class="row">
+      <div class="col-md-12">
         <mdb-row>
-
-          <div class="col-12" v-for="(gallery, index) of galleries" :key="index">
-            <h2 class="h2-responsive mb-5">{{gallery.name}}</span></h2>
-          </div>
-
+          <h2 class="h2-responsive mb-5">Radicle Galleries</h2>
         </mdb-row>
+        <mdb-row>
+          <div class="col-12">
+            <p><router-link to="/gallery/upload">Create a Radicle Gallery</router-link></p>
+          </div>
+        </mdb-row>
+        <div class="row">
+          <single-gallery v-for="(gallery, index) of galleries" :key="index" :gallery="gallery"/>
+        </div>
       </div>
     </div>
-    </mdb-container>
   </mdb-container>
+</mdb-container>
+</div>
 </template>
 
 <script>
@@ -35,12 +43,18 @@ import { mdbContainer, mdbRow,  mdbCard,
     mdbView,
     mdbBtn } from 'mdbvue';
 import { mdbNavbar, mdbNavbarNav, mdbNavItem } from "mdbvue";
+import SingleGallery from "./components/gallery/SingleGallery";
+import ContactSection from "@/views/components/splash/ContactSection";
+import LoadingView from "@/views/components/utils/LoadingView";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MyGalleries",
   bodyClass: "index-page",
   components: {
+    LoadingView,
+    ContactSection,
+    SingleGallery,
     MyArtworksList,
     mdbContainer,
     mdbRow,
@@ -56,16 +70,32 @@ export default {
   },
   data() {
     return {
-      showNav: 1,
+      enabled: false,
+      loading: true,
+      galleries: null,
+      featureMessage: "Please drop us a note about about partnering with us to run your own Radicle Gallery.",
+      loadingMessage: "Loading Radicle Galleries please wait...",
     };
   },
-  created() {
+  mounted() {
+    this.$store.dispatch("galleryStore/fetchMyGalleries").then((myGalleries) => {
+      this.$store.dispatch("myAccountStore/fetchMyAccount").then((myProfile) => {
+        if (myProfile) {
+          this.enabled = myProfile.showAdmin;
+          this.galleries = myGalleries;
+          this.loading = false;
+        } else {
+          this.loadingMessage = "Please login.";
+        }
+      });
+    });
   },
-  methods: {},
+  methods: {
+  },
   computed: {
-    galleries() {
-      return this.$store.getters["galleryStore/getMyGalleries"];
-    },
+    //galleries() {
+  //    return this.$store.getters["galleryStore/getMyGalleries"];
+    //},
   }
 };
 </script>

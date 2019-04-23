@@ -130,24 +130,13 @@ export default {
     }
   },
   computed: {
-    artwork() {
-      if (!this.item.itemId) {
-        return {
-          title: "no artwork under the hammer right now",
-          image: "/images/missing-image.jpg"
-        };
-      }
-      let a = this.$store.getters["artworkSearchStore/getArtwork"](
-        this.item.itemId
-      );
-      if (!a.image) {
-        a.image = require("@/assets/img/missing/artwork-missing.jpg");
-      }
-      return a;
-    },
     loggedIn() {
       let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
       return myProfile.loggedIn;
+    },
+    artwork() {
+      let artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.item.itemId);
+      return artwork;
     },
     bidStatusClass() {
       return biddingUtils.bidStatusClass(this.item);

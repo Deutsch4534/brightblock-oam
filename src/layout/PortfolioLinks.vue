@@ -1,15 +1,32 @@
 <template>
   <mdb-dropdown>
     <mdb-dropdown-toggle tag="a" navLink color="" slot="toggle"  waves-fixed>
-      <span class="hi-link">Upload</span>
+      <span class="hi-link"><mdb-icon icon="ellipsis-v" /></span>
     </mdb-dropdown-toggle>
 
     <mdb-dropdown-menu class="dropdown-menu-right" id="userMainMenu" >
 
       <mdb-dropdown-item>
-        <router-link to="/my-artwork/upload" class="dropdown-item">Upload Artwork</router-link>
+        <router-link class="nav-link navbar-link" to="/my-artworks">My Artwork</router-link>
       </mdb-dropdown-item>
 
+      <mdb-dropdown-item>
+        <router-link class="dropdown-item" to="/my-galleries">My Galleries</router-link>
+      </mdb-dropdown-item>
+
+      <mdb-dropdown-item>
+        <router-link class="dropdown-item" to="/my-auctions">My Auctions</router-link>
+      </mdb-dropdown-item>
+
+<!--
+      <mdb-dropdown-item>
+        <router-link to="/gallery/upload" class="dropdown-item">Gallery Signup</router-link>
+      </mdb-dropdown-item>
+
+      <mdb-dropdown-item>
+        <router-link to="/my-auctions/upload" class="dropdown-item">Upload Auction</router-link>
+      </mdb-dropdown-item>
+-->
     </mdb-dropdown-menu>
   </mdb-dropdown>
 
@@ -20,7 +37,7 @@ import { mdbBadge, mdbNavbar, mdbNavItem, mdbNavbarNav, mdbNavbarToggler, mdbBtn
 import myAccountService from "@/services/myAccountService";
 
 export default {
-  name: 'AccountLinks',
+  name: 'PortfolioLinks',
   components: {
     mdbNavbar,
     mdbNavItem,
@@ -151,5 +168,14 @@ export default {
 }
 
 .fa-user-circle { font-size: 1.7rem; padding-bottom: 4px;}
+
+.dropdown-toggle {
+  padding: 10px 10px;
+  border: none;
+  font-size: 1.2rem;
+}
+.dropdown-toggle::after {
+    display: none;
+}
 
 </style>

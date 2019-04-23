@@ -33,7 +33,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("galleryStore/fetchMyGalleries").then((galleries) => {
-      if (galleries && galleries.length > 0) {
+      if (galleries && galleries.length > 3) {
         this.$router.push("/gallery/update/" + galleries[0].galleryId);
       } else {
         this.$store.dispatch("myAccountStore/fetchMyAccount").then((profile) => {

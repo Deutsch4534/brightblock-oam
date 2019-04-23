@@ -59,6 +59,17 @@ const myAuctionsStore = {
           return auction;
         }
       }
+    },
+    myAuctionItem: state => (auctionId, itemId) => {
+      let auction = state.myAuctions.find(
+        auction => auction.auctionId === auctionId
+      );
+      let index = _.findIndex(auction.items, function(o) {
+        return o.itemId === itemId;
+      });
+      if (index > -1) {
+        return auction.items[index];
+      }
     }
   },
   mutations: {
@@ -87,6 +98,7 @@ const myAuctionsStore = {
       });
     },
 
+    /**
     activateItemEvent(state, data) {
       let auction = store.getters["myAuctionsStore/myAuction"](data.auctionId);
       biddingUtils.makeItemActive(auction, data.itemId);
@@ -99,6 +111,7 @@ const myAuctionsStore = {
         });
       });
     },
+    **/
 
     sendBidEvent(state, data) {
       let auction = state.myAuctions.filter(

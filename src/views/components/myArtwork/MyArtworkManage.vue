@@ -3,7 +3,7 @@
     <confirmation-modal :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
     <delete-artwork-modal :modal="showDeleteModal" :title="modalTitle" :content="modalContent" @deleteArtworkConfirmed="deleteArtworkConfirmed"/>
     <mdb-row>
-      <mdb-col col="8">
+      <mdb-col class="col-md-8 col-sm-12">
         <h1>
           <router-link :to="myArtworksUrl" class="inline-block">
             <mdb-icon far icon="arrow-alt-circle-left" />
@@ -11,7 +11,7 @@
           {{artwork.title}}
         </h1>
       </mdb-col>
-      <mdb-col col="4" class="text-right"><small class="teal-text">{{bitcoinTx}}</small></mdb-col>
+      <mdb-col class="col-md-4 col-sm-12 text-right mb-5"><small class="teal-text">{{bitcoinTx}}</small></mdb-col>
     </mdb-row>
     <mdb-row v-if="!loading">
       <mdb-col col="4">
@@ -49,14 +49,14 @@
           <a to="#" class="inline-block" @click.prevent="showRegisterForSale = !showRegisterForSale">
             <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="canSell" >Sell</mdb-btn>
           </a>
-          <router-link :to="editUrl" class="inline-block">
-            <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="editable">Edit</mdb-btn>
+          <router-link :to="editUrl" class="inline-block" v-if="editable">
+            <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Edit</mdb-btn>
           </router-link>
           <router-link :to="artworkUrl" class="inline-block">
             <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Open</mdb-btn>
           </router-link>
-          <a @click="deleteArtwork" class="inline-block">
-            <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light" v-if="deletable">Delete</mdb-btn>
+          <a @click="deleteArtwork" class="inline-block" v-if="deletable">
+            <mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Delete</mdb-btn>
           </a>
         </div>
 
@@ -64,7 +64,7 @@
           <register-bitcoin :artwork="artwork" :myProfile="myProfile" @registerBitcoin="registerBitcoin"/>
         </mdb-row>
         <mdb-row v-if="showRegisterForSale">
-          <register-for-sale :artwork="artwork" :fiatRates="fiatRates" @registerSaleInfo="registerSaleInfo"/>
+          <register-for-sale :artwork="artwork" :saleType="'direct'" :allowChange="true" @registerSaleInfo="registerSaleInfo"/>
         </mdb-row>
         <mdb-row v-if="showGenerateCoA">
           <create-coa v-if="artwork.bitcoinTx" :artwork="artwork" :myProfile="myProfile" @reload="reload"/>
@@ -131,12 +131,12 @@ export default {
   },
   data() {
     return {
-      showModal: false,
       showDeleteModal: false,
       loading: true,
       showRegisterForSale: false,
       showRegisterOnBitcoin: false,
       showGenerateCoA: false,
+      showModal: false,
       modalTitle: "Registering Ownership",
       modalContent: "<p>Transaction sent - confirmation takes ~ 6 blocks which is about an hour..</p>" +
             "<p>Once confirmed you'll be able to generate Certificate of Authenticity.</p>",
@@ -180,6 +180,7 @@ export default {
         this.showModal = true;
       } else {
         this.showModal = false;
+        this.showRegisterForSale = false;
       }
     },
     registerBitcoin: function(result) {
@@ -217,9 +218,6 @@ export default {
     },
     deletable() {
       return this.$store.getters["myArtworksStore/editable"](this.artwork.id);
-    },
-    fiatRates() {
-      return this.$store.getters["conversionStore/getFiatRates"];
     },
     bitcoinTx() {
       if (this.myProfile.publicKeyData) {

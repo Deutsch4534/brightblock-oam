@@ -14,10 +14,6 @@
         <router-link class="dropdown-item" to="/profile/update">Settings</router-link>
       </mdb-dropdown-item>
 
-      <mdb-dropdown-item v-if="hasGalleries">
-        <router-link class="dropdown-item" to="/my-galleries">My Galleries<sup><mdb-badge color="danger-color" class="ml-2">{{hasGalleries}}</mdb-badge></sup></router-link>
-      </mdb-dropdown-item>
-
       <mdb-dropdown-item>
         <router-link class="dropdown-item" to="/admin/settings" v-if="showAdmin">Admin</router-link>
       </mdb-dropdown-item>

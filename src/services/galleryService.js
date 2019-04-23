@@ -44,7 +44,7 @@ const galleryService = {
   },
 
   mergeGidGud: function(gid, gud) {
-    if (Number(gid.id) !== gud.galleryId) {
+    if (gid.galleryId !== gud.galleryId) {
       throw new Error("Something wrong with this data.");
     }
     let gallery = _.pick(gid, ['title', 'description', 'keywords', 'privacy', 'owner', 'galleryType']);
@@ -73,7 +73,8 @@ const galleryService = {
 
   fetchGalleryUserDataFromGaia: function(gid) {
     return new Promise((resolve, reject) => {
-      const galleryFileName = CONSTANTS.gIndexDataPrefix + gid.id + '.json';
+      let id = (gid.id) ? Number(gid.id) : Number(gid.galleryId);
+      const galleryFileName = CONSTANTS.gIndexDataPrefix + id + '.json';
       let options = {decrypt: false, username: gid.owner};
       getFile(galleryFileName, options).then(function(file) {
         if (file) {

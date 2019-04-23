@@ -1,6 +1,7 @@
 <template>
   <mdb-container class="py-3 py-md-4">
     <!-- Supported elements -->
+    <confirmation-modal :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
     <h1 class="h1-responsive">{{formTitle}}</h1>
     <form class="needs-validation py-5 form-transparent" novalidate @submit.prevent="checkForm" id="artworkForm">
       <!-- item type -->
@@ -85,6 +86,13 @@
             </div>
           </div>
         </div>
+        <div class="form-row" v-if="galleries">
+          <select class="browser-default custom-select" v-model="galleryId" id="galleryId" name="galleryId">
+            <option value="null">Gallery Listing</option>
+            <option v-for="(gallery, index) in galleries" :key="index" :value="gallery.galleryId">{{ gallery.title }}</option>
+          </select>
+          <div class="col-md-12 text-right" v-if="artwork.galleryId"><small><a @click.prevent="removeGallery"><u>remove</u></a></small></div>
+        </div>
         <div class="form-row">
           <div class="col-6">
             <input type="text" class="form-control" id="validationCustom05" placeholder="Owner" v-model="artwork.owner" required>
@@ -135,11 +143,13 @@ import MediaFilesUpload from "../utils/MediaFilesUpload";
 import { mdbIcon, mdbPopover, mdbCol, mdbRow, mdbContainer, mdbBtn } from "mdbvue";
 import moment from "moment";
 import notify from "@/services/notify";
+import ConfirmationModal from "../utils/ConfirmationModal";
 
   // noinspection JSUnusedGlobalSymbols
   export default {
     name: "MyArtworkUploadForm",
     components: {
+      ConfirmationModal,
       MediaFilesUpload,
       mdbContainer,
       mdbIcon,
@@ -153,6 +163,11 @@ import notify from "@/services/notify";
       return {
         errors: [],
         showMedia: false,
+        galleries: null,
+        galleryId: null,
+        showModal: false,
+        modalTitle: "Saving Artwork",
+        modalContent: "<p>Please wait while we update your data.</p>",
         limits: {
           title: 50,
           description: 1000,
@@ -197,18 +212,24 @@ import notify from "@/services/notify";
       };
     },
     mounted() {
-      if (this.artworkId) {
-        this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId).then((artwork) => {
-          this.artwork = artwork;
-          if (this.artwork) {
-            this.created = moment(this.artwork.created).format();
-          }
+      this.$store.dispatch("galleryStore/fetchMyGalleries").then((galleries) => {
+        this.galleries = galleries;
+        if (this.artworkId) {
+          this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId).then((artwork) => {
+            this.artwork = artwork;
+            if (this.artwork) {
+              this.created = moment(this.artwork.created).format();
+              if (artwork.galleryId) {
+                this.galleryId = artwork.galleryId;
+              }
+            }
+            this.showMedia = true;
+          })
+        } else {
+          this.artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
           this.showMedia = true;
-        })
-      } else {
-        this.artwork = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.artworkId);
-        this.showMedia = true;
-      }
+        }
+      });
     },
     computed: {
       mediaFiles1() {
@@ -237,8 +258,17 @@ import notify from "@/services/notify";
       setByEventLogo1 (mediaObjects) {
         this.artwork.artwork = mediaObjects;
       },
+      closeModal: function() {
+        this.showModal = false;
+      },
       info() {
         this.$notify({type: 'success', title: 'Notification 2!', text: 'Hi! I am info message.'});
+      },
+      removeGallery() {
+        this.galleryId = null;
+        this.artwork.galleryId = null;
+        this.artwork.gallerist = null;
+        this.$notify({type: 'info', title: 'Gallery Removed', text: 'Artwork changed back to simple listing - press save!'});
       },
       setByEventLogo2 (mediaObjects) {
         this.artwork.supportingDocuments = mediaObjects;
@@ -253,6 +283,12 @@ import notify from "@/services/notify";
         this.alertMessage =
           "Please wait while we upload your artwork to your storage..";
         this.showAlert = true;
+        if (this.galleryId) {
+          let gallery = this.$store.getters["galleryStore/getMyGallery"](this.galleryId);
+          this.artwork.gallerist = gallery.owner;
+          this.artwork.galleryId = gallery.galleryId;
+        }
+        this.showModal = true;
         if (this.mode === "update") {
           this.$store
             .dispatch("myArtworksStore/updateArtwork", this.artwork)

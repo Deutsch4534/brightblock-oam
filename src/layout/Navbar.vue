@@ -28,12 +28,12 @@
       <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/gallery">Gallery</router-link></li>
       <li class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/artists">Artists</router-link></li>
       <li v-if="featureAuctions" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/online-auctions">Auctions</router-link></li>
-      <li v-if="loggedIn" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/my-artworks">My Artwork</router-link></li>
       <upload-links v-if="loggedIn"/>
       <li v-if="loggedIn && hasInvoices" class="nav-item" @click="closeMenu"><router-link class="nav-link navbar-link" to="/orders">Cart</i><sup><mdb-badge color="danger-color" class="ml-2">{{hasInvoices}}</mdb-badge></sup></router-link></li>
       <li class="nav-item" @click="closeMenu"><router-link to="/search"><mdb-icon icon="search" class="teal-text mt-3 mx-2" style="line-height: 10px;" aria-hidden="true" size="2x"/></router-link></li>
-      <account-links v-if="loggedIn"/>
       <!-- <li class="nav-item" @click="closeMenu"><router-link v-if="!loggedIn" class="nav-link navbar-link" to="/login">Login</router-link></li> -->
+      <portfolio-links v-if="loggedIn"/>
+      <account-links v-if="loggedIn"/>
       <li class="nav-item" @click="closeMenu"><a v-on:click.prevent="loginMultiPlayer" v-if="!loggedIn" class="nav-link navbar-link">Login with Blockstack</a></li>
     </ul>
   </div>
@@ -58,7 +58,9 @@ function resizeThrottler(actualResizeHandler) {
 }
 
 import { mdbBadge, mdbContainer, mdbIcon, mdbRow, mdbCol, mdbNavbar, mdbNavbarToggler, mdbNavbarNav, mdbNavItem, mdbInput, mdbBtn, mdbNavbarBrand } from 'mdbvue';
+import { mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle } from 'mdbvue';
 import AccountLinks from "@/layout/AccountLinks";
+import PortfolioLinks from "@/layout/PortfolioLinks";
 import UploadLinks from "@/layout/UploadLinks";
 import artworkSearchService from "@/services/artworkSearchService";
 import myAccountService from '../services/myAccountService';
@@ -83,6 +85,7 @@ export default {
   components: {
     LoginTabModal,
     UploadLinks,
+    PortfolioLinks,
     AccountLinks,
     mdbContainer,
     mdbRow,
@@ -95,7 +98,11 @@ export default {
     mdbBtn,
     mdbBadge,
     mdbIcon,
-    mdbNavbarBrand
+    mdbNavbarBrand,
+    mdbDropdown,
+    mdbDropdownItem,
+    mdbDropdownMenu,
+    mdbDropdownToggle
   },
   created() {
     this.getContent();
@@ -293,5 +300,6 @@ i.fa-search {
   text-transform: capitalize;
 }
 .search-form button.transparent { border: none; background: transparent; color: black; }
+
 
 </style>

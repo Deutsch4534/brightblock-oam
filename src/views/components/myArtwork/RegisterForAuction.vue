@@ -129,6 +129,25 @@ export default {
     mdbCardText,
     mdbBtn
   },
+  props: {
+    fiatRates: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
+    artwork: {
+      type: Object,
+      default() {
+        return {
+          saleData: {
+            amount: 0,
+            currency: GBP
+          }
+        };
+      }
+    },
+  },
   data() {
     return {
       errors: [],
@@ -153,16 +172,6 @@ export default {
     }
   },
   computed: {
-    fiatRates() {
-      return this.$store.getters["conversionStore/getFiatRates"] || {};
-    },
-
-    artwork() {
-      return this.$store.getters["myArtworksStore/myArtworkOrDefault"](
-        this.artworkId
-      );
-    },
-
     auctionTitle() {
       if (!this.artwork.saleData) {
         return "-";
@@ -267,13 +276,12 @@ export default {
       if (this.errors.length > 0) {
         return;
       }
+      let artwork = this.artwork;
       let $self = this;
       $self.message = "Please wait while we update the data.";
-      this.artwork.saleData = saleData;
-      this.artwork.status = this.$store.state.constants.statuses.artwork.BIDDING_ENABLED;
-      this.$store
-        .dispatch("myArtworksStore/addToAuction", this.artwork)
-        .then(() => {
+      artwork.saleData = saleData;
+      artwork.status = this.$store.state.constants.statuses.artwork.BIDDING_ENABLED;
+      this.$store.dispatch("myArtworksStore/addToAuction", artwork).then(() => {
           $self.message = null;
           $self.closeModal();
         })

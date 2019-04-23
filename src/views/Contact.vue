@@ -1,11 +1,6 @@
 <template>
 <div id="my-app-element" v-if="loaded">
-  <!-- Contact section  -->
-  <mdb-container fluid class="bg-main">
-    <mdb-container class="text-light contact-section">
-      <contact-section class="text-light"/>
-    </mdb-container>
-  </mdb-container>
+  <contact-section/>
 </div>
 </template>
 

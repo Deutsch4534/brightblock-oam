@@ -41,7 +41,7 @@ import TrustedUsersSection from "../utils/TrustedUsersSection";
 import BlockstackSection from "../utils/BlockstackSection";
 import BitcoinAddressEntry from "../utils/BitcoinAddressEntry";
 import EmailAddressEntry from "../utils/EmailAddressEntry";
-import AddressForm from "../utils/AddressForm";
+import AddressForm from "@/views/components/utils/AddressForm";
 
 // noinspection JSUnusedGlobalSymbols
 export default {

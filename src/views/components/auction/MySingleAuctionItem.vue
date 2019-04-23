@@ -1,35 +1,27 @@
 <template>
 <mdb-row class="mb-3">
+  <confirmation-modal :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
   <mdb-col lg="5" xl="4">
     <mdb-view hover class="rounded z-depth-1-half mb-lg-0 mb-4">
       <img class="img-fluid" :src="artwork.image" :alt="artwork.title" />
       <a><mdb-mask overlay="white-slight" waves/></a>
     </mdb-view>
   </mdb-col>
-  <mdb-col lg="7" xl="8" v-if="sellingItem">
+  <mdb-col lg="7" v-if="sellingItem">
+    <h3 class="font-weight-bold mb-3 p-0"><small>{{artwork.title}} <span v-if="item.inplay">live</span></small></h3>
+    <a v-if="!item.inplay" href @click.prevent="activateBidding"><mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Activate</mdb-btn></a>
+    <a v-else href @click.prevent="deactivateBidding"><mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Deactivate</mdb-btn></a>
+    <a href @click.prevent="removeFromAuction"><mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Remove</mdb-btn></a>
+  </mdb-col>
+  <mdb-col lg="7" v-else>
     <h3 class="font-weight-bold mb-3 p-0">
       <strong>{{artwork.title}}</strong>
     </h3>
-    <p class="dark-grey-text"><description-overflow :text="artwork.description"/></p>
-    <p>by
-      <a class="font-weight-bold">{{artwork.artist}}</a>, {{created}}</p>
-    <br/>
-    <a v-if="!item.inplay" href @click.prevent="activateBidding"><mdb-btn color="white" size="md">Activate Bidding</mdb-btn></a>
-    <a v-else href @click.prevent="deactivateBidding"><mdb-btn color="white" size="md">Deactivate Bidding</mdb-btn></a>
-    <a href @click.prevent="removeFromAuction"><mdb-btn color="white" size="md">Remove from Auction</mdb-btn></a>
+    <a to="#" @click.prevent="showRegisterForSale = !showRegisterForSale"><mdb-btn rounded color="white" size="sm" class="mr-1 ml-0 waves-light">Add to Auction</mdb-btn></a>
   </mdb-col>
-  <mdb-col lg="7" xl="8" v-else>
-    <h3 class="font-weight-bold mb-3 p-0">
-      <strong>{{artwork.title}}</strong>
-    </h3>
-    <p class="dark-grey-text"><description-overflow :text="artwork.description"/></p>
-    <p>by
-      <a class="font-weight-bold">{{artwork.artist}}</a>, 19/04/2018</p>
-    <br/>
-    <router-link v-if="artwork.bcitem && artwork.bcitem.itemIndex === -1" :to="registerUrl" class="artwork-action"><mdb-btn color="white" size="md">Register</mdb-btn></router-link>
-    <br/>
-    <router-link v-if="canSell" :to="registerForAuctionUrl"><mdb-btn color="white" size="md">Add to Auction</mdb-btn></router-link>
-  </mdb-col>
+  <mdb-row v-if="showRegisterForSale">
+    <register-for-sale :artwork="artwork" :saleType="'auction'" :allowChange="false" @registerSaleInfo="registerSaleInfo"/>
+  </mdb-row>
 </mdb-row>
 
 </template>
@@ -38,12 +30,16 @@
 import { mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardBody, mdbMask, mdbIcon, mdbView, mdbBtn } from 'mdbvue';
 import moment from "moment";
 import DescriptionOverflow from "@/views/components/utils/DescriptionOverflow";
+import RegisterForSale from "../myArtwork/RegisterForSale";
+import ConfirmationModal from "../utils/ConfirmationModal";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MySingleAuctionItem",
   components: {
+    ConfirmationModal,
     DescriptionOverflow,
+    RegisterForSale,
     mdbContainer,
     mdbRow,
     mdbCol,
@@ -56,103 +52,75 @@ export default {
   },
   props: {
     auctionId: null,
+    itemId: null,
     sellingItem: false,
-    item: {
-      type: Object,
-      default() {
-        return {};
-      }
-    }
+    profile: null
   },
   data() {
     return {
-      sellAuctionActive: false
+      showRegisterForSale: false,
+      showModal: false,
+      modalTitle: "Updating Info",
+      modalContent: "<p>Please wait - updating information for your artwork.</p>",
     };
   },
   mounted() {},
   methods: {
+    registerSaleInfo: function(data) {
+      if (data.operation === "start") {
+        this.showModal = true;
+      } else {
+        this.showRegisterForSale = false;
+        this.addToAuction(this.itemId); // $emit("stateChange", {opcode: "start", auctionId: this.auctionId, itemId: this.itemId})
+      }
+    },
     removeFromAuction() {
-      this.$store
-        .dispatch("myArtworksStore/removeFromAuction", {
+      // this.$emit("stateChange", {opcode: "removeFromAuction", auctionId: this.auctionId, itemId: this.itemId})
+      this.modalContent = "Removing artwork from auction...";
+      this.$store.dispatch("myArtworksStore/removeFromAuction", {
           auctionId: this.auctionId,
-          itemId: this.item.itemId
+          itemId: this.itemId
         })
-        .then(() => {})
+        .then(() => {
+          $self.showModal = false;
+        })
         .catch(e => {
           console.log(e.message);
         });
     },
     activateBidding() {
-      this.$store.commit("myAuctionsStore/activateItemEvent", {
-        auctionId: this.auctionId,
-        itemId: this.item.itemId
-      });
+      this.$emit("stateChange", {opcode: "activate", auctionId: this.auctionId, itemId: this.itemId})
     },
     deactivateBidding() {
-      this.$store.commit("myAuctionsStore/activateItemEvent", {
-        auctionId: this.auctionId,
-        itemId: null
-      });
+      this.$emit("stateChange", {opcode: "deactivate", auctionId: this.auctionId, itemId: this.itemId})
+    },
+    addToAuction(itemId) {
+      this.modalContent = "Adding artwork to auction...";
+      let artwork = this.$store.getters["myArtworksStore/myArtwork"](itemId);
+      artwork.status = this.$store.state.constants.statuses.artwork.BIDDING_ENABLED;
+      let $self = this;
+      this.$store.dispatch("myArtworksStore/addToAuction", artwork).then(() => {
+          $self.showModal = false;
+          $self.showRegisterForSale = false;
+        })
+        .catch(e => {
+          $self.message = e.message;
+          $self.showModal = false;
+          $self.showRegisterForSale = false;
+        });
+    },
+    closeModal: function() {
+      this.showModal = false;
     }
   },
   computed: {
-    canSell() {
-      let artwork = this.$store.getters["myArtworksStore/myArtwork"](
-        this.item.itemId
-      );
-      let bcitem = artwork.bcitem;
-      return bcitem && bcitem.itemIndex > -1;
-    },
-    created() {
-      if (this.artwork.created) {
-        return moment(this.artwork.created).format("YYYY-MM-DD");
-      }
-      return moment(this.artwork.id).format("DD/MMM/YYYY");
-    },
     artwork() {
-      let itemId = this.item.itemId;
-      let a = this.$store.getters["myArtworksStore/myArtwork"](itemId);
-      if (!a) {
-        a = {
-          title: "unknown artwork"
-        };
-      }
+      let a = this.$store.getters["myArtworksStore/myArtworkOrDefault"](this.itemId);
       return a;
     },
-    registerUrl() {
-      let url = `/my-artwork/register/${this.item.itemId}`;
-      url += "?from=auctions&auctionId=" + this.auctionId;
-      return url;
-    },
-    registerForSaleUrl() {
-      let a = this.$store.getters["myArtworksStore/myArtwork"](
-        this.item.itemId
-      );
-      let id = this.artwork.id;
-      let amount = a.saleData ? a.saleData.amount : 0;
-      let currency = a.saleData ? a.saleData.fiatCurrency : "EUR";
-      let url = `/my-artwork/register-for-sale/${id}/${amount}/${currency}`;
-      url += "?from=auctions&auctionId=" + this.auctionId;
-      return url;
-    },
-    registerForAuctionUrl() {
-      let a = this.$store.getters["myArtworksStore/myArtwork"](
-        this.item.itemId
-      );
-      let id = this.artwork.id;
-      let r = a.saleData ? a.saleData.reserve : 0;
-      let i = a.saleData ? a.saleData.increment : 0;
-      let c = a.saleData ? a.saleData.fiatCurrency : "EUR";
-      let aid = this.auctionId;
-      // if (a.saleData && a.saleData.auctionId) {
-      //  aid = a.saleData.auctionId;
-      // }
-      let url = `/my-artwork/register-for-auction/${id}/${aid}/${r}/${i}/${c}`;
-      url += "?from=auctions";
-      return url;
-    },
-    debugMode() {
-      return this.$store.state.constants.debugMode;
+    item() {
+      let item = this.$store.getters["myAuctionsStore/myAuctionItem"](this.auctionId, this.itemId);
+      return (item) ? item : {};
     }
   }
 };

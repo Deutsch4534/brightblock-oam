@@ -222,7 +222,7 @@ const onlineAuctionsStore = {
     },
 
     onlineAuction(state, auction) {
-      if (!auction) return;
+      if (!auction || auction.privacy === "private") return;
       let index = _.findIndex(state.onlineAuctions, function(o) {
         return o.auctionId === auction.auctionId;
       });

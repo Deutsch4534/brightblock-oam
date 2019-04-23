@@ -9,6 +9,9 @@
       <mdb-row v-if="auctionsSize > 0">
         <single-auction v-for="(auction, index) of onlineAuctions" :key="index" :auction="auction"/>
       </mdb-row>
+      <mdb-row v-else>
+        <p>No upcoming auctions - check back by <router-link to="/news-signup">signing up for our newsletter</router-link></p>
+      </mdb-row>
       <mdb-row v-if="auctionsArchiveSize > 0">
         <mdb-col col="12">
           <h1 class="h1-responsive mb-5">Past Auctions</h1>

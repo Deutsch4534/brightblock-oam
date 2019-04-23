@@ -46,8 +46,6 @@ const app = new Vue({
       if (profile.loggedIn) {
         store.dispatch("invoiceStore/fetchInvoices");
         store.dispatch("fetchServerTime");
-        store.dispatch("galleryStore/fetchMyGalleries");
-        store.dispatch("galleryStore/fetchGalleriesFromSearch", {field: "title", query: "*"});
       }
       store.dispatch("conversionStore/fetchConversionData");
     });

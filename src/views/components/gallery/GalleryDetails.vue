@@ -66,7 +66,7 @@
 
       <!-- Right column -->
       <div class="form-row col-md-6" v-if="showMedia">
-        <media-files-upload :contentModel="contentModel" :mediaFiles="mediaFiles" :limit="1" :sizeLimit="500" :mediaTypes="'images'" @updateMedia="setByEventLogo($event)"/>
+        <media-files-upload :contentModel="contentModel" :parentalError="parentalError" :mediaFiles="mediaFiles" :limit="1" :sizeLimit="500" :mediaTypes="'images'" @updateMedia="setByEventLogo($event)"/>
       </div>
     </div>
     <!-- /Input fields section -->
@@ -105,6 +105,7 @@ export default {
     return {
       errors: [],
       showAddresses: false,
+      parentalError: null,
       showMedia: false,
       myProfile: null,
       contentModel: {
@@ -156,12 +157,17 @@ export default {
     checkForm(event) {
       event.preventDefault();
       event.target.classList.add('was-validated');
+      this.parentalError = null;
       this.errors = [];
       if (!this.gallery.title) {
         this.errors.push("Whats the name of your gallery?");
       }
       if (!this.gallery.description) {
         this.errors.push("Where are you based and what kind of art do you specialise in?");
+      }
+      if (!this.gallery.coverImage) {
+        this.parentalError = "Please attach a cover image to make this gallery stand out.";
+        this.errors.push(this.parentalError);
       }
       if (!this.gallery.keywords) {
         this.errors.push("Keywords to help users find you in a search.");
