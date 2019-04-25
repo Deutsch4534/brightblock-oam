@@ -7,24 +7,24 @@
     <mdb-dropdown-menu class="dropdown-menu-right" id="userMainMenu" >
 
       <mdb-dropdown-item>
-        <router-link class="nav-link navbar-link" to="/my-artworks">My Artwork</router-link>
+        <router-link class="nav-link navbar-link" to="/my-artworks"><a @click="closeMenu">My Artwork</a></router-link>
       </mdb-dropdown-item>
 
       <mdb-dropdown-item>
-        <router-link class="dropdown-item" to="/my-galleries">My Galleries</router-link>
+        <router-link class="dropdown-item" to="/my-galleries"><a @click="closeMenu">My Galleries</a></router-link>
       </mdb-dropdown-item>
 
       <mdb-dropdown-item>
-        <router-link class="dropdown-item" to="/my-auctions">My Auctions</router-link>
+        <router-link class="dropdown-item" to="/my-auctions"><a @click="closeMenu">My Auctions</a></router-link>
       </mdb-dropdown-item>
 
 <!--
       <mdb-dropdown-item>
-        <router-link to="/gallery/upload" class="dropdown-item">Gallery Signup</router-link>
+        <router-link to="/gallery/upload" class="dropdown-item"><a @click="closeMenu">Gallery Signup</a></router-link>
       </mdb-dropdown-item>
 
       <mdb-dropdown-item>
-        <router-link to="/my-auctions/upload" class="dropdown-item">Upload Auction</router-link>
+        <router-link to="/my-auctions/upload" class="dropdown-item"><a @click="closeMenu">Upload Auction</a></router-link>
       </mdb-dropdown-item>
 -->
     </mdb-dropdown-menu>
@@ -65,53 +65,10 @@ export default {
   mounted() {
   },
   computed: {
-    showAdmin() {
-      return this.$store.state.myAccountStore.myProfile.showAdmin;
-    },
-    featureAuctions() {
-      return this.$store.state.constants.featureAuctions;
-    },
-    hasInvoices() {
-      let invoices = this.$store.getters["invoiceStore/getInvoices"];
-      if (!invoices) {
-        return 0;
-      }
-      return invoices.length;
-    },
-    username() {
-      return this.$store.state.myAccountStore.myProfile.name;
-    },
-    avatar() {
-      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      if (myProfile.loggedIn) {
-        return (
-          '<img style="width: 40px; height: 40px; border-radius: 20px;" src="' +
-          myProfile.avatarUrl +
-          '"/>'
-        );
-      } else {
-        return '<span class="icon-user"></span>';
-      }
-    },
-    avatarUrl() {
-      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      return myProfile.avatarUrl;
-    },
-    loggedIn() {
-      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      return myProfile.loggedIn;
-    },
-    adminUser() {
-      let myProfile = this.$store.getters["myAccountStore/getMyProfile"];
-      return myProfile.showAdmin;
-    }
   },
   methods: {
-    logout() {
-      localStorage.clear();
-      sessionStorage.clear();
-      myAccountService.logout();
-      this.$router.push("/");
+    closeMenu() {
+      this.$emit("closeMenu");
     }
   }
 };

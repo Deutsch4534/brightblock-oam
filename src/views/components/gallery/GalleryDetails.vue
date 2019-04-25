@@ -109,9 +109,9 @@ export default {
       showMedia: false,
       myProfile: null,
       contentModel: {
-        title: "Cover image",
-        errorMessage: "Cover image is required.",
-        popoverBody: "Promote your galleries brand by uploading a logo / cover image.<br/><br/>A single square(ish) image up to 500Kb.",
+        title: "Profile Image",
+        errorMessage: "Profile image is required.",
+        popoverBody: "Promote your galleries brand by uploading a profile image.<br/><br/>A single square(ish) image up to 500Kb.",
       },
       gallery: {
         title: null,

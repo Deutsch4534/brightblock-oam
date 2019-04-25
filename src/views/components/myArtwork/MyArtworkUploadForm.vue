@@ -2,10 +2,11 @@
   <mdb-container class="py-3 py-md-4">
     <!-- Supported elements -->
     <confirmation-modal :modal="showModal" :title="modalTitle" :content="modalContent" @closeModal="closeModal"/>
+    <keywords-view :modal="showKeywords" :title="'Choose or Enter Tags'" @closeKeywords="closeKeywords"/>
     <h1 class="h1-responsive">{{formTitle}}</h1>
     <form class="needs-validation py-5 form-transparent" novalidate @submit.prevent="checkForm" id="artworkForm">
       <!-- item type -->
-      <div class="row ">
+      <div class="row">
       <div class="col-md-6 mb-4">
         <div class="row ml-1 mb-4">
           <div class="col-12">
@@ -36,11 +37,10 @@
             </div>
         </div>
         <div class="form-row">
-            <!--<label for="validationCustom03">Keywords or tags</label>-->
-            <textarea type="text" class="form-control" id="validationCustom03" :placeholder="'Keywords (' + limits.keywords + ' chars max)'" v-model="artwork.keywords" required :maxlength="limits.keywords"></textarea>
-            <div class="invalid-feedback">
-              Please enter some keywords!
-            </div>
+          <div class="col-12">
+            <a @click.prevent="openKeywords"><u>Set Tags</u></a>&nbsp;&nbsp;&nbsp;
+            <span v-for="keyword in getKeywordList" :key="keyword"><mdb-btn :disabled="true" rounded color="white" size="sm" class="mx-0 waves-light">{{keyword}}</mdb-btn></span>
+          </div>
         </div>
         <div class="form-row">
           <div class="col-6 form-row">
@@ -67,10 +67,13 @@
           </div>
         </div>
         <div class="form-row">
-          <div class="col-4">
-            <input type="text" class="form-control" id="validationCustom06-1" placeholder="Medium / materials" v-model="artwork.medium" required>
+          <div class="col-4 mb-5">
+            <select id="validationCustom06-1" @change="doMedium" class="text-black browser-default custom-select" v-model="medium" required>
+              <option value="" :disabled="true">Medium</option>
+              <option v-for="(medium) in media" :key="medium.value" :value="medium.value">{{medium.label}}</option>
+            </select>
             <div class="invalid-feedback">
-              Please enter the Medium / Materials!
+              Please enter the artwork medium!
             </div>
           </div>
           <div class="col-4">
@@ -144,12 +147,14 @@ import { mdbIcon, mdbPopover, mdbCol, mdbRow, mdbContainer, mdbBtn } from "mdbvu
 import moment from "moment";
 import notify from "@/services/notify";
 import ConfirmationModal from "../utils/ConfirmationModal";
+import KeywordsView from "@/views/components/utils/KeywordsView";
 
   // noinspection JSUnusedGlobalSymbols
   export default {
     name: "MyArtworkUploadForm",
     components: {
       ConfirmationModal,
+      KeywordsView,
       MediaFilesUpload,
       mdbContainer,
       mdbIcon,
@@ -166,8 +171,11 @@ import ConfirmationModal from "../utils/ConfirmationModal";
         galleries: null,
         galleryId: null,
         showModal: false,
+        showKeywords: false,
         modalTitle: "Saving Artwork",
         modalContent: "<p>Please wait while we update your data.</p>",
+        media: this.$store.state.constants.taxonomy.media,
+        medium: "",
         limits: {
           title: 50,
           description: 1000,
@@ -198,7 +206,7 @@ import ConfirmationModal from "../utils/ConfirmationModal";
         artwork: {
           artistry: {},
           itemType: null,
-          keywords: "digital,artwork,illustration",
+          keywords: "",
           artist: null,
           owner: null,
           editions: 1,
@@ -207,6 +215,7 @@ import ConfirmationModal from "../utils/ConfirmationModal";
           images: [],
           supportingDocuments: [],
           artwork: [],
+          medium: "digital2d",
           btcAddress: null
         },
       };
@@ -217,10 +226,14 @@ import ConfirmationModal from "../utils/ConfirmationModal";
         if (this.artworkId) {
           this.$store.dispatch("myArtworksStore/fetchMyArtwork", this.artworkId).then((artwork) => {
             this.artwork = artwork;
+            this.medium = artwork.medium;
             if (this.artwork) {
               this.created = moment(this.artwork.created).format();
               if (artwork.galleryId) {
                 this.galleryId = artwork.galleryId;
+              }
+              if (!this.artwork.medium) {
+                this.artwork.medium = "painting";
               }
             }
             this.showMedia = true;
@@ -238,6 +251,12 @@ import ConfirmationModal from "../utils/ConfirmationModal";
           files = this.artwork.artwork;
         }
         return files;
+      },
+      getKeywordList() {
+        if (this.artwork && this.artwork.keywords) {
+          return this.artwork.keywords.split(',');
+        }
+        return [];
       },
       mediaFiles2() {
         let files = [];
@@ -258,8 +277,18 @@ import ConfirmationModal from "../utils/ConfirmationModal";
       setByEventLogo1 (mediaObjects) {
         this.artwork.artwork = mediaObjects;
       },
+      doMedium () {
+        this.artwork.medium = this.medium;
+      },
       closeModal: function() {
         this.showModal = false;
+      },
+      closeKeywords: function(chosen) {
+        this.showKeywords = false;
+        this.artwork.keywords = chosen.join(",");
+      },
+      openKeywords: function() {
+        this.showKeywords = true;
       },
       info() {
         this.$notify({type: 'success', title: 'Notification 2!', text: 'Hi! I am info message.'});
@@ -343,14 +372,21 @@ import ConfirmationModal from "../utils/ConfirmationModal";
         if (!this.artwork.dimensions) {
           this.errors.push("dimensions needed.");
         }
-        if (!this.artwork.medium) {
-          this.errors.push("medium needed.");
-        }
         if (!this.artwork.artist || this.artwork.artist.indexOf(".id") === -1) {
           this.errors.push("Blockstack id of the artist is missing.");
         }
         if (!this.artwork.owner || this.artwork.owner.indexOf(".id") === -1) {
           this.errors.push("Blockstack id of the owner is missing.");
+        }
+        if (!this.artwork.medium) {
+          this.errors.push("Medium is missing.");
+        }
+        let artMedium = this.artwork.medium;
+        let index = _.findIndex(this.media, function(o) {
+          return o.value === artMedium;
+        });
+        if (index < 0) {
+          this.errors.push("Medium is incorrect.");
         }
         if (this.created) {
           this.artwork.created = moment(this.created).valueOf();

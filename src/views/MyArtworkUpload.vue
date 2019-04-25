@@ -2,9 +2,8 @@
 <loading-view v-if="loading" :loadingMessage="loadingMessage"/>
 <div v-else>
   <contact-section :featureMessage="featureMessage" v-if="!enabled"/>
-  <mdb-container fluid class="" v-else>
+  <mdb-container fluid class="bg-light" v-else>
     <mdb-container class="py-3 py-md-4">
-      <my-auction-upload-form v-if="enabled" :mode="'upload'"/>
       <my-artwork-upload-form :formTitle="'Upload Artwork'" :mode="'upload'"/>
     </mdb-container>
   </mdb-container>

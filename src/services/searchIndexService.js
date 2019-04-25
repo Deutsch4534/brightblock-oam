@@ -24,6 +24,10 @@ const searchIndexService = {
     return new Promise(function(resolve) {
       indexable.domain = location.hostname;
       indexable.objType = objType;
+      indexable.metaData = {
+        keywords: indexable.keywords,
+        medium: indexable.medium
+      };
       searchIndexService
         .makePostCall("/index/addRecord/", indexable)
         .then(function(result) {

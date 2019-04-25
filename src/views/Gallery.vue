@@ -2,7 +2,7 @@
   <mdb-container fluid class="bg-dark flex-1 py-5" id="my-app-element">
     <mdb-container class="py-3 py-md-4">
       <mdb-row class="article">
-        <h2 class="h2-responsive text-white">Radicle Marketplace</h2>
+        <h2 class="h2-responsive text-white">Radicle Gallery</h2>
        </mdb-row>
        <mdb-row class="article">
          <single-result v-for="(artwork, index) of artworks" :key="index" :artwork="artwork" class="result-item"/>
@@ -73,6 +73,14 @@ export default {
   flex-direction: row;
   flex-wrap: no-wrap;
   justify-content: flex-start;
+}
+@media (max-width: 900px) {
+  .article {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: no-wrap;
+    justify-content: center;
+  }
 }
 
 @media all and (min-width: 991px) {

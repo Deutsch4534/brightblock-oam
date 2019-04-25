@@ -14,6 +14,7 @@
       </mdb-card-title>
       <mdb-card-text>
         <selling-options :artwork="artwork" v-if="sellingStatus === 'unsold'"/>
+        <description-overflow :text="artwork.description"/>
         <p class="artwork-caption" v-if="debugMode && artwork">{{artwork.bcitem}}</p>
         <p>by {{artistProfile.name}}, 11/08/2018 <br/>
         <span v-if="artwork.bitcoinTx">registered</span>
@@ -50,12 +51,14 @@
 import SellingOptions from "./SellingOptions";
 import { mdbContainer, mdbRow, mdbCol, mdbCard, mdbCardImage, mdbCardBody, mdbCardTitle, mdbCardText, mdbMask, mdbIcon, mdbView, mdbBtn } from 'mdbvue';
 import moment from "moment";
+import DescriptionOverflow from "@/views/components/utils/DescriptionOverflow";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   name: "MySingleArtwork",
   components: {
     SellingOptions,
+    DescriptionOverflow,
     mdbContainer,
     mdbRow,
     mdbCol,

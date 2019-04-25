@@ -79,7 +79,7 @@
         </div>
       </div>
       <div v-else>
-      <div class="form-row" v-if="isAuctions">
+      <div class="form-row" v-if="isAuctions && mySalePlace === 'auctionplace'">
         <div class="col-md-12">
           <mdb-popover trigger="click" :options="{placement: 'top'}">
             <div class="popover">
@@ -125,7 +125,7 @@
             </div>
             <a @click.prevent="" slot="reference">Opening Bid {{currencySymbol}}</a>
           </mdb-popover>
-          <input type="number" class="form-control" id="vc-openingBid" step="1" placeholder="Opening bid" v-model="openingBid" required min="1">
+          <input type="number" class="form-control" id="vc-openingBid" step="1" placeholder="Opening bid" v-model="openingBid" required min="0">
           <div class="invalid-feedback">
             Please enter the opening bid!
           </div>
@@ -355,6 +355,9 @@ export default {
       artwork.saleData.openingBid = Number(this.openingBid);
       artwork.saleData.biddingEnds = moment(this.biddingEnds).valueOf();
       artwork.saleData.auctionId = Number(this.auctionId);
+      if (this.mySalePlace === "marketplace") {
+        artwork.saleData.auctionId = null;
+      }
       artwork.saleData.fiatCurrency = this.currency;
       let fiatRates = this.$store.getters["conversionStore/getFiatRates"];
       artwork.saleData.initialRateBtc = fiatRates[this.currency]["15m"];
@@ -373,24 +376,24 @@ export default {
       event.target.classList.add('was-validated');
       this.errors = [];
       if (!this.currency) {
-        //this.errors.push("Please select a fiat currency.");
+        this.errors.push("Please select a fiat currency.");
       }
       if (moment(this.biddingEnds).isBefore(moment({}))) {
         this.errors.push("End date before now.");
       }
       if (this.mySaleType === "direct") {
         if (!this.amount || this.amount.length === 0) {
-          //this.errors.push("Amount is required.");
+          this.errors.push("Amount is required.");
         }
       } else {
         if (this.reserve === 0) {
-          //this.errors.push("Reserve is required.");
+          this.errors.push("Reserve is required.");
         }
         if (this.mySalePlace === "auctionplace" && !this.auctionId || this.auctionId === -1) {
-          //this.errors.push("Please indicate an auction.");
+          this.errors.push("Please indicate an auction.");
         }
         if (this.increment === 0) {
-          //this.errors.push("Increment is required.");
+          this.errors.push("Increment is required.");
         }
       }
       if (this.errors.length > 0) {

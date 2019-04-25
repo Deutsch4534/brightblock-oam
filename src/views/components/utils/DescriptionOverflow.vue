@@ -2,10 +2,9 @@
 <div>
   <div v-html="displayable"></div>
   <div v-if="overflow" class="muted">
-    <a @click.prevent="truncated = !truncated" v-if="truncated">more..</a>
-    <a @click.prevent="truncated = !truncated" v-else>less..</a>
+    <a @click.prevent="truncated = !truncated" v-if="truncated"><u>more</u></a>
+    <a @click.prevent="truncated = !truncated" v-else><u>less</u></a>
   </div>
-
 </div>
 </template>
 

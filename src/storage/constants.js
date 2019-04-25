@@ -8,6 +8,17 @@ export const CONSTANTS = {
   btcGatewayUrl: (dev) ? "http://localhost:8191" : "https://api.brightblock.org",
   searchUrl: (dev) ? "http://localhost:8193" : "https://search.brightblock.org",
   commsUrl: (dev) ? "http://localhost:8197" : "https://api.brightblock.org",
+  taxonomy: {
+    keywords: ["outsider", "political", "bauhaus", "impressionism", "noir", "cartoon", "illustration", "grafitti"],
+    media: [
+      {label: "Painting", value: "painting"},
+      {label: "Photography", value: "photography"},
+      {label: "Print", value: "print"},
+      {label: "Digital", value: "digital"},
+      {label: "Sculpture", value: "sculpture"},
+      {label: "Jewellery", value: "jewellery"}
+    ]
+  },
   invoiceRates: {
     platformAddress: (dev) ? "2Mxyetr5jqQdE6WDtS9x9re43F9JTCxdeJK" : "2N3rYRQu4h29JreiM8kF6KGKVoLkgVj2pTc",
     platformFee: 4.2,

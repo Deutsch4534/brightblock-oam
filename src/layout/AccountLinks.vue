@@ -11,11 +11,11 @@
       </mdb-dropdown-item>
 
       <mdb-dropdown-item>
-        <router-link class="dropdown-item" to="/profile/update">Settings</router-link>
+        <router-link class="dropdown-item" to="/profile/update"><a @click="closeMenu">Settings</a></router-link>
       </mdb-dropdown-item>
 
       <mdb-dropdown-item>
-        <router-link class="dropdown-item" to="/admin/settings" v-if="showAdmin">Admin</router-link>
+        <router-link class="dropdown-item" to="/admin/settings" v-if="showAdmin"><a @click="closeMenu">Admin</a></router-link>
       </mdb-dropdown-item>
 
       <mdb-dropdown-item>
@@ -100,6 +100,10 @@ export default {
       sessionStorage.clear();
       myAccountService.logout();
       this.$router.push("/");
+      this.$emit("closeMenu");
+    },
+    closeMenu() {
+      this.$emit("closeMenu");
     }
   }
 };
